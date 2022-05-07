@@ -1,0 +1,34 @@
+.top{
+    background-color: forestgreen;
+    padding: 20px;
+    display: flex;
+    border: 5px darkgreen;
+    border-radius: 5px;
+   /* justify-content: center; */
+}
+
+.top .title{
+    align-items: center;
+    color: white;
+}
+
+.top .user-button{
+    position: absolute;
+    padding: 5px;
+    border-radius: 6px;
+    border-color: azure;
+    top: 50px;
+    right: 40px;
+}
+
+.site-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 200px;
+}
+
+.site-body div{
+    margin: 30px;
+}
+
