@@ -23,7 +23,7 @@ public class RegisterResource {
     private final Gson g = new Gson();
 
     @POST
-    @Path("{username}")
+    @Path("/personal/{username}")
     public Response registerPersonal(@PathParam("username") String username, PersonalRegistrationData data){
         LOG.fine("Attempt to register user: " + username);
 
@@ -69,7 +69,7 @@ public class RegisterResource {
     }
 
     @POST
-    @Path("{username}")
+    @Path("/entity/{username}")
     public Response registerEntity(@PathParam("username") String username, EntityRegistrationData data){
         LOG.fine("Attempt to register user: " + username);
 
