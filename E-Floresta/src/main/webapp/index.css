@@ -29,6 +29,14 @@
     gap: 200px;
 }
 
+.site-body .initial-text{
+    width: 50%;
+}
+
+.site-body .initial-image{
+    width: 50%;
+}
+
 .site-body div{
     margin: 30px;
 }
