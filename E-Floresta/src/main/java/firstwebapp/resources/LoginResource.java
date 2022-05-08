@@ -3,6 +3,7 @@ package firstwebapp.resources;
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 import firstwebapp.util.AuthToken;
+import firstwebapp.util.LoginData;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.*;
@@ -21,15 +22,16 @@ public class LoginResource {
     private final Gson g = new Gson();
 
     @POST
-    @Path("{username}")
+    @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(@PathParam("username") String username, String password){
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(@PathParam("username") String username, LoginData data) {
         LOG.fine("Login attempt by user: " + username);
 
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
-        AuthToken authToken = new AuthToken();
+        AuthToken authToken = new AuthToken(username, user.getString("user_role"));
 
         Key tokenId = datastore.newKeyFactory().setKind("Token").newKey(authToken.tokenID);
 
@@ -41,30 +43,27 @@ public class LoginResource {
 
         Transaction txn = datastore.newTransaction();
 
-        try{
-            if(user != null){
+        try {
+            if (user != null) {
                 String storedPassword = user.getString("user_pwd");
-                if(password.equals(DigestUtils.sha512Hex(storedPassword))){
+                if (storedPassword.equals(DigestUtils.sha512Hex(data.password))) {
                     txn.add(token);
                     txn.commit();
                     LOG.info("User " + username + " logged in sucessfully.");
                     return Response.ok(g.toJson(authToken.tokenID)).build();
 
-                }
-                else{
+                } else {
                     txn.rollback();
                     LOG.warning("Wrong password for username: " + username);
                     return Response.status(Response.Status.FORBIDDEN).build();
                 }
-            }
-            else{
+            } else {
                 txn.rollback();
                 LOG.warning("Failed login attempt for username: " + username);
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-        }
-        finally {
-            if(txn.isActive()){
+        } finally {
+            if (txn.isActive()) {
                 txn.rollback();
             }
         }

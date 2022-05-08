@@ -3,7 +3,6 @@
 
   <threadsafe>true</threadsafe>
   <sessions-enabled>false</sessions-enabled>
-  <service>default</service>
   <runtime>java8</runtime>
 
   <system-properties>
