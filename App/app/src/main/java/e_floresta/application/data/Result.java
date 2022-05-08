@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.data;
+package e_floresta.application.data;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

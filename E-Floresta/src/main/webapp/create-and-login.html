@@ -13,21 +13,22 @@
 
         function getData() {
             xmlhttp.onreadystatechange = function() {
-                if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    token = xmlhttp.responseText;
-                    alert("Logged in successfully.");
-                    sessionStorage.setItem('token', token);
-                    window.location.href = "account.html";
+                if(xmlhttp.readyState == 4) {
+                    if(xmlhttp.status == 200){
+                        token = xmlhttp.responseText;
+                        alert("Logged in successfully.");
+                        sessionStorage.setItem('token', token);
+                        window.location.href = "account.html";
+                    }
                 }
             }
+            var myObj = {password:document.getElementById("session-password").value};
+            var myJson = JSON.stringify(myObj);
+
+            xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/"+document.getElementById("session-username").value, true);
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(myJson);
         }
-
-        var myObj = {password: document.getElementById("session-password").value};
-        var myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/"+document.getElementById("session-username").value, true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
     </script>
 
     <body>
@@ -69,6 +70,5 @@
                 <input class="button" type="button" value="Registar" onclick="location.href='unknown.html'">
             </div>
         </div>
-
     </body>
 </html>

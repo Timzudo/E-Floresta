@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.ui.login;
+package e_floresta.application.ui.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import pt.unl.fct.di.example.e_floresta.data.LoginRepository;
-import pt.unl.fct.di.example.e_floresta.data.Result;
-import pt.unl.fct.di.example.e_floresta.data.model.LoggedInUser;
-import pt.unl.fct.di.example.e_floresta.R;
+import e_floresta.application.data.LoginRepository;
+import e_floresta.application.data.Result;
+import e_floresta.application.data.model.LoggedInUser;
+import e_floresta.application.R;
 
 public class LoginViewModel extends ViewModel {
 

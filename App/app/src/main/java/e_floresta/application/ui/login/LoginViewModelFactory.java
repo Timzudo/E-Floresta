@@ -1,11 +1,11 @@
-package pt.unl.fct.di.example.e_floresta.ui.login;
+package e_floresta.application.ui.login;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import pt.unl.fct.di.example.e_floresta.data.LoginDataSource;
-import pt.unl.fct.di.example.e_floresta.data.LoginRepository;
+import e_floresta.application.data.LoginDataSource;
+import e_floresta.application.data.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

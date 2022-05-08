@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta;
+package e_floresta.application;
 
 import org.junit.Test;
 

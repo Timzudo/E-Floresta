@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.ui.login;
+package e_floresta.application.ui.login;
 
 /**
  * Class exposing authenticated user details to the UI.

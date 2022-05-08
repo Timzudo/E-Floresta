@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta;
+package e_floresta.application;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("pt.unl.fct.di.example.e_floresta", appContext.getPackageName());
+        assertEquals("e_floresta.application", appContext.getPackageName());
     }
 }

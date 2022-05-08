@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.ui.login;
+package e_floresta.application.ui.login;
 
 import androidx.annotation.Nullable;
 

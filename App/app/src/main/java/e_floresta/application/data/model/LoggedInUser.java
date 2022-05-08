@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.data.model;
+package e_floresta.application.data.model;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

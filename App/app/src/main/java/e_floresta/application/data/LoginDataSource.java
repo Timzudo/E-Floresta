@@ -1,6 +1,6 @@
-package pt.unl.fct.di.example.e_floresta.data;
+package e_floresta.application.data;
 
-import pt.unl.fct.di.example.e_floresta.data.model.LoggedInUser;
+import e_floresta.application.data.model.LoggedInUser;
 
 import java.io.IOException;
 

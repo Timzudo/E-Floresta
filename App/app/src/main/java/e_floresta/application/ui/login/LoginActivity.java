@@ -1,4 +1,4 @@
-package pt.unl.fct.di.example.e_floresta.ui.login;
+package e_floresta.application.ui.login;
 
 import android.app.Activity;
 
@@ -22,10 +22,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import pt.unl.fct.di.example.e_floresta.R;
-import pt.unl.fct.di.example.e_floresta.ui.login.LoginViewModel;
-import pt.unl.fct.di.example.e_floresta.ui.login.LoginViewModelFactory;
-import pt.unl.fct.di.example.e_floresta.databinding.ActivityLoginBinding;
+import e_floresta.application.R;
+import e_floresta.application.ui.login.LoginViewModel;
+import e_floresta.application.ui.login.LoginViewModelFactory;
+import e_floresta.application.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
