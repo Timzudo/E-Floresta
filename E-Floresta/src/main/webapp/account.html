@@ -23,7 +23,7 @@
                 }
             }
 
-            xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + sessionStorage.getItem('token'), true);
+            xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + JSON.parse(sessionStorage.getItem('token')));
             xmlhttp.send();
         }
     </script>
