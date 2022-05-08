@@ -32,3 +32,9 @@
 .site-body div{
     margin: 30px;
 }
+
+#map {
+    height: 700px;
+    width: 900px;
+    margin-left: auto;
+}
