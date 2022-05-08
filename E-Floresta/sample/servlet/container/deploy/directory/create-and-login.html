@@ -7,6 +7,56 @@
         <link rel="stylesheet" href="create-and-login.css">
     </head>
 
+    <script>
+        xmlhttp = new XMLHttpRequest();
+        let token;
+
+        function login() {
+            xmlhttp.onreadystatechange = function() {
+                if(xmlhttp.readyState == 4) {
+                    if(xmlhttp.status == 200){
+                        token = xmlhttp.responseText;
+                        alert("Login efetuado com sucesso.");
+                        sessionStorage.setItem('token', token);
+                        window.location.href = "logged-homepage.html";
+                    }
+                }
+            }
+            var myObj = {password:document.getElementById("session-password").value};
+            var myJson = JSON.stringify(myObj);
+
+            xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/"+document.getElementById("session-username").value, true);
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(myJson);
+        }
+
+        function register() {
+            xmlhttp.onreadystatechange = function() {
+                if(xmlhttp.readyState == 4) {
+                    if(xmlhttp.status == 200){
+                        alert("Registo efetuado com sucesso.");
+                        window.location.href = "logged-homepage.html";
+                    }
+                }
+            }
+            var myObj = {username:document.getElementById("create-acc-user").value,
+                password:document.getElementById("create-acc-pass").value,
+                confirmation:document.getElementById("create-acc-conf-pass").value,
+                email:document.getElementById("create-acc-email").value,
+                name:document.getElementById("create-acc-name").value,
+                phone:document.getElementById("create-acc-phone").value,
+                nif:document.getElementById("create-acc-nif").value
+            };
+            var myJson = JSON.stringify(myObj);
+
+            xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/register/"+document.getElementById("session-username").value, true);
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(myJson);
+        }
+
+
+    </script>
+
     <body>
         <div class="top">
             <div class="title">
@@ -21,7 +71,7 @@
                 <input class="align-content" id="session-username" type="text" placeholder="Username/E-mail">
                 <input class="align-content" id="session-password" type="password" placeholder="Password">
 
-                <input class="button" type="button" value="Entrar" onclick="getData();">
+                <input class="button" type="button" value="Entrar" onclick="login();">
 
             </div>
 
@@ -43,33 +93,8 @@
                 <input class="align-content" id="create-acc-phone" type="text" placeholder="Telemóvel/Telefone" maxlength="9">
                 <input class="align-content" id="create-acc-nif" type="text" placeholder="NIF" maxlength="9">
 
-                <input class="button" type="button" value="Registar" onclick="location.href='unknown.html'">
+                <input class="button" type="button" value="Registar" onclick="register();">
             </div>
         </div>
-        <script>
-            xmlhttp = new XMLHttpRequest();
-            let token;
-
-            function getData() {
-                xmlhttp.onreadystatechange = function() {
-                    if(xmlhttp.readyState == 4) {
-                        if(xmlhttp.status == 200){
-                            token = xmlhttp.responseText;
-                            alert("Logged in successfully.");
-                            sessionStorage.setItem('token', token);
-                            window.location.href = "account.html";
-                        }
-                    }
-                }
-            }
-
-            alert(document.getElementById("session-password"));
-            var myObj = {password:document.getElementById("session-password").value};
-            var myJson = JSON.stringify(myObj);
-
-            xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/"+document.getElementById("session-username").value, true);
-            xmlhttp.setRequestHeader("Content-Type", "application/json");
-            xmlhttp.send(myJson);
-        </script>
     </body>
 </html>
