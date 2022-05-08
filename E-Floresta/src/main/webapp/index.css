@@ -1,0 +1,35 @@
+.top{
+    background-color: forestgreen;
+    height: 100px;
+    display: flex;
+    border: 5px darkgreen;
+    border-radius: 5px;
+    /* justify-content: center; */
+}
+
+.top .title{
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
+
+.top .user-button{
+    position: absolute;
+    padding: 5px;
+    border-radius: 6px;
+    border-color: azure;
+    top: 50px;
+    right: 40px;
+}
+
+.site-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 200px;
+}
+
+.site-body div{
+    margin: 30px;
+}

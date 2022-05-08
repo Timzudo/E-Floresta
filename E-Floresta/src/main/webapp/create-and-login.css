@@ -4,7 +4,6 @@
     display: flex;
     border: 5px darkgreen;
     border-radius: 5px;
-   /* justify-content: center; */
 }
 
 .top .title{
@@ -14,34 +13,16 @@
     padding: 20px;
 }
 
-.top .user-button{
-    position: absolute;
-    padding: 5px;
-    border-radius: 6px;
-    border-color: azure;
-    top: 50px;
-    right: 40px;
-}
-
-.site-body{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 200px;
-}
-
-.site-body div{
-    margin: 30px;
-}
-
 .session-body{
     background-color: ghostwhite;
     margin-top: 50px;
-    padding-left: 200px;
-    padding-right: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
+    width: 800px;
+    padding-bottom: 10px;
     border-radius: 10px;
     display: flex;
-    align-items: start;
     justify-content: center;
     gap: 120px;
 }
