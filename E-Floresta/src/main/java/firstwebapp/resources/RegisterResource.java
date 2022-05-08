@@ -16,11 +16,10 @@ import java.util.logging.Logger;
 @Path("/register")
 public class RegisterResource {
 
-    private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(RegisterResource.class.getName());
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
-    private final Gson g = new Gson();
 
     @POST
     @Path("/personal/{username}")
@@ -50,7 +49,7 @@ public class RegisterResource {
                         .set("user_nif", data.nif)
                         .set("user_creation_time", Timestamp.now())
                         .set("user_role", "USER")
-                        .set("user_state", "INACTIVE")
+                        .set("user_state", "ACTIVE")
                         .set("user_type", "personal")
                         .build();
             }
@@ -97,7 +96,7 @@ public class RegisterResource {
                         .set("user_creation_time", Timestamp.now())
                         .set("user_role", "USER")
                         .set("user_state", "INACTIVE")
-                        .set("user_type", "personal")
+                        .set("user_type", "entity")
                         .build();
             }
 

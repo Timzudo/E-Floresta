@@ -37,8 +37,8 @@
 .session-body{
     background-color: ghostwhite;
     margin-top: 50px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 200px;
+    padding-right: 200px;
     border-radius: 10px;
     display: flex;
     align-items: start;
