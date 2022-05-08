@@ -32,3 +32,18 @@
 .site-body div{
     margin: 30px;
 }
+
+.top .buttons{
+    display: flex;
+    align-items: end;
+    font-size: 30px;
+}
+
+#option1,
+#option2 {
+    background-color: darkgreen;
+    color: white;
+    border-color: darkgreen;
+    height: 40px;
+    padding: 5px;
+}
