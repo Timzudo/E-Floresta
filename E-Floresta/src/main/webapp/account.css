@@ -1,0 +1,14 @@
+.top{
+    background-color: forestgreen;
+    height: 100px;
+    display: flex;
+    border: 5px darkgreen;
+    border-radius: 5px;
+}
+
+.top .title{
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
