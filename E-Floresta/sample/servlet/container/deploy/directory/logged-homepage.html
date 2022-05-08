@@ -7,15 +7,36 @@
         <link rel="stylesheet" href="logged-homepage.css">
     </head>
 
+    <script>
+        xmlhttp = new XMLHttpRequest();
+
+        function logout() {
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        sessionStorage.removeItem('token');
+                        window.location.href = "index.html";
+                    }
+                    else{
+                        alert("Não foi possível encerrar a sessão.");
+                    }
+                }
+            }
+
+            xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + sessionStorage.getItem('token'), true);
+            xmlhttp.send();
+        }
+    </script>
+
     <body>
         <div class="top">
             <div class="title">
                 <h1>E-Floresta</h1>
             </div>
 
-            <input class="session-button" type="button" value="Encerrar sessão" onclick="location.href='index.html'">
+            <input class="session-button" type="button" value="Encerrar sessão" onclick="logout();">
 
-            <div class="buttons">
+            <div class="pages-buttons">
 
                 <input id="option1" type="button" value="Página Inicial" onclick="location.href='logged-homepage.html'">
 
@@ -25,7 +46,7 @@
         </div>
 
         <div class="site-body">
-            <div class="initial-text">Texto inicial ser posto aqui!</div>
+            <div class="initial-text">Texto inicial a ser posto aqui!</div>
 
             <div class="initial-image">Imagem inicial que vai para aqui.</div>
         </div>
