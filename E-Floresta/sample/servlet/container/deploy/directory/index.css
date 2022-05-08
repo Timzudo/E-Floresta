@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 .top{
     background-color: forestgreen;
     height: 100px;
@@ -20,15 +24,25 @@
     border-color: azure;
     top: 50px;
     right: 40px;
+    transform: translate(0, -50%); /* Center the button */
 }
 
 .site-body{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 200px;
+    width: 100%;
+    height: calc(100% - 100px); /* 100px are the top bar */
 }
 
-.site-body div{
-    margin: 30px;
+.site-body .initial-text{
+    padding: 2%;
+    width: 46%;
+    float: left;
+}
+
+.site-body .initial-image{
+    width: 50%;
+}
+
+#map {
+    height: 100%;
+    width: 50%;
 }
