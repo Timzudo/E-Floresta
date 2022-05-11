@@ -26,9 +26,29 @@
             xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + JSON.parse(sessionStorage.getItem('token')));
             xmlhttp.send();
         }
+
+        function getValues(){
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        xmlhttp.responseText;
+                    }
+                    else{
+                        alert("Não foi possível obter informação.");
+                    }
+                }
+            }
+
+            var myObj = {tokenId:sessionStorage.getItem('token')};
+            var myJson = JSON.stringify(myObj);
+
+            xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/info/profileinfo");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(myJson);
+        }
     </script>
 
-    <body>
+    <body onload="getValues()">
         <div class="top">
             <div class="title">
                 <h1>E-Floresta</h1>
@@ -45,15 +65,29 @@
             </div>
         </div>
 
-        <div>
-            <h2>Perfil</h2>
+        <div class="info">
+            <img src="img/profile_picture.png" alt="Profile picture">
             <p></p>
-            <p>Username:</p>
-            <p>E-mail:</p>
-            <p>Nome Completo:</p>
-            <p>Telemóvel/Telefone:</p>
-            <p>NIF:</p>
-            <p>Tipo de utilizador:</p>
+            <div id="username">
+                <p class="label">Username:</p>
+            </div>
+            <div id="email">
+                <p class="label">E-mail:</p>
+            </div>
+            <div id="name">
+                <p class="label">Nome Completo:</p>
+            </div>
+            <div id="phone">
+                <p class="label">Telemóvel/Telefone:</p>
+            </div>
+            <div id="nif">
+                <p class="label">NIF:</p>
+            </div>
+            <div id="type">
+                <p class="label">Tipo de utilizador:</p>
+            </div>
+
+
         </div>
 
     </body>

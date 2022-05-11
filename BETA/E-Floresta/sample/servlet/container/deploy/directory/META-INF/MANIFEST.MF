@@ -1,5 +1,3 @@
 Manifest-Version: 1.0
-Created-By: IntelliJ IDEA
-Built-By: msg47
-Build-Jdk: 1.8.0_322
+Class-Path: 
 
