@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Perfil</title>
+        <link rel="stylesheet" href="account.css">
+    </head>
+
+    <script>
+        xmlhttp = new XMLHttpRequest();
+
+        function logout() {
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        sessionStorage.removeItem('token');
+                        window.location.href = "index.html";
+                    }
+                    else{
+                        alert("Não foi possível encerrar a sessão.");
+                    }
+                }
+            }
+
+            xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + JSON.parse(sessionStorage.getItem('token')));
+            xmlhttp.send();
+        }
+    </script>
+
+    <body>
+        <div class="top">
+            <div class="title">
+                <h1>E-Floresta</h1>
+            </div>
+
+            <input class="session-button" type="button" value="Encerrar sessão" onclick="logout();">
+
+            <div class="pages-buttons">
+
+                <input id="option1" type="button" value="Página Inicial" onclick="location.href='logged-homepage.html'">
+
+                <input id="option2" type="button" value="Perfil" onclick="location.href='account.html'">
+
+            </div>
+        </div>
+
+        <div>
+            <h2>Perfil</h2>
+            <p></p>
+            <p>Username:</p>
+            <p>E-mail:</p>
+            <p>Nome Completo:</p>
+            <p>Telemóvel/Telefone:</p>
+            <p>NIF:</p>
+            <p>Tipo de utilizador:</p>
+        </div>
+
+    </body>
+</html>

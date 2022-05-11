@@ -1,0 +1,38 @@
+.top{
+    background-color: forestgreen;
+    height: 100px;
+    display: flex;
+    border: 5px darkgreen;
+    border-radius: 5px;
+}
+
+.top .title{
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 20px;
+}
+
+.top .session-button{
+    position: absolute;
+    padding: 5px;
+    border-radius: 6px;
+    border-color: azure;
+    top: 50px;
+    right: 40px;
+}
+
+.top .pages-buttons{
+    display: flex;
+    align-items: end;
+    font-size: 30px;
+}
+
+#option1,
+#option2 {
+    background-color: darkgreen;
+    color: white;
+    border-color: darkgreen;
+    height: 40px;
+    padding: 5px;
+}

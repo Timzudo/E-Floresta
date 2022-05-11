@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>E-Floresta</title>
+        <link rel="stylesheet" href="logged-homepage.css">
+    </head>
+
+    <script>
+        xmlhttp = new XMLHttpRequest();
+
+        function logout() {
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        sessionStorage.removeItem('token');
+                        window.location.href = "index.html";
+                    }
+                    else{
+                        alert("Não foi possível encerrar a sessão.");
+                    }
+                }
+            }
+
+            xmlhttp.open("DELETE", "https://modified-talon-344017.oa.r.appspot.com/rest/logout/" + JSON.parse(sessionStorage.getItem('token')), true);
+            xmlhttp.send();
+        }
+    </script>
+
+    <body>
+        <div class="top">
+            <div class="title">
+                <h1>E-Floresta</h1>
+            </div>
+
+            <input class="session-button" type="button" value="Encerrar sessão" onclick="logout();">
+
+            <div class="pages-buttons">
+
+                <input id="option1" type="button" value="Página Inicial" onclick="location.href='logged-homepage.html'">
+
+                <input id="option2" type="button" value="Perfil" onclick="location.href='account.html'">
+
+            </div>
+        </div>
+
+        <div class="site-body">
+            <div class="initial-text">
+                O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
+                dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
+                sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas
+                económicas e ambientais resultantes dos incêndios florestais. Assim, a autarquia de Mação pretende
+                reordenar o seu território liderando uma iniciativa que promove a gestão integrada dos terrenos florestais
+                para ganhar escala e reduzir custos. <p> Esta plataforma web permite registar a adesão voluntária dos proprietários
+                a esta iniciativa comunitária e, posteriormente, seguir a sua gestão em termos de custos e proveitos. </p>
+            </div>
+            
+        </div>
+
+    </body>
+</html>
