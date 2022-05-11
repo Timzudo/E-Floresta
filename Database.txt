@@ -1,0 +1,15 @@
+Entidades possiveis (wip)
+
+User:
+-username
+name
+password
+email
+phone
+nif
+creation time
+role
+state type
+
+
+
