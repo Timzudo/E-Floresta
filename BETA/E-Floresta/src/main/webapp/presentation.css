@@ -29,12 +29,26 @@ body {
     font-family: "Calibri Light", sans-serif;
     text-align: justify;
     width: 50%;
-    padding: 25px;
+    padding: 28px 50px 50px 50px;
 }
 
 .bottom .bottom-image{
     margin: 35px;
     margin-top: 50px;
-    width: auto;
+    width: 50%;
+    padding-right: 20px;
+}
+
+.bottom-image p{
+    color: white;
+    font-family: "Calibri Light", sans-serif;
+    margin-left: auto;
+    text-align: center;
+}
+
+.bottom-text h1{
+    background-color: white;
+    color: rgb(145, 196, 131);
+    padding: 5px;
 }
 
