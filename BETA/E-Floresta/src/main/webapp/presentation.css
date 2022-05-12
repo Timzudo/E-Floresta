@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 .top{
     background-color: rgb(145, 196, 131);
     height: 60px;
@@ -14,15 +18,23 @@
     width: 100%;
 }
 
-.site-body .bottom-text{
+.bottom{
     background-color: rgb(145, 196, 131);
-    color: white;
-    font-family: Calibri, sans-serif;
-    text-align: justify;
-    padding: 25px;
+    display: flex;
     margin-top: -5px;
 }
 
-body {
-    margin: 0;
+.bottom .bottom-text{
+    color: white;
+    font-family: "Calibri Light", sans-serif;
+    text-align: justify;
+    width: 50%;
+    padding: 25px;
 }
+
+.bottom .bottom-image{
+    margin: 35px;
+    margin-top: 50px;
+    width: auto;
+}
+
