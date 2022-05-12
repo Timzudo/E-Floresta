@@ -1,0 +1,24 @@
+.top{
+    background-color: rgb(145, 196, 131);
+    height: 60px;
+    display: flex;
+}
+
+.top .logo{
+    display: block;
+    padding: 10px;
+    padding-left: 30px;
+}
+
+.site-body .background{
+    width: 100%;
+}
+
+.site-body .bottom-text{
+    background-color: rgb(145, 196, 131);
+    color: white;
+    font-family: Calibri, sans-serif;
+    text-align: justify;
+    padding: 5px;
+    margin-top: -5px;
+}
