@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+}
+
+.top{
+    background-color: rgb(145, 196, 131);
+    height: 60px;
+    display: flex;
+}
+
+.top .logo{
+    display: block;
+    padding: 10px;
+    padding-left: 30px;
+}
+
+.site-body .background{
+    width: 100%;
+}
+
+.bottom{
+    background-color: rgb(145, 196, 131);
+    display: flex;
+    margin-top: -5px;
+}
+
+.bottom .bottom-text{
+    color: white;
+    font-family: "Calibri Light", sans-serif;
+    text-align: justify;
+    width: 50%;
+    padding: 28px 50px 50px 50px;
+}
+
+.bottom .bottom-image{
+    margin: 35px;
+    margin-top: 50px;
+    width: 50%;
+    padding-right: 20px;
+}
+
+.bottom-image p{
+    color: white;
+    font-family: "Calibri Light", sans-serif;
+    margin-left: auto;
+    text-align: center;
+}
+
+.bottom-text h1{
+    background-color: white;
+    color: rgb(145, 196, 131);
+    padding: 5px;
+}
+
