@@ -1,0 +1,23 @@
+body{
+    margin: 0;
+}
+
+.top{
+    background-color: rgb(145, 196, 131);
+    height: 60px;
+    display: flex;
+}
+
+.top .logo{
+    padding: 10px;    
+}
+
+.top .session-button{
+    position: absolute;
+    transform: translate(915%, 90%);    
+}
+
+.initial-text{
+    padding: 2%;
+    float: left;
+}

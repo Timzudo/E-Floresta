@@ -1,12 +1,48 @@
 import { useState } from 'react'
-import TopBar from './TopBar/TopBar'
+import Image from './logo.png'
+import './App.css'
+import CreateAndLogin from './create-and-login/CreateAndLogin'
+
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from "react-router-dom"
+
 
 const App = () => {
 
-  let a = "yeet";
-
   return (
-      <TopBar name={a}/>
+    <>
+      <Router>
+        <div>
+          <Link to="/create-and-login">
+            <button className="session-button">
+              Login | Criar Utilizador
+            </button>
+          </Link>
+        </div>
+
+        <Routes>
+          <Route path="/create-and-login" element={<CreateAndLogin />} />
+        </Routes>
+
+      </Router>
+
+      <div className="top">
+        <img src={Image} alt="E-Floresta Logo" className="logo" />
+
+      </div>
+
+      <div class="initial-text">
+        O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
+        dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
+        sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas
+        económicas e ambientais resultantes dos incêndios florestais. Assim, a autarquia de Mação pretende
+        reordenar o seu território liderando uma iniciativa que promove a gestão integrada dos terrenos florestais
+        para ganhar escala e reduzir custos. <p> Esta plataforma web permite registar a adesão voluntária dos proprietários
+          a esta iniciativa comunitária e, posteriormente, seguir a sua gestão em termos de custos e proveitos. </p>
+      </div>
+    </>
   )
 }
 
