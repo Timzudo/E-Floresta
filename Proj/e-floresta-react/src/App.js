@@ -7,33 +7,33 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import { Button } from 'react-bootstrap'
 
 
 const App = () => {
 
   return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-and-login" element={<CreateAndLogin />} />
+      </Routes>
+    </Router>
+  )
+}
+
+const Home = () => {
+  return (
     <>
-      <Router>
-        <div>
-          <Link to="/create-and-login">
-            <button className="session-button">
-              Login | Criar Utilizador
-            </button>
-          </Link>
-        </div>
-
-        <Routes>
-          <Route path="/create-and-login" element={<CreateAndLogin />} />
-        </Routes>
-
-      </Router>
-
       <div className="top">
         <img src={Image} alt="E-Floresta Logo" className="logo" />
+        <Link to="/create-and-login">
+          <button type="button" class="btn btn-primary">Create</button>
+        </Link>
 
       </div>
 
-      <div class="initial-text">
+      <div className="initial-text">
         O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
         dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
         sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas
