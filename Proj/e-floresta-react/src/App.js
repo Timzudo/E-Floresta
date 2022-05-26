@@ -28,10 +28,13 @@ const Home = () => {
   return (
     <>
       <div className="top">
-        <img src={Image} alt="E-Floresta Logo" className="logo" />
+        <div className="logoDiv">
+        <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo_app" /></Link>
+        </div>
+        
         <div className="button">
           <Link to="/create-and-login">
-          <button type="button" class="btn btn-light">Login | Create Account</button>
+          <button type="button" className="btn btn-light">Login | Create Account</button>
           </Link>
         </div>
 
