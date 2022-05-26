@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Image from './logo.png'
 import './App.css'
 import CreateAndLogin from './create-and-login/CreateAndLogin'
+import NewMap from './Map/Map'
 
 import {
   BrowserRouter as Router,
@@ -17,6 +18,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create-and-login" element={<CreateAndLogin />} />
+        <Route path="/map" element={<NewMap />} />
       </Routes>
     </Router>
   )
@@ -27,9 +29,12 @@ const Home = () => {
     <>
       <div className="top">
         <img src={Image} alt="E-Floresta Logo" className="logo" />
-        <Link to="/create-and-login">
-          <button type="button" class="btn btn-primary">Create</button>
-        </Link>
+        <div className="button">
+          <Link to="/create-and-login">
+          <button type="button" class="btn btn-light">Login | Create Account</button>
+          </Link>
+        </div>
+
 
       </div>
 

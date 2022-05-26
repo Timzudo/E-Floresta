@@ -21,3 +21,9 @@ body{
     padding: 2%;
     float: left;
 }
+
+.button{
+    margin-left: auto;
+    margin-right: 10px;
+    margin-top: 10px;
+}
