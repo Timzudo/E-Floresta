@@ -5,17 +5,17 @@ import { useState } from 'react'
 import { Polygon } from '@react-google-maps/api';
 
 const containerStyle = {
-    width: 'auto',
-    height: 'auto'
+    width: '100vw',
+    height: '100vh'
 };
 
 const center = {
-    lat: -35.745,
-    lng: -38.523
+    lat: 38.660677,
+    lng: -9.205971
 };
 
 
-const NewMap = () => {
+const Map = () => {
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
 
@@ -63,7 +63,7 @@ const NewMap = () => {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={5}
+                zoom={10}
                 onClick={ev => {
                     addMarker(ev.latLng.lat(), ev.latLng.lng())
                 }}
@@ -79,4 +79,4 @@ const NewMap = () => {
     )
 }
 
-export default React.memo(NewMap)
+export default React.memo(Map)
