@@ -34,7 +34,7 @@ const Home = () => {
         
         <div className="button">
           <Link to="/create-and-login">
-          <button type="button" className="btn btn-light">Login | Create Account</button>
+          <button type="button" className="btn btn-light">Login | Criar Conta</button>
           </Link>
         </div>
 
