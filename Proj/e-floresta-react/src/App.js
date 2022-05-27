@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import Image from './logo.png'
 import './App.css'
-import CreateAndLogin from './CreateAndLogin/CreateAndLogin'
-import Profile from "./Profile/Profile";
+import CreateAndLogin from './create-and-login/CreateAndLogin'
 import NewMap from './Map/Map'
 
 import {
@@ -20,7 +19,6 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/create-and-login" element={<CreateAndLogin />} />
         <Route path="/map" element={<NewMap />} />
-        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   )
@@ -30,13 +28,13 @@ const Home = () => {
   return (
     <>
       <div className="top">
-        <div className="logo">
-          <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo" /></Link>
+        <div className="logoDiv">
+        <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo_app" /></Link>
         </div>
         
         <div className="button">
           <Link to="/create-and-login">
-            <button type="button" className="btn btn-light">Login | Criar Conta</button>
+          <button type="button" className="btn btn-light">Login | Criar Conta</button>
           </Link>
         </div>
 

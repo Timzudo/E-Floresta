@@ -8,9 +8,19 @@ body{
     display: flex;
 }
 
-.top .logo{
+.top .logo_app{
     padding: 10px;  
     width: 16%;  
+}
+
+.top .session-button{
+    position: absolute;
+    transform: translate(915%, 90%);
+}
+
+.initial-text{
+    padding: 2%;
+    float: left;
 }
 
 .button{
@@ -19,9 +29,6 @@ body{
     margin-top: 10px;
 }
 
-.initial-text{
-    padding: 2%;
-    float: left;
-}
-
-
+/*.logoDiv{
+    width: 10%;
+}*/
