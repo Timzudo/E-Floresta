@@ -7,6 +7,7 @@ import Map from './Map/Map'
 import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
 import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
+import RegisterPortion from './RegisterPortion/RegisterPortion'
 
 import {
   BrowserRouter as Router,
@@ -22,7 +23,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create-and-login" element={<CreateAndLogin />} />
-          <Route path="/map" element={<NewMap />} />
+          <Route path="/map" element={<RegisterPortion />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/homepage" element={<LoggedHomepage />} />
           <Route path="/change-profile" element={<ChangeProfile />} />

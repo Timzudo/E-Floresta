@@ -6,7 +6,7 @@ import { Polygon } from '@react-google-maps/api';
 
 const containerStyle = {
     width: '100vw',
-    height: '100vh'
+    height: '93vh'
 };
 
 const center = {

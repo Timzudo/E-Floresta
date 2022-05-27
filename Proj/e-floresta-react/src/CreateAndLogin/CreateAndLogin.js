@@ -20,7 +20,7 @@ const CreateAndLogin = () => {
           token = xmlhttp.responseText;
           alert("Login efetuado com sucesso.");
           sessionStorage.setItem('token', token);
-          window.location.href = "logged-homepage.html";
+          window.location.href = "/homepage";
         }
         else {
           alert("Não foi possível efetuar o login.");
@@ -42,7 +42,7 @@ const CreateAndLogin = () => {
           token = xmlhttp.responseText;
           alert("Registo efetuado com sucesso.");
           sessionStorage.setItem('token', token);
-          window.location.href = "logged-homepage.html";
+          window.location.href = "/homepage";
         }
         else {
           alert("Não foi possível registar o utilizador.");
