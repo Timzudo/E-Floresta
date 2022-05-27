@@ -68,8 +68,8 @@ const CreateAndLogin = () => {
   return (
     <>
       <div className="top">
-        <div className="logoDiv">
-          <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo_app" /></Link>
+        <div className="logo">
+          <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo" /></Link>
         </div>
       </div>
 
