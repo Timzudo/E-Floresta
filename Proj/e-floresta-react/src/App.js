@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import Image from './logo.png'
 import './App.css'
-import CreateAndLogin from './create-and-login/CreateAndLogin'
+import CreateAndLogin from './CreateAndLogin/CreateAndLogin'
+import Profile from './Profile/Profile'
 import Map from './Map/Map'
+import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
+import ChangeProfile from "./ChangeProfile/ChangeProfile"
+import AboutUs from "./AboutUs/AboutUs"
 
 import {
   BrowserRouter as Router,
@@ -14,44 +18,50 @@ import { Button } from 'react-bootstrap'
 const App = () => {
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-and-login" element={<CreateAndLogin />} />
-        <Route path="/map" element={<Map />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create-and-login" element={<CreateAndLogin />} />
+          <Route path="/map" element={<NewMap />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/homepage" element={<LoggedHomepage />} />
+          <Route path="/change-profile" element={<ChangeProfile />} />
+          <Route path="/about-us" element={<AboutUs />} />
+        </Routes>
+      </Router>
   )
 }
 
 const Home = () => {
   return (
-    <>
-      <div className="top">
-        <div className="logoDiv">
-        <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo_app" /></Link>
+      <>
+        <div className="home_top">
+
+          <div>
+            <Link to="/"><img src={Image} alt="E-Floresta Logo" className="home_logo" /></Link>
+          </div>
+
+          <div className="home_button">
+            <Link to="/create-and-login">
+              <button type="button" className="btn btn-light">Login | Criar Conta</button>
+            </Link>
+          </div>
+
         </div>
-        
-        <div className="button">
-          <Link to="/create-and-login">
-          <button type="button" className="btn btn-light">Login | Criar Conta</button>
-          </Link>
-        </div>
 
-
-      </div>
-
-      <div className="initial-text">
-        O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
-        dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
-        sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas
-        económicas e ambientais resultantes dos incêndios florestais. Assim, a autarquia de Mação pretende
-        reordenar o seu território liderando uma iniciativa que promove a gestão integrada dos terrenos florestais
-        para ganhar escala e reduzir custos. <p> Esta plataforma web permite registar a adesão voluntária dos proprietários
+        <div className="i-text">
+          O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
+          dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
+          sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas
+          económicas e ambientais resultantes dos incêndios florestais. Assim, a autarquia de Mação pretende
+          reordenar o seu território liderando uma iniciativa que promove a gestão integrada dos terrenos florestais
+          para ganhar escala e reduzir custos. <p> Esta plataforma web permite registar a adesão voluntária dos proprietários
           a esta iniciativa comunitária e, posteriormente, seguir a sua gestão em termos de custos e proveitos. </p>
-      </div>
-    </>
+        </div>
+      </>
   )
 }
 
 export default App
+
+

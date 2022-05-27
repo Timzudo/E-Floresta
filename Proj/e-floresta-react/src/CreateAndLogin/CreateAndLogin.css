@@ -2,14 +2,15 @@ body{
     margin: 0;
 }
 
-.top{
+.cl_top{
     background-color: rgb(145, 196, 131);
     height: 60px;
     display: flex;
 }
 
-.top .logo{
-    padding: 10px;    
+.cl_logo{
+    padding: 10px;
+    width: 16%;
 }
 
 .session-body{

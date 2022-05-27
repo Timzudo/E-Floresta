@@ -1,0 +1,33 @@
+body{
+    margin: 0;
+}
+
+.topBar_top{
+    background-color: rgb(145, 196, 131);
+    height: 60px;
+    display: flex;
+}
+
+.topBar_top .topBar_logo{
+    padding: 10px;
+    width: 16%;
+}
+
+.btn-group{
+    display: flex;
+    align-items: end;
+    font-size: 30px;
+}
+
+#option1,
+#option2,
+#option3 {
+    border-color: darkgreen;
+}
+
+.close-session-button{
+    margin-left: auto;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+

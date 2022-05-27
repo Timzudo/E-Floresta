@@ -2,33 +2,26 @@ body{
     margin: 0;
 }
 
-.top{
+.home_top{
     background-color: rgb(145, 196, 131);
     height: 60px;
     display: flex;
 }
 
-.top .logo_app{
+.home_logo{
     padding: 10px;  
     width: 16%;  
 }
 
-.top .session-button{
-    position: absolute;
-    transform: translate(915%, 90%);
-}
-
-.initial-text{
-    padding: 2%;
-    float: left;
-}
-
-.button{
+.home_button{
     margin-left: auto;
     margin-right: 10px;
     margin-top: 10px;
 }
 
-/*.logoDiv{
-    width: 10%;
-}*/
+.i-text{
+    padding: 2%;
+    float: left;
+}
+
+

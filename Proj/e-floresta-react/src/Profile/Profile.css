@@ -1,0 +1,21 @@
+.profile_info {
+    border: solid lightgrey;
+    border-radius: 5px;
+    width: 20%;
+    height: auto;
+    padding: 5px;
+    margin: 10px;
+}
+
+.profile_pic {
+    width: 90%;
+    border: solid grey 0.5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.change-profile-info {
+    margin-top: 30px;
+    margin-left: 90px;
+}

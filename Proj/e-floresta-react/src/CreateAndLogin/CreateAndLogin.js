@@ -67,14 +67,18 @@ const CreateAndLogin = () => {
 
   return (
     <>
-      <div className="top">
-        <div className="logoDiv">
-          <Link to="/"><img src={Image} alt="E-Floresta Logo" className="logo_app" /></Link>
+      <div className="cl_top">
+
+        <div>
+          <Link to="/"><img src={Image} alt="E-Floresta Logo" className="cl_logo" /></Link>
         </div>
+
       </div>
 
       <div className="session-body">
+
         <div className="initiate-session">
+
           <h2 className="align-content">Iniciar sessão</h2>
 
           <input className="align-content" id="session-username" type="text" placeholder="Username/E-mail" onChange={getUsername}/>
@@ -87,6 +91,7 @@ const CreateAndLogin = () => {
         <div className="division"> </div>
 
         <div className="create-account">
+
           <h2 className="align-content">Registe-se</h2>
           <p className="align-content">Ainda não tem conta?</p>
           <p className="align-content">Registe-se agora!</p>
@@ -107,8 +112,11 @@ const CreateAndLogin = () => {
           <input className="align-content" id="create-acc-nif" type="text" placeholder="NIF" maxLength="9" />
 
           <input className="button" type="button" value="Registar" onClick={register} />
+
         </div>
+
       </div>
+
     </>
   )
 }
