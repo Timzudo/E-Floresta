@@ -40,23 +40,23 @@ const ChangeProfile = () => {
             <div className="profile_info">
                 <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
                 <p></p>
-                <div id="username">
+                <div id="username_ChangeProfile">
                     <p className="label">Username: {username}</p>
                 </div>
-                <div id="email">
-                    <p className="label">E-mail: {email}</p>
+                <div id="email_ChangeProfile">
+                    E-mail: {email} <input className="label" id="change-email" type="text" />
                 </div>
-                <div id="name">
-                    <p className="label">Nome Completo: {name}</p>
+                <div id="name_ChangeProfile">
+                    Nome Completo: {name} <input className="label" id="change-name" type="text" />
                 </div>
-                <div id="phone">
-                    <p className="label">Telemóvel/Telefone: {phone}</p>
+                <div id="phone_ChangeProfile">
+                    Telemóvel/Telefone: {phone} <input className="label" id="change-phone" type="number" maxLength="9"/>
                 </div>
-                <div id="nif">
-                    <p className="label">NIF: {nif}</p>
+                <div id="nif_ChangeProfile">
+                    NIF: {nif} <input className="label" id="change-nif" type="number" maxLength="9"/>
                 </div>
-                <div id="type">
-                    <p className="label">Tipo de utilizador: {type}</p>
+                <div id="type_ChangeProfile">
+                    Tipo de utilizador: {type} <p className="label"></p>
                 </div>
 
             </div>
