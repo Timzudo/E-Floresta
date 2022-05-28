@@ -21,6 +21,9 @@ const TopBar = () => {
                   <Link to="/about-us">
                       <button id="option3" type="button" className="btn btn-success">Sobre</button>
                   </Link>
+                  <Link to="/map">
+                      <button id="option4" type="button" className="btn btn-success">Mapa</button>
+                  </Link>
               </div>
 
               <div className="close-session-button">
