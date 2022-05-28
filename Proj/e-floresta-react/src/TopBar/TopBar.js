@@ -12,7 +12,7 @@ const TopBar = () => {
               </div>
 
               <div className="btn-group">
-                  <Link to="/">
+                  <Link to="/homepage">
                       <button id="option1" type="button" className="btn btn-success">Página Inicial</button>
                   </Link>
                   <Link to="/profile">
