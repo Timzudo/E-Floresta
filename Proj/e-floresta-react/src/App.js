@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import Image from './logo.png'
 import './App.css'
 import CreateAndLogin from './CreateAndLogin/CreateAndLogin'
 import Profile from './Profile/Profile'
-import Map from './Map/Map'
 import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
 import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
@@ -13,7 +11,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import { Button } from 'react-bootstrap'
 
 
 const App = () => {
