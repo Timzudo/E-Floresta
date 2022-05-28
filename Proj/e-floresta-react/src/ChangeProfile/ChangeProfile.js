@@ -1,6 +1,7 @@
 import  './ChangeProfile.css'
 import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
+import {Link} from "react-router-dom";
 
 const ChangeProfile = () => {
 
@@ -37,7 +38,7 @@ const ChangeProfile = () => {
         <>
             <TopBar />
 
-            <div className="profile_info">
+            <div className="profileInfo_ChangeProfile">
                 <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
                 <p></p>
                 <div id="username_ChangeProfile">
@@ -57,6 +58,12 @@ const ChangeProfile = () => {
                 </div>
                 <div id="type_ChangeProfile">
                     Tipo de utilizador: {type} <p className="label"></p>
+                </div>
+
+                <div className="confirmChanges_ChangeProfile">
+                    <Link to="/profile">
+                        <button type="button" className="btn btn-secondary btn-sm">Confirmar Alterações</button>
+                    </Link>
                 </div>
 
             </div>
