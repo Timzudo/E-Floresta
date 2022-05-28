@@ -6,7 +6,9 @@ const RegisterPortion = () => {
     return(
         <>
         <TopBar/>
-        <Map/>
+            <div className="map_RegisterPortion">
+                <Map/>
+            </div>
         </>
     )
 }

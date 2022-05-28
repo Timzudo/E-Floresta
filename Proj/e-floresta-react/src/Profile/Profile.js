@@ -2,26 +2,31 @@ import  './Profile.css'
 import ProfileImage from './profile_picture.png'
 import TopBar from '../TopBar/TopBar.js'
 import {Link} from "react-router-dom";
+import { useState } from 'react'
 
 const Profile = () => {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [nif, setNif] = useState("");
+    const [type, setType] = useState("");
 
-    let username, email, name, phone, nif, type
 
     let xmlhttp = new XMLHttpRequest();
 
-    function getValues() {
+    (function getValues() {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
-                    username = obj.username;
-                    email = obj.email;
-                    name = obj.name;
-                    phone = obj.phone;
-                    nif = obj.nif;
-                    type = obj.type;
+                    setUsername(obj.username);
+                    setEmail(obj.email)
+                    setName(obj.name);
+                    setPhone(obj.phone);
+                    setNif(obj.nif);
+                    setType(obj.type);
                 } else {
-                    alert("Não foi possível obter informação.");
                 }
             }
         }
@@ -32,7 +37,7 @@ const Profile = () => {
         xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    }
+    })()
 
     return(
         <>
