@@ -17,13 +17,15 @@ body{
     display: flex;
     align-items: end;
     font-size: 30px;
+    right: 54%;
 }
 
 #option1,
 #option2,
 #option3,
 #option4 {
-    border-color: darkgreen;
+    border-radius: 0;
+    color: white;
 }
 
 .close-session-button{

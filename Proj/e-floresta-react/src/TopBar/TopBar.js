@@ -13,16 +13,16 @@ const TopBar = () => {
 
               <div className="btn-group">
                   <Link to="/homepage">
-                      <button id="option1" type="button" className="btn btn-success">Página Inicial</button>
+                      <button id="option1" type="button" className="btn btn-outline-success">Página Inicial</button>
                   </Link>
                   <Link to="/profile">
-                      <button id="option2" type="button" className="btn btn-success">Meu Perfil</button>
+                      <button id="option2" type="button" className="btn btn-outline-success">Meu Perfil</button>
                   </Link>
                   <Link to="/about-us">
-                      <button id="option3" type="button" className="btn btn-success">Sobre</button>
+                      <button id="option3" type="button" className="btn btn-outline-success">Sobre</button>
                   </Link>
                   <Link to="/map">
-                      <button id="option4" type="button" className="btn btn-success">Mapa</button>
+                      <button id="option4" type="button" className="btn btn-outline-success">Mapa</button>
                   </Link>
               </div>
 
