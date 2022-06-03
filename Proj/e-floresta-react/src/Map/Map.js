@@ -16,9 +16,9 @@ const center = {
 };
 
 const options = {
-    fillColor: "lightblue",
-    fillOpacity: 0.5,
-    strokeColor: "blue",
+    fillColor: "Khaki",
+    fillOpacity: 0.3,
+    strokeColor: "DarkOrange",
     strokeOpacity: 1,
     strokeWeight: 2,
     clickable: false,
@@ -41,20 +41,18 @@ const Map = () => {
                     alert("Login efetuado com sucesso.");
                     sessionStorage.setItem('token', token);
                     window.location.href = "/homepage";
-                }
-                else {
+                } else {
                     alert("Não foi possível efetuar o login.");
                 }
             }
         }
-        let myObj = { type: "Polygon",
-                        coordinates: [[]]};
+        let myObj = {
+            coordinates: []
+        };
 
-        for(let i = 0; i<paths.length; i++){
-            myObj.coordinates[0].push(new Array(paths[i].lat, paths[i].lng));
+        for (let i = 0; i < paths.length; i++) {
+            myObj.coordinates.push([paths[i].lat, paths[i].lng]);
         }
-
-        myObj.coordinates[0].push(new Array(paths[0].lat, paths[0].lng));
 
         let myJson = JSON.stringify(myObj);
 
@@ -70,10 +68,18 @@ const Map = () => {
 
     function addMarker(lat, lng) {
 
-        setMarker(markerList.concat(<Marker key={markerList.length} id={markerList.length} position={{
-            lat: lat,
-            lng: lng
-        }}/>))
+        setMarker(markerList.concat(<Marker key={markerList.length} id={markerList.length}
+                                            position={{
+                                                lat: lat,
+                                                lng: lng
+                                            }}
+                                            icon={{
+                                                path: google.maps.SymbolPath.CIRCLE,
+                                                fillColor: "#ff8000",
+                                                fillOpacity: 1.0,
+                                                strokeWeight: 0,
+                                                scale: 5
+                                            }}/>))
 
 
         setPaths(paths.concat({
@@ -83,8 +89,8 @@ const Map = () => {
     }
 
     function rollback() {
-        setMarker(markerList.filter((element, index) => index < markerList.length -1));
-        setPaths(paths.filter((element, index) => index < paths.length -1));
+        setMarker(markerList.filter((element, index) => index < markerList.length - 1));
+        setPaths(paths.filter((element, index) => index < paths.length - 1));
     }
 
 
@@ -109,7 +115,9 @@ const Map = () => {
             </GoogleMap>
         </LoadScript>
             <button type="button" className="btn btn-light" onClick={rollback}>Rollback</button>
-            <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"} onClick={submitParcel}>Submit</button>
+            <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"}
+                    onClick={submitParcel}>Submit
+            </button>
             <input type="text" className="form-control" placeholder="Parcel name"/>
         </div>
 
