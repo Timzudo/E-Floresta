@@ -6,7 +6,7 @@ import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
 import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
 import RegisterPortion from './RegisterPortion/RegisterPortion'
-import CheckIfLoggedOut from "./util/CheckIfLoggedOut";
+import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 
 import {
   BrowserRouter as Router,
@@ -34,6 +34,8 @@ const App = () => {
 const Home = () => {
   return (
       <>
+        <CheckIfLoggedIn />
+
         <div className="home_top">
 
           <div>
