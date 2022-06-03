@@ -1,7 +1,7 @@
 import Image from './logo.png'
 import './CreateAndLogin.css'
 import {Link} from "react-router-dom";
-import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
+import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
 
 const CreateAndLogin = () => {
   let username, password;

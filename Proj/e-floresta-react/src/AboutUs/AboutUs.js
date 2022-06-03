@@ -1,11 +1,11 @@
 import  './AboutUs.css'
 import TopBar from '../TopBar/TopBar.js'
-import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 
 const AboutUs = () => {
     return(
         <>
-            <CheckIfLoggedIn />
+            <CheckIfLoggedOut />
             <TopBar />
             <div className="about-us">
                 <h1>Equipa E-Floresta!</h1>

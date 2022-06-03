@@ -6,7 +6,7 @@ import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
 import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
 import RegisterPortion from './RegisterPortion/RegisterPortion'
-import CheckIfLoggedIn from "./util/CheckIfLoggedIn";
+import CheckIfLoggedOut from "./util/CheckIfLoggedOut";
 
 import {
   BrowserRouter as Router,

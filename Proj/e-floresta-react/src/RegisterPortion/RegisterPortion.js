@@ -1,13 +1,13 @@
 import TopBar from "../TopBar/TopBar.js"
 import Map from "../Map/Map.js"
-import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 
 
 const RegisterPortion = () => {
     return(
         <>
 
-        <CheckIfLoggedIn />
+        <CheckIfLoggedOut />
         <TopBar/>
             <div className="map_RegisterPortion">
                 <Map/>

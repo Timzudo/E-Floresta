@@ -3,7 +3,7 @@ import ProfileImage from './profile_picture.png'
 import TopBar from '../TopBar/TopBar.js'
 import {Link} from "react-router-dom";
 import { useState } from 'react'
-import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 
 const Profile = () => {
     const [username, setUsername] = useState("");
@@ -42,7 +42,7 @@ const Profile = () => {
 
     return(
         <>
-            <CheckIfLoggedIn />
+            <CheckIfLoggedOut />
             <TopBar />
 
             <div className="profile_info">

@@ -1,4 +1,4 @@
-const CheckIfLoggedIn = () => {
+const CheckIfLoggedOut = () => {
 
     let token = sessionStorage.getItem('token');
     if(token == null) {
@@ -10,4 +10,4 @@ const CheckIfLoggedIn = () => {
     )
 }
 
-export default CheckIfLoggedIn
+export default CheckIfLoggedOut
