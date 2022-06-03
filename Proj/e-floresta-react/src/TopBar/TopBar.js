@@ -8,7 +8,7 @@ const TopBar = () => {
           <div className="topBar_top">
 
               <div>
-                  <Link to="/"><img src={LogoImage} alt="E-Floresta Logo" className="topBar_logo"/></Link>
+                  <Link to="/homepage"><img src={LogoImage} alt="E-Floresta Logo" className="topBar_logo"/></Link>
               </div>
 
               <div className="btn-group">
