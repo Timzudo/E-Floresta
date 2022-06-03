@@ -30,6 +30,41 @@ const options = {
 
 
 const Map = () => {
+    let xmlhttp = new XMLHttpRequest();
+    let token = sessionStorage.getItem('token');
+
+    function submitParcel() {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
+                    token = xmlhttp.responseText;
+                    alert("Login efetuado com sucesso.");
+                    sessionStorage.setItem('token', token);
+                    window.location.href = "/homepage";
+                }
+                else {
+                    alert("Não foi possível efetuar o login.");
+                }
+            }
+        }
+        let myObj = { type: "Polygon",
+                        coordinates: [[]]};
+
+        for(let i = 0; i<paths.length; i++){
+            myObj.coordinates[0].push(new Array(paths[i].lat, paths[i].lng));
+        }
+
+        myObj.coordinates[0].push(new Array(paths[0].lat, paths[0].lng));
+
+        let myJson = JSON.stringify(myObj);
+
+        console.log(myJson);
+
+        /*xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);*/
+    }
+
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
 
@@ -73,7 +108,11 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <button onClick={rollback}>Rollback</button></div>
+            <button type="button" className="btn btn-light" onClick={rollback}>Rollback</button>
+            <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"} onClick={submitParcel}>Submit</button>
+            <input type="text" className="form-control" placeholder="Parcel name"/>
+        </div>
+
 
     )
 }
