@@ -62,10 +62,18 @@ const ChangeProfile = () => {
                     Tipo de utilizador: {type} <p className="label"></p>
                 </div>
 
-                <div className="confirmChanges_ChangeProfile">
-                    <Link to="/profile">
-                        <button type="button" className="btn btn-secondary btn-sm">Confirmar Alterações</button>
-                    </Link>
+                <div className="btn-group" id="confirmAndCancel_ChangeProfile">
+                    <div id="confirmChanges_ChangeProfile">
+                        <Link to="/profile">
+                            <button type="button" className="btn btn-success btn-sm">Confirmar Alterações</button>
+                        </Link>
+                    </div>
+
+                    <div id="cancelChanges_ChangeProfile">
+                        <Link to="/profile">
+                            <button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações</button>
+                        </Link>
+                    </div>
                 </div>
 
             </div>
