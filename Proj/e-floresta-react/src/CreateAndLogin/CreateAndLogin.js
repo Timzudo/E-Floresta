@@ -1,6 +1,7 @@
 import Image from './logo.png'
 import './CreateAndLogin.css'
 import {Link} from "react-router-dom";
+import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
 
 const CreateAndLogin = () => {
   let username, password;
@@ -67,6 +68,7 @@ const CreateAndLogin = () => {
 
   return (
     <>
+
       <div className="cl_top">
 
         <div>

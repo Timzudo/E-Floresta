@@ -18,11 +18,11 @@ const TopBar = () => {
                   <Link to="/profile">
                       <button id="option2" type="button" className="btn btn-outline-success">Meu Perfil</button>
                   </Link>
-                  <Link to="/about-us">
-                      <button id="option3" type="button" className="btn btn-outline-success">Sobre</button>
-                  </Link>
                   <Link to="/map">
-                      <button id="option4" type="button" className="btn btn-outline-success">Mapa</button>
+                      <button id="option3" type="button" className="btn btn-outline-success">Mapa</button>
+                  </Link>
+                  <Link to="/about-us">
+                      <button id="option4" type="button" className="btn btn-outline-success">Sobre</button>
                   </Link>
               </div>
 

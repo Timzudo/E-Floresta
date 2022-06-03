@@ -2,6 +2,7 @@ import  './ChangeProfile.css'
 import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
 import {Link} from "react-router-dom";
+import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
 
 const ChangeProfile = () => {
 
@@ -36,6 +37,7 @@ const ChangeProfile = () => {
 
     return(
         <>
+            <CheckIfLoggedIn />
             <TopBar />
 
             <div className="profileInfo_ChangeProfile">

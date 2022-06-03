@@ -1,9 +1,11 @@
 import  './LoggedHomepage.css'
 import TopBar from '../TopBar/TopBar.js'
+import CheckIfLoggedIn from "../util/CheckIfLoggedIn";
 
 const LoggedHomepage = () => {
     return(
         <>
+            <CheckIfLoggedIn />
             <TopBar />
             <div className="lhp-i-text">
                 O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
