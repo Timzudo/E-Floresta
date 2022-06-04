@@ -5,6 +5,8 @@ import {useState} from 'react'
 import {Polygon} from '@react-google-maps/api';
 import "./Map.css"
 
+const google = window.google;
+
 const containerStyle = {
     width: '80vw',
     height: '93vh'
