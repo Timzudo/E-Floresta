@@ -69,6 +69,7 @@ const Map = () => {
     const [paths, setPaths] = useState([]);
 
     function addMarker(lat, lng) {
+        const google = window.google;
 
         setMarker(markerList.concat(<Marker key={markerList.length} id={markerList.length}
                                             position={{
