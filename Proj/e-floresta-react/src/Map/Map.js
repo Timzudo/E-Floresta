@@ -8,7 +8,7 @@ import "./Map.css"
 const google = window.google;
 
 const containerStyle = {
-    width: '80vw',
+    width: '70vw',
     height: '93vh'
 };
 
