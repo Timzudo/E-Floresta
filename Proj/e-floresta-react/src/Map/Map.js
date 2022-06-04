@@ -33,7 +33,7 @@ const options = {
 
 const Map = () => {
     let xmlhttp = new XMLHttpRequest();
-    let token = sessionStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     function submitParcel() {
         xmlhttp.onreadystatechange = function () {
@@ -41,7 +41,7 @@ const Map = () => {
                 if (xmlhttp.status === 200) {
                     token = xmlhttp.responseText;
                     alert("Login efetuado com sucesso.");
-                    sessionStorage.setItem('token', token);
+                    localStorage.setItem('token', token);
                     window.location.href = "/homepage";
                 } else {
                     alert("Não foi possível efetuar o login.");

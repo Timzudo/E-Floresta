@@ -20,7 +20,7 @@ const CreateAndLogin = () => {
         if (xmlhttp.status == 200) {
           token = xmlhttp.responseText;
           alert("Login efetuado com sucesso.");
-          sessionStorage.setItem('token', token);
+          localStorage.setItem('token', token);
           window.location.href = "/homepage";
         }
         else {
@@ -42,7 +42,7 @@ const CreateAndLogin = () => {
         if(xmlhttp.status == 200){
           token = xmlhttp.responseText;
           alert("Registo efetuado com sucesso.");
-          sessionStorage.setItem('token', token);
+          localStorage.setItem('token', token);
           window.location.href = "/homepage";
         }
         else {

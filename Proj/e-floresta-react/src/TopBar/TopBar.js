@@ -28,7 +28,7 @@ const TopBar = () => {
 
               <div className="close-session-button">
                   <Link to="/">
-                      <button type="button" className="btn btn-light">Encerrar sessão</button>
+                      <button type="button" onClick={ () => localStorage.removeItem('token')} className="btn btn-light">Encerrar sessão</button>
                   </Link>
               </div>
 

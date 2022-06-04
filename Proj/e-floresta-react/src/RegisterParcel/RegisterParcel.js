@@ -3,7 +3,7 @@ import Map from "../Map/Map.js"
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 
 
-const RegisterPortion = () => {
+const RegisterParcel = () => {
     return(
         <>
 
@@ -16,4 +16,4 @@ const RegisterPortion = () => {
     )
 }
 
-export default RegisterPortion
+export default RegisterParcel

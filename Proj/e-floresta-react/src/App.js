@@ -5,7 +5,7 @@ import Profile from './Profile/Profile'
 import LoggedHomepage from "./LoggedHomepage/LoggedHomepage"
 import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
-import RegisterPortion from './RegisterPortion/RegisterPortion'
+import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 
 import {
@@ -21,7 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create-and-login" element={<CreateAndLogin />} />
-          <Route path="/map" element={<RegisterPortion />} />
+          <Route path="/map" element={<RegisterParcel />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/homepage" element={<LoggedHomepage />} />
           <Route path="/change-profile" element={<ChangeProfile />} />

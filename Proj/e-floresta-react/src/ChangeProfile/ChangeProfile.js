@@ -27,7 +27,7 @@ const ChangeProfile = () => {
             }
         }
 
-        var myObj = {tokenId:sessionStorage.getItem('token')};
+        var myObj = {tokenId:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
         xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/info/profileinfo");
