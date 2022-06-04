@@ -21,12 +21,10 @@ public class ParcelResource {
     private final Gson g = new Gson();
 
     @POST
-    @Path("/{parcelI}")
+    @Path("/{parcelId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerParcel(@PathParam("parcelI") String parcelI, ParcelInfo parcelInfo){
+    public Response registerParcel(@PathParam("parcelId") String parcelId, ParcelInfo parcelInfo){
         System.out.println(parcelInfo.name);
-        return Response.ok().build();
+        return Response.ok(parcelInfo.name).build();
     }
-
-
 }
