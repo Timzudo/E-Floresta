@@ -117,11 +117,48 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <button type="button" className="btn btn-light" onClick={rollback}>Rollback</button>
+            <button type="button" className="btn btn-light" onClick={rollback}>Voltar atrás</button>
             <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"}
-                    onClick={submitParcel}>Submit
+                    onClick={submitParcel}>Confirmar
             </button>
-            <input type="text" className="form-control" placeholder="Parcel name"/>
+            <div className="submit-buttons_Map">
+                <input type="text" className="form-control" placeholder="Nome da parcela"/>
+
+                <div className="dropdown" id="distrito-dropdown_Map">
+                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        Distrito
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li className="dropdown-item">Lisboa</li>
+                        <li className="dropdown-item">Porto</li>
+                        <li className="dropdown-item">Algarve</li>
+                    </ul>
+                </div>
+
+                <div className="dropdown" id="concelho-dropdown_Map">
+                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        Concelho
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li className="dropdown-item">Concelho1</li>
+                        <li className="dropdown-item">Concelho2</li>
+                        <li className="dropdown-item">Concelho3</li>
+                    </ul>
+                </div>
+
+                <div className="dropdown" id="freguesia-dropdown_Map">
+                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        Freguesia
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li className="dropdown-item">Concelho1</li>
+                        <li className="dropdown-item">Concelho2</li>
+                        <li className="dropdown-item">Concelho3</li>
+                    </ul>
+                </div>
+
+            </div>
+
         </div>
 
 

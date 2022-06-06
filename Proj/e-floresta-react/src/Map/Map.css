@@ -2,9 +2,16 @@
     display: flex;
 }
 
-.form-control{
+.submit-buttons_Map{
     width: 10%;
     height: 10%;
-    align-self: center;
-    margin-left: 10px;
+    align-self: self-start;
+    margin: 20px;
 }
+
+#distrito-dropdown_Map,
+#concelho-dropdown_Map,
+#freguesia-dropdown_Map{
+    margin-top: 20px;
+}
+
