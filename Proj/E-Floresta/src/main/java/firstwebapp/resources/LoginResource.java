@@ -1,14 +1,19 @@
 package firstwebapp.resources;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
-import firstwebapp.util.AuthToken;
+import firstwebapp.util.JWToken;
 import firstwebapp.util.LoginData;
+import javafx.util.Pair;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Logger;
 
 @Path("/login")
@@ -21,7 +26,7 @@ public class LoginResource {
 
     private final Gson g = new Gson();
 
-    @POST
+    /*@POST
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -31,41 +36,38 @@ public class LoginResource {
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
-        AuthToken authToken = new AuthToken(username, user.getString("user_role"));
 
-        Key tokenId = datastore.newKeyFactory().setKind("Token").newKey(authToken.tokenID);
+        if (user != null) {
+            String storedPassword = user.getString("user_pwd");
+            if (storedPassword.equals(DigestUtils.sha512Hex(data.password))) {
 
-        Entity token = Entity.newBuilder(tokenId)
-                .set("token_username", username)
-                .set("token_role", authToken.role)
-                .set("token_creation", authToken.creationDate)
-                .set("token_expiration", authToken.expirationDate).build();
+                String token = JWToken.generateToken(username, user.getString("user_role"));
 
-        Transaction txn = datastore.newTransaction();
-
-        try {
-            if (user != null) {
-                String storedPassword = user.getString("user_pwd");
-                if (storedPassword.equals(DigestUtils.sha512Hex(data.password))) {
-                    txn.add(token);
-                    txn.commit();
-                    LOG.info("User " + username + " logged in sucessfully.");
-                    return Response.ok(g.toJson(authToken.tokenID)).build();
-
-                } else {
-                    txn.rollback();
-                    LOG.warning("Wrong password for username: " + username);
-                    return Response.status(Response.Status.FORBIDDEN).build();
-                }
+                return Response.ok(token).build();
             } else {
-                txn.rollback();
-                LOG.warning("Failed login attempt for username: " + username);
-                return Response.status(Response.Status.NOT_FOUND).build();
+                LOG.warning("Wrong password for username: " + username);
+                return Response.status(Response.Status.FORBIDDEN).build();
             }
-        } finally {
-            if (txn.isActive()) {
-                txn.rollback();
-            }
+        } else {
+            LOG.warning("Failed login attempt for username: " + username);
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }*/
+
+    @GET
+    @Path("/yau")
+    public Response loginy(LoginData data) {
+        Pair<String, String> pair = JWToken.verifyToken(data.password);
+
+        return Response.ok(g.toJson(pair)).build();
+    }
+
+    @POST
+    @Path("/yeet/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response logina(@PathParam("username") String username, LoginData data) {
+        String token = JWToken.generateToken(username, "C");
+
+        return Response.ok(token).build();
     }
 }

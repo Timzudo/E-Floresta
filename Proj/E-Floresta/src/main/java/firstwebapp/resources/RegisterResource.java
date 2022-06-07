@@ -3,8 +3,8 @@ package firstwebapp.resources;
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
-import firstwebapp.util.AuthToken;
 import firstwebapp.util.EntityRegistrationData;
+import firstwebapp.util.JWToken;
 import firstwebapp.util.PersonalRegistrationData;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -39,15 +39,6 @@ public class RegisterResource {
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
         Entity user = datastore.get(userKey);
 
-        AuthToken authToken = new AuthToken(username, "USER");
-
-        Key tokenId = datastore.newKeyFactory().setKind("Token").newKey(authToken.tokenID);
-
-        Entity token = Entity.newBuilder(tokenId)
-                .set("token_username", username)
-                .set("token_role", authToken.role)
-                .set("token_creation", authToken.creationDate)
-                .set("token_expiration", authToken.expirationDate).build();
 
         Transaction txn = datastore.newTransaction();
 
@@ -64,18 +55,20 @@ public class RegisterResource {
                         .set("user_phone", data.phone)
                         .set("user_nif", data.nif)
                         .set("user_creation_time", Timestamp.now())
-                        .set("user_role", "USER")
+                        .set("user_role", "C")
                         .set("user_state", "ACTIVE")
+                        .set("user_trust", 3)
                         .set("user_type", "personal")
                         .build();
             }
 
             txn.add(user);
-            txn.add(token);
             LOG.info("User registered " + data.username);
             txn.commit();
 
-            return Response.ok(g.toJson(authToken.tokenID)).build();
+            String token = JWToken.generateToken(username, "C");
+
+            return Response.ok(token).build();
         }
         finally {
             if(txn.isActive()){
@@ -92,16 +85,6 @@ public class RegisterResource {
         if(!data.validRegistration()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
-
-        AuthToken authToken = new AuthToken(username, "USER");
-
-        Key tokenId = datastore.newKeyFactory().setKind("Token").newKey(authToken.tokenID);
-
-        Entity token = Entity.newBuilder(tokenId)
-                .set("token_username", username)
-                .set("token_role", authToken.role)
-                .set("token_creation", authToken.creationDate)
-                .set("token_expiration", authToken.expirationDate).build();
 
         Transaction txn = datastore.newTransaction();
 
@@ -121,18 +104,20 @@ public class RegisterResource {
                         .set("user_phone", data.phone)
                         .set("user_nif", data.nif)
                         .set("user_creation_time", Timestamp.now())
-                        .set("user_role", "USER")
+                        .set("user_role", "C")
                         .set("user_state", "INACTIVE")
+                        .set("user_trust", 3)
                         .set("user_type", "entity")
                         .build();
             }
 
             txn.add(user);
-            txn.add(token);
             LOG.info("User registered " + data.username);
             txn.commit();
 
-            return Response.ok(g.toJson(authToken.tokenID)).build();
+            String token = JWToken.generateToken(username, "C");
+
+            return Response.ok(token).build();
         }
         finally {
             if(txn.isActive()){
