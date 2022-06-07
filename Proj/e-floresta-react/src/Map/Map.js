@@ -4,6 +4,7 @@ import {Marker} from '@react-google-maps/api';
 import {useState} from 'react'
 import {Polygon} from '@react-google-maps/api';
 import "./Map.css"
+import {Button, Form} from "react-bootstrap";
 
 const google = window.google;
 
@@ -121,42 +122,65 @@ const Map = () => {
             <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"}
                     onClick={submitParcel}>Confirmar
             </button>
-            <div className="submit-buttons_Map">
-                <input type="text" className="form-control" placeholder="Nome da parcela"/>
 
-                <div className="dropdown" id="distrito-dropdown_Map">
-                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                        Distrito
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li className="dropdown-item">Lisboa</li>
-                        <li className="dropdown-item">Porto</li>
-                        <li className="dropdown-item">Algarve</li>
-                    </ul>
-                </div>
+            <div className="submit_Map">
+                <Form>
+                    <Form.Group className="mb-3" controlId="formParcelName">
+                        <Form.Label> <strong>Nome da Parcela </strong> </Form.Label>
+                        <Form.Control required type="text" placeholder="Nome da parcela" />
+                    </Form.Group>
 
-                <div className="dropdown" id="concelho-dropdown_Map">
-                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                        Concelho
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li className="dropdown-item">Concelho1</li>
-                        <li className="dropdown-item">Concelho2</li>
-                        <li className="dropdown-item">Concelho3</li>
-                    </ul>
-                </div>
+                    <Form.Group className="mb-3" controlId="formDistritoDropdown">
+                        <Form.Label> <strong>Distrito</strong> </Form.Label>
+                        <Form.Select>
+                            <option>Lisboa</option>
+                            <option>Porto</option>
+                            <option>Algarve</option>
+                        </Form.Select>
+                    </Form.Group>
 
-                <div className="dropdown" id="freguesia-dropdown_Map">
-                    <button type="button" className="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
-                        Freguesia
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li className="dropdown-item">Concelho1</li>
-                        <li className="dropdown-item">Concelho2</li>
-                        <li className="dropdown-item">Concelho3</li>
-                    </ul>
-                </div>
+                    <Form.Group className="mb-3" controlId="formConcelhoDropdown">
+                        <Form.Label> <strong>Concelho</strong> </Form.Label>
+                        <Form.Select>
+                            <option>Concelho1</option>
+                            <option>Concelho2</option>
+                            <option>Concelho3</option>
+                        </Form.Select>
+                    </Form.Group>
 
+                    <Form.Group className="mb-3" controlId="formFreguesiaDropdown">
+                        <Form.Label> <strong>Freguesia</strong> </Form.Label>
+                        <Form.Select>
+                            <option>Freguesia1</option>
+                            <option>Freguesia2</option>
+                            <option>Freguesia3</option>
+                        </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="position-relative mb-3">
+                        <Form.Label> <strong>Foto</strong> </Form.Label>
+                        <Form.Control
+                            type="file"
+                            required
+                            name="file"
+                            accept = ".png, .jpg, .jpeg"
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="position-relative mb-3">
+                        <Form.Label> <strong>PDF</strong> </Form.Label>
+                        <Form.Control
+                            type="file"
+                            required
+                            name="file"
+                            accept = ".pdf"
+                        />
+                    </Form.Group>
+
+                    <Button variant="success" type="submit">
+                        Submeter
+                    </Button>
+                </Form>
             </div>
 
         </div>

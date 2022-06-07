@@ -15,6 +15,7 @@ const CreateAndLogin = () => {
   let token;
 
   function login() {
+    /*
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
@@ -34,6 +35,10 @@ const CreateAndLogin = () => {
     xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
+
+     */
+    localStorage.setItem('token', token);
+    window.location.href = "/homepage";
   }
 
   function register() {
