@@ -33,38 +33,6 @@ const options = {
 
 
 const Map = () => {
-    let xmlhttp = new XMLHttpRequest();
-    let token = localStorage.getItem('token');
-
-    function submitParcel() {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState === 4) {
-                if (xmlhttp.status === 200) {
-                    token = xmlhttp.responseText;
-                    alert("Login efetuado com sucesso.");
-                    localStorage.setItem('token', token);
-                    window.location.href = "/homepage";
-                } else {
-                    alert("Não foi possível efetuar o login.");
-                }
-            }
-        }
-        let myObj = {
-            coordinates: []
-        };
-
-        for (let i = 0; i < paths.length; i++) {
-            myObj.coordinates.push([paths[i].lat, paths[i].lng]);
-        }
-
-        let myJson = JSON.stringify(myObj);
-
-        console.log(myJson);
-
-        /*xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);*/
-    }
 
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
@@ -95,6 +63,46 @@ const Map = () => {
     function rollback() {
         setMarker(markerList.filter((element, index) => index < markerList.length - 1));
         setPaths(paths.filter((element, index) => index < paths.length - 1));
+    }
+
+    function submitParcel() {
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    alert("Parcela registada com sucesso.");
+                    window.location.href = "/map";
+                } else if(xmlhttp.status == 400) {
+                    alert("Todos os campos obrigatórios devem ser preenchidos.");
+                } else if(xmlhttp.status == 403 || xmlhttp.status == 404) {
+                    alert("Não tem permissões para efetuar esta operação.");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                } else if(xmlhttp.status == 409) {
+                    alert("Já possui uma parcela com o mesmo nome.")
+                }
+            }
+        }
+
+        var myObj = {name:document.getElementById("formParcelName").value,
+            distrito:document.getElementById("formDistritoDropdown").value,
+            concelho:document.getElementById("formConcelhoDropdown").value,
+            freguesia:document.getElementById("formFreguesiaDropdown").value,
+            photo:document.getElementById("formParcelPhoto").value,
+            pdf:document.getElementById("formParcelPdf").value,
+            coordinates: []
+        };
+
+        for (let i = 0; i < paths.length; i++) {
+            myObj.coordinates.push([paths[i].lat, paths[i].lng]);
+        }
+
+        var myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?Token=" + localStorage.getItem("token"), true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
     }
 
 
@@ -154,7 +162,7 @@ const Map = () => {
                         </Form.Select>
                     </Form.Group>
 
-                    <Form.Group className="position-relative mb-3">
+                    <Form.Group className="position-relative mb-3" controlId="formParcelPhoto">
                         <Form.Label> <strong>Foto</strong> </Form.Label>
                         <Form.Control
                             type="file"
@@ -164,7 +172,7 @@ const Map = () => {
                         />
                     </Form.Group>
 
-                    <Form.Group className="position-relative mb-3">
+                    <Form.Group className="position-relative mb-3" controlId="formParcelPdf">
                         <Form.Label> <strong>PDF</strong> </Form.Label>
                         <Form.Control
                             type="file"
@@ -174,7 +182,7 @@ const Map = () => {
                         />
                     </Form.Group>
 
-                    <Button variant="success" type="submit">
+                    <Button variant="success" type="submit" onClick={submitParcel}>
                         Submeter
                     </Button>
                 </Form>
