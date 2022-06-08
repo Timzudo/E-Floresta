@@ -1,8 +1,8 @@
 package firstwebapp.resources;
 
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
+import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
+import firstwebapp.util.JWToken;
 import firstwebapp.util.ParcelInfo;
 
 import javax.ws.rs.*;
@@ -21,10 +21,57 @@ public class ParcelResource {
     private final Gson g = new Gson();
 
     @POST
-    @Path("/{parcelId}")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerParcel(@PathParam("parcelId") String parcelId, ParcelInfo parcelInfo){
-        System.out.println(parcelInfo.name);
-        return Response.ok(parcelInfo.name).build();
+    public Response registerParcel(@QueryParam("Token") String token, ParcelInfo parcelInfo){
+        LOG.fine("Attempt to register parcel.");
+
+        if(!parcelInfo.validRegistration()){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+        }
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        String parcelId = username + "." + parcelInfo.name;
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelId);
+        Entity parcel = datastore.get(parcelKey);
+
+        if(parcel != null){
+            return Response.status(Response.Status.CONFLICT).entity("Parcel with name already exists.").build();
+        }
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcelKey)
+                        .set("parcel_id", parcelId)
+                        .set("parcel_distrito", parcelInfo.distrito)
+                        .set("parcel_concelho", parcelInfo.concelho)
+                        .set("parcel_freguesia", parcelInfo.freguesia)
+                        .build();
+
+            txn.add(parcel);
+            txn.commit();
+            LOG.info("Parcel registered: " + parcelId);
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+            }
+        }
+
+        return Response.ok().build();
     }
 }

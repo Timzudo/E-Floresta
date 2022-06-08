@@ -8,11 +8,6 @@ import {Button, Form} from "react-bootstrap";
 const CreateAndLogin = () => {
   let username, password;
 
-  const getUsername = (event)=>{
-      username = event.target.value;
-      console.log(username);
-  }
-
   let xmlhttp = new XMLHttpRequest();
   let token;
 
@@ -92,7 +87,7 @@ const CreateAndLogin = () => {
 
           <Form>
             <Form.Group className="session-form" id="session-username" >
-              <Form.Control type="text" placeholder="Username/E-mail" onChange={getUsername} />
+              <Form.Control type="text" placeholder="Username/E-mail" />
             </Form.Group>
 
             <Form.Group className="session-form" id="session-password" >
@@ -145,9 +140,8 @@ const CreateAndLogin = () => {
 
             <Form.Group className="create-form" controlId="create-acc-type">
               <Form.Select required>
-                <option>Tipo de conta</option>
-                <option>Pessoal</option>
-                <option>Entidade</option>
+                <option>Conta Pessoal</option>
+                <option>Conta de Entidade</option>
               </Form.Select>
             </Form.Group>
 

@@ -1,19 +1,14 @@
 package firstwebapp.resources;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.LoginData;
-import javafx.util.Pair;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Logger;
 
 @Path("/login")
@@ -26,7 +21,7 @@ public class LoginResource {
 
     private final Gson g = new Gson();
 
-    /*@POST
+    @POST
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,22 +47,5 @@ public class LoginResource {
             LOG.warning("Failed login attempt for username: " + username);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }*/
-
-    @GET
-    @Path("/yau")
-    public Response loginy(LoginData data) {
-        Pair<String, String> pair = JWToken.verifyToken(data.password);
-
-        return Response.ok(g.toJson(pair)).build();
-    }
-
-    @POST
-    @Path("/yeet/{username}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response logina(@PathParam("username") String username, LoginData data) {
-        String token = JWToken.generateToken(username, "C");
-
-        return Response.ok(token).build();
     }
 }

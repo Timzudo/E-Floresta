@@ -9,8 +9,8 @@ import {Button, Form} from "react-bootstrap";
 const google = window.google;
 
 const containerStyle = {
-    width: '70vw',
-    height: '93vh'
+    width: '75vw',
+    height: '93.5vh'
 };
 
 const center = {
@@ -118,10 +118,7 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <button type="button" className="btn btn-light" onClick={rollback}>Voltar atrás</button>
-            <button type="button" className={paths.length >= 3 ? "btn btn-success" : "btn btn-secondary"}
-                    onClick={submitParcel}>Confirmar
-            </button>
+            <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-secondary" : "btn btn-light"} onClick={rollback}>Voltar atrás</button>
 
             <div className="submit_Map">
                 <Form>
