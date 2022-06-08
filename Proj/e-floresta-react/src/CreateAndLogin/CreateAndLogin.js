@@ -2,6 +2,8 @@ import Image from './logo.png'
 import './CreateAndLogin.css'
 import {Link} from "react-router-dom";
 import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
+import {Button, Form} from "react-bootstrap";
+
 
 const CreateAndLogin = () => {
   let username, password;
@@ -88,10 +90,19 @@ const CreateAndLogin = () => {
 
           <h2 className="align-content">Iniciar sessão</h2>
 
-          <input className="align-content" id="session-username" type="text" placeholder="Username/E-mail" onChange={getUsername}/>
-          <input className="align-content" id="session-password" type="password" placeholder="Password" />
+          <Form>
+            <Form.Group className="session-form" id="session-username" >
+              <Form.Control type="text" placeholder="Username/E-mail" onChange={getUsername} />
+            </Form.Group>
 
-          <input className="button" type="button" value="Entrar" onClick={login}/>
+            <Form.Group className="session-form" id="session-password" >
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+
+            <Button id="session-button" variant="dark" type="submit" onClick={login}>
+              Entrar
+            </Button>
+          </Form>
 
         </div>
 
@@ -103,22 +114,48 @@ const CreateAndLogin = () => {
           <p className="align-content">Ainda não tem conta?</p>
           <p className="align-content">Registe-se agora!</p>
 
-          <p>Campos obrigatórios: </p>
-          <input className="align-content" id="create-acc-user" type="text" placeholder="Username" />
-          <input className="align-content" id="create-acc-email" type="email" placeholder="E-mail" />
-          <input className="align-content" id="create-acc-name" type="text" placeholder="Nome Completo" />
-          <input className="align-content" id="create-acc-pass" type="password" placeholder="Password" />
-          <input className="align-content" id="create-acc-conf-pass" type="password" placeholder="Confirmar Password" />
-          <select className="align-content" id="create-acc-type">
-            <option value="personal">Pessoal</option>
-            <option value="entity">Entidade</option>
-          </select>
+          <Form>
+            <Form.Group className="create-form" id="create-acc-user" >
+              <Form.Control required type="text" placeholder="Username" />
+            </Form.Group>
 
-          <p>Campos opcionais: </p>
-          <input className="align-content" id="create-acc-phone" type="text" placeholder="Telemóvel/Telefone" maxLength="9" />
-          <input className="align-content" id="create-acc-nif" type="text" placeholder="NIF" maxLength="9" />
+            <Form.Group className="create-form" id="create-acc-email" >
+              <Form.Control required type="email" placeholder="E-mail" />
+            </Form.Group>
 
-          <input className="button" type="button" value="Registar" onClick={register} />
+            <Form.Group className="create-form" id="create-acc-name" >
+              <Form.Control required type="text" placeholder="Nome Completo" />
+            </Form.Group>
+
+            <Form.Group className="create-form" id="create-acc-pass" >
+              <Form.Control required type="password" placeholder="Password" />
+            </Form.Group>
+
+            <Form.Group className="create-form" id="create-acc-conf-pass" >
+              <Form.Control required type="password" placeholder="Confirmar Password" />
+            </Form.Group>
+
+            <Form.Group className="create-form" id="create-acc-phone" >
+              <Form.Control type="text" placeholder="Telemóvel/Telefone" maxLength="9" />
+            </Form.Group>
+
+            <Form.Group className="create-form" id="create-acc-nif" >
+              <Form.Control type="text" placeholder="NIF" maxLength="9" />
+            </Form.Group>
+
+            <Form.Group className="create-form" controlId="create-acc-type">
+              <Form.Select required>
+                <option>Tipo de conta</option>
+                <option>Pessoal</option>
+                <option>Entidade</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Button id="create-acc-button" variant="dark" type="submit" onClick={register}>
+              Registar
+            </Button>
+
+          </Form>
 
         </div>
 

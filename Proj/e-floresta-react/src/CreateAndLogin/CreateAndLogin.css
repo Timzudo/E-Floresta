@@ -26,30 +26,44 @@ body{
     justify-content: center;
     gap: 120px;
 }
-
-.session-body div{
-    color: dimgrey;
-    margin-top: 50px;
-}
-
-.session-body .division{
-    background-color: darkgrey;
-    padding: 0.8px;
-    height: 450px;
-}
-
 .session-body .create-account,
 .session-body .initiate-session{
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: dimgrey;
+    margin-top: 50px;
+}
+
+.session-body .session-form {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    border: 0.3px solid black;
+    border-radius: 0.25rem;
+}
+
+.session-body #session-button {
+    margin-top: 6px;
+}
+
+.session-body .division{
+    background-color: darkgrey;
+    padding: 0.8px;
+    height: 470px;
+    margin-top: 50px;
+}
+
+.session-body .create-form {
+    margin-bottom: 8px;
+    border: 0.3px solid black;
+    border-radius: 0.25rem;
+}
+
+.session-body #create-acc-user {
+    margin-top: 8px;
 }
 
 .align-content{
-    margin: 5px;
+    margin: 2px;
 }
 
-.session-body .button{
-    margin-top: 5px;
-    margin-left: auto;
-}
