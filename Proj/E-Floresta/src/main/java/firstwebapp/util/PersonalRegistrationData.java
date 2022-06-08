@@ -6,8 +6,8 @@ public class PersonalRegistrationData extends RegistrationData{
         super();
     }
 
-    public PersonalRegistrationData(String username, String password, String confirmation, String email, String name, String phone, String nif){
-        super(username, password, confirmation, email, name, phone, nif);
+    public PersonalRegistrationData(String password, String confirmation, String email, String name, String phone, String nif){
+        super(password, confirmation, email, name, phone, nif);
     }
 
 }

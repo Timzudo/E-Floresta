@@ -36,7 +36,7 @@ public class RegisterResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
 
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
 
@@ -63,7 +63,7 @@ public class RegisterResource {
             }
 
             txn.add(user);
-            LOG.info("User registered " + data.username);
+            LOG.info("User registered " + username);
             txn.commit();
 
             String token = JWToken.generateToken(username, "C");
@@ -89,7 +89,7 @@ public class RegisterResource {
         Transaction txn = datastore.newTransaction();
 
         try{
-            Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
+            Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
             Entity user = datastore.get(userKey);
 
             if(user != null){
@@ -112,7 +112,7 @@ public class RegisterResource {
             }
 
             txn.add(user);
-            LOG.info("User registered " + data.username);
+            LOG.info("User registered " + username);
             txn.commit();
 
             String token = JWToken.generateToken(username, "C");

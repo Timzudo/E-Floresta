@@ -30,7 +30,7 @@ const ChangeProfile = () => {
         var myObj = {tokenId:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/info/profileinfo");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }

@@ -1,6 +1,8 @@
 package firstwebapp.resources;
 
 import com.google.cloud.datastore.*;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.google.gson.Gson;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.LoginData;
@@ -18,6 +20,8 @@ public class LoginResource {
     private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+
+    Storage storage = StorageOptions.getDefaultInstance().getService();
 
     private final Gson g = new Gson();
 

@@ -6,13 +6,15 @@ import {Button, Form} from "react-bootstrap";
 
 
 const CreateAndLogin = () => {
-  let username, password;
+  let username, password, confirmation ,email ,name ,phone, nif, type;
 
   let xmlhttp = new XMLHttpRequest();
   let token;
 
+
   function login() {
-    /*
+
+
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
@@ -26,16 +28,13 @@ const CreateAndLogin = () => {
         }
       }
     }
-    var myObj = { password: document.getElementById("session-password").value };
-    var myJson = JSON.stringify(myObj);
 
-    xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
+    let myObj = { password: document.getElementById("session-password").value };
+    let myJson = JSON.stringify(myObj);
+
+    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
-
-     */
-    localStorage.setItem('token', token);
-    window.location.href = "/homepage";
   }
 
   function register() {
@@ -52,17 +51,18 @@ const CreateAndLogin = () => {
         }
       }
     }
-    var myObj = {username:document.getElementById("create-acc-user").value,
-      password:document.getElementById("create-acc-pass").value,
-      confirmation:document.getElementById("create-acc-conf-pass").value,
-      email:document.getElementById("create-acc-email").value,
-      name:document.getElementById("create-acc-name").value,
-      phone:document.getElementById("create-acc-phone").value,
-      nif:document.getElementById("create-acc-nif").value
-    };
-    var myJson = JSON.stringify(myObj);
 
-    xmlhttp.open("POST", "https://modified-talon-344017.oa.r.appspot.com/rest/register/"+ document.getElementById("create-acc-type").value + "/" + document.getElementById("create-acc-user").value, true);
+    var myObj = {password:password,
+                  confirmation:confirmation,
+                  email:email,
+                  name:name,
+                  phone:phone,
+                  nif:nif};
+
+    var myJson = JSON.stringify(myObj);
+    console.log(type);
+
+    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ type + "/" + username, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -87,11 +87,11 @@ const CreateAndLogin = () => {
 
           <Form>
             <Form.Group className="session-form" id="session-username" >
-              <Form.Control type="text" placeholder="Username/E-mail" />
+              <Form.Control type="text" placeholder="Username" onChange={e => username = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="session-form" id="session-password" >
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Control type="password" placeholder="Password" onChange={e => password = e.target.value}/>
             </Form.Group>
 
             <Button id="session-button" variant="dark" type="submit" onClick={login}>
@@ -111,37 +111,37 @@ const CreateAndLogin = () => {
 
           <Form>
             <Form.Group className="create-form" id="create-acc-user" >
-              <Form.Control required type="text" placeholder="Username" />
+              <Form.Control required type="text" placeholder="Username" onChange={e => username = e.target.value} />
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-email" >
-              <Form.Control required type="email" placeholder="E-mail" />
+              <Form.Control required type="email" placeholder="E-mail" onChange={e => email = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-name" >
-              <Form.Control required type="text" placeholder="Nome Completo" />
+              <Form.Control required type="text" placeholder="Nome Completo" onChange={e => name = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-pass" >
-              <Form.Control required type="password" placeholder="Password" />
+              <Form.Control required type="password" placeholder="Password" onChange={e => password = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-conf-pass" >
-              <Form.Control required type="password" placeholder="Confirmar Password" />
+              <Form.Control required type="password" placeholder="Confirmar Password" onChange={e => confirmation = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-phone" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" />
+              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" onChange={e => phone = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-nif" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" />
+              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" onChange={e => nif = e.target.value}/>
             </Form.Group>
 
             <Form.Group className="create-form" controlId="create-acc-type">
-              <Form.Select required>
-                <option>Conta Pessoal</option>
-                <option>Conta de Entidade</option>
+              <Form.Select required onChange={e => type = e.target.value}>
+                <option value="personal">Conta Pessoal</option>
+                <option value="entity">Conta de Entidade</option>
               </Form.Select>
             </Form.Group>
 

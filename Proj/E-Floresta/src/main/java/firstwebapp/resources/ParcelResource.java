@@ -23,7 +23,7 @@ public class ParcelResource {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerParcel(@QueryParam("Token") String token, ParcelInfo parcelInfo){
+    public Response registerParcel(@QueryParam("token") String token, ParcelInfo parcelInfo){
         LOG.fine("Attempt to register parcel.");
 
         if(!parcelInfo.validRegistration()){
