@@ -136,11 +136,11 @@ const CreateAndLogin = () => {
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-phone" >
-              <Form.Control type="text" placeholder="Telemóvel/Telefone" maxLength="9" />
+              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" />
             </Form.Group>
 
             <Form.Group className="create-form" id="create-acc-nif" >
-              <Form.Control type="text" placeholder="NIF" maxLength="9" />
+              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" />
             </Form.Group>
 
             <Form.Group className="create-form" controlId="create-acc-type">
