@@ -44,6 +44,8 @@ const Map = () => {
     function addMarker(lat, lng) {
         const google = window.google;
 
+        console.log(lat, lng);
+
         setMarker(markerList.concat(<Marker key={markerList.length} id={markerList.length}
                                             position={{
                                                 lat: lat,
@@ -62,7 +64,6 @@ const Map = () => {
             lat: lat,
             lng: lng
         }))
-        console.log(paths);
     }
 
     function rollback() {
@@ -104,8 +105,6 @@ const Map = () => {
         }*/
 
         var myJson = JSON.stringify(myObj);
-
-        console.log(myJson);
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
         xmlhttp.setRequestHeader("Content-Type", "application/json");

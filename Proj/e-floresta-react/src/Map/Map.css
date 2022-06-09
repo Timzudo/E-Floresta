@@ -15,7 +15,13 @@
 }
 
 #rollback.btn-success{
-    background-color: #709c7c;
+    background-color: #d4caa5;
+    box-shadow: none;
+    border-color: #8c8468;
+}
+
+#rollback{
+    border-radius: 0 5px 5px 0;
 }
 
 
