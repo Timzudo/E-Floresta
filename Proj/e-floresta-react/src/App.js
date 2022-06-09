@@ -50,7 +50,7 @@ const Home = () => {
 
         </div>
 
-        <div className="i-text">
+        <div className="initial-text">
           O interior de Portugal está a viver um processo de desertificação populacional provocado pelo movimento
           dos mais jovens para o litoral e pelo envelhecimento da população com graves consequências económicas,
           sociais e ambientais. Em particular, a gestão da floresta torna-se incomportável, dando origem a perdas

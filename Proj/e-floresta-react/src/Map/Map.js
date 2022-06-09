@@ -139,12 +139,12 @@ const Map = () => {
                 <Form onSubmit={submitHandler}>
                     <Form.Group className="mb-3" controlId="formParcelName">
                         <Form.Label> <strong>Nome da Parcela </strong> </Form.Label>
-                        <Form.Control required type="text" placeholder="Nome da parcela" />
+                        <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formDistritoDropdown">
                         <Form.Label> <strong>Distrito</strong> </Form.Label>
-                        <Form.Select>
+                        <Form.Select className="map_fields">
                             <option>Lisboa</option>
                             <option>Porto</option>
                             <option>Algarve</option>
@@ -153,7 +153,7 @@ const Map = () => {
 
                     <Form.Group className="mb-3" controlId="formConcelhoDropdown">
                         <Form.Label> <strong>Concelho</strong> </Form.Label>
-                        <Form.Select>
+                        <Form.Select className="map_fields">
                             <option>Concelho1</option>
                             <option>Concelho2</option>
                             <option>Concelho3</option>
@@ -162,7 +162,7 @@ const Map = () => {
 
                     <Form.Group className="mb-3" controlId="formFreguesiaDropdown">
                         <Form.Label> <strong>Freguesia</strong> </Form.Label>
-                        <Form.Select>
+                        <Form.Select className="map_fields">
                             <option>Freguesia1</option>
                             <option>Freguesia2</option>
                             <option>Freguesia3</option>
@@ -172,6 +172,7 @@ const Map = () => {
                     <Form.Group className="position-relative mb-3" controlId="formParcelPhoto">
                         <Form.Label> <strong>Foto</strong> </Form.Label>
                         <Form.Control
+                            className="map_fields"
                             type="file"
                             required
                             name="file"
@@ -182,6 +183,7 @@ const Map = () => {
                     <Form.Group className="position-relative mb-3" controlId="formParcelPdf">
                         <Form.Label> <strong>PDF</strong> </Form.Label>
                         <Form.Control
+                            className="map_fields"
                             type="file"
                             required
                             name="file"
@@ -196,7 +198,6 @@ const Map = () => {
             </div>
 
         </div>
-
 
     )
 }
