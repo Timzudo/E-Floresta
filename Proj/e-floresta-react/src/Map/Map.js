@@ -133,7 +133,7 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-secondary" : "btn btn-light"} onClick={rollback}>Voltar atrás</button>
+            <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>
 
             <div className="submit_Map">
                 <Form onSubmit={submitHandler}>

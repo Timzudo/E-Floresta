@@ -59,7 +59,7 @@ body{
     border-radius: 0.25rem;
 }
 
-.session-body #create-acc-user {
+.create-account form{
     margin-top: 8px;
 }
 
