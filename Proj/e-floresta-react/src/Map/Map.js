@@ -96,14 +96,16 @@ const Map = () => {
             freguesia:document.getElementById("formFreguesiaDropdown").value,
             /*photo:document.getElementById("formParcelPhoto").value,
             pdf:document.getElementById("formParcelPdf").value,*/
-            coordinates: []
+            coordinates:paths
         };
 
-        for (let i = 0; i < paths.length; i++) {
+        /*for (let i = 0; i < paths.length; i++) {
             myObj.coordinates.push([paths[i].lat, paths[i].lng]);
-        }
+        }*/
 
         var myJson = JSON.stringify(myObj);
+
+        console.log(myJson);
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
         xmlhttp.setRequestHeader("Content-Type", "application/json");

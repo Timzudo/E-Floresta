@@ -31,6 +31,6 @@ public class ParcelInfo {
     }
 
     public boolean validRegistration(){
-        return (name != null && distrito != null && concelho != null && freguesia != null && /*photo != null && document != null &&*/ coordinates != null && coordinates.length >= 3);
+        return (!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && /*photo != null && document != null &&*/ !coordinates.equals("")  && coordinates.length >= 3);
     }
 }

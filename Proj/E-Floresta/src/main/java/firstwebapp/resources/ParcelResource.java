@@ -61,7 +61,7 @@ public class ParcelResource {
         }
 
         //Bucket bucket = storage.create(BucketInfo.of(PARCEL_BUCKET));
-        BlobId blobId = BlobId.of(PARCEL_BUCKET, "pasta/" + parcelId + "_coordinates");
+        BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelId + "_coordinates");
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         storage.create(blobInfo, g.toJson(parcelInfo.coordinates).getBytes(StandardCharsets.UTF_8));
 
