@@ -1,6 +1,8 @@
 package firstwebapp.resources;
 
 import com.google.cloud.datastore.*;
+import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
 import com.google.gson.Gson;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.ParcelInfo;
@@ -8,6 +10,7 @@ import firstwebapp.util.ParcelInfo;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 @Path("/parcel")
@@ -17,6 +20,11 @@ public class ParcelResource {
     private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+
+    Storage storage = StorageOptions.newBuilder().setProjectId("moonlit-oven-349523").build().getService();
+
+    private static final String PARCEL_BUCKET = "parcel_bucket";
+
 
     private final Gson g = new Gson();
 
@@ -43,7 +51,7 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
-        String parcelId = username + "." + parcelInfo.name;
+        String parcelId = username + "_" + parcelInfo.name;
 
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelId);
         Entity parcel = datastore.get(parcelKey);
@@ -51,6 +59,11 @@ public class ParcelResource {
         if(parcel != null){
             return Response.status(Response.Status.CONFLICT).entity("Parcel with name already exists.").build();
         }
+
+        //Bucket bucket = storage.create(BucketInfo.of(PARCEL_BUCKET));
+        BlobId blobId = BlobId.of(PARCEL_BUCKET, "pasta/" + parcelId + "_coordinates");
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+        storage.create(blobInfo, g.toJson(parcelInfo.coordinates).getBytes(StandardCharsets.UTF_8));
 
         Transaction txn = datastore.newTransaction();
 

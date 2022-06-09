@@ -58,6 +58,7 @@ const Map = () => {
             lat: lat,
             lng: lng
         }))
+        console.log(paths);
     }
 
     function rollback() {

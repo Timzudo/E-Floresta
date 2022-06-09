@@ -6,8 +6,6 @@ import {Button, Form} from "react-bootstrap";
 
 
 const CreateAndLogin = () => {
-  let username, password, confirmation ,email ,name ,phone, nif, type;
-
   let xmlhttp = new XMLHttpRequest();
   let token;
 
@@ -52,17 +50,16 @@ const CreateAndLogin = () => {
       }
     }
 
-    var myObj = {password:password,
-                  confirmation:confirmation,
-                  email:email,
-                  name:name,
-                  phone:phone,
-                  nif:nif};
+    var myObj = {password:document.getElementById("create-acc-pass").value,
+                  confirmation:document.getElementById("create-acc-conf-pass").value,
+                  email:document.getElementById("create-acc-email").value,
+                  name:document.getElementById("create-acc-name").value,
+                  phone:document.getElementById("ccreate-acc-phone").value,
+                  nif:document.getElementById("create-acc-nif").value};
 
     var myJson = JSON.stringify(myObj);
-    console.log(type);
 
-    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ type + "/" + username, true);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ document.getElementById("create-acc-type").value + "/" + document.getElementById("create-acc-user").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -86,12 +83,12 @@ const CreateAndLogin = () => {
           <h2 className="align-content">Iniciar sessão</h2>
 
           <Form>
-            <Form.Group className="session-form" id="session-username" >
-              <Form.Control type="text" placeholder="Username" onChange={e => username = e.target.value}/>
+            <Form.Group className="session-form" >
+              <Form.Control type="text" placeholder="Username" id="session-username"/>
             </Form.Group>
 
-            <Form.Group className="session-form" id="session-password" >
-              <Form.Control type="password" placeholder="Password" onChange={e => password = e.target.value}/>
+            <Form.Group className="session-form" >
+              <Form.Control type="password" placeholder="Password" id="session-password"/>
             </Form.Group>
 
             <Button id="session-button" variant="dark" type="submit" onClick={login}>
@@ -110,36 +107,36 @@ const CreateAndLogin = () => {
           <p className="align-content">Registe-se agora!</p>
 
           <Form>
-            <Form.Group className="create-form" id="create-acc-user" >
-              <Form.Control required type="text" placeholder="Username" onChange={e => username = e.target.value} />
+            <Form.Group className="create-form" >
+              <Form.Control required type="text" placeholder="Username" id="create-acc-user" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-email" >
-              <Form.Control required type="email" placeholder="E-mail" onChange={e => email = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control required type="email" placeholder="E-mail" id="create-acc-email" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-name" >
-              <Form.Control required type="text" placeholder="Nome Completo" onChange={e => name = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-pass" >
-              <Form.Control required type="password" placeholder="Password" onChange={e => password = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control required type="password" placeholder="Password" id="create-acc-pass" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-conf-pass" >
-              <Form.Control required type="password" placeholder="Confirmar Password" onChange={e => confirmation = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control required type="password" placeholder="Confirmar Password" id="create-acc-conf-pass" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-phone" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" onChange={e => phone = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
             </Form.Group>
 
-            <Form.Group className="create-form" id="create-acc-nif" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" onChange={e => nif = e.target.value}/>
+            <Form.Group className="create-form" >
+              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" id="create-acc-nif" />
             </Form.Group>
 
-            <Form.Group className="create-form" controlId="create-acc-type">
-              <Form.Select required onChange={e => type = e.target.value}>
+            <Form.Group className="create-form" >
+              <Form.Select required controlId="create-acc-type" >
                 <option value="personal">Conta Pessoal</option>
                 <option value="entity">Conta de Entidade</option>
               </Form.Select>
