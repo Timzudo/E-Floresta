@@ -2,7 +2,6 @@ package firstwebapp.resources;
 
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.*;
-import com.google.cloud.storage.Blob;
 import com.google.gson.Gson;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.ParcelInfo;
@@ -69,7 +68,7 @@ public class ParcelResource {
 
         try{
             parcel = Entity.newBuilder(parcelKey)
-                        .set("parcel_id", parcelId)
+                        .set("parcel_name", parcelInfo.name)
                         .set("parcel_distrito", parcelInfo.distrito)
                         .set("parcel_concelho", parcelInfo.concelho)
                         .set("parcel_freguesia", parcelInfo.freguesia)
