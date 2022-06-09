@@ -9,6 +9,10 @@ const CreateAndLogin = () => {
   let xmlhttp = new XMLHttpRequest();
   let token;
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+  }
+
 
   function login() {
 
@@ -27,8 +31,8 @@ const CreateAndLogin = () => {
       }
     }
 
-    let myObj = { password: document.getElementById("session-password").value };
-    let myJson = JSON.stringify(myObj);
+    var myObj = { password: document.getElementById("session-password").value };
+    var myJson = JSON.stringify(myObj);
 
     xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
@@ -54,7 +58,7 @@ const CreateAndLogin = () => {
                   confirmation:document.getElementById("create-acc-conf-pass").value,
                   email:document.getElementById("create-acc-email").value,
                   name:document.getElementById("create-acc-name").value,
-                  phone:document.getElementById("ccreate-acc-phone").value,
+                  phone:document.getElementById("create-acc-phone").value,
                   nif:document.getElementById("create-acc-nif").value};
 
     var myJson = JSON.stringify(myObj);
@@ -82,7 +86,7 @@ const CreateAndLogin = () => {
 
           <h2 className="align-content">Iniciar sessão</h2>
 
-          <Form>
+          <Form onSubmit={submitHandler}>
             <Form.Group className="session-form" >
               <Form.Control type="text" placeholder="Username" id="session-username"/>
             </Form.Group>
@@ -106,7 +110,7 @@ const CreateAndLogin = () => {
           <p className="align-content">Ainda não tem conta?</p>
           <p className="align-content">Registe-se agora!</p>
 
-          <Form>
+          <Form onSubmit={submitHandler}>
             <Form.Group className="create-form" >
               <Form.Control required type="text" placeholder="Username" id="create-acc-user" />
             </Form.Group>
@@ -128,11 +132,11 @@ const CreateAndLogin = () => {
             </Form.Group>
 
             <Form.Group className="create-form" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
+              <Form.Control placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
             </Form.Group>
 
             <Form.Group className="create-form" >
-              <Form.Control type="tel" pattern="[0-9]" placeholder="NIF" maxLength="9" id="create-acc-nif" />
+              <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
             </Form.Group>
 
             <Form.Group className="create-form" >

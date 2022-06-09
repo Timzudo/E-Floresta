@@ -34,6 +34,10 @@ const options = {
 
 const Map = () => {
 
+    const submitHandler = (e) => {
+        e.preventDefault();
+    }
+
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
 
@@ -90,8 +94,8 @@ const Map = () => {
             distrito:document.getElementById("formDistritoDropdown").value,
             concelho:document.getElementById("formConcelhoDropdown").value,
             freguesia:document.getElementById("formFreguesiaDropdown").value,
-            photo:document.getElementById("formParcelPhoto").value,
-            pdf:document.getElementById("formParcelPdf").value,
+            /*photo:document.getElementById("formParcelPhoto").value,
+            pdf:document.getElementById("formParcelPdf").value,*/
             coordinates: []
         };
 
@@ -101,7 +105,7 @@ const Map = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?Token=" + localStorage.getItem("token"), true);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -130,7 +134,7 @@ const Map = () => {
             <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-secondary" : "btn btn-light"} onClick={rollback}>Voltar atrás</button>
 
             <div className="submit_Map">
-                <Form>
+                <Form onSubmit={submitHandler}>
                     <Form.Group className="mb-3" controlId="formParcelName">
                         <Form.Label> <strong>Nome da Parcela </strong> </Form.Label>
                         <Form.Control required type="text" placeholder="Nome da parcela" />
