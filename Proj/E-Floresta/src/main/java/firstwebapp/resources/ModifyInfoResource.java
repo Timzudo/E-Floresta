@@ -1,7 +1,7 @@
 package firstwebapp.resources;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
+import firstwebapp.util.ChangePasswordData;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.ModifyInfoData;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,46 +20,39 @@ public class ModifyInfoResource {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     @PUT
-    @Path("{username}")
+    @Path("/info/{username}")
     public Response modifyInfo(@PathParam("username") String username, ModifyInfoData data){
         LOG.fine("Attempt to modify user: " + username);
 
-
-
-
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
+        //Verifica o token
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         if(tokenInfo == null){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
+        //Cria a key e usa a key para ir buscar a entidade user certa
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
+        //Se o user n existir
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
         }
 
-        if(!data.username.equals(token.getString("token_username"))){
-            return Response.status(Response.Status.FORBIDDEN).entity("No permission.").build();
-        }
-
+        //Cria transacao
         Transaction txn = datastore.newTransaction();
 
         try{
-            Entity newUser = Entity.newBuilder(userKey)
+            //Atualiza a entidade
+            Entity newUser = Entity.newBuilder(user)
                                 .set("user_name", data.name)
-                                .set("user_pwd", user.getString("user_pwd"))
-                                .set("user_email", data.email)
                                 .set("user_phone", data.phone)
                                 .set("user_nif", data.nif)
-                                .set("user_creation_time", user.getTimestamp("user_creation_time"))
-                                .set("user_role", user.getString("user_role"))
-                                .set("user_state", user.getString("user_state"))
-                                .set("user_type", user.getString("user_type"))
                                 .build();
-            txn.put(newUser);
+            //Da update na transacao e commit
+            txn.update(newUser);
             txn.commit();
-            LOG.fine("Modiffied user: " + username);
+            LOG.fine("Modified user: " + username);
             return Response.ok("User modified successfully.").build();
         }
         finally {
@@ -69,4 +62,51 @@ public class ModifyInfoResource {
             }
         }
     }
+
+
+    @PUT
+    @Path("/password/{username}")
+    public Response changePassword(@PathParam("username") String username, ChangePasswordData data){
+        LOG.fine("Attempt to change password of user: " + username);
+
+        if(!data.validPassword()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+
+        String storedPassword = user.getString("user_pwd");
+        if (!storedPassword.equals(DigestUtils.sha512Hex(data.oldPassword))) {
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect password.").build();
+        }
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            Entity newUser = Entity.newBuilder(user)
+                    .set("user_pwd", DigestUtils.sha512Hex(data.newPassword))
+                    .build();
+            txn.update(newUser);
+            txn.commit();
+            LOG.fine("Modified user: " + username);
+            return Response.ok("User modified successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
 }

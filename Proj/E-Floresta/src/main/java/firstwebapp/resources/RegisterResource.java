@@ -32,22 +32,26 @@ public class RegisterResource {
     public Response registerPersonal(@PathParam("username") String username, PersonalRegistrationData data){
         LOG.fine("Attempt to register user: " + username);
 
+        //Ve se a informacao ta certa
         if(!data.validRegistration()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
 
+        //Cria a chave para ir buscar a entidade user certa
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
-
+        //Cria uma transacao
         Transaction txn = datastore.newTransaction();
 
         try{
+            //Ve se o user ja existe
             if(user != null){
                 txn.rollback();
                 return Response.status(Response.Status.CONFLICT).entity("User already exists.").build();
             }
             else{
+                //Cria uma nova entidade user
                 user = Entity.newBuilder(userKey)
                         .set("user_name", data.name)
                         .set("user_pwd", DigestUtils.sha512Hex(data.password))
@@ -62,10 +66,12 @@ public class RegisterResource {
                         .build();
             }
 
+            //Adiciona a transacao e da commit da transacao
             txn.add(user);
             LOG.info("User registered " + username);
             txn.commit();
 
+            //Gera um token
             String token = JWToken.generateToken(username, "C");
 
             return Response.ok(token).build();

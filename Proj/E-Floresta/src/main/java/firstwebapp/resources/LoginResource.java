@@ -32,14 +32,18 @@ public class LoginResource {
     public Response login(@PathParam("username") String username, LoginData data) {
         LOG.fine("Login attempt by user: " + username);
 
+        //Cria a key e usa a key para ir buscar a entidade user certa
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
 
+        //Se o user existir
         if (user != null) {
+            //Se a password tiver certa
             String storedPassword = user.getString("user_pwd");
             if (storedPassword.equals(DigestUtils.sha512Hex(data.password))) {
 
+                //Gera um token
                 String token = JWToken.generateToken(username, user.getString("user_role"));
 
                 return Response.ok(token).build();
