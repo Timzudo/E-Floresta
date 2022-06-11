@@ -2,6 +2,7 @@ package firstwebapp.resources;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
+import firstwebapp.util.JWToken;
 import firstwebapp.util.ModifyInfoData;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -23,16 +24,16 @@ public class ModifyInfoResource {
     public Response modifyInfo(@PathParam("username") String username, ModifyInfoData data){
         LOG.fine("Attempt to modify user: " + username);
 
-        Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.tokenId);
-        Entity token = datastore.get(tokenKey);
 
-        if(token == null){
-            return Response.status(Response.Status.FORBIDDEN).entity("Not logged in.").build();
+
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(token.getString("token_username"));
         Entity user = datastore.get(userKey);
-
 
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();

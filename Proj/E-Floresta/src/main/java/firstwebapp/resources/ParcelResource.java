@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ParcelResource {
 
-    private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(ParcelResource.class.getName());
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 

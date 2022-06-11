@@ -2,22 +2,19 @@ package firstwebapp.util;
 
 public class ModifyInfoData {
 
-    public String username;
-    public String tokenId;
+
     public String name;
-    public String email;
     public String phone;
     public String nif;
+    public String token;
 
     public ModifyInfoData(){
 
     }
 
-    public ModifyInfoData(String username, String tokenId, String name, String email, String phone, String nif){
-        this.username = username;
-        this.tokenId = tokenId;
+    public ModifyInfoData(  String name, String email, String phone, String nif, String token){
+        this.token = token;
         this.name = name;
-        this.email = email;
         this.phone = phone;
         this.nif = nif;
     }

@@ -12,11 +12,13 @@ const Profile = () => {
     const [phone, setPhone] = useState("");
     const [nif, setNif] = useState("");
     const [type, setType] = useState("");
+    const [state, setState] = useState("");
 
 
     let xmlhttp = new XMLHttpRequest();
 
     (function getValues() {
+        console.log("teste");
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
@@ -27,12 +29,13 @@ const Profile = () => {
                     setPhone(obj.phone);
                     setNif(obj.nif);
                     setType(obj.type);
+                    setState(obj.state);
                 } else {
                 }
             }
         }
 
-        var myObj = {tokenId:localStorage.getItem('token')};
+        var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
@@ -44,7 +47,6 @@ const Profile = () => {
         <>
             <CheckIfLoggedOut />
             <TopBar />
-
             <div className="profile_info">
                 <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
                 <p></p>
