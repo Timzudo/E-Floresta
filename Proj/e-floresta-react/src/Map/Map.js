@@ -141,7 +141,7 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <div>
+            <div id="sideBar">
                 <div id="parcelInfo">
                     <div id="parcelArea">
                         <div className="MapInfo_Map">Área</div>

@@ -23,6 +23,7 @@
 #rollback{
     border-radius: 0 0 5px 0;
     height: 50%;
+    width: 100%;
 }
 
 #parcelInfo{
@@ -38,4 +39,8 @@
 
 .MapInfo_Map{
     color: white;
+}
+
+#sideBar{
+    width: 7%;
 }
