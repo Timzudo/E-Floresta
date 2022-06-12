@@ -7,6 +7,7 @@ import ChangeProfile from "./ChangeProfile/ChangeProfile"
 import AboutUs from "./AboutUs/AboutUs"
 import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
+import ChangePassword from "./ChangePassword/ChangePassword";
 
 import {
   BrowserRouter as Router,
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/homepage" element={<LoggedHomepage />} />
           <Route path="/change-profile" element={<ChangeProfile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </Router>
