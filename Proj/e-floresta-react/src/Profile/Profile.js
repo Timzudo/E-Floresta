@@ -12,13 +12,13 @@ const Profile = () => {
     const [phone, setPhone] = useState("");
     const [nif, setNif] = useState("");
     const [type, setType] = useState("");
-    const [state, setState] = useState("");
+    const [state, setState] = useState(""); //TODO: ver se e preciso
 
 
     let xmlhttp = new XMLHttpRequest();
 
+    //Permite correr a funcao quando a pagina e carregada
     (function getValues() {
-        console.log("teste");
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {

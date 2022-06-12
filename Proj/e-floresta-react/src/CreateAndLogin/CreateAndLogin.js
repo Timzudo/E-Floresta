@@ -16,7 +16,6 @@ const CreateAndLogin = () => {
 
   function login() {
 
-
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
@@ -24,8 +23,11 @@ const CreateAndLogin = () => {
           alert("Login efetuado com sucesso.");
           localStorage.setItem('token', token);
           window.location.href = "/homepage";
-        }
-        else {
+        } else if(xmlhttp.status == 403) {
+          alert("O username ou a password introduzidas estão erradas.");
+        } else if(xmlhttp.status == 404) {
+          alert("O username introduzido não existe.");
+        } else {
           alert("Não foi possível efetuar o login.");
         }
       }
@@ -47,8 +49,11 @@ const CreateAndLogin = () => {
           alert("Registo efetuado com sucesso.");
           localStorage.setItem('token', token);
           window.location.href = "/homepage";
-        }
-        else {
+        } else if(xmlhttp.status == 400) {
+          alert("Todos os campos obrigatórios devem ser preenchidos.");
+        } else if(xmlhttp.status == 409) {
+          alert("Já existe um utilizador com o mesmo nome.");
+        } else {
           alert("Não foi possível registar o utilizador.");
         }
       }

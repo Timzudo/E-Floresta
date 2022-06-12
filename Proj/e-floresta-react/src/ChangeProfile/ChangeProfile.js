@@ -15,12 +15,9 @@ const ChangeProfile = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
-                    username = obj.username;
-                    email = obj.email;
                     name = obj.name;
                     phone = obj.phone;
                     nif = obj.nif;
-                    type = obj.type;
                 } else {
                     alert("Não foi possível obter informação.");
                 }
