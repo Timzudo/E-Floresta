@@ -11,6 +11,14 @@
     margin: 4px;
 }
 
+#change-complete-name,
+#change-phone,
+#change-nif{
+    margin-bottom: 8px;
+    border: 0.3px solid black;
+    border-radius: 0.25rem;
+}
+
 #confirmChanges_ChangeProfile,
 #cancelChanges_ChangeProfile {
     padding: 5px;
