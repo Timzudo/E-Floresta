@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {GoogleMap, LoadScript} from '@react-google-maps/api';
 import {Marker} from '@react-google-maps/api';
 import {useState} from 'react'
 import {Polygon} from '@react-google-maps/api';
 import "./Map.css"
 import {Button, Form} from "react-bootstrap";
+import {getAreaOfPolygon, getDistance, getPathLength} from 'geolib';
 
 const google = window.google;
 
@@ -33,7 +34,6 @@ const options = {
 
 
 const Map = () => {
-
     const submitHandler = (e) => {
         e.preventDefault();
     }
@@ -42,6 +42,11 @@ const Map = () => {
     const [paths, setPaths] = useState([]);
     const [area, setArea] = useState(0);
     const [perimeter, setPerimeter] = useState(0);
+
+    React.useEffect(() => {
+        setPerimeter(getPathLength(paths) + (paths.length>1 ? getDistance(paths[paths.length-1], paths[0]) : 0));
+        setArea(Math.round(getAreaOfPolygon(paths) * 100) / 100);
+    }, [paths]);
 
 
     function addMarker(lat, lng) {
@@ -65,36 +70,9 @@ const Map = () => {
         setPaths(paths.concat({
             lat: lat,
             lng: lng
-        }))
-
-        let area = 0;
-        let perimeter = 0;
-        for(let i = 0; i<paths.length; i++){
-            let next = i+1;
-
-            if(next == paths.length){
-                next = 0;
-            }
-
-            area += (paths[i].lat * paths[next].lng) - (paths[next].lat * paths[i].lng);
-
-            perimeter += getDistance(paths[i].lng, paths[i].lng, paths[next].lng, paths[next].lng)
-        }
-
-        area/=2;
-        setArea(area);
-        setPerimeter(perimeter);
-        console.log("area" + area);
-        console.log("perimeter" + perimeter);
+        }));
     }
 
-
-    function getDistance(x1, y1, x2, y2){
-        let y = x2 - x1;
-        let x = y2 - y1;
-
-        return Math.sqrt(x * x + y * y);
-    }
 
     function rollback() {
         setMarker(markerList.filter((element, index) => index < markerList.length - 1));
@@ -150,6 +128,7 @@ const Map = () => {
                 mapContainerStyle={containerStyle}
                 center={center}
                 zoom={10}
+                tilt={0}
                 onClick={ev => {
                     addMarker(ev.latLng.lat(), ev.latLng.lng())
                 }}
@@ -166,11 +145,11 @@ const Map = () => {
                 <div id="parcelInfo">
                     <div id="parcelArea">
                         <div>Área</div>
-                        <div>{area}</div>
+                        <div>{area}m²</div>
                     </div>
                     <div id="parcelPerimeter">
                         <div>Perímetro</div>
-                        <div>{perimeter}</div>
+                        <div>{perimeter}m</div>
                     </div>
                 </div>
                 <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>

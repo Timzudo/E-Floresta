@@ -21,14 +21,14 @@
 }
 
 #rollback{
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 0 5px 0;
     height: 50%;
 }
 
 #parcelInfo{
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 5px 0 0;
     height: 50%;
-    background-color: red;
+    background-color: rosybrown;
 }
 
 #parcelInfo div{
@@ -36,4 +36,10 @@
     margin: auto;
 }
 
+.parcelArea, div{
+    color: white;
+}
 
+.parcelPerimeter, div{
+    color: white;
+}
