@@ -3,6 +3,7 @@ import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
 import {Link} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
+import {Button} from "react-bootstrap";
 
 const ChangeProfile = () => {
 
@@ -10,24 +11,33 @@ const ChangeProfile = () => {
 
     let xmlhttp = new XMLHttpRequest();
 
-    function getValues() {
+    function changeProfile() {
+
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
-                    name = obj.name;
-                    phone = obj.phone;
-                    nif = obj.nif;
-                } else {
+                    alert("Informação alterada com sucesso.");
+                    window.location.href = "/profile";
+                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                    alert("Não tem permissões para efetuar esta operação.");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+                else {
                     alert("Não foi possível obter informação.");
                 }
             }
         }
 
-        var myObj = {tokenId:localStorage.getItem('token')};
+        var myObj = {name:document.getElementById("change-complete-name").value,
+            phone:document.getElementById("change-phone").value,
+            nif:document.getElementById("change-nif").value,
+            token:localStorage.getItem('token')
+        };
+
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/modify/info");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -41,13 +51,13 @@ const ChangeProfile = () => {
                 <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
                 <p></p>
                 <div id="username_ChangeProfile">
-                    <p className="label">Username: {username}</p>
+                    Username: {username} <p className="label" />
                 </div>
                 <div id="email_ChangeProfile">
-                    E-mail: {email} <input className="label" id="change-email" type="text" />
+                    E-mail: {email} <p className="label" />
                 </div>
                 <div id="name_ChangeProfile">
-                    Nome Completo: {name} <input className="label" id="change-name" type="text" />
+                    Nome Completo: {name} <input className="label" id="change-complete-name" type="text" />
                 </div>
                 <div id="phone_ChangeProfile">
                     Telemóvel/Telefone: {phone} <input className="label" id="change-phone" type="number" maxLength="9"/>
@@ -56,20 +66,19 @@ const ChangeProfile = () => {
                     NIF: {nif} <input className="label" id="change-nif" type="number" maxLength="9"/>
                 </div>
                 <div id="type_ChangeProfile">
-                    Tipo de utilizador: {type} <p className="label"></p>
+                    <p className="label"></p> Tipo de utilizador: {type}
                 </div>
 
                 <div className="btn-group" id="confirmAndCancel_ChangeProfile">
                     <div id="confirmChanges_ChangeProfile">
-                        <Link to="/profile">
-                            <button type="button" className="btn btn-success btn-sm">Confirmar Alterações</button>
-                        </Link>
+                        <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile} >Confirmar Alterações</Button>
                     </div>
 
                     <div id="cancelChanges_ChangeProfile">
                         <Link to="/profile">
-                            <button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações</button>
+                            <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
                         </Link>
+
                     </div>
                 </div>
 
