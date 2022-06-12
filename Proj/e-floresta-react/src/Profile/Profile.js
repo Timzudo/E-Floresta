@@ -69,10 +69,19 @@ const Profile = () => {
                     <p className="label">Tipo de utilizador: {type}</p>
                 </div>
 
-                <div className="change-profile-info">
-                    <Link to="/change-profile">
-                        <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
-                    </Link>
+                <div className="btn-group" id="change-profile-info">
+                    <div id="changeProfileInfo_Profile">
+                        <Link to="/change-profile">
+                            <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
+                        </Link>
+                    </div>
+
+                    <div id="changePassword_Profile">
+                        <Link to="/change-password">
+                            <button type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                        </Link>
+                    </div>
+
                 </div>
 
             </div>
