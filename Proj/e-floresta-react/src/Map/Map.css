@@ -22,7 +22,18 @@
 
 #rollback{
     border-radius: 0 5px 5px 0;
+    height: 50%;
 }
 
+#parcelInfo{
+    border-radius: 0 5px 5px 0;
+    height: 50%;
+    background-color: red;
+}
+
+#parcelInfo div{
+    width: 90%;
+    margin: auto;
+}
 
 

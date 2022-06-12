@@ -40,6 +40,9 @@ const Map = () => {
 
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
+    const [area, setArea] = useState(0);
+    const [perimeter, setPerimeter] = useState(0);
+
 
     function addMarker(lat, lng) {
         const google = window.google;
@@ -59,11 +62,38 @@ const Map = () => {
                                                 scale: 5
                                             }}/>))
 
-
         setPaths(paths.concat({
             lat: lat,
             lng: lng
         }))
+
+        let area = 0;
+        let perimeter = 0;
+        for(let i = 0; i<paths.length; i++){
+            let next = i+1;
+
+            if(next == paths.length){
+                next = 0;
+            }
+
+            area += (paths[i].lat * paths[next].lng) - (paths[next].lat * paths[i].lng);
+
+            perimeter += getDistance(paths[i].lng, paths[i].lng, paths[next].lng, paths[next].lng)
+        }
+
+        area/=2;
+        setArea(area);
+        setPerimeter(perimeter);
+        console.log("area" + area);
+        console.log("perimeter" + perimeter);
+    }
+
+
+    function getDistance(x1, y1, x2, y2){
+        let y = x2 - x1;
+        let x = y2 - y1;
+
+        return Math.sqrt(x * x + y * y);
     }
 
     function rollback() {
@@ -132,7 +162,20 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
-            <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>
+            <div>
+                <div id="parcelInfo">
+                    <div id="parcelArea">
+                        <div>Área</div>
+                        <div>{area}</div>
+                    </div>
+                    <div id="parcelPerimeter">
+                        <div>Perímetro</div>
+                        <div>{perimeter}</div>
+                    </div>
+                </div>
+                <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>
+            </div>
+
 
             <div className="submit_Map">
                 <Form onSubmit={submitHandler}>
