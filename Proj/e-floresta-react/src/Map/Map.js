@@ -144,12 +144,12 @@ const Map = () => {
             <div>
                 <div id="parcelInfo">
                     <div id="parcelArea">
-                        <div>Área</div>
-                        <div>{area}m²</div>
+                        <div className="MapInfo_Map">Área</div>
+                        <div className="MapInfo_Map">{area}m²</div>
                     </div>
                     <div id="parcelPerimeter">
-                        <div>Perímetro</div>
-                        <div>{perimeter}m</div>
+                        <div className="MapInfo_Map">Perímetro</div>
+                        <div className="MapInfo_Map">{perimeter}m</div>
                     </div>
                 </div>
                 <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>

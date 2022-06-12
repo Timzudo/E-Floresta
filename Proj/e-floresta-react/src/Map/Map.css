@@ -36,10 +36,6 @@
     margin: auto;
 }
 
-.parcelArea, div{
-    color: white;
-}
-
-.parcelPerimeter, div{
+.MapInfo_Map{
     color: white;
 }
