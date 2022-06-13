@@ -2,7 +2,7 @@ import Image from './logo.png'
 import './CreateAndLogin.css'
 import {Link} from "react-router-dom";
 import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, InputGroup} from "react-bootstrap";
 
 
 const CreateAndLogin = () => {
@@ -39,6 +39,15 @@ const CreateAndLogin = () => {
     xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
+  }
+
+  function showPassword() {
+    var x = document.getElementById("session-password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
   }
 
   function register() {
@@ -85,81 +94,93 @@ const CreateAndLogin = () => {
 
       </div>
 
-      <div className="session-body">
+      <div className="bg-img">
 
-        <div className="initiate-session">
+        <div className="session-body">
 
-          <h2 className="align-content">Iniciar sessão</h2>
+          <div className="initiate-session">
 
-          <Form onSubmit={submitHandler}>
-            <Form.Group className="session-form" >
-              <Form.Control type="text" placeholder="Username" id="session-username"/>
-            </Form.Group>
+            <h2 className="align-content"><b>Iniciar Sessão</b></h2>
 
-            <Form.Group className="session-form" >
-              <Form.Control type="password" placeholder="Password" id="session-password"/>
-            </Form.Group>
+            <Form onSubmit={submitHandler}>
+              <Form.Group className="session-form" >
+                <Form.Control type="text" placeholder="Username" id="session-username"/>
+              </Form.Group>
 
-            <Button id="session-button" variant="dark" type="submit" onClick={login}>
-              Entrar
-            </Button>
-          </Form>
+              <Form.Group className="session-form" >
+                <Form.Control type="password" placeholder="Password" id="session-password"/>
+              </Form.Group>
 
-        </div>
+              <Form.Group className="checkbox-container" controlId="loginShowPassCheckbox" >
+                <Form.Check id="checkmark-login" type="checkbox" label="Mostrar Palavra-Passe" onClick={showPassword}/>
+              </Form.Group>
 
-        <div className="division"> </div>
+              <Button id="session-button" type="submit" onClick={login}>
+                Entrar
+              </Button>
+            </Form>
 
-        <div className="create-account">
+            <p></p>
+            <span className="forgot-pass_Login">Esqueceu a sua password? <a href="#">Clique aqui.</a></span>
 
-          <h2 className="align-content">Registe-se</h2>
-          <p className="align-content">Ainda não tem conta?</p>
-          <p className="align-content">Registe-se agora!</p>
+          </div>
 
-          <Form onSubmit={submitHandler}>
-            <Form.Group className="create-form" >
-              <Form.Control required type="text" placeholder="Username" id="create-acc-user" />
-            </Form.Group>
+          <div className="division"> </div>
 
-            <Form.Group className="create-form" >
-              <Form.Control required type="email" placeholder="E-mail" id="create-acc-email" />
-            </Form.Group>
+          <div className="create-account">
 
-            <Form.Group className="create-form" >
-              <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" />
-            </Form.Group>
+            <h2 className="align-content"><b>Registe-se</b></h2>
+            <p className="align-content">Ainda não tem conta?</p>
+            <p className="align-content">Registe-se agora!</p>
 
-            <Form.Group className="create-form" >
-              <Form.Control required type="password" placeholder="Password" id="create-acc-pass" />
-            </Form.Group>
+            <Form onSubmit={submitHandler}>
+              <Form.Group className="create-form" >
+                <Form.Control required type="text" placeholder="Username" id="create-acc-user" />
+              </Form.Group>
 
-            <Form.Group className="create-form" >
-              <Form.Control required type="password" placeholder="Confirmar Password" id="create-acc-conf-pass" />
-            </Form.Group>
+              <Form.Group className="create-form" >
+                <Form.Control required type="email" placeholder="E-mail" id="create-acc-email" />
+              </Form.Group>
 
-            <Form.Group className="create-form" >
-              <Form.Control placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
-            </Form.Group>
+              <Form.Group className="create-form" >
+                <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" />
+              </Form.Group>
 
-            <Form.Group className="create-form" >
-              <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
-            </Form.Group>
+              <Form.Group className="create-form" >
+                <Form.Control required type="password" placeholder="Password" id="create-acc-pass" />
+              </Form.Group>
 
-            <Form.Group className="create-form" >
-              <Form.Select required controlId="create-acc-type" >
-                <option value="personal">Conta Pessoal</option>
-                <option value="entity">Conta de Entidade</option>
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="create-form" >
+                <Form.Control required type="password" placeholder="Confirmar Password" id="create-acc-conf-pass" />
+              </Form.Group>
 
-            <Button id="create-acc-button" variant="dark" type="submit" onClick={register}>
-              Registar
-            </Button>
+              <Form.Group className="create-form" >
+                <Form.Control placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
+              </Form.Group>
 
-          </Form>
+              <Form.Group className="create-form" >
+                <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
+              </Form.Group>
+
+              <Form.Group className="create-form" >
+                <Form.Select required controlId="create-acc-type" >
+                  <option value="personal">Conta Pessoal</option>
+                  <option value="entity">Conta de Entidade</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Button id="create-acc-button" type="submit" onClick={register}>
+                Registar
+              </Button>
+
+            </Form>
+
+          </div>
 
         </div>
 
       </div>
+
 
     </>
   )

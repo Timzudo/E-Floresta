@@ -1,5 +1,6 @@
 body{
     margin: 0;
+    height: 100%;
 }
 
 .cl_top{
@@ -13,14 +14,24 @@ body{
     width: 16%;
 }
 
+.bg-img{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: translate(0%, -7.2%);
+    height: 700px;
+    position: relative;
+}
+
 .session-body{
-    background-color: ghostwhite;
+    background-color: rgba(189, 216, 196, 0.85);
     margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
     align-self: center;
-    width: 800px;
-    padding-bottom: 10px;
+    width: 900px;
+    padding-bottom: 30px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -62,6 +73,20 @@ body{
 
 .create-account form{
     margin-top: 8px;
+}
+
+.session-body button{
+    background-color: #32443A;
+    opacity: 0.9;
+    border: none;
+    outline: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.session-body button:hover{
+    background-color: #32443A;
+    opacity: 1;
 }
 
 .align-content{

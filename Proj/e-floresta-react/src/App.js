@@ -50,7 +50,7 @@ const Home = () => {
 
           <div className="home_button">
             <Link to="/create-and-login">
-              <button type="button" className="btn btn-dark">Login | Criar Conta</button>
+              <Button id="topButton_Home" type="button">Login | Criar Conta</Button>
             </Link>
           </div>
 

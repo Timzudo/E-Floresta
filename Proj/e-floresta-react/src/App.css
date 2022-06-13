@@ -20,6 +20,11 @@ body{
     margin-top: 10px;
 }
 
+#topButton_Home{
+    background-color: #32443A;
+    border-color: #32443A;
+}
+
 .hero-image_Home {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background-image.png");
     height:500px;
