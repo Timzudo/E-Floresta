@@ -1,5 +1,6 @@
 body{
     margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .home_top{
@@ -19,9 +20,58 @@ body{
     margin-top: 10px;
 }
 
-.initial-text{
-    padding: 2%;
-    float: left;
+.hero-image_Home {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background-image.png");
+    height:500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
 }
+
+.hero-text_Home {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.hero-text_Home h1{
+    font-size: 60px;
+}
+
+.hero-text_Home button {
+    border: none;
+    border-radius: 0px;
+    outline: 0;
+    display: inline-block;
+    padding: 10px 25px;
+    color: black;
+    background-color: #ddd;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hero-text_Home button:hover {
+    background-color: #32443A;
+    color: white;
+}
+
+.text_Home{
+    background-color: #B0C090;
+    color: white;
+    text-align: justify;
+    padding: 2%;
+    font-size: 18px;
+}
+
+.text_Home h1{
+    background-color: white;
+    color: #B0C090;
+    padding: 5px;
+}
+
 
 
