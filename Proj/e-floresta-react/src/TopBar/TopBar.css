@@ -19,10 +19,15 @@ body{
     margin-top: 0.5%;
 }
 
-.topBar-buttons{
+.buttons_TopBar button {
     background: rgb(169, 196, 114);
     border: rgb(169, 196, 114);
     font-size: 20px;
+}
+
+.buttons_TopBar button:hover {
+    background-color: #3E503A;
+    color: white;
 }
 
 .close-session-button{

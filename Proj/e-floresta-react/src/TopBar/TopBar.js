@@ -14,25 +14,25 @@ const TopBar = () => {
 
               <ButtonGroup className="buttons_TopBar" size="lg">
                   <Link to="/homepage">
-                      <Button id="option1" className="topBar-buttons">Página Inicial</Button>
+                      <Button id="option1">Página Inicial</Button>
                   </Link>
 
                   <Link to="/profile">
-                      <Button id="option2" className="topBar-buttons">Perfil</Button>
+                      <Button id="option2">Perfil</Button>
                   </Link>
 
                   <Link to="/map">
-                      <Button id="option3" className="topBar-buttons">Mapa</Button>
+                      <Button id="option3">Mapa</Button>
                   </Link>
 
                   <Link to="/about-us">
-                      <Button id="option4" className="topBar-buttons">Sobre</Button>
+                      <Button id="option4">Sobre</Button>
                   </Link>
               </ButtonGroup>
 
               <div className="close-session-button">
                   <Link to="/">
-                      <button type="button" onClick={ () => localStorage.removeItem('token')} className="btn btn-light">Encerrar sessão</button>
+                      <button type="button" onClick={ () => localStorage.removeItem('token')} className="btn btn-dark">Encerrar sessão</button>
                   </Link>
               </div>
 
