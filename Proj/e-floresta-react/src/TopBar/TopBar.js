@@ -1,6 +1,7 @@
 import LogoImage from './logo.png'
 import './TopBar.css'
 import {Link} from "react-router-dom";
+import {Button, ButtonGroup} from "react-bootstrap";
 
 const TopBar = () => {
 
@@ -11,20 +12,23 @@ const TopBar = () => {
                   <Link to="/homepage"><img src={LogoImage} alt="E-Floresta Logo" className="topBar_logo"/></Link>
               </div>
 
-              <div className="btn-group">
+              <ButtonGroup className="buttons_TopBar" size="lg">
                   <Link to="/homepage">
-                      <button id="option1" type="button" className="btn btn-outline-success">Página Inicial</button>
+                      <Button id="option1" className="topBar-buttons">Página Inicial</Button>
                   </Link>
+
                   <Link to="/profile">
-                      <button id="option2" type="button" className="btn btn-outline-success">Meu Perfil</button>
+                      <Button id="option2" className="topBar-buttons">Perfil</Button>
                   </Link>
+
                   <Link to="/map">
-                      <button id="option3" type="button" className="btn btn-outline-success">Mapa</button>
+                      <Button id="option3" className="topBar-buttons">Mapa</Button>
                   </Link>
+
                   <Link to="/about-us">
-                      <button id="option4" type="button" className="btn btn-outline-success">Sobre</button>
+                      <Button id="option4" className="topBar-buttons">Sobre</Button>
                   </Link>
-              </div>
+              </ButtonGroup>
 
               <div className="close-session-button">
                   <Link to="/">

@@ -143,14 +143,16 @@ const Map = () => {
                 <></>
             </GoogleMap>
         </LoadScript>
+
             <div id="sideBar">
                 <div id="parcelInfo">
                     <div id="parcelArea">
-                        <div className="MapInfo_Map">Área</div>
+                        <div className="MapInfo_Map">Área:</div>
                         <div className="MapInfo_Map">{area}m²</div>
                     </div>
+                    <p></p>
                     <div id="parcelPerimeter">
-                        <div className="MapInfo_Map">Perímetro</div>
+                        <div className="MapInfo_Map">Perímetro:</div>
                         <div className="MapInfo_Map">{perimeter}m</div>
                     </div>
                 </div>

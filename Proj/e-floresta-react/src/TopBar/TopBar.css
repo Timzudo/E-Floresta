@@ -3,7 +3,7 @@ body{
 }
 
 .topBar_top{
-    background-color: rgb(145, 196, 131);
+    background-color: rgb(169, 196, 114);
     height: 60px;
     display: flex;
 }
@@ -13,19 +13,16 @@ body{
     width: 16%;
 }
 
-.btn-group{
-    display: flex;
-    align-items: end;
-    font-size: 30px;
-    margin-left: auto;
+.buttons_TopBar{
+    position: absolute;
+    margin-left: 12%;
+    margin-top: 0.5%;
 }
 
-#option1,
-#option2,
-#option3,
-#option4 {
-    border-radius: 0;
-    color: white;
+.topBar-buttons{
+    background: rgb(169, 196, 114);
+    border: rgb(169, 196, 114);
+    font-size: 20px;
 }
 
 .close-session-button{
