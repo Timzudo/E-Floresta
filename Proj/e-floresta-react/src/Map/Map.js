@@ -105,7 +105,9 @@ const Map = () => {
             freguesia:document.getElementById("formFreguesiaDropdown").value,
             /*photo:document.getElementById("formParcelPhoto").value,
             pdf:document.getElementById("formParcelPdf").value,*/
-            coordinates:paths
+            coordinates:paths,
+            area:area,
+            perimeter:perimeter
         };
 
         /*for (let i = 0; i < paths.length; i++) {

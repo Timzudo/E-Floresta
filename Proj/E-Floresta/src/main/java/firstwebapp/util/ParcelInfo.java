@@ -1,36 +1,28 @@
 package firstwebapp.util;
 
-import com.google.gson.Gson;
-
-import java.util.List;
-
 public class ParcelInfo {
-
 
     public String name;
     public Point[] coordinates;
     public String distrito;
     public String concelho;
     public String freguesia;
-    /*public byte[] photo;
-    public byte[] document;*/
-
+    public long area;
+    public long perimeter;
+    //public byte[] photo;
 
     public ParcelInfo(){
 
     }
 
-    public ParcelInfo(String name, String distrito, String concelho, String freguesia, /*byte[] photo, byte[] document,*/ Point[] coordinates){
+    public ParcelInfo(String name, Point[] coordinates, String distrito, String concelho, String freguesia, long area, long perimeter/*, byte[] photo*/) {
         this.name = name;
+        this.coordinates = coordinates;
         this.distrito = distrito;
         this.concelho = concelho;
         this.freguesia = freguesia;
-        /*this.photo = photo;
-        this.document = document;*/
-        this.coordinates = coordinates;
-    }
-
-    public boolean validRegistration(){
-        return (!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && /*photo != null && document != null &&*/ !coordinates.equals("")  && coordinates.length >= 3);
+        this.area = area;
+        this.perimeter = perimeter;
+        //this.photo = photo;
     }
 }
