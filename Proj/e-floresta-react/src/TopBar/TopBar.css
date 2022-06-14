@@ -41,3 +41,23 @@ body{
     border-color: #32443A;
 }
 
+.my-account-dropdown_TopBar {
+        
+}
+
+.my-account-dropdown_TopBar .dropdown_TopBar {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.my-account-dropdown_TopBar:hover .dropdown_TopBar {
+    background-color: #3E503A;
+
+}
+

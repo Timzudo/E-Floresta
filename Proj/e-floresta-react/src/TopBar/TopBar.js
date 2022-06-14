@@ -1,7 +1,7 @@
 import LogoImage from './logo.png'
 import './TopBar.css'
 import {Link} from "react-router-dom";
-import {Button, ButtonGroup} from "react-bootstrap";
+import {Button, ButtonGroup, Dropdown} from "react-bootstrap";
 
 const TopBar = () => {
 
@@ -17,16 +17,16 @@ const TopBar = () => {
                       <Button id="option1">Página Inicial</Button>
                   </Link>
 
-                  <Link to="/profile">
-                      <Button id="option2">Perfil</Button>
-                  </Link>
-
                   <Link to="/map">
-                      <Button id="option3">Registar Parcela</Button>
+                      <Button id="option2">Registar Parcela</Button>
                   </Link>
 
                   <Link to="/my-parcels">
-                      <Button id="option4">Minhas Parcelas</Button>
+                      <Button id="option3">Minhas Parcelas</Button>
+                  </Link>
+
+                  <Link to="/profile">
+                      <Button id="option4">Perfil</Button>
                   </Link>
 
                   <Link to="/about-us">
@@ -34,11 +34,16 @@ const TopBar = () => {
                   </Link>
               </ButtonGroup>
 
-              <div className="close-session-button">
-                  <Link to="/">
-                      <Button id="close-sessionButton" type="button" onClick={ () => localStorage.removeItem('token')}>Encerrar sessão</Button>
-                  </Link>
-              </div>
+              <Dropdown className="my-account-dropdown_TopBar">
+                  <Dropdown.Toggle className="dropdown_TopBar">
+                      A Minha Conta
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="dropdown-content_TopBar">
+                      <Dropdown.Item href="/profile">Perfil</Dropdown.Item>
+                      <Dropdown.Item href="/" onClick={ () => localStorage.removeItem('token')}>Encerrar sessão</Dropdown.Item>
+                  </Dropdown.Menu>
+              </Dropdown>
 
           </div>
     )

@@ -3,7 +3,8 @@ import Image from './terreno.png'
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 const MyParcels = () => {
 
@@ -25,6 +26,9 @@ const MyParcels = () => {
                                 <label>Concelho: B</label><br/>
                                 <label>Distrito: C</label><br/>
                             </Card.Text>
+                            <Link to="/edit-parcel">
+                                <Button id="edit-parcel_MyParcels" variant="primary">Editar Parcela</Button>
+                            </Link>
                         </Card.Body>
                     </Card>
 
@@ -39,6 +43,9 @@ const MyParcels = () => {
                                 <label>Concelho: B</label><br/>
                                 <label>Distrito: C</label><br/>
                             </Card.Text>
+                            <Link to="/edit-parcel">
+                                <Button id="edit-parcel_MyParcels" variant="primary">Editar Parcela</Button>
+                            </Link>
                         </Card.Body>
                     </Card>
 
@@ -53,6 +60,9 @@ const MyParcels = () => {
                                 <label>Concelho: B</label><br/>
                                 <label>Distrito: C</label><br/>
                             </Card.Text>
+                            <Link to="/edit-parcel">
+                                <Button id="edit-parcel_MyParcels" variant="primary">Editar Parcela</Button>
+                            </Link>
                         </Card.Body>
                     </Card>
                 </div>

@@ -33,3 +33,20 @@ html, body{
     border-color: #32443A;
     background-color: rgba(218, 240, 252, 1);
 }
+
+.parcel-card_MyParcels button{
+    border: none;
+    border-radius: 0px;
+    outline: 0;
+    display: inline-block;
+    padding: 10px 25px;
+    color: black;
+    background-color: #B0C090;
+    text-align: center;
+    cursor: pointer;
+}
+
+.parcel-card_MyParcels button:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+}
