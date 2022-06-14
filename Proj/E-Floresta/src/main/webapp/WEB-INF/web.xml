@@ -26,9 +26,11 @@
       </param-value> <!-- This is a debug utility that should be disabled when code goes to production -->
     </init-param>
 
+
+
     <init-param>
       <param-name>jersey.config.server.provider.classnames</param-name>
-      <param-value>firstwebapp.filters.AdditionalResponseHeadersFilter</param-value>
+      <param-value>firstwebapp.filters.AdditionalResponseHeadersFilter, org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
     </init-param>
     <init-param>
       <param-name>jersey.config.servlet.filter.contextPath</param-name>

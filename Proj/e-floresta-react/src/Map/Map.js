@@ -34,6 +34,7 @@ const options = {
 
 
 const Map = () => {
+    const [file, setFile] = useState();
     const submitHandler = (e) => {
         e.preventDefault();
     }
@@ -89,6 +90,7 @@ const Map = () => {
                     window.location.href = "/map";
                 } else if(xmlhttp.status == 400) {
                     alert("Todos os campos obrigatórios devem ser preenchidos.");
+                    alert(xmlhttp.responseText);
                 } else if(xmlhttp.status == 403 || xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
@@ -99,26 +101,43 @@ const Map = () => {
             }
         }
 
-        var myObj = {name:document.getElementById("formParcelName").value,
+        let f = new FormData();
+
+        f.append('name', document.getElementById("formParcelName").value);
+        f.append('distrito', document.getElementById("formDistritoDropdown").value);
+        f.append('concelho', document.getElementById("formConcelhoDropdown").value);
+        f.append('freguesia', document.getElementById("formFreguesiaDropdown").value);
+        f.append('photo', file);
+        f.append('coordinates', JSON.stringify(paths));
+        f.append('area', area.toString());
+        f.append('perimeter', perimeter.toString());
+
+        for (var pair of f.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+        }
+
+        /*const myObj = {
+            name:document.getElementById("formParcelName").value,
             distrito:document.getElementById("formDistritoDropdown").value,
             concelho:document.getElementById("formConcelhoDropdown").value,
             freguesia:document.getElementById("formFreguesiaDropdown").value,
-            /*photo:document.getElementById("formParcelPhoto").value,
-            pdf:document.getElementById("formParcelPdf").value,*/
+            photo:file,
             coordinates:paths,
             area:area,
-            perimeter:perimeter
-        };
+            perimeter:perimeter,
+        }
 
-        /*for (let i = 0; i < paths.length; i++) {
-            myObj.coordinates.push([paths[i].lat, paths[i].lng]);
-        }*/
 
-        var myJson = JSON.stringify(myObj);
+        console.log(file);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
+
+        let myJson = JSON.stringify(myObj);
+
+        console.log(myJson)*/
+
+        xmlhttp.open("POST", "http://localhost:8080/rest/parcel/register?token=" + localStorage.getItem("token"), true);
+        //xmlhttp.setRequestHeader("Content-Type", "multipart/form-data");
+        xmlhttp.send(f);
     }
 
 
@@ -202,6 +221,7 @@ const Map = () => {
                             required
                             name="file"
                             accept = ".png, .jpg, .jpeg"
+                            onChange={(e) => setFile(e.target.files[0])}
                         />
                     </Form.Group>
 
