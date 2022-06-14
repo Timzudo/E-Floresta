@@ -22,17 +22,21 @@ const TopBar = () => {
                   </Link>
 
                   <Link to="/map">
-                      <Button id="option3">Mapa</Button>
+                      <Button id="option3">Registar Parcela</Button>
+                  </Link>
+
+                  <Link to="/my-parcels">
+                      <Button id="option4">Minhas Parcelas</Button>
                   </Link>
 
                   <Link to="/about-us">
-                      <Button id="option4">Sobre</Button>
+                      <Button id="option5">Sobre</Button>
                   </Link>
               </ButtonGroup>
 
               <div className="close-session-button">
                   <Link to="/">
-                      <button type="button" onClick={ () => localStorage.removeItem('token')} className="btn btn-dark">Encerrar sessão</button>
+                      <Button id="close-sessionButton" type="button" onClick={ () => localStorage.removeItem('token')}>Encerrar sessão</Button>
                   </Link>
               </div>
 

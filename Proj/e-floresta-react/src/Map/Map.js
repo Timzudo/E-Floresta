@@ -182,7 +182,7 @@ const Map = () => {
             <div className="submit_Map">
                 <Form onSubmit={submitHandler}>
                     <Form.Group className="mb-3" controlId="formParcelName">
-                        <Form.Label> <strong>Nome da Parcela </strong> </Form.Label>
+                        <Form.Label> <strong>Nome da Parcela</strong> </Form.Label>
                         <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" />
                     </Form.Group>
 

@@ -32,7 +32,12 @@ body{
 
 .close-session-button{
     margin-left: auto;
-    margin-right: 15px;
+    margin-right: 10px;
     margin-top: 10px;
+}
+
+#close-sessionButton{
+    background-color: #32443A;
+    border-color: #32443A;
 }
 

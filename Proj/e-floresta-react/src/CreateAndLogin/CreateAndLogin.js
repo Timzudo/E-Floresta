@@ -104,11 +104,11 @@ const CreateAndLogin = () => {
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="session-form" >
-                <Form.Control type="text" placeholder="Username" id="session-username"/>
+                <Form.Control type="text" placeholder="Nome de utilizador" id="session-username"/>
               </Form.Group>
 
               <Form.Group className="session-form" >
-                <Form.Control type="password" placeholder="Password" id="session-password"/>
+                <Form.Control type="password" placeholder="Palavra-Passe" id="session-password"/>
               </Form.Group>
 
               <Form.Group className="checkbox-container" controlId="loginShowPassCheckbox" >
@@ -121,7 +121,7 @@ const CreateAndLogin = () => {
             </Form>
 
             <p></p>
-            <span className="forgot-pass_Login">Esqueceu a sua password? <a href="#">Clique aqui.</a></span>
+            <span className="forgot-pass_Login">Esqueceu a sua palavra-passe? <a href="#">Clique aqui.</a></span>
 
           </div>
 
@@ -135,7 +135,7 @@ const CreateAndLogin = () => {
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="create-form" >
-                <Form.Control required type="text" placeholder="Username" id="create-acc-user" />
+                <Form.Control required type="text" placeholder="Nome de utilizador" id="create-acc-user" />
               </Form.Group>
 
               <Form.Group className="create-form" >
@@ -147,11 +147,11 @@ const CreateAndLogin = () => {
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="password" placeholder="Password" id="create-acc-pass" />
+                <Form.Control required type="password" placeholder="Palavra-Passe" id="create-acc-pass" />
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="password" placeholder="Confirmar Password" id="create-acc-conf-pass" />
+                <Form.Control required type="password" placeholder="Confirmar Palavra-Passe" id="create-acc-conf-pass" />
               </Form.Group>
 
               <Form.Group className="create-form" >

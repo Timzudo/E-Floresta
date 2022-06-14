@@ -16,6 +16,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import MyParcels from "./MyParcels/MyParcels";
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/change-profile" element={<ChangeProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/my-parcels" element={<MyParcels />} />
         </Routes>
       </Router>
   )
