@@ -25,12 +25,8 @@ const TopBar = () => {
                       <Button id="option3">Minhas Parcelas</Button>
                   </Link>
 
-                  <Link to="/profile">
-                      <Button id="option4">Perfil</Button>
-                  </Link>
-
                   <Link to="/about-us">
-                      <Button id="option5">Sobre</Button>
+                      <Button id="option4">Sobre</Button>
                   </Link>
               </ButtonGroup>
 
@@ -41,7 +37,7 @@ const TopBar = () => {
 
                   <Dropdown.Menu className="dropdown-content_TopBar">
                       <Dropdown.Item href="/profile">Perfil</Dropdown.Item>
-                      <Dropdown.Item href="/" onClick={ () => localStorage.removeItem('token')}>Encerrar sessão</Dropdown.Item>
+                      <Dropdown.Item href="/" onClick={ () => localStorage.removeItem('token')}><b>Encerrar sessão</b></Dropdown.Item>
                   </Dropdown.Menu>
               </Dropdown>
 
