@@ -24,12 +24,14 @@
     border-radius: 0 0 5px 0;
     height: 50%;
     width: 100%;
+    border: 1px solid black;
 }
 
 #parcelInfo{
     border-radius: 0 5px 0 0;
     height: 50%;
-    background-color: rosybrown;
+    background-color: #b0c090;
+    border: 1px solid black;
 }
 
 #parcelInfo div{

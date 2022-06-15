@@ -8,14 +8,17 @@ html, body{
 }
 
 .body_MyParcels{
-    background-color: rgba(189, 216, 196, 0.85);
+    background-color: #cbccbc;
     height: 100%;
 }
 
 .container_MyParcels{
     display: flex;
+    justify-content: flex-start;
     padding-top: 10px;
     padding-left: 10px;
+    flex-wrap: wrap;
+    gap: 40px
 }
 
 .container_MyParcels .card{
@@ -49,4 +52,9 @@ html, body{
 .parcel-card_MyParcels button:hover{
     background-color: #3E503A;
     border-color: #3E503A;
+}
+
+.parcel_picture{
+    height: 200px;
+    width: 100%;
 }

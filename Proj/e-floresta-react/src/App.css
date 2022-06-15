@@ -70,12 +70,24 @@ body{
     text-align: justify;
     padding: 2%;
     font-size: 18px;
+    height: 100%;
+    display: flex;
 }
 
 .text_Home h1{
-    background-color: white;
-    color: #B0C090;
+    background-color: #32443A;
+    color: white;
     padding: 5px;
+
+}
+
+.text_Home div{
+    padding: 28px 50px 50px 50px;
+    width: 50%;
+}
+
+img{
+    width: 100%;
 }
 
 

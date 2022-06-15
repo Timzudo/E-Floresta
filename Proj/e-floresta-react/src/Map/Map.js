@@ -46,7 +46,7 @@ const Map = () => {
 
     React.useEffect(() => {
         setPerimeter(getPathLength(paths) + (paths.length>1 ? getDistance(paths[paths.length-1], paths[0]) : 0));
-        setArea(Math.round(getAreaOfPolygon(paths) * 100) / 100);
+        setArea(Math.round(getAreaOfPolygon(paths)));
     }, [paths]);
 
 
@@ -135,7 +135,7 @@ const Map = () => {
 
         console.log(myJson)*/
 
-        xmlhttp.open("POST", "http://localhost:8080/rest/parcel/register?token=" + localStorage.getItem("token"), true);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
         //xmlhttp.setRequestHeader("Content-Type", "multipart/form-data");
         xmlhttp.send(f);
     }

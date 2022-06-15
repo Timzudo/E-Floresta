@@ -30,6 +30,7 @@ const Profile = () => {
                     setNif(obj.nif);
                     setType(obj.type);
                     setState(obj.state);
+                    console.log("yau");
                 } else {
                 }
             }

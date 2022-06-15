@@ -1,23 +1,26 @@
 package firstwebapp.resources;
 
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.ComputeEngineCredentials;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.*;
 import com.google.cloud.storage.Blob;
 import com.google.gson.Gson;
-import com.ibm.websphere.jaxrs20.multipart.IAttachment;
 import firstwebapp.util.*;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -29,7 +32,8 @@ public class ParcelResource {
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
-    Storage storage = StorageOptions.newBuilder().setProjectId("moonlit-oven-349523").build().getService();
+    Credentials credentials = GoogleCredentials.getApplicationDefault();
+    Storage storage = StorageOptions.newBuilder().setProjectId("moonlit-oven-349523").setCredentials(credentials).build().getService();
 
     private static final String PARCEL_BUCKET = "parcel_bucket";
     private static final String PARCEL_DOCUMENT_BUCKET = "parcel_document_bucket";
@@ -37,6 +41,9 @@ public class ParcelResource {
 
 
     private final Gson g = new Gson();
+
+    public ParcelResource() throws IOException {
+    }
 
     @POST
     @Path("/register")
@@ -49,7 +56,7 @@ public class ParcelResource {
                                    @FormDataParam("photo") InputStream photo,
                                    @FormDataParam("coordinates") String coordinates,
                                    @FormDataParam("area") String area,
-                                   @FormDataParam("perimeter") String perimeter) throws IOException {
+                                   @FormDataParam("perimeter") String perimeter) {
 
         LOG.fine("Attempt to register parcel.");
 
@@ -93,6 +100,9 @@ public class ParcelResource {
 
         Transaction txn = datastore.newTransaction();
 
+        long areaLong = Long.parseLong(area);
+        long perimeterLong = Long.parseLong(perimeter);
+
         try{
             parcel = Entity.newBuilder(parcelKey)
                         .set("parcel_name", name)
@@ -100,8 +110,8 @@ public class ParcelResource {
                         .set("parcel_concelho", concelho)
                         .set("parcel_freguesia", freguesia)
                         .set("parcel_owner", username)
-                        .set("parcel_area", area)
-                        .set("parcel_perimeter", perimeter)
+                        .set("parcel_area", areaLong)
+                        .set("parcel_perimeter", perimeterLong)
                         .build();
 
             txn.add(parcel);
@@ -146,30 +156,38 @@ public class ParcelResource {
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
 
-        List<ParcelInfo> parcelList = new ArrayList<>();
+        List<ParcelMiniature> parcelList = new ArrayList<>();
 
-        /*parcelListQuery.forEachRemaining( p -> {
+        parcelListQuery.forEachRemaining( p -> {
 
-            String path = username + "/" + username + "_" + p.getString("parcel_name");
-            System.out.println(path);
-            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+            String parcelName = p.getString("parcel_name");
+
+            String path = username + "/" + username + "_" + parcelName;
+            /*Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
 
             byte[] coordinates = blob.getContent();
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
-            System.out.println(coordinatesString);
-            Point[] coordinateList = g.fromJson(coordinatesString, Point[].class);
+            Point[] coordinateList = g.fromJson(coordinatesString, Point[].class);*/
 
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path+"_photo");
+            //TODO
+            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
-            parcelList.add(new ParcelInfo(p.getString("parcel_name"), coordinateList, p.getString("parcel_distrito"),
-                    p.getString("parcel_concelho"),
-                    p.getString("parcel_freguesia"),
-                    p.getLong("parcel_area"),
-                    p.getLong("parcel_perimeter"),
-                    photo));
+            /*BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(PARCEL_PHOTO_BUCKET, path+"_photo")).build();
 
-        });*/
+            URL url = storage.signUrl(blobInfo, 5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());*/
+
+
+            parcelList.add(new ParcelMiniature(parcelName,
+                                                p.getString("parcel_distrito"),
+                                                p.getString("parcel_concelho"),
+                                                p.getString("parcel_freguesia"),
+                                                p.getLong("parcel_area"),
+                                                p.getLong("parcel_perimeter"),
+                                                url));
+
+
+        });
 
         return Response.ok(g.toJson(parcelList)).build();
     }
