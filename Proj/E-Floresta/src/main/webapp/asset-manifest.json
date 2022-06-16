@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b3cbd128.css",
+    "main.js": "/static/js/main.49f60164.js",
+    "static/media/background-image.png": "/static/media/background-image.ca3e03e2e6b7d7f11267.png",
+    "static/media/terreno.png": "/static/media/terreno.9de8d161c78d4018d225.png",
+    "static/media/front_img.png": "/static/media/front_img.839b3bdb80bce06bdd2e.png",
+    "static/media/foto2-slider.jpg": "/static/media/foto2-slider.04c025f30e49993d8478.jpg",
+    "static/media/foto3-slider.jpg": "/static/media/foto3-slider.6f25c22470108d0ebad4.jpg",
+    "static/media/foto1-slider.jpg": "/static/media/foto1-slider.eda0c6a83a7964847fad.jpg",
+    "static/media/logo.png": "/static/media/logo.e06f8eb1c58acbf3b7fe.png",
+    "static/media/profile_picture.png": "/static/media/profile_picture.a9136072d073801df253.png",
+    "index.html": "/index.html",
+    "main.b3cbd128.css.map": "/static/css/main.b3cbd128.css.map",
+    "main.49f60164.js.map": "/static/js/main.49f60164.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b3cbd128.css",
+    "static/js/main.49f60164.js"
+  ]
+}
