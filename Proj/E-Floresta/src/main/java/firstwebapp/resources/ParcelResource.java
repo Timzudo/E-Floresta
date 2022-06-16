@@ -103,6 +103,9 @@ public class ParcelResource {
         long areaLong = Long.parseLong(area);
         long perimeterLong = Long.parseLong(perimeter);
 
+        String[] managerList = new String[1];
+        managerList[0] = username;
+
         try{
             parcel = Entity.newBuilder(parcelKey)
                         .set("parcel_name", name)
@@ -110,6 +113,7 @@ public class ParcelResource {
                         .set("parcel_concelho", concelho)
                         .set("parcel_freguesia", freguesia)
                         .set("parcel_owner", username)
+                        .set("parcel_managers", g.toJson(managerList))
                         .set("parcel_area", areaLong)
                         .set("parcel_perimeter", perimeterLong)
                         .build();
@@ -132,7 +136,6 @@ public class ParcelResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOwned(TokenData tokenData) {
-
         LOG.fine("Attempt to register parcel.");
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
@@ -190,6 +193,162 @@ public class ParcelResource {
         });
 
         return Response.ok(g.toJson(parcelList)).build();
+    }
+
+
+
+    @POST
+    @Path("/parcelInfo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getParcelInfo(@QueryParam("parcelName") String parcelName, TokenData tokenData) {
+        LOG.fine("Attempt to get parcel info of:" + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        String path = username + "/" + username + "_" + parcelName;
+
+        Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+
+        byte[] coordinates = blob.getContent();
+        String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+
+        ParcelInfo info = new ParcelInfo(parcelName,
+                                            parcel.getString("parcel_distrito"),
+                parcel.getString("parcel_concelho"),
+                parcel.getString("parcel_freguesia"),
+                parcel.getLong("parcel_area"),
+                parcel.getLong("parcel_perimeter"),
+                coordinatesString,
+                parcel.getString("parcel_owner"),
+                g.fromJson(parcel.getString("parcel_managers"), String[].class));
+
+        return Response.ok(g.toJson(info)).build();
+    }
+
+    @POST
+    @Path("/addManager/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addManager(@PathParam("parcelName") String parcelName, ManagerData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        String[] managerList = g.fromJson(parcel.getString("parcel_managers"), String[].class);
+        String[] newManagerList = new String[managerList.length+1];
+
+        for(int i = 0; i<managerList.length; i++){
+            newManagerList[i] = managerList[i];
+        }
+
+        newManagerList[managerList.length] = data.managerName;
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcelKey).set("parcel_managers", g.toJson(newManagerList)).build();
+
+            txn.update(parcel);
+            txn.commit();
+            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @POST
+    @Path("/removeManager/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response removeManager(@PathParam("parcelName") String parcelName, ManagerData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        String[] managerList = g.fromJson(parcel.getString("parcel_managers"), String[].class);
+        String[] newManagerList = new String[managerList.length-1];
+
+        for(int i = 0, j = 0; i<managerList.length; i++){
+            if(!managerList[i].equals(data.managerName)){
+                newManagerList[j] = managerList[i];
+                j++;
+            }
+        }
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcelKey).set("parcel_managers", g.toJson(newManagerList)).build();
+
+            txn.update(parcel);
+            txn.commit();
+            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
     }
 
 }
