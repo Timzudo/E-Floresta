@@ -245,7 +245,7 @@ public class ParcelResource {
     }
 
     @POST
-    @Path("/addManager/{parcelName}")
+    @Path("/addmanager/{parcelName}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addManager(@PathParam("parcelName") String parcelName, ManagerData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
@@ -270,11 +270,21 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
+        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(data.managerName);
+        Entity manager = datastore.get(managerKey);
+
+        if(manager == null || !manager.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.NOT_FOUND).entity("Manager with name not found.").build();
+        }
+
         String[] managerList = g.fromJson(parcel.getString("parcel_managers"), String[].class);
         String[] newManagerList = new String[managerList.length+1];
 
         for(int i = 0; i<managerList.length; i++){
             newManagerList[i] = managerList[i];
+            if(managerList[i].equals(data.managerName)){
+                return Response.status(Response.Status.CONFLICT).entity("Manager with name already exists.").build();
+            }
         }
 
         newManagerList[managerList.length] = data.managerName;
@@ -298,7 +308,7 @@ public class ParcelResource {
     }
 
     @POST
-    @Path("/removeManager/{parcelName}")
+    @Path("/removemanager/{parcelName}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response removeManager(@PathParam("parcelName") String parcelName, ManagerData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
@@ -331,6 +341,10 @@ public class ParcelResource {
                 newManagerList[j] = managerList[i];
                 j++;
             }
+        }
+
+        if(newManagerList.length == managerList.length){
+            return Response.status(Response.Status.NOT_FOUND).entity("Manager not found.").build();
         }
 
         Transaction txn = datastore.newTransaction();
