@@ -1,7 +1,6 @@
 package firstwebapp.resources;
 
 import com.google.auth.Credentials;
-import com.google.auth.oauth2.ComputeEngineCredentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.*;
@@ -13,10 +12,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -103,9 +100,6 @@ public class ParcelResource {
         long areaLong = Long.parseLong(area);
         long perimeterLong = Long.parseLong(perimeter);
 
-        String[] managerList = new String[1];
-        managerList[0] = username;
-
         try{
             parcel = Entity.newBuilder(parcelKey)
                         .set("parcel_name", name)
@@ -113,7 +107,7 @@ public class ParcelResource {
                         .set("parcel_concelho", concelho)
                         .set("parcel_freguesia", freguesia)
                         .set("parcel_owner", username)
-                        .set("parcel_managers", g.toJson(managerList))
+                        .set("parcel_manager", "")
                         .set("parcel_area", areaLong)
                         .set("parcel_perimeter", perimeterLong)
                         .build();
@@ -132,14 +126,14 @@ public class ParcelResource {
     }
 
     @POST
-    @Path("/owned")
+    @Path("/managed")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOwned(TokenData tokenData) {
+    public Response getManaged(TokenData tokenData) {
         LOG.fine("Attempt to register parcel.");
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
-        if(tokenInfo == null){
+        if(tokenInfo == null || !tokenInfo.role.equals("C")){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
         String username = tokenInfo.sub;
@@ -154,7 +148,7 @@ public class ParcelResource {
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("Parcel")
-                .setFilter(StructuredQuery.PropertyFilter.ge("parcel_owner", username))
+                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_manager", username))
                 .build();
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
@@ -196,6 +190,71 @@ public class ParcelResource {
     }
 
 
+    @POST
+    @Path("/owned")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwned(TokenData tokenData) {
+        LOG.fine("Attempt to register parcel.");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_owner", username))
+                .build();
+
+        QueryResults<Entity> parcelListQuery = datastore.run(query);
+
+        List<ParcelMiniature> parcelList = new ArrayList<>();
+
+        parcelListQuery.forEachRemaining( p -> {
+
+            String parcelName = p.getString("parcel_name");
+
+            String path = username + "/" + username + "_" + parcelName;
+            /*Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+
+            byte[] coordinates = blob.getContent();
+            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+            Point[] coordinateList = g.fromJson(coordinatesString, Point[].class);*/
+
+            //TODO
+            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+            /*BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(PARCEL_PHOTO_BUCKET, path+"_photo")).build();
+
+            URL url = storage.signUrl(blobInfo, 5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());*/
+
+
+            parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_distrito"),
+                    p.getString("parcel_concelho"),
+                    p.getString("parcel_freguesia"),
+                    p.getLong("parcel_area"),
+                    p.getLong("parcel_perimeter"),
+                    url));
+
+
+        });
+
+        return Response.ok(g.toJson(parcelList)).build();
+    }
+
+
 
     @POST
     @Path("/parcelInfo")
@@ -212,34 +271,34 @@ public class ParcelResource {
 
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
-
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
         Entity parcel = datastore.get(parcelKey);
-
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
+        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).entity("Parcel with name not found.").build();
+        }
+
         String path = username + "/" + username + "_" + parcelName;
-
         Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
-
         byte[] coordinates = blob.getContent();
         String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
         ParcelInfo info = new ParcelInfo(parcelName,
                                             parcel.getString("parcel_distrito"),
-                parcel.getString("parcel_concelho"),
-                parcel.getString("parcel_freguesia"),
-                parcel.getLong("parcel_area"),
-                parcel.getLong("parcel_perimeter"),
-                coordinatesString,
-                parcel.getString("parcel_owner"),
-                g.fromJson(parcel.getString("parcel_managers"), String[].class));
+                                            parcel.getString("parcel_concelho"),
+                                            parcel.getString("parcel_freguesia"),
+                                            parcel.getLong("parcel_area"),
+                                            parcel.getLong("parcel_perimeter"),
+                                            coordinatesString,
+                                            parcel.getString("parcel_owner"),
+                                            parcel.getString("parcel_manager"));
 
         return Response.ok(g.toJson(info)).build();
     }
@@ -251,6 +310,7 @@ public class ParcelResource {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
         if(tokenInfo == null){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
@@ -259,6 +319,7 @@ public class ParcelResource {
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
+        //Owner existe
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
@@ -266,33 +327,35 @@ public class ParcelResource {
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
         Entity parcel = datastore.get(parcelKey);
 
+        //Parcela existe
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+        //E onwer da parcela
+        if(!parcel.getString("parcel_owner").equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        //Ja tem manager
+        if(!parcel.getString("parcel_manager").equals("")){
+            return Response.status(Response.Status.CONFLICT).build();
         }
 
         Key managerKey = datastore.newKeyFactory().setKind("User").newKey(data.managerName);
         Entity manager = datastore.get(managerKey);
-
-        if(manager == null || !manager.getString("user_state").equals("ACTIVE")){
+        //Manager existe
+        if(manager == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Manager with name not found.").build();
         }
-
-        String[] managerList = g.fromJson(parcel.getString("parcel_managers"), String[].class);
-        String[] newManagerList = new String[managerList.length+1];
-
-        for(int i = 0; i<managerList.length; i++){
-            newManagerList[i] = managerList[i];
-            if(managerList[i].equals(data.managerName)){
-                return Response.status(Response.Status.CONFLICT).entity("Manager with name already exists.").build();
-            }
+        //Manager esta ativo e tem role
+        if(!manager.getString("user_state").equals("ACTIVE") || !manager.getString("user_role").equals("C")){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        newManagerList[managerList.length] = data.managerName;
 
         Transaction txn = datastore.newTransaction();
 
         try{
-            parcel = Entity.newBuilder(parcelKey).set("parcel_managers", g.toJson(newManagerList)).build();
+            parcel = Entity.newBuilder(parcelKey).set("parcel_manager", data.managerName).build();
 
             txn.update(parcel);
             txn.commit();
@@ -310,7 +373,7 @@ public class ParcelResource {
     @POST
     @Path("/removemanager/{parcelName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response removeManager(@PathParam("parcelName") String parcelName, ManagerData data) {
+    public Response removeManager(@PathParam("parcelName") String parcelName, TokenData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
@@ -333,28 +396,17 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
-        String[] managerList = g.fromJson(parcel.getString("parcel_managers"), String[].class);
-        String[] newManagerList = new String[managerList.length-1];
-
-        for(int i = 0, j = 0; i<managerList.length; i++){
-            if(!managerList[i].equals(data.managerName)){
-                newManagerList[j] = managerList[i];
-                j++;
-            }
-        }
-
-        if(newManagerList.length == managerList.length){
-            return Response.status(Response.Status.NOT_FOUND).entity("Manager not found.").build();
+        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         Transaction txn = datastore.newTransaction();
 
         try{
-            parcel = Entity.newBuilder(parcelKey).set("parcel_managers", g.toJson(newManagerList)).build();
+            parcel = Entity.newBuilder(parcelKey).set("parcel_manager", "").build();
 
             txn.update(parcel);
             txn.commit();
-            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
             return Response.ok("Manager added successfully.").build();
         }
         finally {
@@ -364,5 +416,4 @@ public class ParcelResource {
             }
         }
     }
-
 }
