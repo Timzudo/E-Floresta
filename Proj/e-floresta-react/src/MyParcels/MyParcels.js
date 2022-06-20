@@ -19,6 +19,12 @@ const center = {
     lng: -9.205971
 };
 
+const modalContainerStyle = {
+    width: '72vw',
+    height: '45vh'
+};
+
+
 const MyParcels = () => {
     const [show, setShow] = useState(false);
     const [obj, setObj] = useState({});
@@ -109,7 +115,7 @@ const MyParcels = () => {
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
-                dialogClassName="modal-90w"
+                dialogClassName="modal-xl"
                 keyboard={false}
             >
                 <Modal.Header closeButton>
@@ -117,7 +123,7 @@ const MyParcels = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <GoogleMap
-                        mapContainerStyle={containerStyle}
+                        mapContainerStyle={modalContainerStyle}
                         center={center}
                         zoom={10}
                         tilt={0}
@@ -125,14 +131,20 @@ const MyParcels = () => {
                     </GoogleMap>
                 </Modal.Body>
                 <Modal.Body>
-                    blep
+                    <Button variant="success">Ver parcelas próximas</Button><br/>
+                    <p></p>
+                    <label><b>Proprietário:</b> {obj.owner}</label><br/>
+                    <label><b>Gerente:</b> {obj.manager}</label><br/>
+                    <label><b>Freguesia:</b> {obj.freguesia}</label><br/>
+                    <label><b>Concelho:</b> {obj.concelho}</label><br/>
+                    <label><b>Distrito:</b> {obj.distrito}</label><br/>
+                    <label><b>Área da parcela:</b> {obj.area}m²</label><br/>
+                    <label><b>Perímetro da parcela:</b> {obj.perimeter}m</label><br/>
+                    <label><b>Descrição:</b> {obj.description}</label><br/>
+                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}</label><br/>
+                    <label><b>Utilização atual do solo:</b> {obj.soloUtil}</label><br/>
+                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}</label><br/>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary">Understood</Button>
-                </Modal.Footer>
             </Modal>
 
             <div id="myParcelsBody">
