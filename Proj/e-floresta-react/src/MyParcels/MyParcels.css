@@ -16,11 +16,13 @@ html, body{
 
 .container_MyParcels{
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     padding-top: 10px;
     padding-left: 10px;
     flex-wrap: wrap;
-    gap: 15px
+    gap: 15px;
+    margin-left: 20px;
+
 }
 
 .container_MyParcels .card{
