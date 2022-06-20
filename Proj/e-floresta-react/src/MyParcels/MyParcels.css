@@ -8,17 +8,19 @@ html, body{
 }
 
 .body_MyParcels{
-    background-color: #cbccbc;
-    height: 100%;
+    background-color: #e0e3d5;
+    height: auto;
+    width: 100%;
+    overflow-y: scroll;
 }
 
 .container_MyParcels{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     padding-top: 10px;
     padding-left: 10px;
     flex-wrap: wrap;
-    gap: 40px
+    gap: 15px
 }
 
 .container_MyParcels .card{
@@ -32,7 +34,7 @@ html, body{
 }
 
 .parcel-card_MyParcels{
-    margin: 10px;
+    margin: 1px;
     border-color: #32443A;
     background-color: rgba(218, 240, 252, 1);
 }
@@ -57,4 +59,9 @@ html, body{
 .parcel_picture{
     height: 200px;
     width: 100%;
+}
+
+#myParcelsBody{
+    display: flex;
+    height: 93.5%
 }

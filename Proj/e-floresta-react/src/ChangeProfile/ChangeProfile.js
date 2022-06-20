@@ -4,6 +4,7 @@ import ProfileImage from "./profile_picture.png";
 import {Link} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Button} from "react-bootstrap";
+import React, { Component }  from 'react';
 
 const ChangeProfile = () => {
 

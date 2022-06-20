@@ -3,11 +3,27 @@ import Image from './terreno.png'
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Button, Card} from "react-bootstrap";
+import {Button, Card, Modal} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from 'react'
+import React, { Component }  from 'react';
+import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+
+const containerStyle = {
+    width: '75vw',
+    height: '93.5vh'
+};
+
+const center = {
+    lat: 38.660677,
+    lng: -9.205971
+};
 
 const MyParcels = () => {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const [parcelList, setPList] = useState([]);
 
@@ -21,7 +37,7 @@ const MyParcels = () => {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '20rem' }}>
+                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '20rem',cursor: "pointer"}} onClick={() => handleShow()}>
                             <Card.Img className="parcel_picture" variant="top" src={obj[i].photoURL} />
                             <Card.Body>
                                 <Card.Title>{obj[i].name}</Card.Title>
@@ -56,9 +72,42 @@ const MyParcels = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="body_MyParcels">
-                <div className="container_MyParcels">
-                    {parcelList}
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal title</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    I will not close if you click outside me. Don't even try to press
+                    escape key.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary">Understood</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <div id="myParcelsBody">
+                <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={center}
+                        zoom={10}
+                        tilt={0}
+                    >
+                    </GoogleMap>
+                </LoadScript>
+
+                <div className="body_MyParcels">
+                    <div className="container_MyParcels">
+                        {parcelList}
+                    </div>
                 </div>
             </div>
         </>

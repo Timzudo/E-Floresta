@@ -1,3 +1,5 @@
+import React, { Component }  from 'react';
+
 const CheckIfLoggedIn = () => {
 
     let token = localStorage.getItem('token');

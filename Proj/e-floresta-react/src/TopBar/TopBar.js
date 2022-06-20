@@ -2,6 +2,7 @@ import LogoImage from './logo.png'
 import './TopBar.css'
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Dropdown} from "react-bootstrap";
+import React, { Component }  from 'react';
 
 const TopBar = () => {
 

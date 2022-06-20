@@ -3,6 +3,7 @@ import './CreateAndLogin.css'
 import {Link} from "react-router-dom";
 import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
 import {Button, Form, InputGroup} from "react-bootstrap";
+import React, { Component }  from 'react';
 
 
 const CreateAndLogin = () => {

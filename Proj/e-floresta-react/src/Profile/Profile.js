@@ -4,6 +4,7 @@ import TopBar from '../TopBar/TopBar.js'
 import {Link} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
+import React, { Component }  from 'react';
 
 const Profile = () => {
     const [username, setUsername] = useState("");

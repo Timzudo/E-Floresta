@@ -10,6 +10,7 @@ import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 import ChangePassword from "./ChangePassword/ChangePassword";
 import Front_img from "./front_img.png";
+import React, { Component }  from 'react';
 
 import {Button} from "react-bootstrap";
 

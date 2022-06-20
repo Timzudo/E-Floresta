@@ -1,6 +1,7 @@
 import  './AboutUs.css'
 import TopBar from '../TopBar/TopBar.js'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
+import React, { Component }  from 'react';
 
 const AboutUs = () => {
     return(

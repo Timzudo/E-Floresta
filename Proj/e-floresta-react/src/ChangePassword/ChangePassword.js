@@ -3,6 +3,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import React, { Component }  from 'react';
 
 const ChangePassword = () => {
 
