@@ -45,6 +45,26 @@ public class ParcelResource {
     public ParcelResource() throws IOException {
     }
 
+
+    @POST
+    @Path("/getCSV")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("text/plain; charset=UTF-8")
+    public Response getCSV(TokenData data){
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        Blob blob = storage.get("efloresta_util", "freguesias.csv");
+
+        byte[] csvContent = blob.getContent();
+        String csvString = new String(csvContent, StandardCharsets.UTF_8);
+
+        return Response.ok(csvString).build();
+    }
+
+
     @POST
     @Path("/register")
     @Consumes(MediaType.MULTIPART_FORM_DATA)

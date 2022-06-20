@@ -7,20 +7,16 @@ import Image2 from './foto2-slider.jpg'
 import Image3 from './foto3-slider.jpg'
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import React, { Component }  from 'react';
+import CSVConverter from "../util/CSVConverter";
 
 const LoggedHomepage = () => {
+
     return(
         <>
             <CheckIfLoggedOut />
             <TopBar />
 
-            <LoadScript
-                googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
-                <GoogleMap
-                    zoom={10}
-                    tilt={0}>
-                </GoogleMap>
-            </LoadScript>
+            <CSVConverter/>
 
             <div className="lgh_Carousel">
                 <Carousel>

@@ -21,6 +21,8 @@ const center = {
 
 const MyParcels = () => {
     const [show, setShow] = useState(false);
+    const [obj, setObj] = useState({});
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -42,6 +44,23 @@ const MyParcels = () => {
                 <Badge pill bg="secondary">Por verificar</Badge>
             )
         }
+    }
+
+    function loadModalValues() {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    const obj = JSON.parse(xmlhttp.responseText);
+                    setObj(obj);
+                }
+            }
+        }
+        var myObj = {token:localStorage.getItem('token')};
+        var myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
     }
 
     useEffect(() => {
@@ -86,17 +105,27 @@ const MyParcels = () => {
             <TopBar />
 
             <Modal
+                onShow={loadModalValues}
                 show={show}
                 onHide={handleClose}
                 backdrop="static"
+                dialogClassName="modal-90w"
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title><h4>Parcela: {"teste"}</h4></Modal.Title>
+                    <Modal.Title> Parcela: {obj.name} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    I will not close if you click outside me. Don't even try to press
-                    escape key.
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={center}
+                        zoom={10}
+                        tilt={0}
+                    >
+                    </GoogleMap>
+                </Modal.Body>
+                <Modal.Body>
+                    blep
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
