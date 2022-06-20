@@ -21,6 +21,8 @@ const center = {
 
 const MyParcels = () => {
     const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const [parcelList, setPList] = useState([]);
 
@@ -83,6 +85,27 @@ const MyParcels = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
+            <Modal
+                show={show}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title><h4>Parcela: {"teste"}</h4></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    I will not close if you click outside me. Don't even try to press
+                    escape key.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary">Understood</Button>
+                </Modal.Footer>
+            </Modal>
+
             <div id="myParcelsBody">
                 <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
                     <GoogleMap
@@ -101,37 +124,6 @@ const MyParcels = () => {
                 </div>
             </div>
         </>
-    )
-}
-
-const myParcelModal = (props) => {
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    const [name, setName] = useState("");
-
-    return(
-        <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title><h4>Parcela: {name}</h4></Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                I will not close if you click outside me. Don't even try to press
-                escape key.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant="primary">Understood</Button>
-            </Modal.Footer>
-        </Modal>
     )
 }
 

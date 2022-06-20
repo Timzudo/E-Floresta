@@ -176,7 +176,7 @@ public class ParcelResource {
             parcelList.add(new ParcelMiniature(parcelName,
                                                 p.getString("parcel_distrito"),
                                                 p.getString("parcel_concelho"),
-                                                p.getString("parcel_freguesia"),
+                                                p.getString("parcel_fregkuesia"),
                                                 p.getString("parcel_state").equals("APPROVED"),
                                                 p.getLong("parcel_area"),
                                                 p.getLong("parcel_perimeter"),
