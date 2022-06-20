@@ -19,6 +19,7 @@ const CSVConverter = () => {
                     let csv = xmlhttp.responseText;
                     console.log(csv)
                     let json = csvJSON(csv);
+                    console.log(json)
                     localStorage.setItem('csv', json);
                 }
             }
