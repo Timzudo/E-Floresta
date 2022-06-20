@@ -113,6 +113,7 @@ public class ParcelResource {
                         .set("parcel_manager", "")
                         .set("parcel_area", areaLong)
                         .set("parcel_perimeter", perimeterLong)
+                        .set("parcel_state", "PENDING")
                         .build();
 
             txn.add(parcel);
@@ -176,6 +177,7 @@ public class ParcelResource {
                                                 p.getString("parcel_distrito"),
                                                 p.getString("parcel_concelho"),
                                                 p.getString("parcel_freguesia"),
+                                                p.getString("parcel_state").equals("APPROVED"),
                                                 p.getLong("parcel_area"),
                                                 p.getLong("parcel_perimeter"),
                                                 url,
@@ -231,6 +233,7 @@ public class ParcelResource {
                     p.getString("parcel_distrito"),
                     p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
+                    p.getString("parcel_state").equals("APPROVED"),
                     p.getLong("parcel_area"),
                     p.getLong("parcel_perimeter"),
                     url,
