@@ -10,8 +10,6 @@ const CreateAndLogin = () => {
   let xmlhttp = new XMLHttpRequest();
   let token;
 
-  const { language } = this.props;
-
   const submitHandler = (e) => {
     e.preventDefault();
   }
@@ -107,7 +105,7 @@ const CreateAndLogin = () => {
 
           <div className="initiate-session">
 
-            <h2 className="align-content"><b>{language == "EN" ? "Sign In": "Iniciar Sessão"}</b></h2>
+            <h2 className="align-content"><b>Iniciar Sessão</b></h2>
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="session-form" >
@@ -123,12 +121,12 @@ const CreateAndLogin = () => {
               </Form.Group>
 
               <Button id="session-button" type="submit" onClick={login}>
-                {language == "EN" ? "Enter": "Entrar"}
+                Entrar
               </Button>
             </Form>
 
             <p></p>
-            <span className="forgot-pass_Login">{language == "EN" ? "Did you forget your password?": "Esqueceu a sua palavra-passe?"} <a href="#">{language == "EN" ? "Click here.": "Clique aqui."}</a></span>
+            <span className="forgot-pass_Login">Esqueceu a sua palavra-passe? <a href="#">Clique aqui.</a></span>
 
           </div>
 
@@ -136,9 +134,9 @@ const CreateAndLogin = () => {
 
           <div className="create-account">
 
-            <h2 className="align-content"><b>{language == "EN" ? "Register": "Registe-se"}</b></h2>
-            <p className="align-content">{language == "EN" ? "Have you not created an account yet?": "Ainda não tem conta?"}</p>
-            <p className="align-content">{language == "EN" ? "Register now!": "Registe-se agora!"}</p>
+            <h2 className="align-content"><b>Registe-se</b></h2>
+            <p className="align-content">Ainda não tem conta?</p>
+            <p className="align-content">Registe-se agora!</p>
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="create-form" >
@@ -171,13 +169,13 @@ const CreateAndLogin = () => {
 
               <Form.Group className="create-form" >
                 <Form.Select required controlId="create-acc-type" >
-                  <option value="personal">{language == "EN" ? "Personal Account": "Conta Pessoal"}</option>
-                  <option value="entity">{language == "EN" ? "Project Account": "Conta de Entidade"}</option>
+                  <option value="personal">Conta Pessoal</option>
+                  <option value="entity">Conta de Entidade</option>
                 </Form.Select>
               </Form.Group>
 
               <Button id="create-acc-button" type="submit" onClick={register}>
-                {language == "EN" ? "Register": "Registar"}
+                Registar
               </Button>
 
             </Form>

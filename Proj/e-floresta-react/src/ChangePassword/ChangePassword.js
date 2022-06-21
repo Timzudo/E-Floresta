@@ -11,8 +11,6 @@ const ChangePassword = () => {
 
     let xmlhttp = new XMLHttpRequest();
 
-    const { language } = this.props;
-
     function changePassword() {
 
         xmlhttp.onreadystatechange = function () {
@@ -53,23 +51,23 @@ const ChangePassword = () => {
 
             <div className="body-changePassword">
                 <div id="oldPassword_ChangePassword">
-                    {language == "EN" ? "Old Password:": "Palavra-Passe Antiga:"} {oldPassword} <input className="fields_ChangePassword" id="old-password" type="password"/>
+                    Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password" type="password"/>
                 </div>
                 <div id="newPassword_ChangePassword">
-                    {language == "EN" ? "New Password:": "Nova Palavra-Passe:"} {newPassword} <input className="fields_ChangePassword" id="new-password" type="password"/>
+                    Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password" type="password"/>
                 </div>
                 <div id="confirmPassword_ChangePassword">
-                    {language == "EN" ? "Confirm new Password:": "Confirmar nova Palavra-Passe:"} {confirmation} <input className="fields_ChangePassword" id="confirm-password" type="password"/>
+                    Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password" type="password"/>
                 </div>
 
                 <div className="btn-group" id="confirmAndCancel_ChangePassword">
                     <div id="confirm_ChangePassword">
-                        <Button type="button" className="btn btn-success btn-sm" onClick={changePassword} >{language == "EN" ? "Confirm Changes": "Confirmar Alterações"}</Button>
+                        <Button type="button" className="btn btn-success btn-sm" onClick={changePassword} >Confirmar Alterações</Button>
                     </div>
 
                     <div id="cancel_ChangePassword">
                         <Link to="/profile">
-                            <Button type="button" className="btn btn-secondary btn-sm">{language == "EN" ? "Cancel Changes": "Cancelar Alterações"} </Button>
+                            <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
                         </Link>
                     </div>
                 </div>
