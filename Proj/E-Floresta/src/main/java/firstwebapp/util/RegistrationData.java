@@ -13,7 +13,7 @@ public class RegistrationData {
 
     }
 
-    public RegistrationData( String password, String confirmation, String email, String name, String phone, String nif) {
+    public RegistrationData(String password, String confirmation, String email, String name, String phone, String nif) {
         this.password = password;
         this.confirmation = confirmation;
         this.email = email;
