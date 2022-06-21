@@ -1,18 +1,11 @@
-import "./MyParcels.css"
-import Image from './terreno.png'
+import "./ApproveParcels.css"
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Badge, Button, ButtonGroup, Card, Dropdown, Modal} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
-
-const containerStyle = {
-    width: '75vw',
-    height: '93.5vh'
-};
+import {Button, ButtonGroup, Card, Dropdown, Modal} from "react-bootstrap";
+import {GoogleMap, LoadScript} from "@react-google-maps/api";
 
 const center = {
     lat: 38.660677,
@@ -24,8 +17,7 @@ const modalContainerStyle = {
     height: '45vh'
 };
 
-
-const MyParcels = () => {
+const ApproveParcels = () => {
     const [obj, setObj] = useState({});
 
     const [show, setShow] = useState(false);
@@ -36,33 +28,20 @@ const MyParcels = () => {
         setShow(true);
         setEditShow(false);
     }
+
     const handleEditShow = () => {
         console.log("showedit")
         setShow(false);
         setEditShow(true);
     }
+
     const handleClose = () => setShow(false);
     const handleEditClose = () => setEditShow(false);
 
     const [parcelList, setPList] = useState([]);
 
     let xmlhttp = new XMLHttpRequest();
-
     let arr = [];
-    let verified = false;
-
-    function isParcelVerified(verified) {
-        if(verified) {
-            return(
-                <Badge pill bg="success">Verificada</Badge>
-            )
-        }
-        else{
-            return(
-                <Badge pill bg="secondary">Por verificar</Badge>
-            )
-        }
-    }
 
     function hasManager() {
         if(obj.manager != "") {
@@ -108,7 +87,7 @@ const MyParcels = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo"); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -119,10 +98,10 @@ const MyParcels = () => {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "pointer"}}>
+                        arr.push(<Card className="parcel-card_ApproveParcels" style={{ width: '15rem',cursor: "pointer"}}>
                             <Card.Img className="parcel_picture" variant="top" src={obj[i].photoURL} />
                             <Card.Body>
-                                <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>
+                                <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
                                     <label>Área: {obj[i].area}m²</label><br/>
                                     <label>Perímetro: {obj[i].perimeter}m</label><br/>
@@ -130,11 +109,14 @@ const MyParcels = () => {
                                     <label>Concelho: {obj[i].concelho}</label><br/>
                                     <label>Distrito: {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                    <Button id="show-parcel-details_MyParcels" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
-                                    <p></p>
-                                    <Button id="edit-parcel_MyParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>Editar Parcela</Button>
-                                </Card.Body>
-
+                                <Button id="show-parcel-details_ApproveParcels" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
+                                <p></p>
+                                <Button id="edit-parcel_ApproveParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>Editar parcela</Button>
+                                <p></p>
+                                <Button id="confirm-parcel_ApproveParcels" variant="primary" size="sm">Aprovar parcela</Button>
+                                <p></p>
+                                <Button id="reject-parcel_ApproveParcels" variant="primary" size="sm">Rejeitar parcela</Button>
+                            </Card.Body>
                         </Card>);
                     }
                     setPList(arr);
@@ -167,17 +149,20 @@ const MyParcels = () => {
                     <Modal.Title> Parcela: {obj.name} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <GoogleMap
-                        mapContainerStyle={modalContainerStyle}
-                        center={center}
-                        zoom={10}
-                        tilt={0}
-                    >
-                    </GoogleMap>
+
+                    <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
+                        <GoogleMap
+                            mapContainerStyle={modalContainerStyle}
+                            center={center}
+                            zoom={10}
+                            tilt={0}
+                        >
+                        </GoogleMap>
+                    </LoadScript>
+
                 </Modal.Body>
+
                 <Modal.Body>
-                    <Button variant="success">Ver parcelas próximas</Button><br/>
-                    <p></p>
                     <label><b>Proprietário:</b> {obj.owner} </label><br/>
                     <label><b>Gerente:</b> {obj.manager} </label><br/>
                     <label><b>Freguesia:</b> {obj.freguesia} </label><br/>
@@ -216,33 +201,33 @@ const MyParcels = () => {
 
                     <div>
 
-                    <ButtonGroup className="buttons-editParcelModal_MyParcels" size="sm">
+                        <ButtonGroup className="buttons-editParcelModal_ApproveParcels" size="sm">
 
-                        <Button id="rollback-editParcelModal_MyParcels" variant="secondary"> Retroceder </Button>
+                            <Button id="rollback-editParcelModal_ApproveParcels" variant="secondary"> Retroceder </Button>
 
-                        <Button id="confirmNewCoord-editParcelModal_MyParcels" variant="success" > Confirmar novas coordenadas </Button>
+                            <Button id="confirmNewCoord-editParcelModal_ApproveParcels" variant="success" > Confirmar novas coordenadas </Button>
 
-                    </ButtonGroup>
-                    <label id="newA-editParcelModal_MyParcels"> <b>Nova área:</b> </label>
-                    <label id="newP-editParcelModal_MyParcels"> <b>Novo perímetro:</b> </label>
+                        </ButtonGroup>
+                        <label id="newA-editParcelModal_ApproveParcels"> <b>Nova área:</b> </label>
+                        <label id="newP-editParcelModal_ApproveParcels"> <b>Novo perímetro:</b> </label>
                     </div>
                     <p></p>
 
-                    <label className="labels-editParcelModal_MyParcels"><b>Proprietário:</b> {obj.owner} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"> {hasManager()} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Freguesia:</b> {obj.freguesia} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Concelho:</b> {obj.concelho} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Distrito:</b> {obj.distrito} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Área da parcela:</b> {obj.area}m² </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Perímetro da parcela:</b> {obj.perimeter}m </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Proprietário:</b> {obj.owner} </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"> {hasManager()} </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {obj.freguesia} </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Concelho:</b> {obj.concelho} </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Distrito:</b> {obj.distrito} </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Área da parcela:</b> {obj.area}m² </label><br/>
+                    <label className="labels-editParcelModal_ApproveParcels"><b>Perímetro da parcela:</b> {obj.perimeter}m </label><br/>
                     <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}
-                        <input id="cobertSolo-editParcelModal_MyParcels" type="text" />
+                        <input id="cobertSolo-editParcelModal_ApproveParcels" type="text" />
                     </label><br/>
                     <label><b>Utilização atual do solo:</b> {obj.soloUtil}
-                        <input id="utilAtSolo-editParcelModal_MyParcels" type="text" />
+                        <input id="utilAtSolo-editParcelModal_ApproveParcels" type="text" />
                     </label><br/>
                     <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}
-                        <input id="utilPrevSolo-editParcelModal_MyParcels" type="text" />
+                        <input id="utilPrevSolo-editParcelModal_ApproveParcels" type="text" />
                     </label><br/>
                     <p></p>
 
@@ -251,25 +236,13 @@ const MyParcels = () => {
                 </Modal.Body>
             </Modal>
 
-            <div id="myParcelsBody">
-                <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={center}
-                        zoom={10}
-                        tilt={0}
-                    >
-                    </GoogleMap>
-                </LoadScript>
-
-                <div className="body_MyParcels">
-                    <div className="container_MyParcels">
-                        {parcelList}
-                    </div>
+            <div className="approveParcelsBody">
+                <div className="container_ApproveParcels">
+                    {parcelList}
                 </div>
             </div>
         </>
     )
 }
 
-export default MyParcels
+export default ApproveParcels

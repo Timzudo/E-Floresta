@@ -1,17 +1,40 @@
+
+
 .mapDiv_Map{
     display: flex;
+    height: calc(100% - 60px);
+}
+
+.wrapper {
+    max-height: calc(100vh - 60px);
+    width: 25vw;
 }
 
 .submit_Map{
-    width: 10%;
-    height: 10%;
+    width: calc(70% - 40px);
+    max-height: calc(100% - 0px);
     align-self: self-start;
-    margin: 20px;
+    float: left;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.submit_Map::-webkit-scrollbar {
+    display: none;
 }
 
 .map_fields{
-    border: 0.3px solid black;
+    border: 1px solid black;
     border-radius: 0.25rem;
+}
+
+#sideBar{
+    width: 30%;
+    height: 100%;
+    float: left;
 }
 
 #rollback.btn-success{
@@ -28,6 +51,9 @@
 }
 
 #parcelInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border-radius: 0 5px 0 0;
     height: 50%;
     background-color: #b0c090;
@@ -35,15 +61,12 @@
 }
 
 #parcelInfo div{
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    float: left;
+    margin-left: auto;
+    text-align: center;
 }
 
 .MapInfo_Map{
     color: white;
 }
-
-#sideBar{
-    width: 7%;
-}
-

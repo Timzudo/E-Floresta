@@ -9,6 +9,9 @@ import AboutUs from "./AboutUs/AboutUs"
 import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 import ChangePassword from "./ChangePassword/ChangePassword";
+import MyParcels from "./MyParcels/MyParcels";
+import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity";
+import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import Front_img from "./front_img.png";
 import React, { Component }  from 'react';
 
@@ -18,8 +21,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import MyParcels from "./MyParcels/MyParcels";
-
 
 
 const App = () => {
@@ -36,6 +37,8 @@ const App = () => {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/my-parcels" element={<MyParcels />} />
+          <Route path="/proposed-parcels-entity" element={<ProposedParcelsEntity />} />
+          <Route path="/approve-parcels" element={<ApproveParcels />} />
         </Routes>
       </Router>
   )
