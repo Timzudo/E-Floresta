@@ -30,11 +30,14 @@ const MyParcels = () => {
 
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
+
     const handleShow = () => {
+        console.log("show")
         setShow(true);
         setEditShow(false);
     }
     const handleEditShow = () => {
+        console.log("showedit")
         setShow(false);
         setEditShow(true);
     }

@@ -1,48 +1,40 @@
-import React, { Component }  from 'react';
+import React, {Component, useEffect} from 'react';
 //import csv from "./teste.csv";
 
 
 const CSVConverter = () => {
 
-    const csv = `3;Aveiro;Águeda;Aguada de Cima;010103;https://dados.gov.pt/s/brasoes/010103.png;
-3;Aveiro;Águeda;Fermentelos;010109;https://dados.gov.pt/s/brasoes/010109.png;
-3;Aveiro;Águeda;Macinhata do Vouga;010112;https://dados.gov.pt/s/brasoes/010112.png;
-3;Lisboa;Cadaval;União das freguesias de Lamas e Cercal;110412;`
+    function checkCSV() {
 
-    let xmlhttp = new XMLHttpRequest();
+        let xmlhttp = new XMLHttpRequest();
 
-    (function get() {
-
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    let csv = xmlhttp.responseText;
-                    console.log(csv)
-                    let json = csvJSON(csv);
-                    console.log(json)
-                    localStorage.setItem('csv', json);
+        if(localStorage.getItem("csv") === null){
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4) {
+                    if (xmlhttp.status == 200) {
+                        let csv = xmlhttp.responseText;
+                        let json = csvJSON(csv);
+                        localStorage.setItem('csv', json);
+                    }
                 }
             }
+
+            var myObj = { token: localStorage.getItem('token') };
+            var myJson = JSON.stringify(myObj);
+
+            xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/getCSV", false);
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(myJson);
         }
-
-        var myObj = { token: localStorage.getItem('token') };
-        var myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/getCSV", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
-    })();
-
-
+    }
 
     function csvJSON(csv){
 
         let lines=csv.split("\n");
-
         let obj = {};
 
 
-        for(var i=1;i<lines.length;i++){
+        for(let i=1;i<lines.length-1;i++){
             let currentline=lines[i].split(";");
 
             let distrito = currentline[1];
@@ -64,9 +56,15 @@ const CSVConverter = () => {
         return JSON.stringify(obj);
     }
 
+    useEffect(() =>
+    {
+        checkCSV();
+    })
+
     return(
         <></>
     )
 }
+
 
 export default CSVConverter

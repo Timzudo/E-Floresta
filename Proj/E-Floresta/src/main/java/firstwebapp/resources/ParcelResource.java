@@ -76,7 +76,10 @@ public class ParcelResource {
                                    @FormDataParam("photo") InputStream photo,
                                    @FormDataParam("coordinates") String coordinates,
                                    @FormDataParam("area") String area,
-                                   @FormDataParam("perimeter") String perimeter) {
+                                   @FormDataParam("perimeter") String perimeter,
+                                   @FormDataParam("document") InputStream document,
+                                   @FormDataParam("usage") String usage,
+                                   @FormDataParam("oldUsage") String oldUsage) {
 
         LOG.fine("Attempt to register parcel.");
 
@@ -118,6 +121,10 @@ public class ParcelResource {
         BlobInfo blobInfoPhoto = BlobInfo.newBuilder(blobIdPhoto).setContentType("image/png").build();
         storage.create(blobInfoPhoto, photo);
 
+        BlobId blobIdDocument = BlobId.of(PARCEL_DOCUMENT_BUCKET, username + "/" + parcelId + "_document");
+        BlobInfo blobInfoDocument = BlobInfo.newBuilder(blobIdDocument).setContentType("application/pdf").build();
+        storage.create(blobInfoDocument, document);
+
         Transaction txn = datastore.newTransaction();
 
         long areaLong = Long.parseLong(area);
@@ -134,6 +141,8 @@ public class ParcelResource {
                         .set("parcel_area", areaLong)
                         .set("parcel_perimeter", perimeterLong)
                         .set("parcel_state", "PENDING")
+                        .set("parcel_usage", usage)
+                        .set("parcel_old_usage", oldUsage)
                         .build();
 
             txn.add(parcel);
@@ -161,7 +170,6 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
         String username = tokenInfo.sub;
-
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity user = datastore.get(userKey);
 
@@ -259,7 +267,6 @@ public class ParcelResource {
                     url,
                     coordinatesString));
         });
-
         return Response.ok(g.toJson(parcelList)).build();
     }
 
@@ -295,19 +302,12 @@ public class ParcelResource {
         }
 
         String path = username + "/" + username + "_" + parcelName;
-        Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
-        byte[] coordinates = blob.getContent();
-        String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+        Blob blobDocument = storage.get(PARCEL_DOCUMENT_BUCKET, path + "_document");
+        URL url = blobDocument.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
-        ParcelInfo info = new ParcelInfo(parcelName,
-                                            parcel.getString("parcel_distrito"),
-                                            parcel.getString("parcel_concelho"),
-                                            parcel.getString("parcel_freguesia"),
-                                            parcel.getLong("parcel_area"),
-                                            parcel.getLong("parcel_perimeter"),
-                                            coordinatesString,
-                                            parcel.getString("parcel_owner"),
-                                            parcel.getString("parcel_manager"));
+        ParcelInfo info = new ParcelInfo(url.toString(),
+                parcel.getString("parcel_usage"),
+                parcel.getString("parcel_old_usage"));
 
         return Response.ok(g.toJson(info)).build();
     }
@@ -574,7 +574,7 @@ public class ParcelResource {
 
     @POST
     @Path("/nearby")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response getParcelsNearby(@QueryParam("parcelName") String parcelName, TokenData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 

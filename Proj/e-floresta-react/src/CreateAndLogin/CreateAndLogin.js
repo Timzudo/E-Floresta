@@ -21,6 +21,8 @@ const CreateAndLogin = () => {
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
           token = xmlhttp.responseText;
+          console.log("yau")
+          //console.log(atob(token));
           alert("Login efetuado com sucesso.");
           localStorage.setItem('token', token);
           window.location.href = "/homepage";
@@ -56,6 +58,8 @@ const CreateAndLogin = () => {
       if(xmlhttp.readyState == 4) {
         if(xmlhttp.status == 200){
           token = xmlhttp.responseText;
+          console.log("yau")
+          //console.log(atob(token));
           alert("Registo efetuado com sucesso.");
           localStorage.setItem('token', token);
           window.location.href = "/homepage";

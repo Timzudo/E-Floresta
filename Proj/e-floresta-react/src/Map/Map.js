@@ -6,6 +6,7 @@ import {Polygon} from '@react-google-maps/api';
 import "./Map.css"
 import {Button, Form} from "react-bootstrap";
 import {getAreaOfPolygon, getDistance, getPathLength} from 'geolib';
+import CSVConverter from "../util/CSVConverter";
 
 const google = window.google;
 
@@ -32,17 +33,62 @@ const options = {
     zIndex: 1
 }
 
+//TODO
+
 
 const Map = () => {
+
+    let name;
+
+    const obj = JSON.parse(localStorage.getItem('csv'));
+    const distritos = Object.keys(obj);
+    const distritoList = [];
+    for(let i = 0; i<distritos.length; i++) {
+        distritoList.push(<option>{distritos[i]}</option>)
+    }
+
     const [file, setFile] = useState();
+    const [documentState, setDocument] = useState();
     const submitHandler = (e) => {
         e.preventDefault();
+        const formData = new FormData(e.target);
+        submitParcel(formData);
     }
 
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
     const [area, setArea] = useState(0);
     const [perimeter, setPerimeter] = useState(0);
+
+    const [distrito, setDistrito] = useState("");
+    const [concelhoOptions, setConcelhoOptions] = useState([]);
+    const [freguesiaOptions, setFreguesiaOptions] = useState([]);
+
+
+    function handleSetDistrito(distrito){
+        setDistrito(distrito);
+        let listC = Object.keys(obj[distrito]);
+
+        let list = [];
+        for(let i = 0; i<listC.length; i++){
+            list.push(<option>{listC[i]}</option>);
+        }
+        setConcelhoOptions(list);
+    }
+
+    function handleSetConcelho(concelho){
+        console.log(obj);
+        console.log(distrito);
+        console.log(concelho);
+        let listF = Object.keys(obj[distrito][concelho]);
+
+        let list = [];
+        for(let i = 0; i<listF.length; i++){
+            list.push(<option>{listF[i]}</option>);
+        }
+        setFreguesiaOptions(list);
+    }
+
 
     React.useEffect(() => {
         setPerimeter(getPathLength(paths) + (paths.length>1 ? getDistance(paths[paths.length-1], paths[0]) : 0));
@@ -80,7 +126,7 @@ const Map = () => {
         setPaths(paths.filter((element, index) => index < paths.length - 1));
     }
 
-    function submitParcel() {
+    function submitParcel(f) {
         let xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onreadystatechange = function() {
@@ -101,13 +147,13 @@ const Map = () => {
             }
         }
 
-        let f = new FormData();
-
+        
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
         f.append('concelho', document.getElementById("formConcelhoDropdown").value);
         f.append('freguesia', document.getElementById("formFreguesiaDropdown").value);
         f.append('photo', file);
+        f.append('document', documentState)
         f.append('coordinates', JSON.stringify(paths));
         f.append('area', area.toString());
         f.append('perimeter', perimeter.toString());
@@ -116,35 +162,18 @@ const Map = () => {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
-        /*const myObj = {
-            name:document.getElementById("formParcelName").value,
-            distrito:document.getElementById("formDistritoDropdown").value,
-            concelho:document.getElementById("formConcelhoDropdown").value,
-            freguesia:document.getElementById("formFreguesiaDropdown").value,
-            photo:file,
-            coordinates:paths,
-            area:area,
-            perimeter:perimeter,
-        }
-
-
-        console.log(file);
-
-
-        let myJson = JSON.stringify(myObj);
-
-        console.log(myJson)*/
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
-        //xmlhttp.setRequestHeader("Content-Type", "multipart/form-data");
         xmlhttp.send(f);
     }
 
 
     return (
-        <div className="mapDiv_Map"><LoadScript
+        <div className="mapDiv_Map">
+            <CSVConverter/><LoadScript
             googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ"
         >
+
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
@@ -188,29 +217,38 @@ const Map = () => {
 
                     <Form.Group className="mb-3" controlId="formDistritoDropdown">
                         <Form.Label> <strong>Distrito</strong> </Form.Label>
-                        <Form.Select className="map_fields">
-                            <option>Lisboa</option>
-                            <option>Porto</option>
-                            <option>Algarve</option>
+                        <Form.Select className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
+                            {distritoList}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formConcelhoDropdown">
                         <Form.Label> <strong>Concelho</strong> </Form.Label>
-                        <Form.Select className="map_fields">
-                            <option>Concelho1</option>
-                            <option>Concelho2</option>
-                            <option>Concelho3</option>
+                        <Form.Select className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
+                            {concelhoOptions}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formFreguesiaDropdown">
                         <Form.Label> <strong>Freguesia</strong> </Form.Label>
                         <Form.Select className="map_fields">
-                            <option>Freguesia1</option>
-                            <option>Freguesia2</option>
-                            <option>Freguesia3</option>
+                            {freguesiaOptions}
                         </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formParcelCover">
+                        <Form.Label> <strong>Cobertura do solo</strong> </Form.Label>
+                        <Form.Control className="map_fields" required type="text" placeholder="Cobertura do solo" />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formParcelUsage">
+                        <Form.Label> <strong>Utilização do solo</strong> </Form.Label>
+                        <Form.Control className="map_fields" required type="text" placeholder="Utilização do solo" />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formParcelOldUsage">
+                        <Form.Label> <strong>Utilização prévia do solo</strong> </Form.Label>
+                        <Form.Control className="map_fields" required type="text" placeholder="Utilização prévia do solo" />
                     </Form.Group>
 
                     <Form.Group className="position-relative mb-3" controlId="formParcelPhoto">
@@ -220,7 +258,7 @@ const Map = () => {
                             type="file"
                             required
                             name="file"
-                            accept = ".png, .jpg, .jpeg"
+                            accept = ".png"
                             onChange={(e) => setFile(e.target.files[0])}
                         />
                     </Form.Group>
@@ -233,10 +271,11 @@ const Map = () => {
                             required
                             name="file"
                             accept = ".pdf"
+                            onChange={(e) => setDocument(e.target.files[0])}
                         />
                     </Form.Group>
 
-                    <Button variant="success" type="submit" onClick={submitParcel}>
+                    <Button variant="success" type="submit">
                         Submeter
                     </Button>
                 </Form>
