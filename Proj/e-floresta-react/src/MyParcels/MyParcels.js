@@ -42,6 +42,7 @@ const MyParcels = () => {
         setEditShow(true);
     }
     const handleClose = () => setShow(false);
+    const handleEditClose = () => setEditShow(false);
 
     const [parcelList, setPList] = useState([]);
 
@@ -86,7 +87,7 @@ const MyParcels = () => {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "pointer"}} onClick={() => handleShow()}>
+                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "pointer"}}>
                             <Card.Img className="parcel_picture" variant="top" src={obj[i].photoURL} />
                             <Card.Body>
                                 <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>
@@ -97,8 +98,11 @@ const MyParcels = () => {
                                     <label>Concelho: {obj[i].concelho}</label><br/>
                                     <label>Distrito: {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                    <Button id="edit-parcel_MyParcels" variant="primary" onClick={() => handleEditShow()}>Editar Parcela</Button>
+                                    <Button id="show-parcel-details_MyParcels" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
+                                    <p></p>
+                                    <Button id="edit-parcel_MyParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>Editar Parcela</Button>
                                 </Card.Body>
+
                         </Card>);
                     }
                     setPList(arr);
@@ -160,7 +164,7 @@ const MyParcels = () => {
             <Modal
                 onShow={loadModalValues}
                 show={editShow}
-                onHide={handleClose}
+                onHide={handleEditClose}
                 backdrop="static"
                 dialogClassName="modal-xl"
                 keyboard={false}
@@ -177,7 +181,7 @@ const MyParcels = () => {
                     <label><b>Distrito:</b> {obj.distrito}</label><br/>
                     <label><b>Área da parcela:</b> {obj.area}m²</label><br/>
                     <label><b>Perímetro da parcela:</b> {obj.perimeter}m</label><br/>
-                    <label><b>Descrição:</b> {obj.description}</label><br/>
+                    <label><b>Descrição:</b> {obj.description} <input type="text" /> </label><br/>
                     <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}</label><br/>
                     <label><b>Utilização atual do solo:</b> {obj.soloUtil}</label><br/>
                     <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}</label><br/>
