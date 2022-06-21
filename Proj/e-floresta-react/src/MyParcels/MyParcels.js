@@ -26,11 +26,19 @@ const modalContainerStyle = {
 
 
 const MyParcels = () => {
-    const [show, setShow] = useState(false);
     const [obj, setObj] = useState({});
 
+    const [show, setShow] = useState(false);
+    const [editShow, setEditShow] = useState(false);
+    const handleShow = () => {
+        setShow(true);
+        setEditShow(false);
+    }
+    const handleEditShow = () => {
+        setShow(false);
+        setEditShow(true);
+    }
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     const [parcelList, setPList] = useState([]);
 
@@ -86,10 +94,8 @@ const MyParcels = () => {
                                     <label>Concelho: {obj[i].concelho}</label><br/>
                                     <label>Distrito: {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                <Link to="/edit-parcel">
-                                    <Button id="edit-parcel_MyParcels" variant="primary">Editar Parcela</Button>
-                                </Link>
-                            </Card.Body>
+                                    <Button id="edit-parcel_MyParcels" variant="primary" onClick={() => handleEditShow()}>Editar Parcela</Button>
+                                </Card.Body>
                         </Card>);
                     }
                     setPList(arr);
@@ -132,6 +138,34 @@ const MyParcels = () => {
                 </Modal.Body>
                 <Modal.Body>
                     <Button variant="success">Ver parcelas próximas</Button><br/>
+                    <p></p>
+                    <label><b>Proprietário:</b> {obj.owner}</label><br/>
+                    <label><b>Gerente:</b> {obj.manager}</label><br/>
+                    <label><b>Freguesia:</b> {obj.freguesia}</label><br/>
+                    <label><b>Concelho:</b> {obj.concelho}</label><br/>
+                    <label><b>Distrito:</b> {obj.distrito}</label><br/>
+                    <label><b>Área da parcela:</b> {obj.area}m²</label><br/>
+                    <label><b>Perímetro da parcela:</b> {obj.perimeter}m</label><br/>
+                    <label><b>Descrição:</b> {obj.description}</label><br/>
+                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}</label><br/>
+                    <label><b>Utilização atual do solo:</b> {obj.soloUtil}</label><br/>
+                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}</label><br/>
+                </Modal.Body>
+            </Modal>
+
+
+            <Modal
+                onShow={loadModalValues}
+                show={editShow}
+                onHide={handleClose}
+                backdrop="static"
+                dialogClassName="modal-xl"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title> Parcela: {obj.name} <input type="text" /> </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <p></p>
                     <label><b>Proprietário:</b> {obj.owner}</label><br/>
                     <label><b>Gerente:</b> {obj.manager}</label><br/>
