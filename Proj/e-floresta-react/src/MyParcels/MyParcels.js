@@ -26,6 +26,7 @@ const modalContainerStyle = {
 
 
 const MyParcels = () => {
+    const { language } = this.props;
     const [obj, setObj] = useState({});
 
     const [show, setShow] = useState(false);
@@ -54,12 +55,20 @@ const MyParcels = () => {
     function isParcelVerified(verified) {
         if(verified) {
             return(
-                <Badge pill bg="success">Verificada</Badge>
+                <Badge pill bg="success">
+                    {language == "EN"
+                    ? "Verified"
+                    : "Verificada"}
+                </Badge>
             )
         }
         else{
             return(
-                <Badge pill bg="secondary">Por verificar</Badge>
+                <Badge pill bg="secondary">
+                    {language == "EN"
+                    ? "To be Verified"
+                    : "Por Verificar"}
+                </Badge>
             )
         }
     }
@@ -92,15 +101,15 @@ const MyParcels = () => {
                             <Card.Body>
                                 <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>
                                 <Card.Text>
-                                    <label>Área: {obj[i].area}m²</label><br/>
-                                    <label>Perímetro: {obj[i].perimeter}m</label><br/>
-                                    <label>Freguesia: {obj[i].freguesia}</label><br/>
-                                    <label>Concelho: {obj[i].concelho}</label><br/>
-                                    <label>Distrito: {obj[i].distrito}</label><br/>
+                                    <label>{language == "EN" ? "Area:": "Área:"} {obj[i].area}m²</label><br/>
+                                    <label>{language == "EN" ? "Perimiter:": "Perímetro:"} {obj[i].perimeter}m</label><br/>
+                                    <label>{language == "EN" ? "Parish:": "Freguesia:"} {obj[i].freguesia}</label><br/>
+                                    <label>{language == "EN" ? "County:": "Concelho:"} {obj[i].concelho}</label><br/>
+                                    <label>{language == "EN" ? "District:": "Distrito:"} {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                    <Button id="show-parcel-details_MyParcels" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
+                                    <Button id="show-parcel-details_MyParcels" variant="primary" size="sm" onClick={() => handleShow()}>{language == "EN" ? "View Details:": "Ver Detalhes:"}</Button>
                                     <p></p>
-                                    <Button id="edit-parcel_MyParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>Editar Parcela</Button>
+                                    <Button id="edit-parcel_MyParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>{language == "EN" ? "Edit Plot:": "Editar Parcela:"}</Button>
                                 </Card.Body>
 
                         </Card>);
@@ -132,7 +141,7 @@ const MyParcels = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title> Parcela: {obj.name} </Modal.Title>
+                    <Modal.Title> {language == "EN" ? "Plot:": "Parcela:"} {obj.name} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <GoogleMap
@@ -144,19 +153,19 @@ const MyParcels = () => {
                     </GoogleMap>
                 </Modal.Body>
                 <Modal.Body>
-                    <Button variant="success">Ver parcelas próximas</Button><br/>
+                    <Button variant="success">{language == "EN" ? "View nearby plots": "Ver parcelas próximas"} {obj.name}</Button><br/>
                     <p></p>
-                    <label><b>Proprietário:</b> {obj.owner}</label><br/>
-                    <label><b>Gerente:</b> {obj.manager}</label><br/>
-                    <label><b>Freguesia:</b> {obj.freguesia}</label><br/>
-                    <label><b>Concelho:</b> {obj.concelho}</label><br/>
-                    <label><b>Distrito:</b> {obj.distrito}</label><br/>
-                    <label><b>Área da parcela:</b> {obj.area}m²</label><br/>
-                    <label><b>Perímetro da parcela:</b> {obj.perimeter}m</label><br/>
-                    <label><b>Descrição:</b> {obj.description}</label><br/>
-                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}</label><br/>
-                    <label><b>Utilização atual do solo:</b> {obj.soloUtil}</label><br/>
-                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}</label><br/>
+                    <label><b>{language == "EN" ? "Owner:": "Proprietário:"}</b> {obj.owner}</label><br/>
+                    <label><b>{language == "EN" ? "Manager:": "Gerente:"}</b> {obj.manager}</label><br/>
+                    <label><b>{language == "EN" ? "Parish:": "Freguesia:"}</b> {obj.freguesia}</label><br/>
+                    <label><b>{language == "EN" ? "County:": "Concelho:"}</b> {obj.concelho}</label><br/>
+                    <label><b>{language == "EN" ? "District:": "Distrito:"}</b> {obj.distrito}</label><br/>
+                    <label><b>{language == "EN" ? "Area of the plot:": "Área da parcela:"}</b> {obj.area}m²</label><br/>
+                    <label><b>{language == "EN" ? "Perimiter of the plot": "Perímetro da parcela:"}</b> {obj.perimeter}m</label><br/>
+                    <label><b>{language == "EN" ? "Description:": "Descrição:"}</b> {obj.description}</label><br/>
+                    <label><b>{language == "EN" ? "Type of coverage of land:": "Tipo de cobertura do solo:"}</b> {obj.tipoSolo}</label><br/>
+                    <label><b>{language == "EN" ? "Current use of land:": "Utilização atual do solo:"}</b> {obj.soloUtil}</label><br/>
+                    <label><b>{language == "EN" ? "Previous use of land:": "Utilização prévia do solo:"}</b> {obj.oldSoloUtil}</label><br/>
                 </Modal.Body>
             </Modal>
 
@@ -170,21 +179,21 @@ const MyParcels = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title> Parcela: {obj.name} <input type="text" /> </Modal.Title>
+                    <Modal.Title> {language == "EN" ? "Plot:": "Parcela:"} {obj.name} <input type="text" /> </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p></p>
-                    <label><b>Proprietário:</b> {obj.owner}</label><br/>
-                    <label><b>Gerente:</b> {obj.manager}</label><br/>
-                    <label><b>Freguesia:</b> {obj.freguesia}</label><br/>
-                    <label><b>Concelho:</b> {obj.concelho}</label><br/>
-                    <label><b>Distrito:</b> {obj.distrito}</label><br/>
-                    <label><b>Área da parcela:</b> {obj.area}m²</label><br/>
-                    <label><b>Perímetro da parcela:</b> {obj.perimeter}m</label><br/>
-                    <label><b>Descrição:</b> {obj.description} <input type="text" /> </label><br/>
-                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}</label><br/>
-                    <label><b>Utilização atual do solo:</b> {obj.soloUtil}</label><br/>
-                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}</label><br/>
+                    <label><b>{language == "EN" ? "Owner:": "Proprietário:"}</b> {obj.owner}</label><br/>
+                    <label><b>{language == "EN" ? "Manager:": "Gerente:"}</b> {obj.manager}</label><br/>
+                    <label><b>{language == "EN" ? "Parish:": "Freguesia:"}</b> {obj.freguesia}</label><br/>
+                    <label><b>{language == "EN" ? "County:": "Concelho:"}</b> {obj.concelho}</label><br/>
+                    <label><b>{language == "EN" ? "District:": "Distrito:"}</b> {obj.distrito}</label><br/>
+                    <label><b>{language == "EN" ? "Area of the plot:": "Área da parcela:"}</b> {obj.area}m²</label><br/>
+                    <label><b>{language == "EN" ? "Perimiter of the plot": "Perímetro da parcela:"}</b> {obj.perimeter}m</label><br/>
+                    <label><b>{language == "EN" ? "Description:": "Descrição:"}</b> {obj.description} <input type="text" /> </label><br/>
+                    <label><b>{language == "EN" ? "Type of coverage of land:": "Tipo de cobertura do solo:"}</b> {obj.tipoSolo}</label><br/>
+                    <label><b>{language == "EN" ? "Current use of land:": "Utilização atual do solo:"}</b> {obj.soloUtil}</label><br/>
+                    <label><b>{language == "EN" ? "Previous use of land:": "Utilização prévia do solo:"}</b> {obj.oldSoloUtil}</label><br/>
                 </Modal.Body>
             </Modal>
 

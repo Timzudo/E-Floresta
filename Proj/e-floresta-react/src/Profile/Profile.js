@@ -15,6 +15,7 @@ const Profile = () => {
     const [type, setType] = useState("");
     const [state, setState] = useState(""); //TODO: ver se e preciso
 
+    const { language } = this.props;
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -59,28 +60,28 @@ const Profile = () => {
                     <p className="label">E-mail: {email}</p>
                 </div>
                 <div id="name">
-                    <p className="label">Nome Completo: {name}</p>
+                    <p className="label">{language == "EN" ? "Full Name:": "Nome Completo:"} {name}</p>
                 </div>
                 <div id="phone">
-                    <p className="label">Telemóvel/Telefone: {phone}</p>
+                    <p className="label">{language == "EN" ? "Phone Number:": "Telemóvel/Telefone:"} {phone}</p>
                 </div>
                 <div id="nif">
                     <p className="label">NIF: {nif}</p>
                 </div>
                 <div id="type">
-                    <p className="label">Tipo de utilizador: {type}</p>
+                    <p className="label">{language == "EN" ? "Type of User:": "Tipo de utilizador:"} {type}</p>
                 </div>
 
                 <div className="btn-group" id="change-profile-info">
                     <div id="changeProfileInfo_Profile">
                         <Link to="/change-profile">
-                            <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
+                            <button type="button" className="btn btn-secondary btn-sm">{language == "EN" ? "Edit Profile:": "Editar Perfil:"}</button>
                         </Link>
                     </div>
 
                     <div id="changePassword_Profile">
                         <Link to="/change-password">
-                            <button type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                            <button type="button" className="btn btn-warning btn-sm">{language == "EN" ? "Change Password:": "Alterar Palavra-Passe:"}</button>
                         </Link>
                     </div>
 

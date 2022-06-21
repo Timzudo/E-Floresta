@@ -12,6 +12,8 @@ const ChangeProfile = () => {
 
     let xmlhttp = new XMLHttpRequest();
 
+    const { language } = this.props;
+
     function changeProfile() {
 
         xmlhttp.onreadystatechange = function () {
@@ -58,26 +60,26 @@ const ChangeProfile = () => {
                     E-mail: {email} <p className="label" />
                 </div>
                 <div id="name_ChangeProfile">
-                    Nome Completo: {name} <input className="label" id="change-complete-name" type="text" />
+                    {language == "EN" ? "Full Name:": "Nome Completo:"} {name} <input className="label" id="change-complete-name" type="text" />
                 </div>
                 <div id="phone_ChangeProfile">
-                    Telemóvel/Telefone: {phone} <input className="label" id="change-phone" type="number" maxLength="9"/>
+                    {language == "EN" ? "Phone Number:": "Telemóvel/Telefone:"} {phone} <input className="label" id="change-phone" type="number" maxLength="9"/>
                 </div>
                 <div id="nif_ChangeProfile">
                     NIF: {nif} <input className="label" id="change-nif" type="number" maxLength="9"/>
                 </div>
                 <div id="type_ChangeProfile">
-                    <p className="label"></p> Tipo de utilizador: {type}
+                    <p className="label"></p> {language == "EN" ? "Type of User:": "Tipo de utilizador:"} {type}
                 </div>
 
                 <div className="btn-group" id="confirmAndCancel_ChangeProfile">
                     <div id="confirmChanges_ChangeProfile">
-                        <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile} >Confirmar Alterações</Button>
+                        <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile} >{language == "EN" ? "Confirm Changes": "Confirmar Alterações"}</Button>
                     </div>
 
                     <div id="cancelChanges_ChangeProfile">
                         <Link to="/profile">
-                            <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
+                            <Button type="button" className="btn btn-secondary btn-sm">{language == "EN" ? "Cancel Changes": "Cancelar Alterações"} </Button>
                         </Link>
 
                     </div>

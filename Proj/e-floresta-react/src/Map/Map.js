@@ -163,6 +163,7 @@ const Map = () => {
         xmlhttp.send(f);
     }
 
+    const { language } = this.props;
 
     return (
         <div className="mapDiv_Map">
@@ -191,64 +192,64 @@ const Map = () => {
             <div id="sideBar">
                 <div id="parcelInfo">
                     <div id="parcelArea">
-                        <div className="MapInfo_Map">Área:</div>
+                        <div className="MapInfo_Map">{language == "EN" ? "Area;:": "Área:"}</div>
                         <div className="MapInfo_Map">{area}m²</div>
                     </div>
                     <p></p>
                     <div id="parcelPerimeter">
-                        <div className="MapInfo_Map">Perímetro:</div>
+                        <div className="MapInfo_Map">{language == "EN" ? "Perimeter": "Perímetro:"}</div>
                         <div className="MapInfo_Map">{perimeter}m</div>
                     </div>
                 </div>
-                <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>
+                <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>{language == "EN" ? "Go back:": "Voltar atrás"}</button>
             </div>
 
 
             <div className="submit_Map">
                 <Form onSubmit={submitHandler}>
                     <Form.Group className="mb-3" controlId="formParcelName">
-                        <Form.Label> <strong>Nome da Parcela</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Nome da Parcela": "Plot Name:"}</strong> </Form.Label>
                         <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formDistritoDropdown">
-                        <Form.Label> <strong>Distrito</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "District": "Distrito:"}</strong> </Form.Label>
                         <Form.Select className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
                             {distritoList}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formConcelhoDropdown">
-                        <Form.Label> <strong>Concelho</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "County:": "Concelho:"}</strong> </Form.Label>
                         <Form.Select className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
                             {concelhoOptions}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formFreguesiaDropdown">
-                        <Form.Label> <strong>Freguesia</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Parish:": "Freguesia:"}</strong> </Form.Label>
                         <Form.Select className="map_fields">
                             {freguesiaOptions}
                         </Form.Select>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formParcelCover">
-                        <Form.Label> <strong>Cobertura do solo</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Coverage of land:": "Cobertura do solo:"}</strong> </Form.Label>
                         <Form.Control className="map_fields" required type="text" placeholder="Cobertura do solo" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formParcelUsage">
-                        <Form.Label> <strong>Utilização do solo</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Current use of land:": "Utilização atual do solo:"}</strong> </Form.Label>
                         <Form.Control className="map_fields" required type="text" placeholder="Utilização do solo" />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formParcelOldUsage">
-                        <Form.Label> <strong>Utilização prévia do solo</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Previous use of land:": "Utilização prévia do solo:"}</strong> </Form.Label>
                         <Form.Control className="map_fields" required type="text" placeholder="Utilização prévia do solo" />
                     </Form.Group>
 
                     <Form.Group className="position-relative mb-3" controlId="formParcelPhoto">
-                        <Form.Label> <strong>Foto</strong> </Form.Label>
+                        <Form.Label> <strong>{language == "EN" ? "Photo": "Foto"}</strong> </Form.Label>
                         <Form.Control
                             className="map_fields"
                             type="file"
@@ -272,7 +273,7 @@ const Map = () => {
                     </Form.Group>
 
                     <Button variant="success" type="submit">
-                        Submeter
+                        {language == "EN" ? "Submit": "Submeter:"}
                     </Button>
                 </Form>
             </div>
