@@ -33,12 +33,8 @@ const options = {
     zIndex: 1
 }
 
-//TODO
-
 
 const Map = () => {
-
-    let name;
 
     const obj = JSON.parse(localStorage.getItem('csv'));
     const distritos = Object.keys(obj);
@@ -147,7 +143,7 @@ const Map = () => {
             }
         }
 
-        
+
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
         f.append('concelho', document.getElementById("formConcelhoDropdown").value);
