@@ -115,10 +115,10 @@ const ParcelsEntity = () => {
             }
         }
 
-        var myObj = {token:localStorage.getItem('token')};
-        var myJson = JSON.stringify(myObj);
+        let myObj = {token:localStorage.getItem('token')};
+        let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managed");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     })

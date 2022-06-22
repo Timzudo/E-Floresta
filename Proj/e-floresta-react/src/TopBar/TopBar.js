@@ -22,20 +22,24 @@ const TopBar = () => {
                     <Button id="option2">Registar Parcela</Button>
                 </Link>
 
-                <Link to="/my-parcels">
+                {localStorage.getItem('role') == 'D' ? <Link to="/my-parcels">
                     <Button id="option3">Minhas Parcelas</Button>
-                </Link>
+                </Link> : <></>}
+
+                {localStorage.getItem('role') == 'C' ? <Link to="/parcels-entity">
+                    <Button id="option5">Minhas Parcelas</Button>
+                </Link> : <></>}
 
                 {localStorage.getItem('role') == 'C' ? <Link to="/proposed-parcels-entity">
-                    <Button id="option3">Parcelas Pendentes</Button>
+                    <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
                 {localStorage.getItem('role') == 'B' ? <Link to="/approve-parcels">
-                    <Button id="option3">Parcelas Pendentes</Button>
+                    <Button id="option7">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
                 {localStorage.getItem('role') == 'B' ? <Link to="/all-parcels">
-                    <Button id="option3">Visualizar Parcelas</Button>
+                    <Button id="option8">Visualizar Parcelas</Button>
                 </Link> : <></>}
 
                 <Link to="/about-us">
