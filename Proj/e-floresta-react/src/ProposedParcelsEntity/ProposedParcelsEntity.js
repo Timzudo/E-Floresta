@@ -49,23 +49,42 @@ const ProposedParcelsEntity = () => {
         xmlhttp.send(myJson);
     }
 
-    /*function addManager(manager) {
+    function addManager(parcel) {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
-                    setObj(obj);
+                    alert("Parcel accepted successfully");
                 }
             }
         }
-        let myObj = {token:localStorage.getItem('token'),
-        managerName: };
+        let myObj = {
+            token: localStorage.getItem('token'),
+        };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo"); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/addmanager/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    }~*/
+    }
+
+    function removeManager(parcel) {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    alert("Parcel rejected successfully");
+                }
+                console.log(parcel.owner+"_"+parcel.name)
+            }
+        }
+        let myObj = {
+            token: localStorage.getItem('token'),
+        };
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/rejectparcel/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
@@ -91,10 +110,10 @@ const ProposedParcelsEntity = () => {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <Button id="confirm-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm">Aceitar</Button>
+                                        <Button id="confirm-parcel_ProposedParcelsEntity" onClick={() => addManager(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aceitar</Button>
                                     </Col>
                                     <Col>
-                                        <Button id="reject-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
+                                        <Button id="reject-parcel_ProposedParcelsEntity" onClick={() => removeManager(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
                                     </Col>
                                 </Row>
                             </Card.Body>
