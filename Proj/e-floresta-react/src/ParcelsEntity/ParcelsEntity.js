@@ -56,6 +56,23 @@ const ParcelsEntity = () => {
     let arr = [];
     let pathsArr = [];
 
+    function removeManager(parcelName, owner){
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    window.location.href = "/parcels-entity";
+                }
+            }
+        }
+        let myObj = {token:localStorage.getItem('token')};
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/removemanager/" + owner + "_" + parcelName);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
+
 
     function loadModalValues() {
         xmlhttp.onreadystatechange = function () {
@@ -96,7 +113,7 @@ const ParcelsEntity = () => {
                                         <Button id="show-parcel-details_ParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
                                     </Col>
                                     <Col>
-                                        <Button id="remove-parcel_ParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm">Remover</Button>
+                                        <Button id="remove-parcel_ParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => removeManager(obj[i].name, obj[i].owner)}>Remover</Button>
                                     </Col>
                                 </Row>
                             </Card.Body>

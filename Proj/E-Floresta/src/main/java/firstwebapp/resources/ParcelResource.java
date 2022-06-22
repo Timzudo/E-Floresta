@@ -210,6 +210,8 @@ public class ParcelResource {
                     p.getString("parcel_distrito"),
                     p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
+                    p.getString("parcel_owner"),
+                    p.getString("parcel_manager"),
                     p.getString("parcel_state").equals("APPROVED"),
                     p.getLong("parcel_area"),
                     p.getLong("parcel_perimeter"),
@@ -266,6 +268,8 @@ public class ParcelResource {
                     p.getString("parcel_distrito"),
                     p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
+                    p.getString("parcel_owner"),
+                    p.getString("parcel_manager"),
                     p.getString("parcel_state").equals("APPROVED"),
                     p.getLong("parcel_area"),
                     p.getLong("parcel_perimeter"),
@@ -296,7 +300,7 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
         Entity parcel = datastore.get(parcelKey);
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
@@ -306,7 +310,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Parcel with name not found.").build();
         }
 
-        String path = username + "/" + username + "_" + parcelName;
+        String path = username + "/" + parcelName;
         Blob blobDocument = storage.get(PARCEL_DOCUMENT_BUCKET, path + "_document");
         URL url = blobDocument.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
@@ -426,7 +430,7 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
         Entity parcel = datastore.get(parcelKey);
 
         if(parcel == null){
