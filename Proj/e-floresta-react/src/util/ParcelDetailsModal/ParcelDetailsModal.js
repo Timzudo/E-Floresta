@@ -2,7 +2,6 @@ import {Modal} from "react-bootstrap";
 import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
-import {render} from "react-dom";
 
 
 const center = {
@@ -51,9 +50,6 @@ const ParcelDetailsModal = (props) => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
-
-    console.log(props.obj.coordinates);
-    console.log(props.obj);
 
     return <>
         <Modal

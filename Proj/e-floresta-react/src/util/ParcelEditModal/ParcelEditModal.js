@@ -1,12 +1,26 @@
 import {Button, ButtonGroup, Dropdown, Modal} from "react-bootstrap";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import React from "react";
+import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import {useState} from "react";
 
 
 const center = {
     lat: 38.660677,
     lng: -9.205971
 };
+
+const options = {
+    fillColor: "Khaki",
+    fillOpacity: 0.3,
+    strokeColor: "DarkOrange",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1
+}
 
 const modalContainerStyle = {
     width: '100%',
@@ -15,6 +29,8 @@ const modalContainerStyle = {
 
 
 const ParcelEditModal = (props) => {
+
+    const [obj, setObj] = useState({});
 
     const handleEditClose = () => props.setShow(false);
 
@@ -56,7 +72,7 @@ const ParcelEditModal = (props) => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
+                    setObj(JSON.parse(xmlhttp.responseText));
                 }
             }
         }
@@ -88,6 +104,11 @@ const ParcelEditModal = (props) => {
                     zoom={10}
                     tilt={0}
                 >
+                    <Polygon
+                        paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
+                        options={options}
+                    />
+                    
                 </GoogleMap>
 
                 <div>
