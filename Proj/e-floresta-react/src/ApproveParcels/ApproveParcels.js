@@ -6,17 +6,12 @@ import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
 import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
 import {GoogleMap, LoadScript} from "@react-google-maps/api";
-import ParcelDetailsModal from "../ParcelDetailsModal/ParcelDetailsModal";
-import ParcelEditModal from "../ParcelEditModal/ParcelEditModal";
+import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
+import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
 const center = {
     lat: 38.660677,
     lng: -9.205971
-};
-
-const modalContainerStyle = {
-    width: '72vw',
-    height: '45vh'
 };
 
 const ApproveParcels = () => {
@@ -100,9 +95,13 @@ const ApproveParcels = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
+            <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
 
-            <ParcelEditModal obj={obj} show={editShow} setShow={setEditShow}/>
+                <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
+
+                <ParcelEditModal obj={obj} show={editShow} setShow={setEditShow}/>
+
+            </LoadScript>
 
             <div className="approveParcelsBody">
                 <div className="container_ApproveParcels">

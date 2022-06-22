@@ -12,9 +12,10 @@ import ChangePassword from "./ChangePassword/ChangePassword";
 import MyParcels from "./MyParcels/MyParcels";
 import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
+import AllParcels from "./AllParcels/AllParcels";
+
 import Front_img from "./front_img.png";
 import React, { Component }  from 'react';
-
 import {Button} from "react-bootstrap";
 
 import {
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/my-parcels" element={<MyParcels />} />
           <Route path="/proposed-parcels-entity" element={<ProposedParcelsEntity />} />
           <Route path="/approve-parcels" element={<ApproveParcels />} />
+          <Route path="/all-parcels" element={<AllParcels />} />
         </Routes>
       </Router>
   )

@@ -1,13 +1,13 @@
 import "./MyParcels.css"
-import Image from './terreno.png'
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Badge, Button, ButtonGroup, Card, Dropdown, Modal} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Badge, Button, ButtonGroup, Card, Col, Dropdown, Modal, Row} from "react-bootstrap";
 import {useEffect, useState} from 'react'
-import React, { Component }  from 'react';
-import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import React from 'react';
+import {GoogleMap, LoadScript} from "@react-google-maps/api";
+import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
+import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
 const containerStyle = {
     width: '75vw',
@@ -31,13 +31,15 @@ const MyParcels = () => {
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
 
-    const handleShow = () => {
+    const handleShow = (obj) => {
         console.log("show")
+        setObj(obj);
         setShow(true);
         setEditShow(false);
     }
-    const handleEditShow = () => {
+    const handleEditShow = (obj) => {
         console.log("showedit")
+        setObj(obj);
         setShow(false);
         setEditShow(true);
     }
@@ -124,15 +126,20 @@ const MyParcels = () => {
                             <Card.Body>
                                 <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>
                                 <Card.Text>
-                                    <label>Área: {obj[i].area}m²</label><br/>
-                                    <label>Perímetro: {obj[i].perimeter}m</label><br/>
-                                    <label>Freguesia: {obj[i].freguesia}</label><br/>
-                                    <label>Concelho: {obj[i].concelho}</label><br/>
-                                    <label>Distrito: {obj[i].distrito}</label><br/>
+                                    <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label><br/>
+                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                    <Button id="show-parcel-details_MyParcels" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
-                                    <p></p>
-                                    <Button id="edit-parcel_MyParcels" variant="primary" size="sm" onClick={() => handleEditShow()}>Editar Parcela</Button>
+                                    <Row>
+                                        <Col>
+                                            <Button id="show-parcel-details_MyParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
+                                        </Col>
+                                        <Col>
+                                            <Button id="edit-parcel_MyParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
+                                        </Col>
+                                    </Row>
                                 </Card.Body>
 
                         </Card>);
@@ -155,104 +162,14 @@ const MyParcels = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <Modal
-                onShow={loadModalValues}
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                dialogClassName="modal-xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title> Parcela: {obj.name} </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <GoogleMap
-                        mapContainerStyle={modalContainerStyle}
-                        center={center}
-                        zoom={10}
-                        tilt={0}
-                    >
-                    </GoogleMap>
-                </Modal.Body>
-                <Modal.Body>
-                    <Button variant="success">Ver parcelas próximas</Button><br/>
-                    <p></p>
-                    <label><b>Proprietário:</b> {obj.owner} </label><br/>
-                    <label><b>Gerente:</b> {obj.manager} </label><br/>
-                    <label><b>Freguesia:</b> {obj.freguesia} </label><br/>
-                    <label><b>Concelho:</b> {obj.concelho} </label><br/>
-                    <label><b>Distrito:</b> {obj.distrito} </label><br/>
-                    <label><b>Área da parcela:</b> {obj.area}m² </label><br/>
-                    <label><b>Perímetro da parcela:</b> {obj.perimeter}m </label><br/>
-                    <label><b>Descrição:</b> {obj.description} </label><br/>
-                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo} </label><br/>
-                    <label><b>Utilização atual do solo:</b> {obj.soloUtil} </label><br/>
-                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil} </label><br/>
-                </Modal.Body>
-            </Modal>
+            <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
 
+                <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
 
-            <Modal
-                onShow={loadModalValues}
-                show={editShow}
-                onHide={handleEditClose}
-                backdrop="static"
-                dialogClassName="modal-xl"
-                keyboard={false}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title> Parcela: {obj.name} </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <ParcelEditModal obj={obj} show={editShow} setShow={setEditShow}/>
 
-                    <GoogleMap
-                        mapContainerStyle={modalContainerStyle}
-                        center={center}
-                        zoom={10}
-                        tilt={0}
-                    >
-                    </GoogleMap>
+                <div id="myParcelsBody">
 
-                    <div>
-
-                    <ButtonGroup className="buttons-editParcelModal_MyParcels" size="sm">
-
-                        <Button id="rollback-editParcelModal_MyParcels" variant="secondary"> Retroceder </Button>
-
-                        <Button id="confirmNewCoord-editParcelModal_MyParcels" variant="success" > Confirmar novas coordenadas </Button>
-
-                    </ButtonGroup>
-                    <label id="newA-editParcelModal_MyParcels"> <b>Nova área:</b> </label>
-                    <label id="newP-editParcelModal_MyParcels"> <b>Novo perímetro:</b> </label>
-                    </div>
-                    <p></p>
-
-                    <label className="labels-editParcelModal_MyParcels"><b>Proprietário:</b> {obj.owner} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"> {hasManager()} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Freguesia:</b> {obj.freguesia} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Concelho:</b> {obj.concelho} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Distrito:</b> {obj.distrito} </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Área da parcela:</b> {obj.area}m² </label><br/>
-                    <label className="labels-editParcelModal_MyParcels"><b>Perímetro da parcela:</b> {obj.perimeter}m </label><br/>
-                    <label><b>Tipo de cobertura do solo:</b> {obj.tipoSolo}
-                        <input id="cobertSolo-editParcelModal_MyParcels" type="text" />
-                    </label><br/>
-                    <label><b>Utilização atual do solo:</b> {obj.soloUtil}
-                        <input id="utilAtSolo-editParcelModal_MyParcels" type="text" />
-                    </label><br/>
-                    <label><b>Utilização prévia do solo:</b> {obj.oldSoloUtil}
-                        <input id="utilPrevSolo-editParcelModal_MyParcels" type="text" />
-                    </label><br/>
-                    <p></p>
-
-                    <Button type="button" className="btn btn-success btn-sm" > Confirmar Alterações </Button>
-
-                </Modal.Body>
-            </Modal>
-
-            <div id="myParcelsBody">
-                <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
                     <GoogleMap
                         mapContainerStyle={containerStyle}
                         center={center}
@@ -260,14 +177,19 @@ const MyParcels = () => {
                         tilt={0}
                     >
                     </GoogleMap>
-                </LoadScript>
 
-                <div className="body_MyParcels">
-                    <div className="container_MyParcels">
-                        {parcelList}
+                    <div className="body_MyParcels">
+                        <div className="container_MyParcels">
+                            {parcelList}
+                        </div>
                     </div>
                 </div>
-            </div>
+
+            </LoadScript>
+
+
+
+
         </>
     )
 }

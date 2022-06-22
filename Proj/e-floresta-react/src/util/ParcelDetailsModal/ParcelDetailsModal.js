@@ -8,7 +8,7 @@ const center = {
 };
 
 const modalContainerStyle = {
-    width: '72vw',
+    width: '100%',
     height: '45vh'
 };
 
@@ -48,15 +48,13 @@ const ParcelDetailsModal = (props) => {
             </Modal.Header>
             <Modal.Body>
 
-                <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
-                    <GoogleMap
-                        mapContainerStyle={modalContainerStyle}
-                        center={center}
-                        zoom={10}
-                        tilt={0}
-                    >
-                    </GoogleMap>
-                </LoadScript>
+            <GoogleMap
+                mapContainerStyle={modalContainerStyle}
+                center={center}
+                zoom={10}
+                tilt={0}
+            >
+            </GoogleMap>
 
             </Modal.Body>
 

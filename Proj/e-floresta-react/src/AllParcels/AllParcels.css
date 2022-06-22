@@ -7,51 +7,50 @@ html, body{
     height:100%;
 }
 
-.body_MyParcels{
+.allParcelsBody{
     background-color: #e0e3d5;
-    height: auto;
+    min-height: calc(100% - 60px);
     width: 100%;
-    overflow-y: scroll;
 }
 
-.container_MyParcels{
+.container_AllParcels{
     display: flex;
     justify-content: flex-start;
     padding-top: 10px;
     padding-left: 10px;
     flex-wrap: wrap;
     gap: 15px;
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
-.container_MyParcels .card{
+.container_AllParcels .card{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 40%;
 }
 
-.container_MyParcels .card:hover{
+.container_AllParcels .card:hover{
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.parcel-card_MyParcels{
+.parcel-card_AllParcels{
     margin: 1px;
     border-color: #32443A;
     background-color: rgba(218, 240, 252, 1);
 }
 
-.parcel-card_MyParcels button{
+.parcel-card_AllParcels button{
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
     outline: 0;
     display: inline-block;
-    color: black;
+    color: white;
     background-color: #B0C090;
     text-align: center;
     cursor: pointer;
 }
 
-.parcel-card_MyParcels button:hover{
+.parcel-card_AllParcels button:hover{
     background-color: #3E503A;
     border-color: #3E503A;
 }
@@ -61,33 +60,39 @@ html, body{
     width: 100%;
 }
 
-#myParcelsBody{
-    display: flex;
-    height: 93.5%
+#confirm-parcel_ApproveParcels{
+    background-color: #3E503A;
+    color: white;
+    border: solid 1px #32443A;
 }
 
-.buttons-editParcelModal_MyParcels{
+#reject-parcel_ApproveParcels{
+    background-color: brown;
+    color: white;
+}
+
+.buttons-editParcelModal_ApproveParcels{
     margin-top: 1%;
 }
 
-#rollback-editParcelModal_MyParcels,
-#confirmNewCoord-editParcelModal_MyParcels{
+#rollback-editParcelModal_ApproveParcels,
+#confirmNewCoord-editParcelModal_ApproveParcels{
     border-radius: 2px;
     margin-right: 3%;
 }
 
-#newA-editParcelModal_MyParcels,
-#newP-editParcelModal_MyParcels{
+#newA-editParcelModal_ApproveParcels,
+#newP-editParcelModal_ApproveParcels{
     margin-left: 1%;
     margin-right: 5%;
 }
 
-.labels-editParcelModal_MyParcels{
+.labels-editParcelModal_ApproveParcels{
     margin-top: 1%;
 }
 
-#cobertSolo-editParcelModal_MyParcels,
-#utilAtSolo-editParcelModal_MyParcels,
-#utilPrevSolo-editParcelModal_MyParcels{
+#cobertSolo-editParcelModal_ApproveParcels,
+#utilAtSolo-editParcelModal_ApproveParcels,
+#utilPrevSolo-editParcelModal_ApproveParcels{
     margin-top: 2%;
 }
