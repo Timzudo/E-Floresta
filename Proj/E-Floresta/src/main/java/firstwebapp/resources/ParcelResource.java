@@ -804,9 +804,10 @@ public class ParcelResource {
         Transaction txn = datastore.newTransaction();
 
         try{
-            Entity request = Entity.newBuilder(requestKey).set("parcel_name", parcelName).build();
+            Entity request = Entity.newBuilder(requestKey).set("parcel_name", parcelName)
+                    .set("manager", data.managerName).build();
 
-            txn.add(request);
+            txn.put(request);
             txn.commit();
             LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
             return Response.ok("Manager added successfully.").build();
@@ -861,6 +862,78 @@ public class ParcelResource {
 
         return Response.ok(g.toJson(managerList)).build();
     }
+
+
+
+    @POST
+    @Path("/requested")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRequested(TokenData data) {
+        LOG.fine("Attempt to register parcel.");
+
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null || !tokenInfo.role.equals("C")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("ParcelRequest")
+                .setFilter(StructuredQuery.PropertyFilter.eq("manager", username))
+                .build();
+
+        QueryResults<Entity> parcelListQuery = datastore.run(query);
+
+        List<ParcelMiniature> parcelList = new ArrayList<>();
+
+
+        Entity u;
+
+        while(parcelListQuery.hasNext()){
+            u = parcelListQuery.next();
+
+            Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(u.getString("parcel_name"));
+            Entity parcel = datastore.get(parcelKey);
+
+            String parcelName = parcel.getString("parcel_name");
+            String owner = parcel.getString("parcel_owner");
+            String path = owner + "/" + owner + "_" + parcelName;
+            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+            byte[] coordinates = blob.getContent();
+            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+
+            //TODO
+            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+            parcelList.add(new ParcelMiniature(parcel.getString("parcel_name"),
+                    parcel.getString("parcel_distrito"),
+                    parcel.getString("parcel_concelho"),
+                    parcel.getString("parcel_freguesia"),
+                    parcel.getString("parcel_owner"),
+                    parcel.getString("parcel_manager"),
+                    parcel.getString("parcel_state").equals("APPROVED"),
+                    parcel.getLong("parcel_area"),
+                    parcel.getLong("parcel_perimeter"),
+                    url,
+                    coordinatesString));
+        };
+
+        return Response.ok(g.toJson(parcelList)).build();
+    }
+
+
+
     
     Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() { 
     	@Override public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) { 
