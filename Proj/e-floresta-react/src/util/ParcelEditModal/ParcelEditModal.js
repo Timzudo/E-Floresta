@@ -1,3 +1,5 @@
+import './ParcelEditModal.css'
+
 import {Button, ButtonGroup, Dropdown, Modal} from "react-bootstrap";
 import React from "react";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
@@ -33,6 +35,7 @@ const ParcelEditModal = (props) => {
     const [managerValue, setmanagerValue] = useState("");
 
     const [obj, setObj] = useState({});
+    const [info, setInfo] = useState({});
 
     const [managerList, setManager] = useState([]);
 
@@ -69,7 +72,7 @@ const ParcelEditModal = (props) => {
             return(
                 <label>
                     <b>Gerente:</b> {props.obj.manager}
-                    <Button id="rmv-manager_MyParcels" variant="danger" size="sm">Remover gerente</Button>
+                    <Button id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Remover gerente</Button>
                 </label>
             )
         } else {
@@ -77,11 +80,11 @@ const ParcelEditModal = (props) => {
                 <label>
                     <b>Gerente:</b>
 
-                    <select id="dropdown-basic" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
+                    <select id="dropdown-basic" className="managerButtons_ParcelEditModal" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
                         {managerList}
                     </select>
 
-                    <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" variant="success" size="sm">Adicionar gerente</Button>
+                    <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="success" size="sm">Adicionar gerente</Button>
 
                 </label>
             )
@@ -92,14 +95,14 @@ const ParcelEditModal = (props) => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    setObj(JSON.parse(xmlhttp.responseText));
+                    setInfo(JSON.parse(xmlhttp.responseText));
                 }
             }
         }
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo"); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -121,6 +124,38 @@ const ParcelEditModal = (props) => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
+
+    /**
+     * function changeParcelInfo() {
+     *         xmlhttp.onreadystatechange = function () {
+     *             if (xmlhttp.readyState == 4) {
+     *                 if (xmlhttp.status == 200) {
+     *                     alert("Informação alterada com sucesso.");
+     *                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+     *                     alert("Não tem permissões para efetuar esta operação.");
+     *                     localStorage.removeItem("token");
+     *                     window.location.href = "/";
+     *                 }
+     *                 else {
+     *                     alert("Não foi possível concluir a operação.");
+     *                 }
+     *             }
+     *         }
+     *
+     *         var myObj = {tipoSolo:document.getElementById("cobertSolo-editParcelModal_ApproveParcels").value,
+     *             usage:document.getElementById("utilAtSolo-editParcelModal_ApproveParcels").value,
+     *             oldUsage:document.getElementById("utilPrevSolo-editParcelModal_ApproveParcels").value,
+     *             token:localStorage.getItem('token')
+     *         };
+     *
+     *         var myJson = JSON.stringify(myObj);
+     *
+     *         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel//info");
+     *         xmlhttp.setRequestHeader("Content-Type", "application/json");
+     *         xmlhttp.send(myJson);
+     *     }
+     */
+
 
     return <>
         <Modal
@@ -164,24 +199,33 @@ const ParcelEditModal = (props) => {
                 <p></p>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Proprietário:</b> {props.obj.owner} </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"> {hasManager()} </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"><b>Concelho:</b> {props.obj.concelho} </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"><b>Distrito:</b> {props.obj.distrito} </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
+
                 <label className="labels-editParcelModal_ApproveParcels"><b>Perímetro da parcela:</b> {props.obj.perimeter}m </label><br/>
-                <label><b>Tipo de cobertura do solo:</b> {props.obj.tipoSolo}
-                    <input id="cobertSolo-editParcelModal_ApproveParcels" type="text" />
+
+                <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
+                    <input id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.tipoSolo} />
                 </label><br/>
-                <label><b>Utilização atual do solo:</b> {props.obj.soloUtil}
-                    <input id="utilAtSolo-editParcelModal_ApproveParcels" type="text" />
+
+                <label for="utilAtSolo-editParcelModal_ApproveParcels"><b>Utilização atual do solo:</b>
+                    <input id="utilAtSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.usage} />
                 </label><br/>
-                <label><b>Utilização prévia do solo:</b> {props.obj.oldSoloUtil}
-                    <input id="utilPrevSolo-editParcelModal_ApproveParcels" type="text" />
+
+                <label for="utilPrevSolo-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
+                    <input id="utilPrevSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.oldUsage} />
                 </label><br/>
                 <p></p>
 
-                <Button type="button" className="btn btn-success btn-sm" > Confirmar Alterações </Button>
+                <Button type="button" className="btn btn-success btn-sm"> Confirmar Alterações </Button>
 
             </Modal.Body>
         </Modal>
