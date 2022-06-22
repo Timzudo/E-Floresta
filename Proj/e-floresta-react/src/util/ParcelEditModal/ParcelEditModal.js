@@ -30,6 +30,8 @@ const modalContainerStyle = {
 
 const ParcelEditModal = (props) => {
 
+    const [managerValue, setmanagerValue] = useState("");
+
     const [obj, setObj] = useState({});
 
     const [managerList, setManager] = useState([]);
@@ -46,8 +48,9 @@ const ParcelEditModal = (props) => {
                     let arr = [];
 
                     for(let i = 0; i<managersObj.length; i++){
-                        arr.push(<Dropdown.Item value={managersObj[i]}>{managersObj[i]}</Dropdown.Item>)
+                        arr.push(<option value={managersObj[i]}>{managersObj[i]}</option>)
                     }
+                    setmanagerValue(managersObj[0]);
                     setManager(arr);
                 }
             }
@@ -74,17 +77,11 @@ const ParcelEditModal = (props) => {
                 <label>
                     <b>Gerente:</b>
 
-                    <Dropdown>
-                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                            Gerentes disponíveis
-                        </Dropdown.Toggle>
+                    <select id="dropdown-basic" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
+                        {managerList}
+                    </select>
 
-                        <Dropdown.Menu>
-                            {managerList}
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                    <Button id="add-manager_MyParcels" variant="success" size="sm">Adicionar gerente</Button>
+                    <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" variant="success" size="sm">Adicionar gerente</Button>
 
                 </label>
             )
@@ -103,6 +100,24 @@ const ParcelEditModal = (props) => {
         var myJson = JSON.stringify(myObj);
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo"); //TODO:alterar link
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
+
+    function sendManagerRequest() {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    alert("Pedido enviado.")
+                }
+            }
+        }
+        var myObj = {token:localStorage.getItem('token'),
+                        managerName:managerValue};
+        console.log(myObj);
+        var myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/sendRequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
