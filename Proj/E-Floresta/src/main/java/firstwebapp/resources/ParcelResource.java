@@ -365,10 +365,7 @@ public class ParcelResource {
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
-        //E onwer da parcela
-        if(!parcel.getString("parcel_owner").equals(username)){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+
         //Ja tem manager
         if(!parcel.getString("parcel_manager").equals("")){
             return Response.status(Response.Status.CONFLICT).build();
@@ -450,10 +447,6 @@ public class ParcelResource {
 
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
-        }
-
-        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username)){
-            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
 
@@ -746,6 +739,53 @@ public class ParcelResource {
             }
         }
     }
+
+
+    @POST
+    @Path("/rejectparcel/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response sendRequest(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(username);
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+
+            txn.delete(requestKey);
+            txn.commit();
+            return Response.ok().build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
+
+
 
     @POST
     @Path("/sendRequest/{parcelName}")
