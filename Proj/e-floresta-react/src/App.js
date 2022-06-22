@@ -15,7 +15,7 @@ import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import AllParcels from "./AllParcels/AllParcels";
 
-import Front_img from "./front_img.png";
+import Front_img from "./front_img.jpg";
 import React, { Component }  from 'react';
 import {Button} from "react-bootstrap";
 
