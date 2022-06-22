@@ -9,6 +9,7 @@ import React, { Component }  from 'react';
 const CreateAndLogin = () => {
   let xmlhttp = new XMLHttpRequest();
   let token;
+  let type = "personal";
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -21,10 +22,12 @@ const CreateAndLogin = () => {
       if (xmlhttp.readyState == 4) {
         if (xmlhttp.status == 200) {
           token = xmlhttp.responseText;
-          console.log("yau")
+          let obj = JSON.parse(atob(token.split(".")[1]));
           //console.log(atob(token));
+          console.log(obj);
           alert("Login efetuado com sucesso.");
           localStorage.setItem('token', token);
+          localStorage.setItem('role', obj["role"]);
           window.location.href = "/homepage";
         } else if(xmlhttp.status == 403) {
           alert("O username ou a password introduzidas estão erradas.");
@@ -36,8 +39,8 @@ const CreateAndLogin = () => {
       }
     }
 
-    var myObj = { password: document.getElementById("session-password").value };
-    var myJson = JSON.stringify(myObj);
+    let myObj = { password: document.getElementById("session-password").value };
+    let myJson = JSON.stringify(myObj);
 
     xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
@@ -58,10 +61,11 @@ const CreateAndLogin = () => {
       if(xmlhttp.readyState == 4) {
         if(xmlhttp.status == 200){
           token = xmlhttp.responseText;
-          console.log("yau")
-          //console.log(atob(token));
+          let obj = JSON.parse(atob(token.split(".")[1]));
+          console.log(obj);
           alert("Registo efetuado com sucesso.");
           localStorage.setItem('token', token);
+          localStorage.setItem('role', obj["role"]);
           window.location.href = "/homepage";
         } else if(xmlhttp.status == 400) {
           alert("Todos os campos obrigatórios devem ser preenchidos.");
@@ -73,16 +77,17 @@ const CreateAndLogin = () => {
       }
     }
 
-    var myObj = {password:document.getElementById("create-acc-pass").value,
+    let myObj = {password:document.getElementById("create-acc-pass").value,
                   confirmation:document.getElementById("create-acc-conf-pass").value,
                   email:document.getElementById("create-acc-email").value,
                   name:document.getElementById("create-acc-name").value,
                   phone:document.getElementById("create-acc-phone").value,
                   nif:document.getElementById("create-acc-nif").value};
 
-    var myJson = JSON.stringify(myObj);
+    let myJson = JSON.stringify(myObj);
 
-    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ document.getElementById("create-acc-type").value + "/" + document.getElementById("create-acc-user").value, true);
+    console.log(type);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ type + "/" + document.getElementById("create-acc-user").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -168,7 +173,7 @@ const CreateAndLogin = () => {
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Select required controlId="create-acc-type" >
+                <Form.Select required controlId="create-acc-type" onChange={(e) => {type = e.target.value}}>
                   <option value="personal">Conta Pessoal</option>
                   <option value="entity">Conta de Entidade</option>
                 </Form.Select>
