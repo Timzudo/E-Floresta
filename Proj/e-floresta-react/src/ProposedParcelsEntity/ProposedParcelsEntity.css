@@ -8,9 +8,8 @@ html, body{
 }
 
 .proposedParcelsEntityBody{
-    display: flex;
     background-color: #e0e3d5;
-    height: calc(100% - 60px);
+    min-height: calc(100% - 60px);
     width: 100%;
 }
 
@@ -21,14 +20,13 @@ html, body{
     padding-left: 10px;
     flex-wrap: wrap;
     gap: 15px;
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 .container_ProposedParcelsEntity .card{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 40%;
-    height: 75%;
 }
 
 .container_ProposedParcelsEntity .card:hover{
@@ -43,11 +41,10 @@ html, body{
 
 .parcel-card_ProposedParcelsEntity button{
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
     outline: 0;
     display: inline-block;
-    padding: 10px 25px;
-    color: black;
+    color: white;
     background-color: #B0C090;
     text-align: center;
     cursor: pointer;
@@ -67,11 +64,6 @@ html, body{
     background-color: #3E503A;
     color: white;
     border: solid 1px #32443A;
-}
-
-#confirm-parcel_ProposedParcelsEntity button:hover{
-    background-color: #32443A;
-    border-color: #32443A;
 }
 
 #reject-parcel_ProposedParcelsEntity{

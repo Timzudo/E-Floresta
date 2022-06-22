@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {Button, ButtonGroup, Card, Modal} from "react-bootstrap";
+import {Button, ButtonGroup, Card, Col, Modal, Row} from "react-bootstrap";
 import {GoogleMap, LoadScript} from "@react-google-maps/api";
 
 const center = {
@@ -60,17 +60,25 @@ const ProposedParcelsEntity = () => {
                             <Card.Body>
                                 <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
-                                    <label>Área: {obj[i].area}m²</label><br/>
-                                    <label>Perímetro: {obj[i].perimeter}m</label><br/>
-                                    <label>Freguesia: {obj[i].freguesia}</label><br/>
-                                    <label>Concelho: {obj[i].concelho}</label><br/>
-                                    <label>Distrito: {obj[i].distrito}</label><br/>
+                                    <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label><br/>
+                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label><br/>
+                                    <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label><br/>
                                 </Card.Text>
-                                <Button id="show-parcel-details_ProposedParcelsEntity" variant="primary" size="sm" onClick={() => handleShow()}>Ver detalhes</Button>
-                                <p></p>
-                                <Button id="confirm-parcel_ProposedParcelsEntity" variant="primary" size="sm">Aceitar gerenciamento</Button>
-                                <p></p>
-                                <Button id="reject-parcel_ProposedParcelsEntity" variant="primary" size="sm">Rejeitar gerenciamento</Button>
+                                <Row>
+                                    <Col>
+                                        <Button id="show-parcel-details_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow()}>Detalhes</Button>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Button id="confirm-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm">Aceitar</Button>
+                                    </Col>
+                                    <Col>
+                                        <Button id="reject-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
+                                    </Col>
+                                </Row>
                             </Card.Body>
                         </Card>);
                     }
