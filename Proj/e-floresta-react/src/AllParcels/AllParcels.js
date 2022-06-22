@@ -2,10 +2,10 @@ import "./AllParcels.css"
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
+import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {useEffect, useState} from "@types/react";
-import {Button, Card, Col, Row} from "react-bootstrap";
-import {LoadScript} from "@react-google-maps/api";
+import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
+import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
@@ -94,6 +94,22 @@ const AllParcels = () => {
             </LoadScript>
 
             <div className="allParcelsBody">
+                <div className="chooseFreguesia_AllParcels">
+
+                    <Dropdown>
+                        <Dropdown.Toggle variant="light" id="dropdown-basic">
+                            Freguesia
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu> //TODO:alterarDropdown
+                            <Dropdown.Item value="freguesia1">Freguesia1</Dropdown.Item>
+                            <Dropdown.Item value="freguesia2">Freguesia2</Dropdown.Item>
+                            <Dropdown.Item value="freguesia3">Freguesia3</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+
+                </div>
+
                 <div className="container_AllParcels">
                     {parcelList}
                 </div>
