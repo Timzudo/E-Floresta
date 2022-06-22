@@ -2,12 +2,10 @@ import  './LoggedHomepage.css'
 import TopBar from '../TopBar/TopBar.js'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Button, Carousel, Modal} from "react-bootstrap";
-import Image1 from './foto1-slider.jpg'
-import Image2 from './foto2-slider.jpg'
-import Image3 from './foto3-slider.jpg'
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import React, { Component }  from 'react';
 import CSVConverter from "../util/CSVConverter";
+import {Link} from "react-router-dom";
 
 const LoggedHomepage = () => {
 
@@ -18,33 +16,41 @@ const LoggedHomepage = () => {
 
             <CSVConverter/>
 
-            <div className="lgh_Carousel">
-                <Carousel>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100 h-80"
-                            src={Image1}
-                            alt="Primeira foto"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src={Image2}
-                            alt="Segunda foto"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <img
-                            className="d-block w-100"
-                            src={Image3}
-                            alt="Terceira foto"
-                        />
-                    </Carousel.Item>
-                </Carousel>
+            <div className="lgh_body">
+
+                <div className="hero-register_LoggedHome">
+                    <div className="hero-register-text_LoggedHome">
+                        <h1><b>Registe as suas parcelas</b></h1>
+                        No nosso site é possível registar as suas parcelas de forma rápida e fácil. <br/>
+                        Clique na aba "Registar Parcelas". Clique no mapa para desenhar o seu terreno e marcar <br/>
+                        os seus limites e registe as informações respetivas ao mesmo do lado direito, preenchendo <br/>
+                        e selecionando os campos exigidos. Por fim, clique em Submeter. <br/>
+                        <p></p>
+                        <Link to="/map">
+                            <Button id="buttonHero-register_LoggedHome" variant="dark">Registe já</Button>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="hero-myParcels_LoggedHome">
+                    <div className="hero-myParcels-text_LoggedHome">
+                        <h1><b>Verifique as suas parcelas</b></h1>
+                        O site E-Floresta permite-lhe guardar toda a informação sobre os seus terrenos num único sítio,<br/>
+                        para um acesso rápido e fácil. Clique na aba "Minhas Parcelas". O mapa do lado esquerdo contém <br/>
+                        marcados todos os seus terrenos registados. Do lado direito, existe um cartão para cada uma das <br/>
+                        propriedades registadas. Clique em "Detalhes" para ver todas as informações sobre uma parcela. <br/>
+                        Clique em "Editar" para alterar alguma informação sobre a parcela em causa. <br/>
+                        <p></p>
+                        <Link to="/my-parcels">
+                            <Button id="buttonHero-register_LoggedHome" variant="dark">Verifique as suas parcelas</Button>
+                        </Link>
+                    </div>
+                </div>
+
             </div>
 
         </>
     )
 }
+
 export default LoggedHomepage

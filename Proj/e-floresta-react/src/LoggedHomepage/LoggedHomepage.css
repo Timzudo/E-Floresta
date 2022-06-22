@@ -1,5 +1,82 @@
-.lgh_Carousel{
-    height: 80%;
-    width: 80%;
-    margin: 50px;
+.hero-register_LoggedHome{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background1.jpg");
+    height:500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
 }
+
+.hero-register-text_LoggedHome{
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-98%, -50%);
+    color: white;
+}
+
+.hero-register-text_LoggedHome h1{
+    font-size: 60px;
+}
+
+.hero-register-text_LoggedHome button{
+    border: none;
+    border-radius: 0px;
+    outline: 0;
+    display: inline-block;
+    padding: 10px 25px;
+    color: white;
+    background-color: #32443A;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hero-register-text_LoggedHome button:hover{
+    background-color: #dddddd;
+    color: black;
+}
+
+
+
+
+
+.hero-myParcels_LoggedHome{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background2.jpg");
+    height:500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.hero-myParcels-text_LoggedHome{
+    text-align: right;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-5%, -50%);
+    color: white;
+}
+
+.hero-myParcels-text_LoggedHome h1{
+    font-size: 60px;
+}
+
+.hero-myParcels-text_LoggedHome button{
+    border: none;
+    border-radius: 0px;
+    outline: 0;
+    display: inline-block;
+    padding: 10px 25px;
+    color: black;
+    background-color: #dddddd;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hero-myParcels-text_LoggedHome button:hover{
+    background-color: #32443A;
+    color: white;
+}
+
