@@ -45,6 +45,8 @@ const AllParcels = () => {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
+
+
                         arr.push(<Card className="parcel-card_AllParcels" style={{ width: '15rem',cursor: "pointer"}}>
                             <Card.Img className="parcel_picture_AllParcels" variant="top" src={obj[i].photoURL} />
                             <Card.Body>

@@ -5,7 +5,7 @@ import TopBar from "../TopBar/TopBar";
 import {Badge, Button, ButtonGroup, Card, Col, Dropdown, Modal, Row} from "react-bootstrap";
 import {useEffect, useState} from 'react'
 import React from 'react';
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
+import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
@@ -19,6 +19,19 @@ const center = {
     lng: -9.205971
 };
 
+const options = {
+    fillColor: "Khaki",
+    fillOpacity: 0.3,
+    strokeColor: "DarkOrange",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1
+}
+
 const modalContainerStyle = {
     width: '72vw',
     height: '45vh'
@@ -27,6 +40,8 @@ const modalContainerStyle = {
 
 const MyParcels = () => {
     const [obj, setObj] = useState({});
+
+    const [paths, setPaths] = useState([]);
 
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
@@ -51,6 +66,7 @@ const MyParcels = () => {
     let xmlhttp = new XMLHttpRequest();
 
     let arr = [];
+    let pathsArr = [];
     let verified = false;
 
     function isParcelVerified(verified) {
@@ -141,10 +157,17 @@ const MyParcels = () => {
                                         </Col>
                                     </Row>
                                 </Card.Body>
-
                         </Card>);
+
+                        pathsArr.push(
+                            <Polygon
+                                paths={obj[i].coordinates}
+                                options={options}
+                            />
+                        );
                     }
                     setPList(arr);
+                    setPaths(pathsArr);
                 }
             }
         }
@@ -156,6 +179,7 @@ const MyParcels = () => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     })
+
 
     return(
         <>
@@ -176,6 +200,7 @@ const MyParcels = () => {
                         zoom={10}
                         tilt={0}
                     >
+                        {paths}
                     </GoogleMap>
 
                     <div className="body_MyParcels">
@@ -186,9 +211,6 @@ const MyParcels = () => {
                 </div>
 
             </LoadScript>
-
-
-
 
         </>
     )

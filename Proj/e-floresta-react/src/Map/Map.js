@@ -143,7 +143,6 @@ const Map = () => {
             }
         }
 
-
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
         f.append('concelho', document.getElementById("formConcelhoDropdown").value);
