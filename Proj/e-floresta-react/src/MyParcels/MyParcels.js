@@ -161,7 +161,7 @@ const MyParcels = () => {
 
                         pathsArr.push(
                             <Polygon
-                                paths={obj[i].coordinates}
+                                paths={JSON.parse(obj[i].coordinates)}
                                 options={options}
                             />
                         );

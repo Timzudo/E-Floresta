@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -327,53 +330,72 @@ void registerRequest(String username, String email, String name,
 }
 
 class _ParcelListState extends State<ParcelList> {
-
-   Map<String, dynamic> parcelList;
+  List<dynamic> parcelList = [];
 
   @override
   void initState() {
+    getOwned().whenComplete(() => setState(() {}));
     super.initState();
-    parcelList = getOwned("username") as Map<String, dynamic>;
+  }
+
+  Future<List<dynamic>> getOwned() async {
+    final response = await http.post(
+      Uri.parse(
+          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'token':
+            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aW0iLCJyb2xlIjoiQyIsImlzcyI6IkUtRmxvcmVzdGEiLCJleHAiOjE2NTY4OTk5MDN9.SLxovfWVKcMAX5IiskiAlT2xdT_Y4i9tMrfSjjN9WyI'
+      }),
+    );
+
+    dynamic map;
+    if (response.statusCode == 200) {
+      map = jsonDecode(utf8.decode(response.bodyBytes));
+      parcelList = map;
+      print(jsonDecode(map[1]['coordinates'])[0]['lat']);
+    } else {
+      map = response.statusCode;
+    }
+
+    return map;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("asd")),
+        appBar: AppBar(
+          title: const Text("asd"),
+          automaticallyImplyLeading: false,
+        ),
         body: ListView.builder(
             padding: const EdgeInsets.all(16.0),
-            itemCount: parcelList.isNotEmpty ? parcelList.length : 0,
+            itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
             itemBuilder: (context, i) {
+              if (i.isOdd) return const Divider();
+              final index = i ~/ 2;
               return ListTile(
-                title: Text(parcelList[i]['name']),
+                leading: const Icon(Icons.landscape_outlined),
+                title: Text(parcelList[index]['name']),
                 tileColor: Colors.green,
+                textColor: Colors.white,
+                subtitle: Text(parcelList[index]['freguesia']),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Map(
+                            lat: 39.137251,
+                            lng: -8.378835,
+                            coordsList:
+                                jsonDecode(parcelList[index]['coordinates']))),
+                  );
+                },
               );
             }));
   }
-}
-
-Future<Map<String, dynamic>?> getOwned(String username) async {
-  final response = await http.post(
-    Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned/'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'token':
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aW0iLCJyb2xlIjoiQyIsImlzcyI6IkUtRmxvcmVzdGEiLCJleHAiOjE2NTY4OTk5MDN9.SLxovfWVKcMAX5IiskiAlT2xdT_Y4i9tMrfSjjN9WyI'
-    }),
-  );
-
-  Map<String, dynamic>? map;
-  if (response.statusCode == 200) {
-    map = jsonDecode(response.body);
-  }
-  else{
-    map = null;
-  }
-
-  return map;
 }
 
 class ParcelList extends StatefulWidget {
@@ -381,4 +403,84 @@ class ParcelList extends StatefulWidget {
 
   @override
   State<ParcelList> createState() => _ParcelListState();
+}
+
+class Map extends StatefulWidget {
+  final double lat;
+  final double lng;
+  final List<dynamic> coordsList;
+
+  const Map(
+      {Key? key,
+      required this.lat,
+      required this.lng,
+      required this.coordsList})
+      : super(key: key);
+
+  @override
+  _MapState createState() => _MapState();
+}
+
+class _MapState extends State<Map> {
+  late GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  Set<Polygon> myPolygon() {
+    List<LatLng> polygonCoords = [];
+
+    for (int i = 0; i < widget.coordsList.length; i++) {
+      polygonCoords.add(
+          LatLng(widget.coordsList[i]['lat'], widget.coordsList[i]['lng']));
+    }
+
+    Set<Polygon> polygonSet = {};
+    polygonSet.add(Polygon(
+        polygonId: const PolygonId('test'),
+        points: polygonCoords,
+        strokeWidth: 2,
+        strokeColor: Colors.blueAccent,
+        fillColor: Colors.blue.withOpacity(0.4)));
+
+    return polygonSet;
+  }
+
+  MapType _currentMapType = MapType.normal;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Maps Sample App'),
+          backgroundColor: Colors.green[700],
+          automaticallyImplyLeading: true,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {
+            setState(() {
+              _currentMapType = (_currentMapType == MapType.normal)
+                  ? MapType.satellite
+                  : MapType.normal;
+            })
+          },
+          heroTag: null,
+          child: const Icon(Icons.layers),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        body: GoogleMap(
+          mapType: _currentMapType,
+          polygons: myPolygon(),
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(
+                widget.coordsList[0]['lat'], widget.coordsList[0]['lng']),
+            zoom: 16.0,
+          ),
+        ),
+      ),
+    );
+  }
 }
