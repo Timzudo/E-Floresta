@@ -96,14 +96,16 @@ const ChangeProfile = () => {
                     <p className="label" > E-mail: {email} </p>
                 </div>
                 <div id="name_ChangeProfile">
-                    Nome Completo: <input className="label" id="change-complete-name" type="text" value={name}/>
+                    <label className="label"> Nome Completo: </label>
+                    <input id="change-complete-name" type="text" value={name}/>
                 </div>
                 <div id="phone_ChangeProfile">
-                    Telemóvel/Telefone: <input className="label" id="change-phone" type="number" value={phone} maxLength="9"/>
+                    <label className="label"> Telemóvel/Telefone: </label>
+                    <input id="change-phone" type="number" value={phone} maxLength="9"/>
                 </div>
                 <div id="nif_ChangeProfile">
-                    <label for="change-nif">NIF:</label>
-                    <input className="label" id="change-nif" type="number" value={nif} maxLength="9"/>
+                    <label className="label" for="change-nif">NIF:</label>
+                    <input id="change-nif" type="number" value={nif} maxLength="9"/>
                 </div>
                 <div id="type_ChangeProfile">
                     <p className="label"> Tipo de utilizador: {type} </p>
