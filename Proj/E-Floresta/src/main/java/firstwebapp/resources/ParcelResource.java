@@ -340,7 +340,7 @@ public class ParcelResource {
     @POST
     @Path("/addmanager/{parcelName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addManager(@PathParam("parcelName") String parcelName, ManagerData data) {
+    public Response addManager(@PathParam("parcelName") String parcelName, TokenData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
@@ -374,7 +374,7 @@ public class ParcelResource {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
-        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(data.managerName);
+        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(username);
         Entity manager = datastore.get(managerKey);
         //Manager existe
         if(manager == null){
@@ -385,7 +385,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(data.managerName);
+        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(username);
         Entity request = datastore.get(requestKey);
 
         if(request == null){
@@ -404,8 +404,8 @@ public class ParcelResource {
                     .set("parcel_distrito", parcel.getString("parcel_distrito"))
                     .set("parcel_concelho", parcel.getString("parcel_concelho"))
                     .set("parcel_freguesia", parcel.getString("parcel_freguesia"))
-                    .set("parcel_owner", username)
-                    .set("parcel_manager", data.managerName)
+                    .set("parcel_owner", parcel.getString("parcel_owner"))
+                    .set("parcel_manager", username)
                     .set("parcel_area", parcel.getLong("parcel_area"))
                     .set("parcel_perimeter", parcel.getLong("parcel_perimeter"))
                     .set("parcel_state", "PENDING")
@@ -416,7 +416,6 @@ public class ParcelResource {
             txn.delete(requestKey);
             txn.update(parcel);
             txn.commit();
-            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
             return Response.ok("Manager added successfully.").build();
         }
         finally {
@@ -700,7 +699,7 @@ public class ParcelResource {
 
     @POST
     @Path("/modify/{parcelName}/info")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response modifyParcelInfo(@PathParam("parcelName") String parcelName, ParcelData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 

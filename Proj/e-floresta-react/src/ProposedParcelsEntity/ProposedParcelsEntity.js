@@ -49,6 +49,24 @@ const ProposedParcelsEntity = () => {
         xmlhttp.send(myJson);
     }
 
+    /*function addManager(manager) {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    const obj = JSON.parse(xmlhttp.responseText);
+                    setObj(obj);
+                }
+            }
+        }
+        let myObj = {token:localStorage.getItem('token'),
+        managerName: };
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo"); //TODO:alterar link
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }~*/
+
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
