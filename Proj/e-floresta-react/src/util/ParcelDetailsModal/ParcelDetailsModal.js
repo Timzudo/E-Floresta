@@ -1,6 +1,8 @@
 import {Modal} from "react-bootstrap";
 import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import {useState} from "react";
+import {render} from "react-dom";
 
 
 const center = {
@@ -28,6 +30,8 @@ const modalContainerStyle = {
 
 const ParcelDetailsModal = (props) => {
 
+    const [obj, setObj] = useState({});
+
     const handleClose = () => props.setShow(false);
 
     let xmlhttp = new XMLHttpRequest();
@@ -36,7 +40,7 @@ const ParcelDetailsModal = (props) => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
+                    setObj(JSON.parse(xmlhttp.responseText));
                 }
             }
         }
@@ -47,6 +51,9 @@ const ParcelDetailsModal = (props) => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
+
+    console.log(props.obj.coordinates);
+    console.log(props.obj);
 
     return <>
         <Modal
@@ -69,8 +76,8 @@ const ParcelDetailsModal = (props) => {
                 tilt={0}
             >
                 <Polygon
-                    paths={JSON.parse(props.obj.coordinates)}
-                    option={options}
+                    paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
+                    options={options}
                 />
             </GoogleMap>
 
