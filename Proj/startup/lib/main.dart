@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:location/location.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -52,13 +54,16 @@ class LoginScreen extends StatelessWidget {
           ],
         ),
       ),
-      /*body: Center(
-        child: FractionallySizedBox(
-          widthFactor: 0.9,
-          heightFactor: 0.8,
-          child: LoginForm(),
-        ),
-      ),*/
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const OfflineMap()),
+          )
+        },
+        heroTag: null,
+        child: const Icon(Icons.map),
+      ),
       body: TabBarView(
         children: <Widget>[
           Center(
@@ -207,6 +212,7 @@ void loginRequest(
       child: const Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
+        Navigator.of(context).pop();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ParcelList()),
@@ -279,6 +285,7 @@ void registerRequest(String username, String email, String name,
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
         Navigator.push(
           context,
@@ -367,7 +374,7 @@ class _ParcelListState extends State<ParcelList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("asd"),
+          title: const Text("Lista de parcelas"),
           automaticallyImplyLeading: false,
         ),
         body: ListView.builder(
@@ -394,7 +401,16 @@ class _ParcelListState extends State<ParcelList> {
                   );
                 },
               );
-            }));
+            }),floatingActionButton: FloatingActionButton(
+      onPressed: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OfflineMap()),
+        )
+      },
+      heroTag: null,
+      child: const Icon(Icons.map),
+    ));
   }
 }
 
@@ -454,7 +470,7 @@ class _MapState extends State<Map> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Maps Sample App'),
+          title: const Text('Visualizador de parcelas'),
           backgroundColor: Colors.green[700],
           automaticallyImplyLeading: true,
         ),
@@ -471,6 +487,7 @@ class _MapState extends State<Map> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         body: GoogleMap(
+          myLocationEnabled: true,
           mapType: _currentMapType,
           polygons: myPolygon(),
           onMapCreated: _onMapCreated,
@@ -480,6 +497,161 @@ class _MapState extends State<Map> {
             zoom: 16.0,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class OfflineMap extends StatefulWidget {
+  /*final LatLng center;*/
+  const OfflineMap({Key? key /*, required this.center*/}) : super(key: key);
+
+  @override
+  _OfflineMapState createState() => _OfflineMapState();
+}
+
+class _OfflineMapState extends State<OfflineMap> {
+  late GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  List<LatLng> pointList = [];
+  LatLng _lastMapPosition = const LatLng(38.662295, -9.207663);
+  MapType _currentMapType = MapType.normal;
+
+  void _onCameraMove(CameraPosition position) {
+    _lastMapPosition = position.target;
+  }
+
+  Set<Marker> getMarkers() {
+    Set<Marker> markers = {};
+    for (int i = 0; i < pointList.length; i++) {
+      markers.add(
+          Marker(markerId: MarkerId(i.toString()), position: pointList[i]));
+    }
+    return markers;
+  }
+
+  void addPoint() {
+    pointList.add(_lastMapPosition);
+    setState(() {
+      _currentMapType = _currentMapType;
+    });
+  }
+
+  void removePoint() {
+    pointList.removeLast();
+    setState(() {
+      _currentMapType = _currentMapType;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+          appBar: AppBar(
+            title: const Text('Mapa offline'),
+            backgroundColor: Colors.green[700],
+            automaticallyImplyLeading: true,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => {
+              setState(() {
+                _currentMapType = (_currentMapType == MapType.normal)
+                    ? MapType.satellite
+                    : MapType.normal;
+              })
+            },
+            heroTag: null,
+            child: const Icon(Icons.layers),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          body: Stack(
+            children: [
+              GoogleMap(
+                myLocationEnabled: true,
+                mapType: _currentMapType,
+                markers: getMarkers(),
+                polygons: {
+                  Polygon(
+                      polygonId: const PolygonId('test'),
+                      points: pointList.isNotEmpty
+                          ? pointList
+                          : [const LatLng(38.802711, -9.263537)],
+                      strokeWidth: 2,
+                      strokeColor: Colors.blueAccent,
+                      fillColor: Colors.blue.withOpacity(0.4))
+                },
+                onMapCreated: _onMapCreated,
+                onCameraMove: _onCameraMove,
+                initialCameraPosition: CameraPosition(
+                  target: _lastMapPosition,
+                  zoom: 14.0,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 114.0, horizontal: 4.0),
+                child: IconButton(
+                    iconSize: 40.0,
+                    onPressed: addPoint,
+                    icon: const Icon(Icons.add_box_rounded)),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 174.0, horizontal: 4.0),
+                child: IconButton(
+                    iconSize: 40.0,
+                    onPressed: removePoint,
+                    icon: const Icon(Icons.assignment_return_rounded)),
+              ),
+              const Center(child: Icon(Icons.adjust)),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
+                child: IconButton(
+                    iconSize: 40.0,
+                    onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShowCoords(pointList)))
+                        },
+                    icon: const Icon(Icons.save)),
+              )
+            ],
+          )),
+    );
+  }
+}
+
+class ShowCoords extends StatelessWidget {
+  const ShowCoords(this.coords);
+
+  final List<LatLng> coords;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Lista de pontos"),
+      ),
+      body: ListView.builder(
+        itemCount: coords.isNotEmpty ? coords.length * 2 : 0,
+        itemBuilder: (context, i) {
+          if (i.isOdd) return const Divider();
+          final index = i ~/ 2;
+          return ListTile(
+            leading: const Icon(Icons.landscape_outlined),
+            title: Text((index + 1).toString()),
+            tileColor: Colors.green,
+            textColor: Colors.white,
+            subtitle: Text("Lat: ${coords[index].latitude} Lng: ${coords[index].longitude}"),
+          );
+        },
       ),
     );
   }
