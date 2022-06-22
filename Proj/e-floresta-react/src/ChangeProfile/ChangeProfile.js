@@ -5,12 +5,50 @@ import {Link} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Button} from "react-bootstrap";
 import React, { Component }  from 'react';
+import {useState} from "react";
 
 const ChangeProfile = () => {
 
-    let username, email, name, phone, nif, type
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [nif, setNif] = useState("");
+    const [type, setType] = useState("");
 
     let xmlhttp = new XMLHttpRequest();
+
+    (function getValues() {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    const obj = JSON.parse(xmlhttp.responseText);
+                    setUsername(obj.username);
+                    setEmail(obj.email)
+                    setName(obj.name);
+                    setPhone(obj.phone);
+                    setNif(obj.nif);
+                    setType(obj.type);
+                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                    alert("Não tem permissões para efetuar esta operação.");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+                else {
+                    alert("Não foi possível obter informação.");
+                }
+            }
+        }
+
+        var myObj = {token:localStorage.getItem('token')};
+        var myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    })()
+
+
 
     function changeProfile() {
 
@@ -52,22 +90,23 @@ const ChangeProfile = () => {
                 <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
                 <p></p>
                 <div id="username_ChangeProfile">
-                    Username: {username} <p className="label" />
+                    <p className="label" > Username: {username} </p>
                 </div>
                 <div id="email_ChangeProfile">
-                    E-mail: {email} <p className="label" />
+                    <p className="label" > E-mail: {email} </p>
                 </div>
                 <div id="name_ChangeProfile">
-                    Nome Completo: {name} <input className="label" id="change-complete-name" type="text" />
+                    Nome Completo: <input className="label" id="change-complete-name" type="text" value={name}/>
                 </div>
                 <div id="phone_ChangeProfile">
-                    Telemóvel/Telefone: {phone} <input className="label" id="change-phone" type="number" maxLength="9"/>
+                    Telemóvel/Telefone: <input className="label" id="change-phone" type="number" value={phone} maxLength="9"/>
                 </div>
                 <div id="nif_ChangeProfile">
-                    NIF: {nif} <input className="label" id="change-nif" type="number" maxLength="9"/>
+                    <label for="change-nif">NIF:</label>
+                    <input className="label" id="change-nif" type="number" value={nif} maxLength="9"/>
                 </div>
                 <div id="type_ChangeProfile">
-                    <p className="label"></p> Tipo de utilizador: {type}
+                    <p className="label"> Tipo de utilizador: {type} </p>
                 </div>
 
                 <div className="btn-group" id="confirmAndCancel_ChangeProfile">

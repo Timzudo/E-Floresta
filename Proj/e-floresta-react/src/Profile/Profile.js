@@ -31,8 +31,13 @@ const Profile = () => {
                     setNif(obj.nif);
                     setType(obj.type);
                     setState(obj.state);
-                    console.log("yau");
-                } else {
+                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                    alert("Não tem permissões para efetuar esta operação.");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+                else {
+                    alert("Não foi possível obter informação.");
                 }
             }
         }
