@@ -21,7 +21,7 @@ const center = {
 
 const options = {
     fillColor: "Khaki",
-    fillOpacity: 0.3,
+    fillOpacity: 0.1,
     strokeColor: "DarkOrange",
     strokeOpacity: 1,
     strokeWeight: 2,

@@ -32,9 +32,34 @@ const ParcelEditModal = (props) => {
 
     const [obj, setObj] = useState({});
 
+    const [managerList, setManager] = useState([]);
+
     const handleEditClose = () => props.setShow(false);
 
     let xmlhttp = new XMLHttpRequest();
+
+    (function loadManagers() {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    const managersObj = JSON.parse(xmlhttp.responseText);
+                    let arr = [];
+
+                    for(let i = 0; i<managersObj.length; i++){
+                        arr.push(<Dropdown.Item value={managersObj[i]}>{managersObj[i]}</Dropdown.Item>)
+                    }
+                    setManager(arr);
+                }
+            }
+        }
+
+        let myObj = {token:localStorage.getItem('token')};
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managers");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    })()
 
     function hasManager() {
         if(props.obj.manager != "") {
@@ -54,10 +79,8 @@ const ParcelEditModal = (props) => {
                             Gerentes disponíveis
                         </Dropdown.Toggle>
 
-                        <Dropdown.Menu> //TODO:alterarDropdown
-                            <Dropdown.Item value="gerente1">Gerente1</Dropdown.Item>
-                            <Dropdown.Item value="gerente2">Gerente2</Dropdown.Item>
-                            <Dropdown.Item value="gerente3">Gerente3</Dropdown.Item>
+                        <Dropdown.Menu>
+                            {managerList}
                         </Dropdown.Menu>
                     </Dropdown>
 

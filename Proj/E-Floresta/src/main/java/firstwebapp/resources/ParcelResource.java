@@ -804,6 +804,46 @@ public class ParcelResource {
     }
 
 
+    @POST
+    @Path("/managers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getManagerds(TokenData tokenData) {
+        LOG.fine("Attempt to register parcel.");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("User")
+                .setFilter(StructuredQuery.PropertyFilter.eq("user_role", "C"))
+                .build();
+
+        QueryResults<Entity> managerListQuery = datastore.run(query);
+
+        List<String> managerList = new ArrayList<>();
+
+
+        Entity u;
+
+        while(managerListQuery.hasNext()){
+            u = managerListQuery.next();
+
+            managerList.add(u.getKey().getName());
+        }
+
+        return Response.ok(g.toJson(managerList)).build();
+    }
 }
 
 
