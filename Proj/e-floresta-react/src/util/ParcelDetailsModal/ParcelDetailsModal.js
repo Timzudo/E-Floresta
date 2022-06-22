@@ -1,11 +1,25 @@
 import {Modal} from "react-bootstrap";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import React from 'react';
+import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+
 
 const center = {
     lat: 38.660677,
     lng: -9.205971
 };
+
+const options = {
+    fillColor: "Khaki",
+    fillOpacity: 0.3,
+    strokeColor: "DarkOrange",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1
+}
 
 const modalContainerStyle = {
     width: '100%',
@@ -54,6 +68,10 @@ const ParcelDetailsModal = (props) => {
                 zoom={10}
                 tilt={0}
             >
+                <Polygon
+                    paths={JSON.parse(props.obj.coordinates)}
+                    option={options}
+                />
             </GoogleMap>
 
             </Modal.Body>
