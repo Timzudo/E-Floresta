@@ -824,8 +824,9 @@ public class ParcelResource {
     @Path("/managers")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getManagerds(TokenData tokenData) {
+    public Response getManagers(TokenData tokenData) {
         LOG.fine("Attempt to register parcel.");
+
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
         if(tokenInfo == null){
