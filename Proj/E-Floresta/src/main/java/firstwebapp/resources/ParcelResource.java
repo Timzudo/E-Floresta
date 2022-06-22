@@ -17,7 +17,23 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -844,6 +860,203 @@ public class ParcelResource {
 
         return Response.ok(g.toJson(managerList)).build();
     }
+    
+    Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() { 
+    	@Override public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) { 
+    		int v1 = e1.getValue(); 
+    		int v2 = e2.getValue(); 
+    		int res = 0;
+    		
+    		if(v2 < v1)
+    			res = -1;
+    		else if(v2 > v1)
+    			res = 1;
+    		
+    		return res;
+    	} 
+    };
+    
+    Comparator<Entry<String, Long>> valueComparatorLong = new Comparator<Entry<String,Long>>() { 
+    	@Override public int compare(Entry<String, Long> e1, Entry<String, Long> e2) { 
+    		Long v1 = e1.getValue(); 
+    		Long v2 = e2.getValue(); 
+    		int res = 0;
+    		
+    		if(v2 < v1)
+    			res = -1;
+    		else if(v2 > v1)
+    			res = 1;
+    		
+    		return res;
+    	} 
+    };
+	
+    // method to get list of users and the number of parcels they own, for use in ranking
+    
+    @POST
+    @Path("/ranking/byOwned")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getRankingByOwned( TokenData data ) {
+        LOG.fine("Attempt to get users ranking by number of owned parcels: ");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .build();
+
+        QueryResults<Entity> allParcels = datastore.run(query);
+
+        // ownerList -> mapa do tipo < OwnerName, nOfParcelsOwned > para efetuar o ranking
+        
+        Map<String,Integer> ownerList = new HashMap<String,Integer>();
+
+        allParcels.forEachRemaining( p -> {
+
+            String parcelName = p.getString("parcel_name");
+            String owner = p.getString("parcel_owner");
+            
+            if(ownerList.containsKey(owner)) {
+            	int count = ownerList.get(owner);
+            	count += 1;
+            	ownerList.put(owner, count);
+            }
+            else {
+            	ownerList.put(owner, 1);
+            }
+            
+        });
+        
+        // sorting users, by number of owned parcels
+        
+        Set<Entry<String,Integer>> entries = ownerList.entrySet();
+        List<Entry<String,Integer>> ownerListSorted = new ArrayList<Entry<String,Integer>>(entries);
+        Collections.sort(ownerListSorted, valueComparatorInt);
+        
+        return Response.ok(g.toJson(ownerListSorted)).build();
+    }
+    
+    // method to get list of users and the number of parcels they manage, for use in ranking
+    
+    @POST
+    @Path("/ranking/byManaged")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getRankingByManaged( TokenData data ) {
+        LOG.fine("Attempt to get users ranking by number of parcels they manage: ");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .build();
+
+        QueryResults<Entity> allParcels = datastore.run(query);
+
+        // ownerList -> mapa do tipo < ManagerName, nOfParcelsManaged > para efetuar o ranking
+        
+        Map<String,Integer> managerList = new HashMap<String,Integer>();
+
+        allParcels.forEachRemaining( p -> {
+
+            String parcelName = p.getString("parcel_name");
+            String manager = p.getString("parcel_manager");
+            
+            if(managerList.containsKey(manager)) {
+            	int count = managerList.get(manager);
+            	count += 1;
+            	managerList.put(manager, count);
+            }
+            else {
+            	managerList.put(manager, 1);
+            }
+            
+        });
+
+        // sorting users, by number of managed parcels
+        
+        Set<Entry<String,Integer>> entries = managerList.entrySet();
+        List<Entry<String,Integer>> managerListSorted = new ArrayList<Entry<String,Integer>>(entries);
+        Collections.sort(managerListSorted, valueComparatorInt);
+        
+        return Response.ok(g.toJson(managerListSorted)).build();
+    }
+    
+    // method to get list of users and their total owned area, for use in ranking
+    
+    @POST
+    @Path("/ranking/byArea")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getRankingByArea( TokenData data ) {
+        LOG.fine("Attempt to get users ranking by total area of all owned parcels: ");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .build();
+
+        QueryResults<Entity> allParcels = datastore.run(query);
+
+        // ownerList -> mapa do tipo < OwnerName, totalAreaOwned > para efetuar o ranking
+        
+        Map<String,Long> listByArea = new HashMap<String,Long>();
+
+        allParcels.forEachRemaining( p -> {
+
+            String parcelName = p.getString("parcel_name");
+            String owner = p.getString("parcel_owner");
+            Long area = p.getLong("parcel_area");
+            
+            if(listByArea.containsKey(owner)) {
+            	Long totalArea = listByArea.get(owner);
+            	totalArea += area;
+            	listByArea.put(owner, totalArea);
+            }
+            else {
+            	listByArea.put(owner, area);
+            }
+            
+        });
+        
+        // sort users in order of total owned area
+        
+        Set<Entry<String,Long>> entries = listByArea.entrySet();
+        List<Entry<String,Long>> areaListSorted = new ArrayList<Entry<String,Long>>(entries);
+        Collections.sort(areaListSorted, valueComparatorLong);
+
+        return Response.ok(g.toJson(areaListSorted)).build();
+    }
+    
 }
 
 
