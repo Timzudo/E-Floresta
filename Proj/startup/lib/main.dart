@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'package:location/location.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -207,11 +207,13 @@ void loginRequest(
   );
 
   if (response.statusCode == 200) {
+    final prefs = await SharedPreferences.getInstance();
+    String token = response.body;
+    await prefs.setString('token', token);
     // set up the button
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
-        Navigator.of(context).pop();
         Navigator.of(context).pop();
         Navigator.push(
           context,
@@ -281,11 +283,13 @@ void registerRequest(String username, String email, String name,
   );
 
   if (response.statusCode == 200) {
+    final prefs = await SharedPreferences.getInstance();
+    String token = response.body;
+    await prefs.setString('token', token);
     // set up the button
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
-        Navigator.of(context).pop();
         Navigator.of(context).pop();
         Navigator.push(
           context,
@@ -346,28 +350,32 @@ class _ParcelListState extends State<ParcelList> {
   }
 
   Future<List<dynamic>> getOwned() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? "";
+
     final response = await http.post(
       Uri.parse(
           'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'token':
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aW0iLCJyb2xlIjoiQyIsImlzcyI6IkUtRmxvcmVzdGEiLCJleHAiOjE2NTY4OTk5MDN9.SLxovfWVKcMAX5IiskiAlT2xdT_Y4i9tMrfSjjN9WyI'
-      }),
+      body: jsonEncode(<String, String>{'token': token}),
     );
 
     dynamic map;
     if (response.statusCode == 200) {
       map = jsonDecode(utf8.decode(response.bodyBytes));
       parcelList = map;
-      print(jsonDecode(map[1]['coordinates'])[0]['lat']);
     } else {
       map = response.statusCode;
     }
 
     return map;
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
   }
 
   @override
@@ -376,6 +384,14 @@ class _ParcelListState extends State<ParcelList> {
         appBar: AppBar(
           title: const Text("Lista de parcelas"),
           automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  logout();
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.exit_to_app_rounded))
+          ],
         ),
         body: ListView.builder(
             padding: const EdgeInsets.all(16.0),
@@ -401,16 +417,17 @@ class _ParcelListState extends State<ParcelList> {
                   );
                 },
               );
-            }),floatingActionButton: FloatingActionButton(
-      onPressed: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const OfflineMap()),
-        )
-      },
-      heroTag: null,
-      child: const Icon(Icons.map),
-    ));
+            }),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const OfflineMap()),
+            )
+          },
+          heroTag: null,
+          child: const Icon(Icons.map),
+        ));
   }
 }
 
@@ -644,12 +661,16 @@ class ShowCoords extends StatelessWidget {
         itemBuilder: (context, i) {
           if (i.isOdd) return const Divider();
           final index = i ~/ 2;
+          double lat =
+              double.parse((coords[index].latitude).toStringAsFixed(6));
+          double lng =
+              double.parse((coords[index].longitude).toStringAsFixed(6));
           return ListTile(
             leading: const Icon(Icons.landscape_outlined),
             title: Text((index + 1).toString()),
             tileColor: Colors.green,
             textColor: Colors.white,
-            subtitle: Text("Lat: ${coords[index].latitude} Lng: ${coords[index].longitude}"),
+            subtitle: Text("Lat: $lat \nLng: $lng"),
           );
         },
       ),
