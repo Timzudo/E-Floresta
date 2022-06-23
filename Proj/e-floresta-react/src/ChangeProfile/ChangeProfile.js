@@ -1,14 +1,14 @@
 import  './ChangeProfile.css'
 import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Button} from "react-bootstrap";
 import React, { Component }  from 'react';
 import {useState} from "react";
 
 const ChangeProfile = () => {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -32,7 +32,7 @@ const ChangeProfile = () => {
                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
-                    window.location.href = "/";
+                    navigate("/");
                 }
                 else {
                     alert("Não foi possível obter informação.");
@@ -56,11 +56,11 @@ const ChangeProfile = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Informação alterada com sucesso.");
-                    window.location.href = "/profile";
+                    navigate("/profile");
                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
-                    window.location.href = "/";
+                    navigate("/");
                 }
                 else {
                     alert("Não foi possível obter informação.");

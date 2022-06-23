@@ -7,6 +7,7 @@ import "./Map.css"
 import {Button, Form} from "react-bootstrap";
 import {getAreaOfPolygon, getDistance, getPathLength} from 'geolib';
 import CSVConverter from "../util/CSVConverter";
+import {useNavigate} from "react-router-dom";
 
 const google = window.google;
 
@@ -35,7 +36,7 @@ const options = {
 
 
 const Map = () => {
-
+    const navigate = useNavigate();
     const obj = JSON.parse(localStorage.getItem('csv'));
     const distritos = Object.keys(obj);
     const distritoList = [];
@@ -129,14 +130,14 @@ const Map = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Parcela registada com sucesso.");
-                    window.location.href = "/map";
+                    navigate("/map");
                 } else if(xmlhttp.status == 400) {
                     alert("Todos os campos obrigatórios devem ser preenchidos.");
                     alert(xmlhttp.responseText);
                 } else if(xmlhttp.status == 403 || xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
-                    window.location.href = "/";
+                    navigate("/");
                 } else if(xmlhttp.status == 409) {
                     alert("Já possui uma parcela com o mesmo nome.")
                 }

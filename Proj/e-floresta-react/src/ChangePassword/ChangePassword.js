@@ -2,11 +2,11 @@ import './ChangePassword.css'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Button} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React, { Component }  from 'react';
 
 const ChangePassword = () => {
-
+    const navigate = useNavigate();
     let oldPassword, newPassword, confirmation
 
     let xmlhttp = new XMLHttpRequest();
@@ -17,13 +17,13 @@ const ChangePassword = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Palavra-passe alterada com sucesso.");
-                    window.location.href = "/profile";
+                    navigate("/profile");
                 } else if (xmlhttp.status == 400) {
                     alert("A nova palavra-passe e a confirmação não coincidem.")
                 } else if (xmlhttp.status == 403 || xmlhttp.status == 404) {  //TODO: tratar de forma diferente se a pessoa errar a oldPassword
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
-                    window.location.href = "/";
+                    navigate("/");
                 } else {
                     alert("Não foi alterar a palavra-passe.");
                 }

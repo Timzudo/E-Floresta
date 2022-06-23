@@ -1,12 +1,13 @@
 import  './Profile.css'
 import ProfileImage from './profile_picture.png'
 import TopBar from '../TopBar/TopBar.js'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React, { Component }  from 'react';
 
 const Profile = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -34,7 +35,7 @@ const Profile = () => {
                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
-                    window.location.href = "/";
+                    navigate("/");
                 }
                 else {
                     alert("Não foi possível obter informação.");

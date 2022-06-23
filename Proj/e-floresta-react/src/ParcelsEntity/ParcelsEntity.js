@@ -8,6 +8,7 @@ import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
+import {useNavigate} from "react-router-dom";
 
 
 const containerStyle = {
@@ -35,6 +36,7 @@ const options = {
 
 
 const ParcelsEntity = () => {
+    const navigate = useNavigate();
     const [obj, setObj] = useState({});
 
     const [paths, setPaths] = useState([]);
@@ -61,7 +63,7 @@ const ParcelsEntity = () => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
-                    window.location.href = "/parcels-entity";
+                    navigate("/parcels-entity");
                 }
             }
         }

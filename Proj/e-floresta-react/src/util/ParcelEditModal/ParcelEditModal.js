@@ -31,7 +31,6 @@ const modalContainerStyle = {
 
 
 const ParcelEditModal = (props) => {
-
     const [managerValue, setmanagerValue] = useState("");
 
     const [obj, setObj] = useState({});

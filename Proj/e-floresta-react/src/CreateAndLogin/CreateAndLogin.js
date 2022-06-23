@@ -1,12 +1,13 @@
 import Image from './logo.png'
 import './CreateAndLogin.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
 import {Button, Form, InputGroup} from "react-bootstrap";
 import React, { Component }  from 'react';
 
 
 const CreateAndLogin = () => {
+  const navigate = useNavigate()
   let xmlhttp = new XMLHttpRequest();
   let token;
   let type = "personal";
@@ -28,7 +29,7 @@ const CreateAndLogin = () => {
           alert("Login efetuado com sucesso.");
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
-          window.location.href = "/homepage";
+          navigate('/homepage');
         } else if(xmlhttp.status == 403) {
           alert("O username ou a password introduzidas estão erradas.");
         } else if(xmlhttp.status == 404) {
@@ -66,7 +67,7 @@ const CreateAndLogin = () => {
           alert("Registo efetuado com sucesso.");
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
-          window.location.href = "/homepage";
+          navigate('/homepage');
         } else if(xmlhttp.status == 400) {
           alert("Todos os campos obrigatórios devem ser preenchidos.");
         } else if(xmlhttp.status == 409) {
