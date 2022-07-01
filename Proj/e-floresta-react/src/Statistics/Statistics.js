@@ -1,12 +1,12 @@
 import './Statistics.css'
-import React, { useState } from 'react';
-/*
+import React, { useState } from 'react'
 import { Line } from 'react-chartjs-2';
 import { CDBContainer } from 'cdbreact';
-*/
+import Chart from 'chart.js/auto';
+import TopBar from '../TopBar/TopBar.js'
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 
 const Statistics = () => {
-    /*
     const [data] = useState({
         labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
         datasets: [
@@ -19,12 +19,18 @@ const Statistics = () => {
         ],
     });
 
- */
     return (
-        <></>
+        <>
+            <CheckIfLoggedOut />
+            <TopBar />
+
+            <CDBContainer>
+                <h3 className="mt-5">Line chart</h3>
+                <Line data={data} options={{ responsive: true }} />
+            </CDBContainer>
+        </>
+
     );
 };
-
-
 
 export default Statistics;
