@@ -76,23 +76,6 @@ const ParcelsEntity = () => {
     }
 
 
-    function loadModalValues() {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
-                    setObj(obj);
-                }
-            }
-        }
-        var myObj = {token:localStorage.getItem('token')};
-        var myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo");
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
-    }
-
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
@@ -105,7 +88,6 @@ const ParcelsEntity = () => {
                                 <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
                                     <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label><br/>
-                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label><br/>

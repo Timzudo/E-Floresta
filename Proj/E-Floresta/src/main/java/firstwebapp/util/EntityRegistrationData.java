@@ -8,8 +8,6 @@ public class EntityRegistrationData {
     public String name;
     public String phone;
     public String nif;
-    public String distrito;
-    public String concelho;
 
     public EntityRegistrationData() {
 
@@ -22,12 +20,10 @@ public class EntityRegistrationData {
         this.name = name;
         this.phone = phone;
         this.nif = nif;
-        this.distrito = distrito;
-        this.concelho = concelho;
     }
 
     public boolean validRegistration() {
-        boolean checkNull = !(password.equals("") || confirmation.equals("") || email.equals("") || name.equals("") || distrito.equals("") || concelho.equals(""));
+        boolean checkNull = !(password.equals("") || confirmation.equals("") || email.equals("") || name.equals(""));
         boolean checkPassword = password.equals(confirmation) && password.length()>=6;
         boolean checkEmail = true;
 

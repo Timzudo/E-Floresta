@@ -53,7 +53,6 @@ const AllParcels = () => {
                                 <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
                                     <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label>
-                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label>

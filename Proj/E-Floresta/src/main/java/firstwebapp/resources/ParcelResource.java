@@ -136,6 +136,7 @@ public class ParcelResource {
                         .set("parcel_freguesia", freguesia)
                         .set("parcel_owner", username)
                         .set("parcel_manager", "")
+                        .set("parcel_requested_manager", "")
                         .set("parcel_area", areaLong)
                         .set("parcel_perimeter", perimeterLong)
                         .set("parcel_state", "PENDING")
@@ -164,7 +165,7 @@ public class ParcelResource {
         LOG.fine("Attempt to register parcel.");
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
-        if(tokenInfo == null || tokenInfo.role.equals("D")){
+        if(tokenInfo == null){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
         String username = tokenInfo.sub;
@@ -203,7 +204,8 @@ public class ParcelResource {
                     p.getString("parcel_manager"),
                     p.getString("parcel_state").equals("APPROVED"),
                     url,
-                    coordinatesString));
+                    coordinatesString,
+                    p.getLong("parcel_area")));
         });
         return Response.ok(g.toJson(parcelList)).build();
     }
@@ -263,7 +265,8 @@ public class ParcelResource {
                     p.getString("parcel_manager"),
                     p.getString("parcel_state").equals("APPROVED"),
                     url,
-                    coordinatesString));
+                    coordinatesString,
+                    p.getLong("parcel_area")));
         }
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -921,7 +924,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
         Entity parcel = datastore.get(parcelKey);
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
@@ -1013,7 +1016,8 @@ public class ParcelResource {
                     parcel.getString("parcel_manager"),
                     parcel.getString("parcel_state").equals("APPROVED"),
                     url,
-                    coordinatesString));
+                    coordinatesString,
+                    parcel.getLong("parcel_area")));
         }
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -1088,7 +1092,8 @@ public class ParcelResource {
                     parcel.getString("parcel_manager"),
                     parcel.getString("parcel_state").equals("APPROVED"),
                     url,
-                    coordinatesString));
+                    coordinatesString,
+                    parcel.getLong("parcel_area")));
         }
 
         return Response.ok(g.toJson(parcelList)).build();
