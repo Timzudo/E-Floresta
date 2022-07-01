@@ -1,11 +1,11 @@
 import LogoImage from './logo.png'
 import './TopBar.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Button, ButtonGroup, Dropdown} from "react-bootstrap";
 import React, {Component} from 'react';
 
 const TopBar = () => {
-
+    const navigate = useNavigate();
     return (
         <div className="topBar_top">
 
@@ -53,8 +53,8 @@ const TopBar = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="dropdown-content_TopBar">
-                    <Dropdown.Item href="/profile">Perfil</Dropdown.Item>
-                    <Dropdown.Item href="/" onClick={() => localStorage.removeItem('token')}><b>Encerrar
+                    <Dropdown.Item onClick={() => navigate("/profile")}>Perfil</Dropdown.Item>
+                    <Dropdown.Item onClick={() => {localStorage.removeItem('token'); navigate("/")}}><b>Encerrar
                         sessão</b></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>

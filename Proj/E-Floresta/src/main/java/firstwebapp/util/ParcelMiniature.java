@@ -5,14 +5,10 @@ import java.net.URL;
 public class ParcelMiniature {
 
     public String name;
-    public String distrito;
-    public String concelho;
     public String freguesia;
     public String owner;
     public String manager;
     public boolean isApproved;
-    public long area;
-    public long perimeter;
     public URL photoURL;
     public String coordinates;
 
@@ -20,16 +16,12 @@ public class ParcelMiniature {
 
     }
 
-    public ParcelMiniature(String name, String distrito, String concelho, String freguesia, String owner, String manager, boolean isApproved, long area, long perimeter, URL photoURL, String coordinates) {
+    public ParcelMiniature(String name, String freguesia, String owner, String manager, boolean isApproved, URL photoURL, String coordinates) {
         this.name = name;
-        this.distrito = distrito;
-        this.concelho = concelho;
         this.freguesia = freguesia;
         this.owner = owner;
         this.manager = manager;
         this.isApproved = isApproved;
-        this.area = area;
-        this.perimeter = perimeter;
         this.photoURL = photoURL;
         this.coordinates = coordinates;
     }

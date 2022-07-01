@@ -17,25 +17,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+
 
 @Path("/parcel")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -84,7 +69,7 @@ public class ParcelResource {
     @POST
     @Path("/register")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response registerParcel(@QueryParam("token") String token,
+    public Response registerParcel(@FormDataParam("token") String token,
                                    @FormDataParam("name") String name,
                                    @FormDataParam("distrito") String distrito,
                                    @FormDataParam("concelho") String concelho,
@@ -101,7 +86,7 @@ public class ParcelResource {
 
         Point[] coordinateList = g.fromJson(coordinates, Point[].class);
 
-        if(!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  &&/* document != null &&*/ !coordinates.equals("")  && !(coordinateList.length >= 3)){
+        if(!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && document != null && photo != null && !coordinates.equals("")  && !(coordinateList.length >= 3)){
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
 
@@ -119,8 +104,6 @@ public class ParcelResource {
         }
 
         String parcelId = username + "_" + name;
-
-
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelId);
         Entity parcel = datastore.get(parcelKey);
 
@@ -128,7 +111,6 @@ public class ParcelResource {
             return Response.status(Response.Status.CONFLICT).entity("Parcel with name already exists.").build();
         }
 
-        //Bucket bucket = storage.create(BucketInfo.of(PARCEL_BUCKET));
         BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelId + "_coordinates");
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         storage.create(blobInfo, coordinates.getBytes(StandardCharsets.UTF_8));
@@ -173,6 +155,59 @@ public class ParcelResource {
             }
         }
     }
+
+    @POST
+    @Path("/owned")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOwned(TokenData tokenData) {
+        LOG.fine("Attempt to register parcel.");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null || tokenInfo.role.equals("D")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_owner", username))
+                .build();
+
+        QueryResults<Entity> parcelListQuery = datastore.run(query);
+
+        List<ParcelMiniature> parcelList = new ArrayList<>();
+
+        parcelListQuery.forEachRemaining( p -> {
+
+            String parcelName = p.getString("parcel_name");
+            String path = username + "/" + username + "_" + parcelName;
+            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+            byte[] coordinates = blob.getContent();
+            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+
+            //TODO
+            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+            parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_freguesia"),
+                    p.getString("parcel_owner"),
+                    p.getString("parcel_manager"),
+                    p.getString("parcel_state").equals("APPROVED"),
+                    url,
+                    coordinatesString));
+        });
+        return Response.ok(g.toJson(parcelList)).build();
+    }
+
 
     @POST
     @Path("/managed")
@@ -223,78 +258,16 @@ public class ParcelResource {
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
-                    p.getString("parcel_distrito"),
-                    p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
                     p.getString("parcel_state").equals("APPROVED"),
-                    p.getLong("parcel_area"),
-                    p.getLong("parcel_perimeter"),
                     url,
                     coordinatesString));
         }
 
         return Response.ok(g.toJson(parcelList)).build();
     }
-
-
-    @POST
-    @Path("/owned")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOwned(TokenData tokenData) {
-        LOG.fine("Attempt to register parcel.");
-
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
-        if(tokenInfo == null){
-            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
-        }
-        String username = tokenInfo.sub;
-
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-        Entity user = datastore.get(userKey);
-        if(user == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
-        }
-
-
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("Parcel")
-                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_owner", username))
-                .build();
-
-        QueryResults<Entity> parcelListQuery = datastore.run(query);
-
-        List<ParcelMiniature> parcelList = new ArrayList<>();
-
-        parcelListQuery.forEachRemaining( p -> {
-
-            String parcelName = p.getString("parcel_name");
-            String path = username + "/" + username + "_" + parcelName;
-            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
-            byte[] coordinates = blob.getContent();
-            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
-
-            //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
-            URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
-
-            parcelList.add(new ParcelMiniature(parcelName,
-                    p.getString("parcel_distrito"),
-                    p.getString("parcel_concelho"),
-                    p.getString("parcel_freguesia"),
-                    p.getString("parcel_owner"),
-                    p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
-                    p.getLong("parcel_area"),
-                    p.getLong("parcel_perimeter"),
-                    url,
-                    coordinatesString));
-        });
-        return Response.ok(g.toJson(parcelList)).build();
-    }
-
 
 
     @POST
@@ -337,15 +310,93 @@ public class ParcelResource {
         return Response.ok(g.toJson(info)).build();
     }
 
+
+
     @POST
-    @Path("/addmanager/{parcelName}")
+    @Path("/sendrequest/{parcelName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addManager(@PathParam("parcelName") String parcelName, TokenData data) {
+    public Response sendRequest(@PathParam("parcelName") String parcelName, ManagerData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         //Token valido
-        if(tokenInfo == null){
+        if(tokenInfo == null || !tokenInfo.role.equals("D")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+        //E onwer da parcela
+        if(!parcel.getString("parcel_owner").equals(username) || !parcel.getString("parcel_state").equals("APPROVED")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        //Ja tem manager
+        if(!parcel.getString("parcel_manager").equals("")){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+
+
+        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(data.managerName);
+        Entity manager = datastore.get(managerKey);
+        //Manager existe
+        if(manager == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Manager with name not found.").build();
+        }
+        //Manager esta ativo e tem role
+        if(!manager.getString("user_state").equals("ACTIVE") || !manager.getString("user_role").equals("C") ||
+                (!manager.getString("user_concelho").equals(parcel.getString("parcel_concelho")) && !manager.getString("user_freguesia").equals(parcel.getString("parcel_freguesia")))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcel).set("parcel_requested_manager", managerKey.getName()).build();
+
+            txn.update(parcel);
+            txn.commit();
+            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+
+    @POST
+    @Path("/acceptrequest/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response acceptParcelRequest(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null || !tokenInfo.role.equals("C")){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
         String username = tokenInfo.sub;
@@ -356,6 +407,10 @@ public class ParcelResource {
         //Owner existe
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
 
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
@@ -371,46 +426,19 @@ public class ParcelResource {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
-        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(username);
-        Entity manager = datastore.get(managerKey);
-        //Manager existe
-        if(manager == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Manager with name not found.").build();
-        }
-        //Manager esta ativo e tem role
-        if(!manager.getString("user_state").equals("ACTIVE") || !manager.getString("user_role").equals("C")){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(username);
-        Entity request = datastore.get(requestKey);
-
-        if(request == null){
+        if(!parcel.getString("parcel_requested_manager").equals(username)){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if(!request.getString("parcel_name").equals(parcelName)){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
 
         Transaction txn = datastore.newTransaction();
 
         try{
-            parcel = Entity.newBuilder(parcelKey)
-                    .set("parcel_name", parcel.getString("parcel_name"))
-                    .set("parcel_distrito", parcel.getString("parcel_distrito"))
-                    .set("parcel_concelho", parcel.getString("parcel_concelho"))
-                    .set("parcel_freguesia", parcel.getString("parcel_freguesia"))
-                    .set("parcel_owner", parcel.getString("parcel_owner"))
+            parcel = Entity.newBuilder(parcel)
                     .set("parcel_manager", username)
-                    .set("parcel_area", parcel.getLong("parcel_area"))
-                    .set("parcel_perimeter", parcel.getLong("parcel_perimeter"))
-                    .set("parcel_state", "PENDING")
-                    .set("parcel_usage", parcel.getString("parcel_usage"))
-                    .set("parcel_old_usage", parcel.getString("parcel_old_usage"))
+                    .set("parcel_requested_manager", "")
                     .build();
 
-            txn.delete(requestKey);
             txn.update(parcel);
             txn.commit();
             return Response.ok("Manager added successfully.").build();
@@ -422,6 +450,69 @@ public class ParcelResource {
             }
         }
     }
+
+
+    @POST
+    @Path("/rejectrequest/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response rejectRequest(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null || !tokenInfo.role.equals("C")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        //Ja tem manager
+        if(!parcel.getString("parcel_manager").equals("")){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+        if(!parcel.getString("parcel_requested_manager").equals(username)){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcel)
+                    .set("parcel_requested_manager", "")
+                    .build();
+
+            txn.update(parcel);
+            txn.commit();
+            return Response.ok().build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
 
     @POST
     @Path("/removemanager/{parcelName}")
@@ -442,6 +533,10 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
+        if(!user.getString("user_state").equals("ACTIVE") || (!tokenInfo.role.equals("C") || !tokenInfo.role.equals("D"))){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
         Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
         Entity parcel = datastore.get(parcelKey);
 
@@ -449,39 +544,20 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
-
-        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(parcel.getString("parcel_manager"));
-        Entity request = datastore.get(requestKey);
-
-        if(request == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        if(!request.getString("parcel_name").equals(parcelName)){
-            return Response.status(Response.Status.FORBIDDEN).build();
+        if(!parcel.getString("parcel_manager").equals(username) && !parcel.getString("parcel_owner").equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
 
         Transaction txn = datastore.newTransaction();
 
         try{
-            parcel = Entity.newBuilder(parcelKey)
-                    .set("parcel_name", parcel.getString("parcel_name"))
-                    .set("parcel_distrito", parcel.getString("parcel_distrito"))
-                    .set("parcel_concelho", parcel.getString("parcel_concelho"))
-                    .set("parcel_freguesia", parcel.getString("parcel_freguesia"))
-                    .set("parcel_owner", username)
+            parcel = Entity.newBuilder(parcel)
                     .set("parcel_manager", "")
-                    .set("parcel_area", parcel.getLong("parcel_area"))
-                    .set("parcel_perimeter", parcel.getLong("parcel_perimeter"))
-                    .set("parcel_state", "PENDING")
-                    .set("parcel_usage", parcel.getString("parcel_usage"))
-                    .set("parcel_old_usage", parcel.getString("parcel_old_usage"))
                     .build();
 
-            txn.delete(requestKey);
             txn.update(parcel);
             txn.commit();
-            return Response.ok("Manager added successfully.").build();
+            return Response.ok("Manager removed successfully.").build();
         }
         finally {
             if(txn.isActive()){
@@ -491,8 +567,9 @@ public class ParcelResource {
         }
     }
 
-    //Modify resources
 
+
+    //Modify resources
     @POST
     @Path("/modify/{parcelName}/photo")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -520,7 +597,10 @@ public class ParcelResource {
         }
 
         String role = user.getString("user_role");
-        if(!parcel.getString("parcel_owner").equals(username) && !role.equals(MODERATOR_ROLE) && !role.equals(SYS_ADMIN_ROLE)){
+        if((role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))) ||
+                (role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))) ||
+                (role.equals("D") && !parcel.getString("parcel_owner").equals(username)) ||
+                (role.equals("C"))){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -559,8 +639,15 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
         String role = user.getString("user_role");
-        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username) && !role.equals(MODERATOR_ROLE) && !role.equals(SYS_ADMIN_ROLE)){
+        if((role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))) ||
+                (role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))) ||
+                (role.equals("D") && !parcel.getString("parcel_owner").equals(username)) ||
+                (role.equals("C"))){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -571,6 +658,73 @@ public class ParcelResource {
 
         return Response.ok().build();
     }
+
+
+    @POST
+    @Path("/nearby")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getParcelsNearby(@QueryParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Entity parcel = datastore.get(parcelKey);
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        String role = user.getString("user_role");
+        if((role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))) ||
+           ((role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))) ||
+           (role.equals("C") && !parcel.getString("parcel_manager").equals(username)) ||
+           (role.equals("D") && !parcel.getString("parcel_owner").equals(username)))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        String freguesia = parcel.getString("parcel_freguesia");
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Parcel")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia),
+                            StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED")))
+                .build();
+
+        QueryResults<Entity> parcelListQuery = datastore.run(query);
+
+        List<String> parcelList = new ArrayList<>();
+
+        parcelListQuery.forEachRemaining( p -> {
+
+            String path = username + "/" + username + "_" + p.getString("parcel_name");
+            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+            byte[] coordinates = blob.getContent();
+            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+
+            parcelList.add(coordinatesString);
+        });
+
+        return Response.ok(g.toJson(parcelList)).build();
+    }
+
 
 
     @POST
@@ -606,8 +760,15 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
         String role = user.getString("user_role");
-        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username) && !role.equals(MODERATOR_ROLE) && !role.equals(SYS_ADMIN_ROLE)){
+        if((role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))) ||
+           (role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))) ||
+           (role.equals("D") && !parcel.getString("parcel_owner").equals(username)) ||
+           (role.equals("C"))){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
@@ -636,59 +797,6 @@ public class ParcelResource {
         }
     }
 
-
-    @POST
-    @Path("/nearby")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getParcelsNearby(@QueryParam("parcelName") String parcelName, TokenData data) {
-        LOG.fine("Attempt to get add managers to: " + parcelName);
-
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
-        if(tokenInfo == null){
-            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
-        }
-
-        String username = tokenInfo.sub;
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-        Entity user = datastore.get(userKey);
-        if(user == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
-        }
-
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
-        Entity parcel = datastore.get(parcelKey);
-        if(parcel == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
-        }
-
-        String role = user.getString("user_role");
-        if(!parcel.getString("parcel_owner").equals(username) && !role.equals(MODERATOR_ROLE) && !role.equals(SYS_ADMIN_ROLE)){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        String freguesia = parcel.getString("parcel_freguesia");
-
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("Parcel")
-                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia))
-                .build();
-
-        QueryResults<Entity> parcelListQuery = datastore.run(query);
-
-        List<String> parcelList = new ArrayList<>();
-
-        parcelListQuery.forEachRemaining( p -> {
-
-            String path = username + "/" + username + "_" + p.getString("parcel_name");
-            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
-            byte[] coordinates = blob.getContent();
-            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
-
-            parcelList.add(coordinatesString);
-        });
-
-        return Response.ok(g.toJson(parcelList)).build();
-    }
 
     @POST
     @Path("/modify/{parcelName}/info")
@@ -741,123 +849,6 @@ public class ParcelResource {
     }
 
 
-    @POST
-    @Path("/rejectparcel/{parcelName}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response sendRequest(@PathParam("parcelName") String parcelName, TokenData data) {
-        LOG.fine("Attempt to get add managers to: " + parcelName);
-
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
-        if(tokenInfo == null){
-            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
-        }
-
-        String username = tokenInfo.sub;
-
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-        Entity user = datastore.get(userKey);
-        if(user == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
-        }
-
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
-        Entity parcel = datastore.get(parcelKey);
-        if(parcel == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
-        }
-
-        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(username);
-
-        Transaction txn = datastore.newTransaction();
-
-        try{
-
-            txn.delete(requestKey);
-            txn.commit();
-            return Response.ok().build();
-        }
-        finally {
-            if(txn.isActive()){
-                txn.rollback();
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-            }
-        }
-    }
-
-
-
-
-    @POST
-    @Path("/sendRequest/{parcelName}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response sendRequest(@PathParam("parcelName") String parcelName, ManagerData data) {
-        LOG.fine("Attempt to get add managers to: " + parcelName);
-
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
-        //Token valido
-        if(tokenInfo == null || !tokenInfo.role.equals("D")){
-            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
-        }
-        String username = tokenInfo.sub;
-
-
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
-        Entity user = datastore.get(userKey);
-
-        //Owner existe
-        if(user == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
-        }
-
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
-        Entity parcel = datastore.get(parcelKey);
-
-        //Parcela existe
-        if(parcel == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
-        }
-        //E onwer da parcela
-        if(!parcel.getString("parcel_owner").equals(username)){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-        //Ja tem manager
-        if(!parcel.getString("parcel_manager").equals("")){
-            return Response.status(Response.Status.CONFLICT).build();
-        }
-
-
-
-        Key managerKey = datastore.newKeyFactory().setKind("User").newKey(data.managerName);
-        Entity manager = datastore.get(managerKey);
-        //Manager existe
-        if(manager == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Manager with name not found.").build();
-        }
-        //Manager esta ativo e tem role
-        if(!manager.getString("user_state").equals("ACTIVE") || !manager.getString("user_role").equals("C")){
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        Key requestKey = datastore.newKeyFactory().setKind("ParcelRequest").newKey(data.managerName);
-
-        Transaction txn = datastore.newTransaction();
-
-        try{
-            Entity request = Entity.newBuilder(requestKey).set("parcel_name", parcelName)
-                    .set("manager", data.managerName).build();
-
-            txn.put(request);
-            txn.commit();
-            LOG.fine("Added manager: " + data.managerName + "to parcel: " + parcelName);
-            return Response.ok("Manager added successfully.").build();
-        }
-        finally {
-            if(txn.isActive()){
-                txn.rollback();
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
-            }
-        }
-    }
 
 
     @POST
@@ -880,6 +871,10 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("User")
@@ -898,6 +893,61 @@ public class ParcelResource {
 
             managerList.add(u.getKey().getName());
         }
+
+        return Response.ok(g.toJson(managerList)).build();
+    }
+
+    @POST
+    @Path("/availablemanagers/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAvailableManagers(@PathParam("parcelName") String parcelName, TokenData tokenData) {
+        LOG.fine("Attempt to register parcel.");
+
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Entity parcel = datastore.get(parcelKey);
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+
+        Query<Entity> queryFreguesia = Query.newEntityQueryBuilder()
+                .setKind("User")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("user_role", "C"),
+                        StructuredQuery.PropertyFilter.eq("user_freguesia", parcel.getString("parcel_freguesia"))))
+                .build();
+
+        Query<Entity> queryConcelho = Query.newEntityQueryBuilder()
+                .setKind("User")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("user_role", "C"),
+                        StructuredQuery.PropertyFilter.eq("user_concelho", parcel.getString("parcel_concelho"))))
+                .build();
+
+        QueryResults<Entity> managerListFreguesiaQuery = datastore.run(queryFreguesia);
+        QueryResults<Entity> managerListConcelhoQuery = datastore.run(queryConcelho);
+
+        List<String> managerList = new ArrayList<>();
+
+
+        managerListFreguesiaQuery.forEachRemaining(u -> managerList.add(u.getKey().getName()));
+        managerListConcelhoQuery.forEachRemaining(u -> managerList.add(u.getKey().getName()));
 
         return Response.ok(g.toJson(managerList)).build();
     }
@@ -924,11 +974,13 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
-
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
 
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("ParcelRequest")
-                .setFilter(StructuredQuery.PropertyFilter.eq("manager", username))
+                .setFilter(StructuredQuery.PropertyFilter.eq("parcel_requested_manager", username))
                 .build();
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
@@ -956,25 +1008,279 @@ public class ParcelResource {
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcel.getString("parcel_name"),
-                    parcel.getString("parcel_distrito"),
-                    parcel.getString("parcel_concelho"),
                     parcel.getString("parcel_freguesia"),
                     parcel.getString("parcel_owner"),
                     parcel.getString("parcel_manager"),
                     parcel.getString("parcel_state").equals("APPROVED"),
-                    parcel.getLong("parcel_area"),
-                    parcel.getLong("parcel_perimeter"),
                     url,
                     coordinatesString));
-        };
+        }
+
+        return Response.ok(g.toJson(parcelList)).build();
+    }
+
+    @POST
+    @Path("/pendingbyregion")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPendingByRegion(TokenData data) {
+        LOG.fine("Attempt to register parcel.");
+
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null || !tokenInfo.role.contains("B")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        StructuredQuery.PropertyFilter filter;
+
+        if(tokenInfo.role.equals("B1")){
+            filter = StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"));
+        }
+        else{
+            filter = StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia"));
+        }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("ParcelRequest")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_manager", username), filter))
+                .build();
+
+
+        QueryResults<Entity> parcelListQuery = datastore.run(query);
+
+        List<ParcelMiniature> parcelList = new ArrayList<>();
+
+
+        Entity u;
+
+        while(parcelListQuery.hasNext()){
+            u = parcelListQuery.next();
+
+            Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(u.getString("parcel_name"));
+            Entity parcel = datastore.get(parcelKey);
+
+            String parcelName = parcel.getString("parcel_name");
+            String owner = parcel.getString("parcel_owner");
+            String path = owner + "/" + owner + "_" + parcelName;
+            Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
+            byte[] coordinates = blob.getContent();
+            String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
+
+            //TODO
+            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+
+            parcelList.add(new ParcelMiniature(parcel.getString("parcel_name"),
+                    parcel.getString("parcel_freguesia"),
+                    parcel.getString("parcel_owner"),
+                    parcel.getString("parcel_manager"),
+                    parcel.getString("parcel_state").equals("APPROVED"),
+                    url,
+                    coordinatesString));
+        }
 
         return Response.ok(g.toJson(parcelList)).build();
     }
 
 
+    @POST
+    @Path("/approve/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response approveParcel(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
 
-    
-    Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() { 
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null || !tokenInfo.role.contains("B")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        //Ja tem manager
+        if(!parcel.getString("parcel_state").equals("PENDING")){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+        if((tokenInfo.role.equals("C1") && !parcel.getString("parcel_concenlho").equals(user.getString("user_concelho"))) ||
+                (tokenInfo.role.equals("C2") && !parcel.getString("parcel_freguesia").equals(user.getString("user_freguesia")))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcel)
+                    .set("parcel_state", "APPROVED")
+                    .build();
+
+            txn.update(parcel);
+            txn.commit();
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @POST
+    @Path("/reject/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response rejectParcel(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null || !tokenInfo.role.contains("B")){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        //Ja tem manager
+        if(!parcel.getString("parcel_state").equals("PENDING")){
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+
+        if((tokenInfo.role.equals("C1") && !parcel.getString("parcel_concenlho").equals(user.getString("user_concelho"))) ||
+                (tokenInfo.role.equals("C2") && !parcel.getString("parcel_freguesia").equals(user.getString("user_freguesia")))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            parcel = Entity.newBuilder(parcel)
+                    .set("parcel_state", "REJECTED")
+                    .build();
+
+            txn.update(parcel);
+            txn.commit();
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @POST
+    @Path("/delete/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteParcel(@PathParam("parcelName") String parcelName, TokenData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        if((tokenInfo.role.equals("C1") && !parcel.getString("parcel_concenlho").equals(user.getString("user_concelho"))) ||
+                (tokenInfo.role.equals("C2") && !parcel.getString("parcel_freguesia").equals(user.getString("user_freguesia"))) ||
+                (tokenInfo.role.equals("D") && !parcel.getString("parcel_freguesia").equals(username)) ||
+                (tokenInfo.role.equals("C"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            txn.delete(parcelKey);
+            txn.commit();
+            return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+
+
+    //change usage
+    /*Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() {
     	@Override public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) { 
     		int v1 = e1.getValue(); 
     		int v2 = e2.getValue(); 
@@ -1168,7 +1474,7 @@ public class ParcelResource {
         Collections.sort(areaListSorted, valueComparatorLong);
 
         return Response.ok(g.toJson(areaListSorted)).build();
-    }
+    }*/
     
 }
 

@@ -44,17 +44,39 @@ public class GetInfoResource {
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
         }
 
+        String s = user.getString("user_role");
+
+        switch (s){
+            case "A1":
+                s = "System admin";
+                break;
+            case "A2":
+                s = "Moderador";
+                break;
+            case "B1":
+                s = "Técnico camarário";
+                break;
+            case "B2":
+                s = "Técnico da junta";
+                break;
+            case "C":
+                s = "Entidade";
+                break;
+            case "D":
+                s = "Utilizador";
+                break;
+        }
+
         UserProfileInfo data = new UserProfileInfo(userKey.getName(),
                                     user.getString("user_email"),
                                     user.getString("user_name"),
                                     user.getString("user_phone"),
                                     user.getString("user_nif"),
-                                    user.getString("user_type"),
-                                    user.getString("user_state"));
+                                    s,
+                                    user.getString("user_state"),
+                                    (int) (user.getLong("user_trust")/20));
 
         return Response.ok(g.toJson(data)).build();
 
     }
-
-
 }
