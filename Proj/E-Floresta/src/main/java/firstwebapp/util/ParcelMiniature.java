@@ -11,12 +11,13 @@ public class ParcelMiniature {
     public boolean isApproved;
     public URL photoURL;
     public String coordinates;
+    public long area;
 
     public ParcelMiniature(){
 
     }
 
-    public ParcelMiniature(String name, String freguesia, String owner, String manager, boolean isApproved, URL photoURL, String coordinates) {
+    public ParcelMiniature(String name, String freguesia, String owner, String manager, boolean isApproved, URL photoURL, String coordinates, long area) {
         this.name = name;
         this.freguesia = freguesia;
         this.owner = owner;
@@ -24,5 +25,6 @@ public class ParcelMiniature {
         this.isApproved = isApproved;
         this.photoURL = photoURL;
         this.coordinates = coordinates;
+        this.area = area;
     }
 }

@@ -86,7 +86,6 @@ const ParcelDetailsModal = (props) => {
                 <label><b>Concelho:</b> {props.obj.concelho} </label><br/>
                 <label><b>Distrito:</b> {props.obj.distrito} </label><br/>
                 <label><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
-                <label><b>Perímetro da parcela:</b> {props.obj.perimeter}m </label><br/>
                 <label><b>Descrição:</b> {props.obj.description} </label><br/>
                 <label><b>Tipo de cobertura do solo:</b> {/*props.obj.tipoSolo*/} </label><br/>
                 <label><b>Utilização atual do solo:</b> {obj.usage} </label><br/>

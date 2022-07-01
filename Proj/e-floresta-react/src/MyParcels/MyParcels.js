@@ -82,54 +82,6 @@ const MyParcels = () => {
         }
     }
 
-    function hasManager() {
-        if(obj.manager != "") {
-            return(
-                <label>
-                    <b>Gerente:</b> {obj.manager}
-                    <Button id="rmv-manager_MyParcels" variant="danger" size="sm">Remover gerente</Button>
-                </label>
-            )
-        } else {
-            return(
-                <label>
-                    <b>Gerente:</b>
-
-                    <Dropdown>
-                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                            Gerentes disponíveis
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu> //TODO:alterarDropdown
-                            <Dropdown.Item value="gerente1">Gerente1</Dropdown.Item>
-                            <Dropdown.Item value="gerente2">Gerente2</Dropdown.Item>
-                            <Dropdown.Item value="gerente3">Gerente3</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                    <Button id="add-manager_MyParcels" variant="success" size="sm">Adicionar gerente</Button>
-
-                </label>
-            )
-        }
-    }
-
-    function loadModalValues() {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
-                    setObj(obj);
-                }
-            }
-        }
-        var myObj = {token:localStorage.getItem('token')};
-        var myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo");
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
-    }
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
@@ -143,7 +95,6 @@ const MyParcels = () => {
                                 <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>
                                 <Card.Text>
                                     <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label><br/>
-                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label><br/>
                                     <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label><br/>

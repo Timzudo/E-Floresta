@@ -34,13 +34,46 @@ const ApproveParcels = () => {
         setEditShow(true);
     }
 
-    const handleClose = () => setShow(false);
-    const handleEditClose = () => setEditShow(false);
-
     const [parcelList, setPList] = useState([]);
 
     let xmlhttp = new XMLHttpRequest();
     let arr = [];
+
+    function approveParcel(parcel) {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    alert("Parcel approved successfully");
+                }
+            }
+        }
+        let myObj = {
+            token: localStorage.getItem('token'),
+        };
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/approve/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
+
+    function rejectParcel(parcel) {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    alert("Parcel approved successfully");
+                }
+            }
+        }
+        let myObj = {
+            token: localStorage.getItem('token'),
+        };
+        let myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/reject/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
@@ -54,7 +87,6 @@ const ApproveParcels = () => {
                                 <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
                                     <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label>
-                                    <label className={"w-100 text-truncate"}>Perímetro: {obj[i].perimeter}m</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label>
                                     <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label>
@@ -66,10 +98,10 @@ const ApproveParcels = () => {
                                             <Button id="edit-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
                                         </Col>
                                         <Col>
-                                            <Button id="confirm-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
+                                            <Button id="confirm-parcel_ApproveParcels" onClick={() => approveParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
                                         </Col>
                                         <Col>
-                                            <Button id="reject-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
+                                            <Button id="reject-parcel_ApproveParcels" onClick={() => rejectParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
                                         </Col>
                                     </Row>
                                 </Card.Text>
@@ -85,7 +117,7 @@ const ApproveParcels = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/pendingbyregion");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])

@@ -61,7 +61,7 @@ const ParcelEditModal = (props) => {
         let myObj = {token:localStorage.getItem('token')};
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managers");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     })()
@@ -124,37 +124,6 @@ const ParcelEditModal = (props) => {
         xmlhttp.send(myJson);
     }
 
-    /**
-     * function changeParcelInfo() {
-     *         xmlhttp.onreadystatechange = function () {
-     *             if (xmlhttp.readyState == 4) {
-     *                 if (xmlhttp.status == 200) {
-     *                     alert("Informação alterada com sucesso.");
-     *                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
-     *                     alert("Não tem permissões para efetuar esta operação.");
-     *                     localStorage.removeItem("token");
-     *                     window.location.href = "/";
-     *                 }
-     *                 else {
-     *                     alert("Não foi possível concluir a operação.");
-     *                 }
-     *             }
-     *         }
-     *
-     *         var myObj = {tipoSolo:document.getElementById("cobertSolo-editParcelModal_ApproveParcels").value,
-     *             usage:document.getElementById("utilAtSolo-editParcelModal_ApproveParcels").value,
-     *             oldUsage:document.getElementById("utilPrevSolo-editParcelModal_ApproveParcels").value,
-     *             token:localStorage.getItem('token')
-     *         };
-     *
-     *         var myJson = JSON.stringify(myObj);
-     *
-     *         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel//info");
-     *         xmlhttp.setRequestHeader("Content-Type", "application/json");
-     *         xmlhttp.send(myJson);
-     *     }
-     */
-
 
     return <>
         <Modal
@@ -209,7 +178,6 @@ const ParcelEditModal = (props) => {
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"><b>Perímetro da parcela:</b> {props.obj.perimeter}m </label><br/>
 
                 <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
                     <input id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.tipoSolo} />
