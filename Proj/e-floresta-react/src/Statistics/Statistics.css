@@ -1,4 +1,16 @@
-.example-graph{
-    height: 400px !important;
-    width: 1300px !important;
+.util-solo-graph{
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 75% !important;
+    width: 60% !important;
 }
+
+
+.example-graph{
+    margin-left: auto;
+    margin-right: auto;
+    height: 70% !important;
+    width: 60% !important;
+}
+
