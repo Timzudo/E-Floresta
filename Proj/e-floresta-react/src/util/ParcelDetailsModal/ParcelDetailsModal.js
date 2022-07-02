@@ -81,15 +81,15 @@ const ParcelDetailsModal = (props) => {
 
             <Modal.Body>
                 <label><b>Proprietário:</b> {props.obj.owner} </label><br/>
-                <label><b>Gerente:</b> {props.obj.manager} </label><br/>
+                <label><b>Gerente:</b> {props.obj.manager === "" ? " - " : props.obj.manager} </label><br/>
                 <label><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
                 <label><b>Concelho:</b> {props.obj.concelho} </label><br/>
                 <label><b>Distrito:</b> {props.obj.distrito} </label><br/>
                 <label><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
-                <label><b>Descrição:</b> {props.obj.description} </label><br/>
-                <label><b>Tipo de cobertura do solo:</b> {/*props.obj.tipoSolo*/} </label><br/>
+                <label><b>Tipo de cobertura do solo:</b> {obj.cover} </label><br/>
                 <label><b>Utilização atual do solo:</b> {obj.usage} </label><br/>
                 <label><b>Utilização prévia do solo:</b> {obj.oldUsage} </label><br/>
+                <label><b>Descrição:</b> {obj.description} </label><br/>
             </Modal.Body>
         </Modal>
     </>

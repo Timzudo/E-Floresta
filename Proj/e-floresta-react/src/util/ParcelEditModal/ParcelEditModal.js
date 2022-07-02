@@ -119,7 +119,7 @@ const ParcelEditModal = (props) => {
         console.log(myObj);
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/sendRequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -180,7 +180,7 @@ const ParcelEditModal = (props) => {
 
 
                 <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
-                    <input id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.tipoSolo} />
+                    <input id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.cover} />
                 </label><br/>
 
                 <label for="utilAtSolo-editParcelModal_ApproveParcels"><b>Utilização atual do solo:</b>
@@ -190,6 +190,12 @@ const ParcelEditModal = (props) => {
                 <label for="utilPrevSolo-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
                     <input id="utilPrevSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.oldUsage} />
                 </label><br/>
+
+                <label htmlFor="description-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
+                    <input id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"
+                           type="text" value={info.description}/>
+                </label><br/>
+
                 <p></p>
 
                 <Button type="button" className="btn btn-success btn-sm"> Confirmar Alterações </Button>

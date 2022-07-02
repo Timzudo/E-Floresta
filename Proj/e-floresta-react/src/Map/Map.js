@@ -144,6 +144,7 @@ const Map = () => {
             }
         }
 
+        f.append('token', localStorage.getItem('token'));
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
         f.append('concelho', document.getElementById("formConcelhoDropdown").value);
@@ -155,6 +156,7 @@ const Map = () => {
         f.append('document', documentState);
         f.append('usage', document.getElementById("formParcelUsage").value);
         f.append('oldUsage', document.getElementById("formParcelOldUsage").value);
+        f.append('cover', document.getElementById("formParcelCover").value);
 
         for (var pair of f.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);

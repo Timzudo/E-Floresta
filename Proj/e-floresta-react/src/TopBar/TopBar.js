@@ -34,11 +34,11 @@ const TopBar = () => {
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'B' ? <Link to="/approve-parcels">
+                {localStorage.getItem('role').includes('B')  ? <Link to="/approve-parcels">
                     <Button id="option7">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'B' ? <Link to="/all-parcels">
+                {localStorage.getItem('role').includes('B') ? <Link to="/all-parcels">
                     <Button id="option8">Visualizar Parcelas</Button>
                 </Link> : <></>}
 

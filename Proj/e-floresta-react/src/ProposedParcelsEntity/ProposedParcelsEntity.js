@@ -75,6 +75,7 @@ const ProposedParcelsEntity = () => {
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
+                console.log("yau");
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
@@ -112,10 +113,10 @@ const ProposedParcelsEntity = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/requested");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/getrequested");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    })
+    }, [])
 
     return(
         <>

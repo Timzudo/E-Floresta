@@ -80,7 +80,8 @@ public class ParcelResource {
                                    @FormDataParam("perimeter") String perimeter,
                                    @FormDataParam("document") InputStream document,
                                    @FormDataParam("usage") String usage,
-                                   @FormDataParam("oldUsage") String oldUsage) {
+                                   @FormDataParam("oldUsage") String oldUsage,
+                                   @FormDataParam("cover") String cover) {
 
         LOG.fine("Attempt to register parcel.");
 
@@ -142,6 +143,8 @@ public class ParcelResource {
                         .set("parcel_state", "PENDING")
                         .set("parcel_usage", usage)
                         .set("parcel_old_usage", oldUsage)
+                        .set("parcel_cover", cover)
+                        .set("parcel_description", "teste")
                         .build();
 
             txn.add(parcel);
@@ -199,6 +202,8 @@ public class ParcelResource {
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_distrito"),
+                    p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
@@ -260,6 +265,8 @@ public class ParcelResource {
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_distrito"),
+                    p.getString("parcel_concelho"),
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
@@ -298,17 +305,21 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
-        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username)){
+        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username) && !parcel.getString("parcel_requested_manager").equals(username)){
             return Response.status(Response.Status.FORBIDDEN).entity("Parcel with name not found.").build();
         }
 
-        String path = username + "/" + parcelName;
+        String owner = parcel.getString("parcel_owner");
+
+        String path = owner + "/" + parcelName;
         Blob blobDocument = storage.get(PARCEL_DOCUMENT_BUCKET, path + "_document");
         URL url = blobDocument.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
         ParcelInfo info = new ParcelInfo(url.toString(),
                 parcel.getString("parcel_usage"),
-                parcel.getString("parcel_old_usage"));
+                parcel.getString("parcel_old_usage"),
+                parcel.getString("parcel_cover"),
+                parcel.getString("parcel_description"));
 
         return Response.ok(g.toJson(info)).build();
     }
@@ -958,7 +969,7 @@ public class ParcelResource {
 
 
     @POST
-    @Path("/requested")
+    @Path("/getrequested")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequested(TokenData data) {
@@ -982,7 +993,7 @@ public class ParcelResource {
         }
 
         Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("ParcelRequest")
+                .setKind("Parcel")
                 .setFilter(StructuredQuery.PropertyFilter.eq("parcel_requested_manager", username))
                 .build();
 
@@ -991,16 +1002,10 @@ public class ParcelResource {
         List<ParcelMiniature> parcelList = new ArrayList<>();
 
 
-        Entity u;
+        parcelListQuery.forEachRemaining( p ->{
 
-        while(parcelListQuery.hasNext()){
-            u = parcelListQuery.next();
-
-            Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(u.getString("parcel_name"));
-            Entity parcel = datastore.get(parcelKey);
-
-            String parcelName = parcel.getString("parcel_name");
-            String owner = parcel.getString("parcel_owner");
+            String parcelName = p.getString("parcel_name");
+            String owner = p.getString("parcel_owner");
             String path = owner + "/" + owner + "_" + parcelName;
             Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
             byte[] coordinates = blob.getContent();
@@ -1010,16 +1015,17 @@ public class ParcelResource {
             Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
-            parcelList.add(new ParcelMiniature(parcel.getString("parcel_name"),
-                    parcel.getString("parcel_freguesia"),
-                    parcel.getString("parcel_owner"),
-                    parcel.getString("parcel_manager"),
-                    parcel.getString("parcel_state").equals("APPROVED"),
+            parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_distrito"),
+                    p.getString("parcel_concelho"),
+                    p.getString("parcel_freguesia"),
+                    p.getString("parcel_owner"),
+                    p.getString("parcel_manager"),
+                    p.getString("parcel_state").equals("APPROVED"),
                     url,
                     coordinatesString,
-                    parcel.getLong("parcel_area")));
-        }
-
+                    p.getLong("parcel_area")));
+        });
         return Response.ok(g.toJson(parcelList)).build();
     }
 
@@ -1057,8 +1063,8 @@ public class ParcelResource {
         }
 
         Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("ParcelRequest")
-                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_manager", username), filter))
+                .setKind("Parcel")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"), filter))
                 .build();
 
 
@@ -1067,16 +1073,9 @@ public class ParcelResource {
         List<ParcelMiniature> parcelList = new ArrayList<>();
 
 
-        Entity u;
-
-        while(parcelListQuery.hasNext()){
-            u = parcelListQuery.next();
-
-            Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(u.getString("parcel_name"));
-            Entity parcel = datastore.get(parcelKey);
-
-            String parcelName = parcel.getString("parcel_name");
-            String owner = parcel.getString("parcel_owner");
+        parcelListQuery.forEachRemaining(p ->{
+            String parcelName = p.getString("parcel_name");
+            String owner = p.getString("parcel_owner");
             String path = owner + "/" + owner + "_" + parcelName;
             Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
             byte[] coordinates = blob.getContent();
@@ -1086,15 +1085,17 @@ public class ParcelResource {
             Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
-            parcelList.add(new ParcelMiniature(parcel.getString("parcel_name"),
-                    parcel.getString("parcel_freguesia"),
-                    parcel.getString("parcel_owner"),
-                    parcel.getString("parcel_manager"),
-                    parcel.getString("parcel_state").equals("APPROVED"),
+            parcelList.add(new ParcelMiniature(parcelName,
+                    p.getString("parcel_distrito"),
+                    p.getString("parcel_concelho"),
+                    p.getString("parcel_freguesia"),
+                    p.getString("parcel_owner"),
+                    p.getString("parcel_manager"),
+                    p.getString("parcel_state").equals("APPROVED"),
                     url,
                     coordinatesString,
-                    parcel.getLong("parcel_area")));
-        }
+                    p.getLong("parcel_area")));
+        });
 
         return Response.ok(g.toJson(parcelList)).build();
     }

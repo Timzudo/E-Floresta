@@ -44,6 +44,7 @@ const ApproveParcels = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Parcel approved successfully");
+                    window.location.reload();
                 }
             }
         }
@@ -62,6 +63,7 @@ const ApproveParcels = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Parcel approved successfully");
+                    window.location.reload();
                 }
             }
         }
