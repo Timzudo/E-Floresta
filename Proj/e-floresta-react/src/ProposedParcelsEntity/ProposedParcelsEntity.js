@@ -41,6 +41,7 @@ const ProposedParcelsEntity = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Parcel accepted successfully");
+                    window.location.reload();
                 }
             }
         }
@@ -59,6 +60,7 @@ const ProposedParcelsEntity = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     alert("Parcel rejected successfully");
+                    window.location.reload();
                 }
             }
         }

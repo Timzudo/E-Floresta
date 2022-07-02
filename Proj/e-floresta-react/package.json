@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^18.0.12",
     "cdbreact": "^1.5.2",
+    "chart.js": "^3.6.0",
     "geolib": "^3.3.3",
     "react": "^18.1.0",
     "react-bootstrap": "^2.4.0",

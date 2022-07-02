@@ -77,7 +77,7 @@ const AllParcels = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/approvedbyregion");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])
@@ -95,21 +95,6 @@ const AllParcels = () => {
             </LoadScript>
 
             <div className="allParcelsBody">
-                <div className="chooseFreguesia_AllParcels">
-
-                    <Dropdown>
-                        <Dropdown.Toggle variant="light" id="dropdown-basic">
-                            Freguesia
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu> //TODO:alterarDropdown
-                            <Dropdown.Item value="freguesia1">Freguesia1</Dropdown.Item>
-                            <Dropdown.Item value="freguesia2">Freguesia2</Dropdown.Item>
-                            <Dropdown.Item value="freguesia3">Freguesia3</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                </div>
 
                 <div className="container_AllParcels">
                     {parcelList}

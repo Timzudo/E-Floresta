@@ -32,7 +32,7 @@ const modalContainerStyle = {
 
 const ParcelEditModal = (props) => {
     const [managerValue, setmanagerValue] = useState("");
-
+    const [changedInfo, setChangedInfo] = useState(false);
     const [obj, setObj] = useState({});
     const [info, setInfo] = useState({});
 
@@ -124,6 +124,94 @@ const ParcelEditModal = (props) => {
         xmlhttp.send(myJson);
     }
 
+    async function sendNewInfo(){
+
+        let any = false;
+        var info = true;
+        var doc = true;
+        var photo = true;
+
+        if(changedInfo){
+            any = true;
+            sendInfo().then(r => (info = r));
+        }
+        if(document.getElementById("file-editParcelModal_ApproveParcels").files[0] != undefined){
+            any = true;
+            sendDocument(document.getElementById("file-editParcelModal_ApproveParcels").files[0]).then(r => (doc = r));
+        }
+        if(document.getElementById("photo-editParcelModal_ApproveParcels").files[0] != undefined){
+            any = true;
+            sendPhoto(document.getElementById("photo-editParcelModal_ApproveParcels").files[0]).then(r => (photo = r));
+        }
+
+        var result = info && await doc && await photo;
+
+        console.log("Any:" + any);
+        console.log("Info:" + info);
+        console.log("Doc:" + doc);
+        console.log("Photo:" + photo);
+
+        if(result && any){
+            alert("Success");
+        }
+        else{
+            alert("Error")
+        }
+    }
+
+    async function sendInfo(){
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                return xmlhttp.status == 200;
+            }
+        }
+        var myObj = {cover:document.getElementById("cobertSolo-editParcelModal_ApproveParcels").value,
+                    usage:document.getElementById("utilAtSolo-editParcelModal_ApproveParcels").value,
+                    oldUsage:document.getElementById("utilPrevSolo-editParcelModal_ApproveParcels").value,
+                    description:document.getElementById("description-editParcelModal_ApproveParcels").value,
+                    token:localStorage.getItem('token')};
+
+        console.log(myObj);
+        var myJson = JSON.stringify(myObj);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/info", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(myJson);
+    }
+
+    async function sendDocument(document){
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                return xmlhttp.status == 200;
+            }
+        }
+
+        const formData = new FormData();
+        formData.append('token', localStorage.getItem('token'));
+        formData.append('document', document);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/document", true);
+        xmlhttp.send(formData);
+    }
+
+    async function sendPhoto(photo){
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                return xmlhttp.status == 200;
+            }
+        }
+
+        const formData = new FormData();
+        formData.append('token', localStorage.getItem('token'));
+        formData.append('photo', photo);
+
+        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", true);
+        xmlhttp.send(formData);
+    }
+
 
     return <>
         <Modal
@@ -180,25 +268,33 @@ const ParcelEditModal = (props) => {
 
 
                 <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
-                    <input id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.cover} />
+                    <input onChange={ () => (setChangedInfo(true))} id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.cover} />
                 </label><br/>
 
                 <label for="utilAtSolo-editParcelModal_ApproveParcels"><b>Utilização atual do solo:</b>
-                    <input id="utilAtSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.usage} />
+                    <input onChange={ () => (setChangedInfo(true))} id="utilAtSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.usage} />
                 </label><br/>
 
                 <label for="utilPrevSolo-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
-                    <input id="utilPrevSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" value={info.oldUsage} />
+                    <input onChange={ () => (setChangedInfo(true))} id="utilPrevSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.oldUsage} />
                 </label><br/>
 
-                <label htmlFor="description-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
-                    <input id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"
-                           type="text" value={info.description}/>
+                <label htmlFor="description-editParcelModal_ApproveParcels"><b>Descrição:</b>
+                    <input onChange={ () => (setChangedInfo(true))} id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"
+                           type="text" defaultValue={info.description}/>
+                </label><br/>
+
+                <label htmlFor="file-editParcelModal_ApproveParcels"><b>Alterar Documento: </b>
+                    <input id="file-editParcelModal_ApproveParcels" type="file" name="upload" accept="application/pdf" />
+                </label><br/>
+
+                <label htmlFor="photo-editParcelModal_ApproveParcels"><b>Alterar Fotografia: </b>
+                    <input id="photo-editParcelModal_ApproveParcels" type="file" name="upload" accept="image/png" />
                 </label><br/>
 
                 <p></p>
 
-                <Button type="button" className="btn btn-success btn-sm"> Confirmar Alterações </Button>
+                <Button type="button" className="btn btn-success btn-sm" onClick={sendNewInfo}> Confirmar Alterações </Button>
 
             </Modal.Body>
         </Modal>
