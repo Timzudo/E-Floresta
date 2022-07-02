@@ -2,9 +2,15 @@ import './Statistics.css'
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
+import TopBar from "../TopBar/TopBar";
+
 
 const Statistics = () => {
-    const [data] = useState({
+
+
+
+    const [exemplo] = useState({
         labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
         datasets: [
             {
@@ -14,12 +20,16 @@ const Statistics = () => {
                 data: [65, 59, 90, 81, 56, 55, 40],
             },
         ],
+        height: '50px',
+        width: '100%',
     });
 
     return (
         <>
-                <h3 className="mt-5">Line chart</h3>
-                <Line data={data} options={{ responsive: true }} />
+            <CheckIfLoggedOut />
+            <TopBar />
+            <h3 className="mt-4">Line chart</h3>
+            <Line className="example-graph" data={exemplo} options={{ responsive: true }} />
         </>
     );
 };
