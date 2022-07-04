@@ -33,7 +33,7 @@ const modalContainerStyle = {
 const ParcelEditModal = (props) => {
     const [managerValue, setmanagerValue] = useState("");
     const [changedInfo, setChangedInfo] = useState(false);
-    const [obj, setObj] = useState({});
+    const [centerLoc, setCenterLoc] = useState(center);
     const [info, setInfo] = useState({});
 
     const [managerList, setManager] = useState([]);
@@ -126,90 +126,64 @@ const ParcelEditModal = (props) => {
 
     async function sendNewInfo(){
 
-        let any = false;
-        var info = true;
-        var doc = true;
-        var photo = true;
+        let arr = [];
 
         if(changedInfo){
-            any = true;
-            sendInfo().then(r => (info = r));
+            arr.push(sendInfo());
+            console.log("yau");
         }
-        if(document.getElementById("file-editParcelModal_ApproveParcels").files[0] != undefined){
-            any = true;
-            sendDocument(document.getElementById("file-editParcelModal_ApproveParcels").files[0]).then(r => (doc = r));
+        if(document.getElementById("file-editParcelModal_ApproveParcels").files[0] !== undefined){
+            arr.push(sendDocument(document.getElementById("file-editParcelModal_ApproveParcels").files[0]));
         }
-        if(document.getElementById("photo-editParcelModal_ApproveParcels").files[0] != undefined){
-            any = true;
-            sendPhoto(document.getElementById("photo-editParcelModal_ApproveParcels").files[0]).then(r => (photo = r));
+        if(document.getElementById("photo-editParcelModal_ApproveParcels").files[0] !== undefined){
+            arr.push(sendPhoto(document.getElementById("photo-editParcelModal_ApproveParcels").files[0]));
         }
 
-        var result = info && await doc && await photo;
-
-        console.log("Any:" + any);
-        console.log("Info:" + info);
-        console.log("Doc:" + doc);
-        console.log("Photo:" + photo);
-
-        if(result && any){
-            alert("Success");
-        }
-        else{
-            alert("Error")
-        }
+        Promise.all(arr).then(() => (alert("Success"), window.location.reload())).catch(() => alert("Error"));
     }
 
     async function sendInfo(){
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                return xmlhttp.status == 200;
-            }
-        }
-        var myObj = {cover:document.getElementById("cobertSolo-editParcelModal_ApproveParcels").value,
-                    usage:document.getElementById("utilAtSolo-editParcelModal_ApproveParcels").value,
-                    oldUsage:document.getElementById("utilPrevSolo-editParcelModal_ApproveParcels").value,
-                    description:document.getElementById("description-editParcelModal_ApproveParcels").value,
-                    token:localStorage.getItem('token')};
+        let myObj = {cover:document.getElementById("cobertSolo-editParcelModal_ApproveParcels").value,
+            usage:document.getElementById("utilAtSolo-editParcelModal_ApproveParcels").value,
+            oldUsage:document.getElementById("utilPrevSolo-editParcelModal_ApproveParcels").value,
+            description:document.getElementById("description-editParcelModal_ApproveParcels").value,
+            token:localStorage.getItem('token')};
 
-        console.log(myObj);
-        var myJson = JSON.stringify(myObj);
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/info", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
+        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/info", options);
     }
 
     async function sendDocument(document){
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                return xmlhttp.status == 200;
-            }
-        }
-
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('token', localStorage.getItem('token'));
         formData.append('document', document);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/document", true);
-        xmlhttp.send(formData);
+        const options = {
+            method: 'POST',
+            body: formData,
+        };
+
+        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/document", options);
     }
 
     async function sendPhoto(photo){
-        let xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                return xmlhttp.status == 200;
-            }
-        }
-
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('token', localStorage.getItem('token'));
         formData.append('photo', photo);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", true);
-        xmlhttp.send(formData);
+        const options = {
+            method: 'POST',
+            body: formData,
+        };
+
+        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", options);
     }
 
 
@@ -229,12 +203,14 @@ const ParcelEditModal = (props) => {
 
                 <GoogleMap
                     mapContainerStyle={modalContainerStyle}
-                    center={center}
-                    zoom={10}
+                    center={centerLoc}
+
+                    zoom={15}
                     tilt={0}
+                    onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
                 >
                     <Polygon
-                        paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
+                        paths={JSON.parse(props.obj.coordinates === undefined ? "[]" : props.obj.coordinates)}
                         options={options}
                     />
                     

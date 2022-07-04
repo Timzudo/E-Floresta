@@ -622,8 +622,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        String parcelId = username + "_" + parcelName;
-        BlobId blobIdPhoto = BlobId.of(PARCEL_PHOTO_BUCKET, username + "/" + parcelId + "_photo");
+        BlobId blobIdPhoto = BlobId.of(PARCEL_PHOTO_BUCKET, parcel.getString("parcel_owner") + "/" + parcelName + "_photo");
         BlobInfo blobInfoPhoto = BlobInfo.newBuilder(blobIdPhoto).setContentType("image/png").build();
         storage.create(blobInfoPhoto, photo);
 
@@ -673,8 +672,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        String parcelId = username + "_" + parcelName;
-        BlobId blobIdDocument = BlobId.of(PARCEL_DOCUMENT_BUCKET, username + "/" + parcelId + "_photo");
+        BlobId blobIdDocument = BlobId.of(PARCEL_DOCUMENT_BUCKET, parcel.getString("parcel_owner") + "/" + parcelName + "_document");
         BlobInfo blobInfoDocument = BlobInfo.newBuilder(blobIdDocument).setContentType("application/pdf").build();
         storage.create(blobInfoDocument, document);
 
@@ -798,8 +796,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        String parcelId = username + "_" + parcelName;
-        BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelId + "_coordinates");
+        BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelName + "_coordinates");
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         storage.create(blobInfo, coordinates.getBytes(StandardCharsets.UTF_8));
 

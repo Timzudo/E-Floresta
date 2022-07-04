@@ -30,7 +30,7 @@ const modalContainerStyle = {
 const ParcelDetailsModal = (props) => {
 
     const [obj, setObj] = useState({});
-
+    const [centerLoc, setCenterLoc] = useState(center);
     const handleClose = () => props.setShow(false);
 
     let xmlhttp = new XMLHttpRequest();
@@ -67,9 +67,10 @@ const ParcelDetailsModal = (props) => {
 
             <GoogleMap
                 mapContainerStyle={modalContainerStyle}
-                center={center}
-                zoom={10}
+                center={centerLoc}
+                zoom={15}
                 tilt={0}
+                onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
             >
                 <Polygon
                     paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
