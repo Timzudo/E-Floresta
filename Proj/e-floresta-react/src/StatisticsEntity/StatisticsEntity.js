@@ -1,13 +1,15 @@
 import './StatisticsEntity.css'
 import React, { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Col, Row} from "react-bootstrap";
+import {Col, Form, Row} from "react-bootstrap";
 
 
 const StatisticsEntity = () => {
+ //   const [freguesiaOptions, setFreguesiaOptions] = useState([]);
 
     const [utilSoloByNumber] = useState({
         labels: ['Privado', 'Comercial', 'Pasto', 'Floresta', 'Agrícola', 'Residencial', 'Transporte', 'Recreativo'],
@@ -73,30 +75,50 @@ const StatisticsEntity = () => {
     });
 
 
+    const [nrParcelsPerFreguesiaInConcelho] = useState({
+        labels: ['Colares', 'S. João das Lampas', 'S. Martinho', 'Terrugem', 'Santa Maria e S.Miguel', 'S. Pedro de Penaferrim', 'Montelavar',
+        'Pero Pinheiro', 'Algueirão-Men Martins', 'Rio de Mouro', 'Agualva-Cacém', 'Massamá', 'Belas', 'Almargem do Bispo', 'Casal de Cambra',
+        'Monte Abraão', 'Queluz'],
+        datasets: [
+            {
+                label: 'Parcelas nas Freguesias de Sintra',
+                backgroundColor: 'rgba(176, 192, 144, 0.5)',
+                borderColor: 'rgb(62, 80, 58)',
+                data: [35, 12, 69, 46, 2, 84, 82, 34, 56, 90, 42, 26, 98, 19, 78, 38, 50],
+            },
+        ],
+    });
+
 
     return (
         <>
             <CheckIfLoggedOut />
             <TopBar />
 
-            <Row class>
+            <Row>
                 <p></p>
-                <h2 className="statistics-title">Tipos de Utilização do Solo</h2>
-                <Col>
-                    <h6 className="graph-title">Percentagem por quantidade de parcelas</h6>
-                    <Pie className="util-solo-graph" data={utilSoloByNumber} options={{ responsive: true }} />
+                <h2 className="stats-entity-title"> Tipos de Utilização do Solo </h2>
+
+                <Col className="stats-entity-container">
+                    <h6 className="graph-entity-title"> Percentagem por quantidade de parcelas </h6>
+                    <Pie className="util-solo-graph_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
                 </Col>
-                <Col>
-                    <h6 className="graph-title">Percentagem por área de parcelas</h6>
-                    <Pie className="util-solo-graph" data={utilSoloByArea} options={{ responsive: true }} />
+
+                <Col className="stats-entity-container">
+                    <h6 className="graph-entity-title"> Percentagem por área de parcelas </h6>
+                    <Pie className="util-solo-graph_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
                 </Col>
             </Row>
 
+            <h2 className="stats-entity-title"> Número de Parcelas num Concelho de uma Freguesia </h2>
+
+            <Row className="stats-entity-container">
+                <Bar className="nrParcels-in-concelho-per-freguesia_StatsEntity" data={nrParcelsPerFreguesiaInConcelho} options={{ responsive: true }} />
+            </Row>
 
         </>
     );
 };
-
 
 
 export default StatisticsEntity;
