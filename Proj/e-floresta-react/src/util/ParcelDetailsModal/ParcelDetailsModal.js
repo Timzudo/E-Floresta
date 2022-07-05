@@ -71,6 +71,7 @@ const ParcelDetailsModal = (props) => {
                 zoom={15}
                 tilt={0}
                 onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
+
             >
                 <Polygon
                     paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
@@ -91,6 +92,7 @@ const ParcelDetailsModal = (props) => {
                 <label><b>Utilização atual do solo:</b> {obj.usage} </label><br/>
                 <label><b>Utilização prévia do solo:</b> {obj.oldUsage} </label><br/>
                 <label><b>Descrição:</b> {obj.description} </label><br/>
+                <button onClick={() => (window.open(obj.documentURL), '_blank')} type="button">Ver documento</button>
             </Modal.Body>
         </Modal>
     </>

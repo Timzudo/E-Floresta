@@ -313,7 +313,7 @@ public class ParcelResource {
 
         String path = owner + "/" + parcelName;
         Blob blobDocument = storage.get(PARCEL_DOCUMENT_BUCKET, path + "_document");
-        URL url = blobDocument.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+        URL url = blobDocument.signUrl(2, TimeUnit.HOURS, Storage.SignUrlOption.withV4Signature());
 
         ParcelInfo info = new ParcelInfo(url.toString(),
                 parcel.getString("parcel_usage"),
@@ -749,7 +749,7 @@ public class ParcelResource {
 
     @POST
     @Path("/modify/{parcelName}/coordinates")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response modifyParcelCoordinates(@PathParam("parcelName") String parcelName,
                                             @FormDataParam("token") String token,
                                             @FormDataParam("coordinates") String coordinates,
@@ -763,7 +763,7 @@ public class ParcelResource {
         }
 
         Point[] coordinateList = g.fromJson(coordinates, Point[].class);
-        if(coordinateList.length>3){
+        if(coordinateList.length < 3){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -803,7 +803,7 @@ public class ParcelResource {
 
         Transaction txn = datastore.newTransaction();
         try{
-            parcel = Entity.newBuilder(parcelKey)
+            parcel = Entity.newBuilder(parcel)
                     .set("parcel_area", Long.parseLong(area))
                     .set("parcel_perimeter", Long.parseLong(perimeter))
                     .build();

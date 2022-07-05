@@ -2,8 +2,9 @@ import './ParcelEditModal.css'
 
 import {Button, ButtonGroup, Dropdown, Modal} from "react-bootstrap";
 import React from "react";
-import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import {GoogleMap, LoadScript, Marker, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
+import {getAreaOfPolygon, getDistance, getPathLength} from "geolib";
 
 
 const center = {
@@ -13,8 +14,20 @@ const center = {
 
 const options = {
     fillColor: "Khaki",
-    fillOpacity: 0.3,
+    fillOpacity: 0.2,
     strokeColor: "DarkOrange",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1
+}
+const optionsSecondary = {
+    fillColor: "DarkCyan",
+    fillOpacity: 0.4,
+    strokeColor: "Aqua",
     strokeOpacity: 1,
     strokeWeight: 2,
     clickable: false,
@@ -31,6 +44,11 @@ const modalContainerStyle = {
 
 
 const ParcelEditModal = (props) => {
+    const [markerList, setMarker] = useState([]);
+    const [paths, setPaths] = useState([]);
+    const [area, setArea] = useState(0);
+    const [perimeter, setPerimeter] = useState(0);
+
     const [managerValue, setmanagerValue] = useState("");
     const [changedInfo, setChangedInfo] = useState(false);
     const [centerLoc, setCenterLoc] = useState(center);
@@ -65,6 +83,38 @@ const ParcelEditModal = (props) => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     })()
+
+    function addMarker(lat, lng) {
+        const google = window.google;
+
+        setMarker(markerList.concat(<Marker key={markerList.length} id={markerList.length}
+                                            position={{
+                                                lat: lat,
+                                                lng: lng
+                                            }}
+                                            icon={{
+                                                path: google.maps.SymbolPath.CIRCLE,
+                                                fillColor: "Aqua",
+                                                fillOpacity: 1.0,
+                                                strokeWeight: 0,
+                                                scale: 5
+                                            }}/>))
+
+        setPaths(paths.concat({
+            lat: lat,
+            lng: lng
+        }));
+    }
+
+    function rollback() {
+        setMarker(markerList.filter((element, index) => index < markerList.length - 1));
+        setPaths(paths.filter((element, index) => index < paths.length - 1));
+    }
+
+    React.useEffect(() => {
+        setPerimeter(getPathLength(paths) + (paths.length>1 ? getDistance(paths[paths.length-1], paths[0]) : 0));
+        setArea(Math.round(getAreaOfPolygon(paths)));
+    }, [paths]);
 
     function hasManager() {
         if(props.obj.manager != "") {
@@ -125,7 +175,6 @@ const ParcelEditModal = (props) => {
     }
 
     async function sendNewInfo(){
-
         let arr = [];
 
         if(changedInfo){
@@ -137,6 +186,10 @@ const ParcelEditModal = (props) => {
         }
         if(document.getElementById("photo-editParcelModal_ApproveParcels").files[0] !== undefined){
             arr.push(sendPhoto(document.getElementById("photo-editParcelModal_ApproveParcels").files[0]));
+        }
+        if(paths.length > 2){
+            arr.push(sendCoordinates(paths));
+            console.log("send");
         }
 
         Promise.all(arr).then(() => (alert("Success"), window.location.reload())).catch(() => alert("Error"));
@@ -186,6 +239,21 @@ const ParcelEditModal = (props) => {
         return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", options);
     }
 
+    async function sendCoordinates(paths){
+        let formData = new FormData();
+        formData.append('token', localStorage.getItem('token'));
+        formData.append('coordinates', JSON.stringify(paths));
+        formData.append('area', area.toString());
+        formData.append('perimeter', perimeter.toString());
+
+        const options = {
+            method: 'POST',
+            body: formData,
+        };
+
+        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/coordinates", options);
+    }
+
 
     return <>
         <Modal
@@ -208,11 +276,19 @@ const ParcelEditModal = (props) => {
                     zoom={15}
                     tilt={0}
                     onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
+                    onClick={ev => {
+                        addMarker(ev.latLng.lat(), ev.latLng.lng())
+                    }}
                 >
                     <Polygon
                         paths={JSON.parse(props.obj.coordinates === undefined ? "[]" : props.obj.coordinates)}
                         options={options}
                     />
+                    <Polygon
+                        paths={paths}
+                        options={optionsSecondary}
+                    />
+                    {markerList}
                     
                 </GoogleMap>
 
@@ -220,13 +296,11 @@ const ParcelEditModal = (props) => {
 
                     <ButtonGroup className="buttons-editParcelModal_ApproveParcels" size="sm">
 
-                        <Button id="rollback-editParcelModal_ApproveParcels" variant="secondary"> Retroceder </Button>
-
-                        <Button id="confirmNewCoord-editParcelModal_ApproveParcels" variant="success" > Confirmar novas coordenadas </Button>
+                        <Button id="rollback-editParcelModal_ApproveParcels" variant="secondary" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}> Retroceder </Button>
 
                     </ButtonGroup>
-                    <label id="newA-editParcelModal_ApproveParcels"> <b>Nova área:</b> </label>
-                    <label id="newP-editParcelModal_ApproveParcels"> <b>Novo perímetro:</b> </label>
+                    <label id="newA-editParcelModal_ApproveParcels"> <b>Nova área:{area}</b> </label>
+                    <label id="newP-editParcelModal_ApproveParcels"> <b>Novo perímetro:{perimeter}</b> </label>
                 </div>
                 <p></p>
 
