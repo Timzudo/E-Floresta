@@ -87,7 +87,10 @@ const ParcelEditModal = (props) => {
 
     function onLoad() {
         let centerPoint = getCenterOfBounds(JSON.parse(props.obj.coordinates));
-        setCenterLoc(centerPoint);
+        setCenterLoc({
+            lat: centerPoint.latitude,
+            lng: centerPoint.longitude
+        });
 
         let arr = orderByDistance(centerPoint, JSON.parse(props.obj.coordinates));
         let mostDistant = arr[arr.length-1];
@@ -282,10 +285,7 @@ const ParcelEditModal = (props) => {
 
                 <GoogleMap
                     mapContainerStyle={modalContainerStyle}
-                    center={{
-                        lat:centerLoc.latitude,
-                        lng:centerLoc.longitude}
-                    }
+                    center={centerLoc}
 
                     zoom={zoom}
                     tilt={0}

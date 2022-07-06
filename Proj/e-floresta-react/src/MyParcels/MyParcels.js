@@ -81,7 +81,7 @@ const MyParcels = () => {
                 if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "pointer"}}>
+                        arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "default"}}>
                             <Card.Img className="parcel_picture" variant="top" src={obj[i].photoURL} />
                             <Card.Body>
                                 <Card.Title>{obj[i].name} {isParcelVerified(obj[i].isApproved)} </Card.Title>

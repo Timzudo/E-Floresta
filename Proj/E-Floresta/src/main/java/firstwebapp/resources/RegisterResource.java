@@ -8,12 +8,18 @@ import firstwebapp.util.JWToken;
 import firstwebapp.util.RegistrationData;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Path("/register")
@@ -22,11 +28,14 @@ public class RegisterResource {
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
+    Properties props = new Properties();
+    Session session = Session.getDefaultInstance(props, null);
+
 
     @POST
     @Path("/personal/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerPersonal(@PathParam("username") String username, RegistrationData data){
+    public Response registerPersonal(@PathParam("username") String username, RegistrationData data) throws UnsupportedEncodingException, MessagingException {
         LOG.fine("Attempt to register personal account: " + username);
 
         if(!data.validRegistration()) {
@@ -38,7 +47,8 @@ public class RegisterResource {
         if(user != null){
             return Response.status(Response.Status.CONFLICT).entity("User already exists.").build();
         }
-
+        String confirmationID = UUID.randomUUID().toString();
+        Key confirmationKey = datastore.newKeyFactory().setKind("Confirmation").newKey(confirmationID);
 
         Transaction txn = datastore.newTransaction();
 
@@ -57,14 +67,60 @@ public class RegisterResource {
                     .set("user_freguesia", "")
                     .build();
 
+            Entity confirmation = Entity.newBuilder(confirmationKey)
+                            .set("confirmation_username", username)
+                                    .build();
 
-            txn.add(user);
+
+            txn.add(user, confirmation);
             LOG.info("Personal user registered " + username);
             txn.commit();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }
 
-            String token = JWToken.generateToken(username, "D");
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("eflorestaapdc@gmail.com", "Example.com Admin"));
+        msg.addRecipient(Message.RecipientType.TO,
+                new InternetAddress(data.email, "Mr. User"));
+        msg.setSubject("Confirme o seu e-mail.");
+        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
+        Transport.send(msg);
 
-            return Response.ok(token).build();
+        String token = JWToken.generateToken(username, "D");
+        return Response.ok(token).build();
+    }
+
+    @GET
+    @Path("/confirm/{id}")
+    public Response confirmEmail(@PathParam("id") String id){
+
+        Key confirmationKey = datastore.newKeyFactory().setKind("Confirmation").newKey(id);
+        Entity confirmation = datastore.get(confirmationKey);
+        if(confirmation == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist").build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(confirmation.getString("confirmation_username"));
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist").build();
+        }
+
+        Transaction txn = datastore.newTransaction();
+        try{
+            user = Entity.newBuilder(user)
+                    .set("user_state", "CONFIRMED")
+                    .build();
+
+            txn.update(user);
+            txn.delete(confirmationKey);
+            txn.commit();
+            return Response.ok().build();
         }
         finally {
             if(txn.isActive()){

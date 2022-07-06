@@ -24,6 +24,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
 
 
 
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/approve-parcels" element={<ApproveParcels />} />
           <Route path="/all-parcels" element={<AllParcels />} />
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
+          <Route path="/confirmation" element={<ConfirmationPage />} />
         </Routes>
       </Router>
   )
