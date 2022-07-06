@@ -50,7 +50,7 @@ const ProposedParcelsEntity = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/acceptrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/acceptrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -69,7 +69,7 @@ const ProposedParcelsEntity = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/rejectrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/rejectrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -115,7 +115,7 @@ const ProposedParcelsEntity = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/getrequested");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getrequested");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])

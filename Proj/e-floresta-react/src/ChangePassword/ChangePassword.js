@@ -39,7 +39,7 @@ const ChangePassword = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/modify/password");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/modify/password");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }

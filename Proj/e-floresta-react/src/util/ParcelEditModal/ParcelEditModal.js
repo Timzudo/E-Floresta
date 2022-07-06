@@ -57,7 +57,13 @@ const ParcelEditModal = (props) => {
 
     const [managerList, setManager] = useState([]);
 
-    const handleEditClose = () => props.setShow(false);
+    const handleEditClose = () => closeModal();
+
+    function closeModal(){
+        props.setShow(false);
+        setMarker([]);
+        setPaths([]);
+    }
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -80,7 +86,7 @@ const ParcelEditModal = (props) => {
         let myObj = {token:localStorage.getItem('token')};
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, []);
@@ -165,7 +171,7 @@ const ParcelEditModal = (props) => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -183,7 +189,7 @@ const ParcelEditModal = (props) => {
         console.log(myObj);
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -224,7 +230,7 @@ const ParcelEditModal = (props) => {
             body: JSON.stringify(myObj),
         };
 
-        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/info", options);
+        return fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/info", options);
     }
 
     async function sendDocument(document){
@@ -237,7 +243,7 @@ const ParcelEditModal = (props) => {
             body: formData,
         };
 
-        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/document", options);
+        return fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/document", options);
     }
 
     async function sendPhoto(photo){
@@ -250,7 +256,7 @@ const ParcelEditModal = (props) => {
             body: formData,
         };
 
-        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", options);
+        return fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/photo", options);
     }
 
     async function sendCoordinates(paths){
@@ -265,7 +271,7 @@ const ParcelEditModal = (props) => {
             body: formData,
         };
 
-        return fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/coordinates", options);
+        return fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/coordinates", options);
     }
 
 

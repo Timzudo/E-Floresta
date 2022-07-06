@@ -43,7 +43,7 @@ const ChangeProfile = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])
@@ -75,7 +75,7 @@ const ChangeProfile = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/modify/info");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/modify/info");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import Image from "../logo.png";
 import {Spinner} from "react-bootstrap";
 import {useLocation} from "react-router-dom";
-import {useState} from "@types/react";
+import {useState} from "react";
 
 
 
@@ -14,12 +14,12 @@ const ConfirmationPage = () => {
     console.log(name);
 
     useEffect(() => {
-        fetch("https://moonlit-oven-349523.oa.r.appspot.com/rest/register/confirm/" + name).then(r => alert(r.status));
+        fetch("https://moonlit-oven-349523.appspot.com/rest/register/confirm/" + name).then(r => setConfirmed(true)).catch( () =>alert("yau"));
     }, [])
 
     function body(){
         if(confirmed){
-
+            return(<span>O seu e-mail foi confirmado com sucesso, pode voltar à pagina inicial.</span>)
         }
         else{
             return(<>
@@ -38,10 +38,7 @@ const ConfirmationPage = () => {
                     <Link to="/"><img src={Image} alt="E-Floresta Logo" className="home_logo" /></Link>
                 </div>
             </div>
-            <span>A confirmar o seu e-mail, por favor aguarde...</span>
-            <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </Spinner>
+            {body()}
         </>
     )
 }

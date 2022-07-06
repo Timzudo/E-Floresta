@@ -77,7 +77,7 @@ const AllParcels = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/approvedbyregion");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/approvedbyregion");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])

@@ -21,7 +21,7 @@ const center = {
 
 const options = {
     fillColor: "Khaki",
-    fillOpacity: 0.1,
+    fillOpacity: 0.2,
     strokeColor: "DarkOrange",
     strokeOpacity: 1,
     strokeWeight: 2,
@@ -118,7 +118,7 @@ const MyParcels = () => {
         var myObj = {token:localStorage.getItem('token')};
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/owned");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])

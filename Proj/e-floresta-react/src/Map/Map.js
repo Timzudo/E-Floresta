@@ -163,7 +163,7 @@ const Map = () => {
         }
 
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
         xmlhttp.send(f);
     }
 

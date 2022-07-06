@@ -70,7 +70,7 @@ const ParcelsEntity = () => {
         let myObj = {token:localStorage.getItem('token')};
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/removemanager/" + owner + "_" + parcelName);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/removemanager/" + owner + "_" + parcelName);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -119,7 +119,7 @@ const ParcelsEntity = () => {
         let myObj = {token:localStorage.getItem('token')};
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managed");
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/managed");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }, [])

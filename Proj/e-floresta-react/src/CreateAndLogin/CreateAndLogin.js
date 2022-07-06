@@ -37,13 +37,14 @@ const CreateAndLogin = () => {
         } else {
           alert("Não foi possível efetuar o login.");
         }
+        console.log(xmlhttp.status);
       }
     }
 
     let myObj = { password: document.getElementById("session-password").value };
     let myJson = JSON.stringify(myObj);
 
-    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/login/" + document.getElementById("session-username").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -88,7 +89,7 @@ const CreateAndLogin = () => {
     let myJson = JSON.stringify(myObj);
 
     console.log(type);
-    xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/register/"+ type + "/" + document.getElementById("create-acc-user").value, true);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/register/"+ type + "/" + document.getElementById("create-acc-user").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
