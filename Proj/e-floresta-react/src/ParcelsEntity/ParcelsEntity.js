@@ -122,7 +122,7 @@ const ParcelsEntity = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managed");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    })
+    }, [])
 
 
     return(

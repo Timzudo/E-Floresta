@@ -1,10 +1,10 @@
 import './ParcelEditModal.css'
 
-import {Button, ButtonGroup, Dropdown, Modal} from "react-bootstrap";
-import React from "react";
-import {GoogleMap, LoadScript, Marker, Polygon} from "@react-google-maps/api";
+import {Button, ButtonGroup, Modal} from "react-bootstrap";
+import {GoogleMap, Marker, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
-import {getAreaOfPolygon, getDistance, getPathLength} from "geolib";
+import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
+import React, {useEffect} from 'react'
 
 
 const center = {
@@ -48,6 +48,7 @@ const ParcelEditModal = (props) => {
     const [paths, setPaths] = useState([]);
     const [area, setArea] = useState(0);
     const [perimeter, setPerimeter] = useState(0);
+    const [zoom, setZoom] = useState(15);
 
     const [managerValue, setmanagerValue] = useState("");
     const [changedInfo, setChangedInfo] = useState(false);
@@ -60,10 +61,10 @@ const ParcelEditModal = (props) => {
 
     let xmlhttp = new XMLHttpRequest();
 
-    (function loadManagers() {
+    useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const managersObj = JSON.parse(xmlhttp.responseText);
                     let arr = [];
 
@@ -82,7 +83,17 @@ const ParcelEditModal = (props) => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    })()
+    }, []);
+
+    function onLoad() {
+        let centerPoint = getCenterOfBounds(JSON.parse(props.obj.coordinates));
+        setCenterLoc(centerPoint);
+
+        let arr = orderByDistance(centerPoint, JSON.parse(props.obj.coordinates));
+        let mostDistant = arr[arr.length-1];
+        let dist = getDistance(centerPoint, mostDistant, 1);
+        setZoom(Math.round(97.1634 - (69.2069*Math.pow((dist*9), 0.0174478)))-1);
+    }
 
     function addMarker(lat, lng) {
         const google = window.google;
@@ -117,7 +128,7 @@ const ParcelEditModal = (props) => {
     }, [paths]);
 
     function hasManager() {
-        if(props.obj.manager != "") {
+        if(props.obj.manager !== "") {
             return(
                 <label>
                     <b>Gerente:</b> {props.obj.manager}
@@ -142,8 +153,8 @@ const ParcelEditModal = (props) => {
 
     function loadModalValues() {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     setInfo(JSON.parse(xmlhttp.responseText));
                 }
             }
@@ -158,7 +169,7 @@ const ParcelEditModal = (props) => {
 
     function sendManagerRequest() {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
+            if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status == 200) {
                     alert("Pedido enviado.")
                 }
@@ -271,11 +282,14 @@ const ParcelEditModal = (props) => {
 
                 <GoogleMap
                     mapContainerStyle={modalContainerStyle}
-                    center={centerLoc}
+                    center={{
+                        lat:centerLoc.latitude,
+                        lng:centerLoc.longitude}
+                    }
 
-                    zoom={15}
+                    zoom={zoom}
                     tilt={0}
-                    onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
+                    onLoad={() => onLoad(paths)}
                     onClick={ev => {
                         addMarker(ev.latLng.lat(), ev.latLng.lng())
                     }}

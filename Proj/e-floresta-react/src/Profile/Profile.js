@@ -4,7 +4,7 @@ import TopBar from '../TopBar/TopBar.js'
 import {Link, useNavigate} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
-import React, { Component }  from 'react';
+import React, {useEffect} from 'react'
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Profile = () => {
     let xmlhttp = new XMLHttpRequest();
 
     //Permite correr a funcao quando a pagina e carregada
-    (function getValues() {
+    useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
@@ -49,7 +49,7 @@ const Profile = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    })()
+    }, [])
 
     return(
         <>

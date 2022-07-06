@@ -1,10 +1,10 @@
+import React, {useEffect} from 'react'
 import  './ChangeProfile.css'
 import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
 import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Button} from "react-bootstrap";
-import React, { Component }  from 'react';
 import {useState} from "react";
 
 const ChangeProfile = () => {
@@ -18,7 +18,7 @@ const ChangeProfile = () => {
 
     let xmlhttp = new XMLHttpRequest();
 
-    (function getValues() {
+    useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
@@ -46,8 +46,7 @@ const ChangeProfile = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    })()
-
+    }, [])
 
 
     function changeProfile() {

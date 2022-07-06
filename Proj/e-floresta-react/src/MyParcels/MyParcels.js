@@ -2,7 +2,7 @@ import "./MyParcels.css"
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Badge, Button, ButtonGroup, Card, Col, Dropdown, Modal, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Row} from "react-bootstrap";
 import {useEffect, useState} from 'react'
 import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
@@ -32,11 +32,6 @@ const options = {
     zIndex: 1
 }
 
-const modalContainerStyle = {
-    width: '72vw',
-    height: '45vh'
-};
-
 
 const MyParcels = () => {
     const [obj, setObj] = useState({});
@@ -58,8 +53,6 @@ const MyParcels = () => {
         setShow(false);
         setEditShow(true);
     }
-    const handleClose = () => setShow(false);
-    const handleEditClose = () => setEditShow(false);
 
     const [parcelList, setPList] = useState([]);
 
@@ -67,7 +60,6 @@ const MyParcels = () => {
 
     let arr = [];
     let pathsArr = [];
-    let verified = false;
 
     function isParcelVerified(verified) {
         if(verified) {
@@ -85,8 +77,8 @@ const MyParcels = () => {
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
                         arr.push(<Card className="parcel-card_MyParcels" style={{ width: '15rem',cursor: "pointer"}}>

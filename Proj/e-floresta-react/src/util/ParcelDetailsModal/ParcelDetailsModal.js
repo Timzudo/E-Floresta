@@ -1,7 +1,8 @@
 import {Modal} from "react-bootstrap";
 import React from 'react';
-import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import {GoogleMap, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
+import {getCenterOfBounds, getDistance, orderByDistance} from "geolib";
 
 
 const center = {
@@ -31,14 +32,15 @@ const ParcelDetailsModal = (props) => {
 
     const [obj, setObj] = useState({});
     const [centerLoc, setCenterLoc] = useState(center);
+    const [zoom, setZoom] = useState(15);
     const handleClose = () => props.setShow(false);
 
     let xmlhttp = new XMLHttpRequest();
 
     function loadModalValues() {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     setObj(JSON.parse(xmlhttp.responseText));
                 }
             }
@@ -49,6 +51,16 @@ const ParcelDetailsModal = (props) => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name); //TODO:alterar link
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
+    }
+
+    function onLoad(coordinates) {
+        let centerPoint = getCenterOfBounds(JSON.parse(props.obj.coordinates));
+        setCenterLoc(centerPoint);
+
+        let arr = orderByDistance(centerPoint, JSON.parse(props.obj.coordinates));
+        let mostDistant = arr[arr.length-1];
+        let dist = getDistance(centerPoint, mostDistant, 1);
+        setZoom(Math.round(97.1634 - (69.2069*Math.pow((dist*9), 0.0174478)))-1);
     }
 
     return <>
@@ -67,14 +79,17 @@ const ParcelDetailsModal = (props) => {
 
             <GoogleMap
                 mapContainerStyle={modalContainerStyle}
-                center={centerLoc}
-                zoom={15}
+                center={{
+                    lat:centerLoc.latitude,
+                    lng:centerLoc.longitude}
+                }
+                zoom={zoom}
                 tilt={0}
-                onLoad={() => setCenterLoc(JSON.parse(props.obj.coordinates)[0])}
+                onLoad={() => onLoad(props.obj.coordinates)}
 
             >
                 <Polygon
-                    paths={JSON.parse(props.obj.coordinates == undefined ? "[]" : props.obj.coordinates)}
+                    paths={JSON.parse(props.obj.coordinates === undefined ? "[]" : props.obj.coordinates)}
                     options={options}
                 />
             </GoogleMap>

@@ -59,7 +59,7 @@ const CSVConverter = () => {
     useEffect(() =>
     {
         checkCSV();
-    })
+    }, [])
 
     return(
         <></>

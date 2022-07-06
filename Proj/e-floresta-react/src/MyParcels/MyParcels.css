@@ -42,7 +42,7 @@ html, body{
 
 .parcel-card_MyParcels button{
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
     outline: 0;
     display: inline-block;
     color: black;

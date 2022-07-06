@@ -5,13 +5,20 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.*;
 import com.google.cloud.storage.Blob;
+import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import firstwebapp.util.*;
+import firstwebapp.util.Point;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.imageio.ImageIO;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -39,6 +46,7 @@ public class ParcelResource {
     private static final String PARCEL_BUCKET = "parcel_bucket";
     private static final String PARCEL_DOCUMENT_BUCKET = "parcel_document_bucket";
     private static final String PARCEL_PHOTO_BUCKET = "parcel_photo_bucket";
+    private static final String PARCEL_THUMBNAIL_BUCKET = "parcel_thumbnail_bucket";
 
 
     private final Gson g = new Gson();
@@ -81,7 +89,7 @@ public class ParcelResource {
                                    @FormDataParam("document") InputStream document,
                                    @FormDataParam("usage") String usage,
                                    @FormDataParam("oldUsage") String oldUsage,
-                                   @FormDataParam("cover") String cover) {
+                                   @FormDataParam("cover") String cover) throws IOException {
 
         LOG.fine("Attempt to register parcel.");
 
@@ -116,9 +124,24 @@ public class ParcelResource {
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         storage.create(blobInfo, coordinates.getBytes(StandardCharsets.UTF_8));
 
+        byte[] bytes = ByteStreams.toByteArray(photo);
+
+        ByteArrayInputStream isThumbnail = new ByteArrayInputStream(bytes);
+
+        BufferedImage img = new BufferedImage(238, 200, BufferedImage.TYPE_INT_RGB);
+        img.createGraphics().drawImage(ImageIO.read(isThumbnail).getScaledInstance(238, 200, Image.SCALE_SMOOTH),0,0,null);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+        BlobId blobIdThumbnail = BlobId.of(PARCEL_THUMBNAIL_BUCKET, username + "/" + parcelId + "_thumbnail");
+        BlobInfo blobInfoThumbnail = BlobInfo.newBuilder(blobIdThumbnail).setContentType("image/png").build();
+        storage.create(blobInfoThumbnail, is);
+
+        ByteArrayInputStream isPhoto = new ByteArrayInputStream(bytes);
         BlobId blobIdPhoto = BlobId.of(PARCEL_PHOTO_BUCKET, username + "/" + parcelId + "_photo");
         BlobInfo blobInfoPhoto = BlobInfo.newBuilder(blobIdPhoto).setContentType("image/png").build();
-        storage.create(blobInfoPhoto, photo);
+        storage.create(blobInfoPhoto, isPhoto);
 
         BlobId blobIdDocument = BlobId.of(PARCEL_DOCUMENT_BUCKET, username + "/" + parcelId + "_document");
         BlobInfo blobInfoDocument = BlobInfo.newBuilder(blobIdDocument).setContentType("application/pdf").build();
@@ -198,7 +221,7 @@ public class ParcelResource {
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
             //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            Blob blobPhoto = storage.get(PARCEL_THUMBNAIL_BUCKET, path + "_thumbnail");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
@@ -261,7 +284,7 @@ public class ParcelResource {
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
             //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            Blob blobPhoto = storage.get(PARCEL_THUMBNAIL_BUCKET, path + "_thumbnail");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
@@ -589,7 +612,7 @@ public class ParcelResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response modifyParcelPhoto(@PathParam("parcelName") String parcelName,
                                          @FormDataParam("token") String token,
-                                         @FormDataParam("photo") InputStream photo) {
+                                         @FormDataParam("photo") InputStream photo) throws IOException {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
@@ -622,9 +645,24 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
+        byte[] bytes = ByteStreams.toByteArray(photo);
+
+        ByteArrayInputStream isThumbnail = new ByteArrayInputStream(bytes);
+
+        BufferedImage img = new BufferedImage(238, 200, BufferedImage.TYPE_INT_RGB);
+        img.createGraphics().drawImage(ImageIO.read(isThumbnail).getScaledInstance(238, 200, Image.SCALE_SMOOTH),0,0,null);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", os);
+        InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+        BlobId blobIdThumbnail = BlobId.of(PARCEL_THUMBNAIL_BUCKET, parcel.getString("parcel_owner") + "/" + parcelName + "_thumbnail");
+        BlobInfo blobInfoThumbnail = BlobInfo.newBuilder(blobIdThumbnail).setContentType("image/png").build();
+        storage.create(blobInfoThumbnail, is);
+
+        ByteArrayInputStream isPhoto = new ByteArrayInputStream(bytes);
         BlobId blobIdPhoto = BlobId.of(PARCEL_PHOTO_BUCKET, parcel.getString("parcel_owner") + "/" + parcelName + "_photo");
         BlobInfo blobInfoPhoto = BlobInfo.newBuilder(blobIdPhoto).setContentType("image/png").build();
-        storage.create(blobInfoPhoto, photo);
+        storage.create(blobInfoPhoto, isPhoto);
 
         return Response.ok().build();
     }
@@ -1026,7 +1064,7 @@ public class ParcelResource {
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
             //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            Blob blobPhoto = storage.get(PARCEL_THUMBNAIL_BUCKET, path + "_thumbnail");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
@@ -1096,7 +1134,7 @@ public class ParcelResource {
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
             //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            Blob blobPhoto = storage.get(PARCEL_THUMBNAIL_BUCKET, path + "_thumbnail");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
@@ -1167,7 +1205,7 @@ public class ParcelResource {
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
             //TODO
-            Blob blobPhoto = storage.get(PARCEL_PHOTO_BUCKET, path + "_photo");
+            Blob blobPhoto = storage.get(PARCEL_THUMBNAIL_BUCKET, path + "_thumbnail");
             URL url = blobPhoto.signUrl(5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
 
             parcelList.add(new ParcelMiniature(parcelName,
