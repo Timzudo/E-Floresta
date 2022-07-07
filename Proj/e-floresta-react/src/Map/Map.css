@@ -43,9 +43,14 @@
     border-color: #8c8468;
 }
 
+.latlng_input{
+    width: 90%;
+    margin: auto;
+}
+
 #rollback{
     border-radius: 0 0 5px 0;
-    height: 50%;
+    height: 33%;
     width: 100%;
     border: 1px solid black;
 }
@@ -55,9 +60,20 @@
     flex-direction: column;
     justify-content: center;
     border-radius: 0 5px 0 0;
-    height: 50%;
+    height: 34%;
     background-color: #b0c090;
     border: 1px solid black;
+}
+
+#parcelAddPoint{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    border-radius: 0 5px 0 0;
+    height: 33%;
+    background-color: #daf0fc;
+    border: 1px solid black;
+    padding-top: 10px;
 }
 
 #parcelInfo div{
@@ -67,6 +83,24 @@
     text-align: center;
 }
 
+#parcelAddPoint div{
+    width: 100%;
+    float: left;
+    margin-left: auto;
+    text-align: center;
+}
+
+#submit_latlng{
+    margin: auto;
+    width: 90%;
+}
+
 .MapInfo_Map{
     color: white;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

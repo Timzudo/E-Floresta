@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {GoogleMap, LoadScript} from '@react-google-maps/api';
 import {Marker} from '@react-google-maps/api';
 import {useState} from 'react'
@@ -94,6 +94,7 @@ const Map = () => {
 
 
     function addMarker(lat, lng) {
+        console.log(lat + " - " + lng);
         const google = window.google;
 
         console.log(lat, lng);
@@ -127,18 +128,18 @@ const Map = () => {
         let xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Parcela registada com sucesso.");
                     navigate("/map");
-                } else if(xmlhttp.status == 400) {
+                } else if(xmlhttp.status === 400) {
                     alert("Todos os campos obrigatórios devem ser preenchidos.");
                     alert(xmlhttp.responseText);
-                } else if(xmlhttp.status == 403 || xmlhttp.status == 404) {
+                } else if(xmlhttp.status === 403 || xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");
-                } else if(xmlhttp.status == 409) {
+                } else if(xmlhttp.status === 409) {
                     alert("Já possui uma parcela com o mesmo nome.")
                 }
             }
@@ -204,6 +205,18 @@ const Map = () => {
                             <div className="MapInfo_Map">Perímetro</div>
                             <div className="MapInfo_Map">{perimeter}m</div>
                         </div>
+                    </div>
+                    <div id="parcelAddPoint">
+                        <div id="addLat">
+                            <div className="MapInfo_Map">Latitude</div>
+                            <input className="latlng_input" type="number" id="input_lat" placeholder="Ex: 38.661142"/>
+                        </div>
+                        <br/>
+                        <div id="addLng">
+                            <div className="MapInfo_Map">Longitude</div>
+                            <input className="latlng_input" type="number" id="input_lng" placeholder="Ex: -9.203510"/>
+                        </div>
+                        <button type="button" id="submit_latlng" className="btn btn-success" onClick={() => addMarker(Number(document.getElementById("input_lat").value), Number(document.getElementById("input_lng").value))}>Adicionar ponto</button>
                     </div>
                     <button type="button" id="rollback" className={paths.length > 0 ? "btn btn-success" : "btn btn-secondary"} onClick={rollback}>Voltar atrás</button>
                 </div>
