@@ -95,26 +95,28 @@ const StatisticsEntity = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <Row>
-                <p></p>
-                <h2 className="stats-entity-title"> Tipos de Utilização do Solo </h2>
+            <div className="statistics-background">
+                <Row>
+                    <p></p>
+                    <h2 className="stats-entity-title"> Tipos de Utilização do Solo </h2>
 
-                <Col className="stats-entity-container">
-                    <h6 className="graph-entity-title"> Percentagem por quantidade de parcelas </h6>
-                    <Pie className="util-solo-graph_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
-                </Col>
+                    <Col className="stats-entity-container">
+                        <h6 className="graph-entity-title"> Percentagem por quantidade de parcelas </h6>
+                        <Pie className="util-solo-graph_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
+                    </Col>
 
-                <Col className="stats-entity-container">
-                    <h6 className="graph-entity-title"> Percentagem por área de parcelas </h6>
-                    <Pie className="util-solo-graph_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
-                </Col>
-            </Row>
+                    <Col className="stats-entity-container">
+                        <h6 className="graph-entity-title"> Percentagem por área de parcelas </h6>
+                        <Pie className="util-solo-graph_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
+                    </Col>
+                </Row>
 
-            <h2 className="stats-entity-title"> Número de Parcelas num Concelho de uma Freguesia </h2>
+                <h2 className="stats-entity-title"> Número de Parcelas num Concelho de uma Freguesia </h2>
 
-            <Row className="stats-entity-container">
-                <Bar className="nrParcels-in-concelho-per-freguesia_StatsEntity" data={nrParcelsPerFreguesiaInConcelho} options={{ responsive: true }} />
-            </Row>
+                <Row className="stats-entity-container">
+                    <Bar className="nrParcels-in-concelho-per-freguesia_StatsEntity" data={nrParcelsPerFreguesiaInConcelho} options={{ responsive: true }} />
+                </Row>
+            </div>
 
         </>
     );

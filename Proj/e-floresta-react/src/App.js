@@ -15,6 +15,8 @@ import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import AllParcels from "./AllParcels/AllParcels";
 import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
+import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
+import Rankings from "./Rankings/Rankings";
 
 import Front_img from "./front_img.jpg";
 import React, { Component }  from 'react';
@@ -24,7 +26,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
+
 
 
 
@@ -49,6 +51,7 @@ const App = () => {
           <Route path="/all-parcels" element={<AllParcels />} />
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
+          <Route path="/rankings" element={<Rankings />} />
         </Routes>
       </Router>
   )

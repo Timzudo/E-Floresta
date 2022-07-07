@@ -46,6 +46,10 @@ const TopBar = () => {
                     <Button id="option8">Visualizar Parcelas</Button>
                 </Link> : <></>}
 
+                <Link to="/rankings">
+                    <Button id="option10">Rankings</Button>
+                </Link>
+
                 <Link to="/about-us">
                     <Button id="option4">Sobre</Button>
                 </Link>
