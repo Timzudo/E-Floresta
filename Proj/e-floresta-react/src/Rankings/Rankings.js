@@ -14,7 +14,7 @@ const Rankings = () => {
         datasets: [
             {
                 label: 'Utilizadores com melhor User trust',
-                backgroundColor: 'rgba(176, 192, 144, 0.5)',
+                backgroundColor: 'rgba(62, 80, 58, 0.9)',
                 borderColor: 'rgb(62, 80, 58)',
                 data: [98,96,90,87,82],
             },
@@ -26,7 +26,7 @@ const Rankings = () => {
         datasets: [
             {
                 label: 'Utilizadores com maior área de parcelas',
-                backgroundColor: 'rgba(176, 192, 144, 0.5)',
+                backgroundColor: 'rgba(62, 80, 58, 0.9)',
                 borderColor: 'rgb(62, 80, 58)',
                 data: [3524,3283,2987,2365,2013],
             },
@@ -38,7 +38,7 @@ const Rankings = () => {
         datasets: [
             {
                 label: 'Utilizadores com mais parcelas registadas',
-                backgroundColor: 'rgba(176, 192, 144, 0.5)',
+                backgroundColor: 'rgba(62, 80, 58, 0.9)',
                 borderColor: 'rgb(62, 80, 58)',
                 data: [45,41,38,34,29],
             },

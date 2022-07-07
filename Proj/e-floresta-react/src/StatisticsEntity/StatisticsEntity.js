@@ -82,7 +82,7 @@ const StatisticsEntity = () => {
         datasets: [
             {
                 label: 'Parcelas nas Freguesias de Sintra',
-                backgroundColor: 'rgba(176, 192, 144, 0.5)',
+                backgroundColor: 'rgba(62, 80, 58, 0.9)',
                 borderColor: 'rgb(62, 80, 58)',
                 data: [35, 12, 69, 46, 2, 84, 82, 34, 56, 90, 42, 26, 98, 19, 78, 38, 50],
             },
