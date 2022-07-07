@@ -22,8 +22,8 @@ const Profile = () => {
     //Permite correr a funcao quando a pagina e carregada
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     setUsername(obj.username);
                     setEmail(obj.email)

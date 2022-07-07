@@ -4,7 +4,7 @@ import {Button, ButtonGroup, Modal} from "react-bootstrap";
 import {GoogleMap, Marker, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
 import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
-import React, {useEffect} from 'react'
+import React from 'react'
 
 
 const center = {
@@ -51,6 +51,7 @@ const ParcelEditModal = (props) => {
     const [zoom, setZoom] = useState(15);
 
     const [managerValue, setmanagerValue] = useState("");
+    const [managerRequestValue, setmanagerRequestValue] = useState("");
     const [changedInfo, setChangedInfo] = useState(false);
     const [centerLoc, setCenterLoc] = useState(center);
     const [info, setInfo] = useState({});
@@ -67,29 +68,6 @@ const ParcelEditModal = (props) => {
 
     let xmlhttp = new XMLHttpRequest();
 
-    useEffect(() => {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState === 4) {
-                if (xmlhttp.status === 200) {
-                    const managersObj = JSON.parse(xmlhttp.responseText);
-                    let arr = [];
-
-                    for(let i = 0; i<managersObj.length; i++){
-                        arr.push(<option value={managersObj[i]}>{managersObj[i]}</option>)
-                    }
-                    setmanagerValue(managersObj[0]);
-                    setManager(arr);
-                }
-            }
-        }
-
-        let myObj = {token:localStorage.getItem('token')};
-        let myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
-    }, []);
 
     function onLoad() {
         let centerPoint = getCenterOfBounds(JSON.parse(props.obj.coordinates));
@@ -141,7 +119,7 @@ const ParcelEditModal = (props) => {
             return(
                 <label>
                     <b>Gerente:</b> {props.obj.manager}
-                    <Button id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Remover gerente</Button>
+                    <Button onClick={() => removeManager()} id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Remover gerente</Button>
                 </label>
             )
         } else {
@@ -160,16 +138,92 @@ const ParcelEditModal = (props) => {
         }
     }
 
+    function managerRequest(){
+
+        return(<label>
+            <b>Pedido enviado:</b> {managerRequestValue}
+            <Button onClick={() => {removeRequest()}} id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Cancelar pedido</Button>
+        </label>)
+    }
+
+    function removeManager(){
+        let myObj = {token:localStorage.getItem('token')};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/removemanager/" + props.obj.owner + "_" + props.obj.name, options)
+            .then((r) =>{
+                if(r.ok){
+                    alert("Gerente removido.");
+                    window.location.reload();
+                }
+            });
+    }
+
+    function removeRequest(){
+        let myObj = {token:localStorage.getItem('token')};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/rejectrequest/" + props.obj.owner + "_" + props.obj.name, options)
+            .then((r) =>{
+                if(r.ok){
+                    alert("Pedido removido.");
+                    window.location.reload();
+                }
+            });
+    }
+
     function loadModalValues() {
+        let myObjManager = {token:localStorage.getItem('token')};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObjManager),
+        };
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/availablemanagers/"+props.obj.owner+"_"+props.obj.name, options)
+            .then((r) => {
+                if(r.ok){
+                    r.text().then((text) => {
+                        const managersObj = JSON.parse(text);
+                        let arr = [];
+
+                        for(let i = 0; i<managersObj.length; i++){
+                            arr.push(<option value={managersObj[i]}>{managersObj[i]}</option>)
+                        }
+                        setmanagerValue(managersObj[0]);
+                        setManager(arr);
+                    })
+                }
+            });
+
+
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
                     setInfo(JSON.parse(xmlhttp.responseText));
+                    setmanagerRequestValue(JSON.parse(xmlhttp.responseText).managerRequest);
                 }
             }
         }
-        var myObj = {token:localStorage.getItem('token')};
-        var myJson = JSON.stringify(myObj);
+        let myObj = {token:localStorage.getItem('token')};
+        let myJson = JSON.stringify(myObj);
 
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
@@ -179,7 +233,7 @@ const ParcelEditModal = (props) => {
     function sendManagerRequest() {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4) {
-                if (xmlhttp.status == 200) {
+                if (xmlhttp.status === 200) {
                     alert("Pedido enviado.")
                 }
             }
@@ -212,7 +266,7 @@ const ParcelEditModal = (props) => {
             console.log("send");
         }
 
-        Promise.all(arr).then(() => (alert("Success"), window.location.reload())).catch(() => alert("Error"));
+        Promise.all(arr).then(() => {alert("Success"); window.location.reload()}).catch(() => alert("Error"));
     }
 
     async function sendInfo(){
@@ -326,7 +380,7 @@ const ParcelEditModal = (props) => {
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Proprietário:</b> {props.obj.owner} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"> {hasManager()} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"> {managerRequestValue===""?hasManager():managerRequest()} </label><br/>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
 

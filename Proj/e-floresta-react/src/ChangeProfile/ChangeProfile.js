@@ -52,11 +52,11 @@ const ChangeProfile = () => {
     function changeProfile() {
 
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Informação alterada com sucesso.");
                     navigate("/profile");
-                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                } else if(xmlhttp.status === 403 ||xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");

@@ -38,8 +38,8 @@ const ProposedParcelsEntity = () => {
 
     function addManager(parcel) {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Parcel accepted successfully");
                     window.location.reload();
                 }
@@ -57,8 +57,8 @@ const ProposedParcelsEntity = () => {
 
     function removeManager(parcel) {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Parcel rejected successfully");
                     window.location.reload();
                 }

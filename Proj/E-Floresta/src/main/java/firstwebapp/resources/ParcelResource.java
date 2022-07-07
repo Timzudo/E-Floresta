@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -342,7 +343,8 @@ public class ParcelResource {
                 parcel.getString("parcel_usage"),
                 parcel.getString("parcel_old_usage"),
                 parcel.getString("parcel_cover"),
-                parcel.getString("parcel_description"));
+                parcel.getString("parcel_description"),
+                parcel.getString("parcel_requested_manager"));
 
         return Response.ok(g.toJson(info)).build();
     }
@@ -497,7 +499,7 @@ public class ParcelResource {
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         //Token valido
-        if(tokenInfo == null || !tokenInfo.role.equals("C")){
+        if(tokenInfo == null || (!tokenInfo.role.equals("C") && !tokenInfo.role.equals("D"))){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
         String username = tokenInfo.sub;
@@ -527,8 +529,8 @@ public class ParcelResource {
             return Response.status(Response.Status.CONFLICT).build();
         }
 
-        if(!parcel.getString("parcel_requested_manager").equals(username)){
-            return Response.status(Response.Status.NOT_FOUND).build();
+        if(!parcel.getString("parcel_requested_manager").equals(username) && !parcel.getString("parcel_owner").equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         Transaction txn = datastore.newTransaction();
@@ -1397,6 +1399,163 @@ public class ParcelResource {
             txn.delete(parcelKey);
             txn.commit();
             return Response.ok("Manager added successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+
+    @POST
+    @Path("/report/{parcelName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response sendReport(@PathParam("parcelName") String parcelName, ReportData data) {
+        LOG.fine("Attempt to get add managers to: " + parcelName);
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
+        Entity parcel = datastore.get(parcelKey);
+
+        //Parcela existe
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        Key reportKey = datastore.newKeyFactory().setKind("Report").newKey(UUID.randomUUID().toString());
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            Entity report = Entity.newBuilder(reportKey)
+                            .set("report_parcel_name", parcelKey.getName())
+                            .set("report_sender", username)
+                            .set("report_topic", data.topic)
+                            .set("report_message", data.text)
+                            .set("report_priority", user.getLong("user_trust"))
+                            .build();
+
+            txn.add(report);
+            txn.commit();
+            return Response.ok().build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @POST
+    @Path("/review/{reportID}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response reviewReport(@PathParam("reportID") String reportID, ReviewData data) {
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        if(!tokenInfo.role.contains("B") && !tokenInfo.role.contains("A")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key reportKey = datastore.newKeyFactory().setKind("Report").newKey(reportID);
+        Entity report = datastore.get(reportKey);
+        if(report == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(report.getString("report_parcel_name"));
+        Entity parcel = datastore.get(parcelKey);
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+
+        if(tokenInfo.role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        if(tokenInfo.role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Key senderKey = datastore.newKeyFactory().setKind("User").newKey(report.getString("report_sender"));
+        Entity sender = datastore.get(senderKey);
+
+        Transaction txn = datastore.newTransaction();
+
+
+        try{
+            if(sender != null){
+                int change = 0;
+
+                switch (data.opinion){
+                    case "POSITIVE":
+                        change += 1;
+                        break;
+                    case "NEGATIVE":
+                        change -= 3;
+                        break;
+                }
+
+                long trust = sender.getLong("user_trust");
+                trust += change;
+                if(trust > 200){
+                    trust = 200;
+                }
+                else if(trust < 0){
+                    trust = 0;
+                }
+
+                sender = Entity.newBuilder(sender)
+                        .set("user_trust", trust)
+                        .build();
+                txn.update(sender);
+            }
+
+
+
+            txn.delete(reportKey);
+            txn.commit();
+            return Response.ok().build();
         }
         finally {
             if(txn.isActive()){
