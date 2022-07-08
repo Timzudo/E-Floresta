@@ -3,13 +3,6 @@ body{
     height: 100%;
 }
 
-
-/*
-.rankings-background{
-   background-color: ;
-}
-*/
-
 .rankings-title{
     margin-top: 1%;
     margin-left: 1%;
@@ -19,11 +12,13 @@ body{
     border: solid 1px #C0C6CF;
 }
 
-.userTrust_Rankings,
-.biggerArea_Rankings,
-.mostParcels_Rankings{
+#userTrust_Rankings,
+#biggerArea_Rankings,
+#mostParcels_Rankings{
     margin-left: auto;
     margin-right: auto;
+    margin-top: 2%;
     margin-bottom: 2%;
-    width: 60% !important;
+    width: 80% !important;
+    background-color: #b0c090;
 }
