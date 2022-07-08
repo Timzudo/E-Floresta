@@ -27,6 +27,8 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import RecoverPassword from "./RecoverPassword/RecoverPassword";
+import RecoverRequest from "./RecoverPassword/RecoverRequest";
 
 
 
@@ -51,6 +53,8 @@ const App = () => {
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
+          <Route path="/recover" element={<RecoverPassword />} />
+          <Route path="/recover-request" element={<RecoverRequest />} />
           <Route path="/rankings" element={<Rankings />} />
         </Routes>
       </Router>

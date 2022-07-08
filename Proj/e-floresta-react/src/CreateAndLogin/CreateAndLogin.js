@@ -133,7 +133,7 @@ const CreateAndLogin = () => {
             </Form>
 
             <p></p>
-            <span className="forgot-pass_Login">Esqueceu a sua palavra-passe? <a href="#">Clique aqui.</a></span>
+            <span className="forgot-pass_Login">Esqueceu a sua palavra-passe? <a  href="/recover-request">Clique aqui.</a></span>
 
           </div>
 

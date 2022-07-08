@@ -352,7 +352,7 @@ const Map = () => {
                                 required
                                 name="file"
                                 accept = ".geojson"
-                                onChange={(e) => loadGeojson(e.target.files[0])}
+                                onChange={(e) => {if(e.target.files[0]){loadGeojson(e.target.files[0])}}}
                             />
                         </Form.Group>:<></>}
 

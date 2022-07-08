@@ -1,13 +1,12 @@
 package firstwebapp.resources;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.gson.Gson;
 import firstwebapp.util.JWToken;
 import firstwebapp.util.LoginData;
-import firstwebapp.util.ParcelMiniature;
+import firstwebapp.util.RecoverPasswordData;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.mail.Message;
@@ -105,7 +104,7 @@ public class LoginResource {
 
         try{
             Entity forgotPassword = Entity.newBuilder(forgotPasswordKey)
-                    .set("confirmation_username", username)
+                    .set("forgotPassword_username", username)
                     .build();
 
 
@@ -124,10 +123,49 @@ public class LoginResource {
         msg.setFrom(new InternetAddress("eflorestaapdc@gmail.com", "Equipa E-Floresta"));
         msg.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(email, "Caro utilizador"));
-        msg.setSubject("Recuperar password");
-        msg.setText("Olá " + username + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
+        msg.setSubject("Recuperar password E-Floresta");
+        msg.setText("Olá " + username + ". \nClique neste link para recuperar a sua palavra-passe: " + "http://localhost:3000/recover?id=" + confirmationID);
         Transport.send(msg);
 
         return Response.ok().build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/recoverpassword/{id}")
+    public Response recoverPassword(@PathParam("id") String id, RecoverPasswordData data){
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        Key forgotPasswordKey = datastore.newKeyFactory().setKind("ForgotPassword").newKey(id);
+        Entity forgotPassword = datastore.get(forgotPasswordKey);
+        if(forgotPassword == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(forgotPassword.getString("forgotPassword_username"));
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist").build();
+        }
+
+        Transaction txn = datastore.newTransaction();
+        try{
+            user = Entity.newBuilder(user)
+                    .set("user_pwd", DigestUtils.sha512Hex(data.newPassword))
+                    .build();
+
+            txn.update(user);
+            txn.delete(forgotPasswordKey);
+            txn.commit();
+            return Response.ok().build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }
     }
 }
