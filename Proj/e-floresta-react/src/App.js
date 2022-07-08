@@ -21,6 +21,8 @@ import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
 import Rankings from "./Rankings/Rankings";
 import RecoverPassword from "./RecoverPassword/RecoverPassword";
 import RecoverRequest from "./RecoverPassword/RecoverRequest";
+import FindUser from "./FindUser/FindUser";
+import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 
 
 import Front_img from "./front_img.jpg";
@@ -31,7 +33,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import FindUser from "./FindUser/FindUser";
 
 
 
@@ -60,7 +61,8 @@ const App = () => {
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/recover-request" element={<RecoverRequest />} />
           <Route path="/rankings" element={<Rankings />} />
-            <Route path="/find-user" element={<FindUser />} />
+          <Route path="/find-user" element={<FindUser />} />
+          <Route path="/reports-technician" element={<ReportsTechnician />} />
         </Routes>
       </Router>
   )

@@ -58,6 +58,10 @@ const TopBar = () => {
                     <Button id="option10">Rankings</Button>
                 </Link>
 
+                {localStorage.getItem('role').includes('B') ? <Link to="/reports-technician">
+                    <Button id="option13">Reports</Button>
+                </Link> : <></>}
+
                 <Link to="/about-us">
                     <Button id="option4">Sobre</Button>
                 </Link>

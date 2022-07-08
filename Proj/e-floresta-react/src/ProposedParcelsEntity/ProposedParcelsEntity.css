@@ -69,5 +69,6 @@ html, body{
 #reject-parcel_ProposedParcelsEntity{
     background-color: brown;
     color: white;
+    border: solid 1px brown;
 }
 
