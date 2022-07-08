@@ -23,7 +23,7 @@ import RecoverPassword from "./RecoverPassword/RecoverPassword";
 import RecoverRequest from "./RecoverPassword/RecoverRequest";
 import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
-
+import ReportsAdmin from "./ReportsAdmin/ReportsAdmin";
 
 import Front_img from "./front_img.jpg";
 import React, { Component }  from 'react';
@@ -63,6 +63,7 @@ const App = () => {
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
+          <Route path="/reports-admin" element={<ReportsAdmin />} />
         </Routes>
       </Router>
   )
