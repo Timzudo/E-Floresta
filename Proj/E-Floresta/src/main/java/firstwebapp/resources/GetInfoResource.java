@@ -78,9 +78,9 @@ public class GetInfoResource {
     }
 
     @POST
-    @Path("/profileinfo/{username}")
+    @Path("/profileinfo/{checkUsername}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response checkUserInfo(@PathParam("username") String checkUsername, TokenData token){
+    public Response checkUserInfo(@PathParam("checkUsername") String checkUsername, TokenData token){
         LOG.info("Attempt to get info of user with token: " + token.token);
 
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token.token);
@@ -192,4 +192,5 @@ public class GetInfoResource {
         return Response.ok(g.toJson(data)).build();
 
     }
+
 }

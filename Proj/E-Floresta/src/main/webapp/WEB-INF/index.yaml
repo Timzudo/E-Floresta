@@ -1,0 +1,7 @@
+indexes:
+
+  - kind: Parcel
+    properties:
+      - name: parcel_owner
+      - name: parcel_area
+        direction: desc
