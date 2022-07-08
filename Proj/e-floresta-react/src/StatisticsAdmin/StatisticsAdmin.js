@@ -51,31 +51,31 @@ const StatisticsAdmin = () => {
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Área total das parcelas registadas </h4>
-                        <h6 className="stats-admin-title"> 36562m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 36562m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Média da área das parcelas registadas </h4>
-                        <h6 className="stats-admin-title"> 1204m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 1204m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Perímetro total das parcelas registadas </h4>
-                        <h6 className="stats-admin-title"> 25963m </h6>
+                        <h5 className="stats-admin-title statistics_result"> 25963m </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Média do perímetro das parcelas registadas </h4>
-                        <h6 className="stats-admin-title"> 1204m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 1204m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Número de parcelas registadas </h4>
-                        <h6 className="stats-admin-title"> 804 </h6>
+                        <h5 className="stats-admin-title statistics_result"> 804 </h5>
                     </Col>
                     <p></p>
                 </Row>
@@ -98,7 +98,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 16204m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 16204m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -116,7 +116,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 1204m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 1204m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -134,7 +134,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 204m² </h6>
+                        <h5 className="stats-admin-title statistics_result"> 204m² </h5>
                     </Col>
 
                 </Row>
@@ -156,7 +156,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 16204m </h6>
+                        <h5 className="stats-admin-title statistics_result"> 16204m </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -174,7 +174,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 1204m </h6>
+                        <h5 className="stats-admin-title statistics_result"> 1204m </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -192,7 +192,7 @@ const StatisticsAdmin = () => {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        <h6 className="stats-admin-title"> 204m </h6>
+                        <h5 className="stats-admin-title statistics_result"> 204m </h5>
                     </Col>
 
                 </Row>

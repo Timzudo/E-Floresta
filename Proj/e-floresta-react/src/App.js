@@ -31,6 +31,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import FindUser from "./FindUser/FindUser";
 
 
 
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/recover-request" element={<RecoverRequest />} />
           <Route path="/rankings" element={<Rankings />} />
+            <Route path="/find-user" element={<FindUser />} />
         </Routes>
       </Router>
   )

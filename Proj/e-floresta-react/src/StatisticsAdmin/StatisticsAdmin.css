@@ -61,3 +61,8 @@ body{
     color: white;
     --bs-table-striped-color: white;
 }
+
+.statistics_result{
+    color: #247d3c;
+    font-weight: bold;
+}

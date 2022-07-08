@@ -1,23 +1,37 @@
-import  './Profile.css'
-import ProfileImage from './profile_picture.png'
 import TopBar from '../TopBar/TopBar.js'
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
-import React, {useEffect} from 'react'
+import React from 'react'
+import {Button} from "react-bootstrap";
+import './FindUser.css'
 
 const FindUser = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [nif, setNif] = useState("");
-    const [type, setType] = useState("");
-    const [state, setState] = useState(""); //TODO: ver se e preciso
+    const [result, setResult] = useState("");
 
 
-    let xmlhttp = new XMLHttpRequest();
+
+    function findUser(){
+        let myObj = {token:localStorage.getItem('token')};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+        console.log("yeet");
+        fetch("https://moonlit-oven-349523.appspot.com/rest/info/profileinfo/"+document.getElementById("username_finduser").value, options)
+            .then((r) => {
+                if(r.ok){
+                    r.text().then(t => {setResult(JSON.parse(t))})
+                    console.log("yau");
+                }
+            }).catch(r=>(console.log));
+    }
+    /*let xmlhttp = new XMLHttpRequest();
 
     //Permite correr a funcao quando a pagina e carregada
     useEffect(() => {
@@ -49,50 +63,17 @@ const FindUser = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/info/profileinfo");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
-    }, [])
+    }, [])*/
 
     return(
         <>
             <CheckIfLoggedOut />
             <TopBar />
-            <div className="profile_info">
-                <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
-                <p></p>
-                <div id="username">
-                    <p className="label">Username: {username}</p>
-                </div>
-                <div id="email">
-                    <p className="label">E-mail: {email}</p>
-                </div>
-                <div id="name">
-                    <p className="label">Nome Completo: {name}</p>
-                </div>
-                <div id="phone">
-                    <p className="label">Telemóvel/Telefone: {phone===""? "Indefinido":phone}</p>
-                </div>
-                <div id="nif">
-                    <p className="label">NIF: {nif===""? "Indefinido":nif}</p>
-                </div>
-                <div id="type">
-                    <p className="label">Tipo de utilizador: {type}</p>
-                </div>
-
-                <div className="btn-group" id="change-profile-info">
-                    <div id="changeProfileInfo_Profile">
-                        <Link to="/change-profile">
-                            <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
-                        </Link>
-                    </div>
-
-                    <div id="changePassword_Profile">
-                        <Link to="/change-password">
-                            <button type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
-                        </Link>
-                    </div>
-
-                </div>
-
+            <div>
+                <input id="username_finduser" type="text" placeholder="username"/>
+                <Button onClick={findUser} id="button_finduser" type="button" className="btn btn-success"></Button>
             </div>
+
 
         </>
 

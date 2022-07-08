@@ -114,7 +114,7 @@ public class RegisterResource {
         Transaction txn = datastore.newTransaction();
         try{
             user = Entity.newBuilder(user)
-                    .set("user_state", "CONFIRMED")
+                    .set("user_state", "ACTIVE")
                     .build();
 
             txn.update(user);
