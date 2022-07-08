@@ -39,7 +39,7 @@ const RecoverPassword = () => {
 
     function recoverPassword(){
         let myObj = {newPassword:document.getElementById("session-password").value,
-                        confirmation:document.getElementById("session-confirmation")};
+                        confirmation:document.getElementById("session-confirmation").value};
 
         const options = {
             method: 'POST',

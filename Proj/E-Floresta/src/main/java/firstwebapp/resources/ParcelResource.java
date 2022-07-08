@@ -1453,6 +1453,9 @@ public class ParcelResource {
                             .set("report_topic", data.topic)
                             .set("report_message", data.text)
                             .set("report_priority", user.getLong("user_trust"))
+                            .set("report_distrito", parcel.getString("parcel_distrito"))
+                            .set("report_concelho", parcel.getString("parcel_concelho"))
+                            .set("report_freguesia", parcel.getString("parcel_freguesia"))
                             .build();
 
             txn.add(report);
@@ -1541,8 +1544,8 @@ public class ParcelResource {
                 if(trust > 200){
                     trust = 200;
                 }
-                else if(trust < 0){
-                    trust = 0;
+                else if(trust < 1){
+                    trust = 1;
                 }
 
                 sender = Entity.newBuilder(sender)
@@ -1565,7 +1568,103 @@ public class ParcelResource {
         }
     }
 
+    @POST
+    @Path("/getreports/{distrito}/{concelho}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response reviewReport(@PathParam("reportID") String reportID, ReviewData data) {
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        if(!tokenInfo.role.contains("B") && !tokenInfo.role.contains("A")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+
+        Key reportKey = datastore.newKeyFactory().setKind("Report").newKey(reportID);
+        Entity report = datastore.get(reportKey);
+        if(report == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        }
+
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(report.getString("report_parcel_name"));
+        Entity parcel = datastore.get(parcelKey);
+        if(parcel == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+
+        if(tokenInfo.role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        if(tokenInfo.role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Key senderKey = datastore.newKeyFactory().setKind("User").newKey(report.getString("report_sender"));
+        Entity sender = datastore.get(senderKey);
+
+        Transaction txn = datastore.newTransaction();
+
+
+        try{
+            if(sender != null){
+                int change = 0;
+
+                switch (data.opinion){
+                    case "POSITIVE":
+                        change += 1;
+                        break;
+                    case "NEGATIVE":
+                        change -= 3;
+                        break;
+                }
+
+                long trust = sender.getLong("user_trust");
+                trust += change;
+                if(trust > 200){
+                    trust = 200;
+                }
+                else if(trust < 1){
+                    trust = 1;
+                }
+
+                sender = Entity.newBuilder(sender)
+                        .set("user_trust", trust)
+                        .build();
+                txn.update(sender);
+            }
+
+
+
+            txn.delete(reportKey);
+            txn.commit();
+            return Response.ok().build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
 
     //change usage
     /*Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() {

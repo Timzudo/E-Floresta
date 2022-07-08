@@ -105,6 +105,7 @@ public class LoginResource {
         try{
             Entity forgotPassword = Entity.newBuilder(forgotPasswordKey)
                     .set("forgotPassword_username", username)
+                    .set("forgotPassword_expiration", System.currentTimeMillis() + 1000*60*60*24)
                     .build();
 
 
@@ -124,7 +125,7 @@ public class LoginResource {
         msg.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(email, "Caro utilizador"));
         msg.setSubject("Recuperar password E-Floresta");
-        msg.setText("Olá " + username + ". \nClique neste link para recuperar a sua palavra-passe: " + "http://localhost:3000/recover?id=" + confirmationID);
+        msg.setText("Olá " + username + ". \nClique neste link para recuperar a sua palavra-passe: " + "http://localhost:3000/recover?id=" + confirmationID + "\nEste link é valdio durante 24h.");
         Transport.send(msg);
 
         return Response.ok().build();
@@ -141,7 +142,11 @@ public class LoginResource {
         Key forgotPasswordKey = datastore.newKeyFactory().setKind("ForgotPassword").newKey(id);
         Entity forgotPassword = datastore.get(forgotPasswordKey);
         if(forgotPassword == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
+
+        }
+
+        if(System.currentTimeMillis()>forgotPassword.getLong("forgotPassword_expiration")){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         Key userKey = datastore.newKeyFactory().setKind("User").newKey(forgotPassword.getString("forgotPassword_username"));

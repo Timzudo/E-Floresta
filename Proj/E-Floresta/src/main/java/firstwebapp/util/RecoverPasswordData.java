@@ -14,6 +14,6 @@ public class RecoverPasswordData {
     }
 
     public boolean isValid(){
-        return newPassword.equals(confirmation);
+        return newPassword.equals(confirmation) && newPassword.length()>=6;
     }
 }

@@ -68,10 +68,10 @@ const Profile = () => {
                     <p className="label">Nome Completo: {name}</p>
                 </div>
                 <div id="phone">
-                    <p className="label">Telemóvel/Telefone: {phone}</p>
+                    <p className="label">Telemóvel/Telefone: {phone===""? "Indefinido":phone}</p>
                 </div>
                 <div id="nif">
-                    <p className="label">NIF: {nif}</p>
+                    <p className="label">NIF: {nif===""? "Indefinido":nif}</p>
                 </div>
                 <div id="type">
                     <p className="label">Tipo de utilizador: {type}</p>
