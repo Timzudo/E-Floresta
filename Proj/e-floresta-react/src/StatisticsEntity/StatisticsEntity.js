@@ -1,7 +1,6 @@
 import './StatisticsEntity.css'
 import React, { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
@@ -9,7 +8,6 @@ import {Col, Form, Row} from "react-bootstrap";
 
 
 const StatisticsEntity = () => {
- //   const [freguesiaOptions, setFreguesiaOptions] = useState([]);
 
     const [utilSoloByNumber] = useState({
         labels: ['Privado', 'Comercial', 'Pasto', 'Floresta', 'Agrícola', 'Residencial', 'Transporte', 'Recreativo'],
@@ -37,7 +35,7 @@ const StatisticsEntity = () => {
                     'rgba(204, 153, 255, 1)'
                 ],
                 borderWidth: 2,
-                data: [0.4, 0.12, 0.10, 0.05, 0.1, 0.03, 0.1, 0.1],
+                data: [4, 12, 10, 5, 1, 3, 1, 1],
             },
         ],
     });
@@ -69,22 +67,7 @@ const StatisticsEntity = () => {
                     'rgba(204, 153, 255, 1)'
                 ],
                 borderWidth: 2,
-                data: [0.2, 0.05, 0.15, 0.05, 0.3, 0.04, 0.2, 0.01],
-            },
-        ],
-    });
-
-
-    const [nrParcelsPerFreguesiaInConcelho] = useState({
-        labels: ['Colares', 'S. João das Lampas', 'S. Martinho', 'Terrugem', 'Santa Maria e S.Miguel', 'S. Pedro de Penaferrim', 'Montelavar',
-        'Pero Pinheiro', 'Algueirão-Men Martins', 'Rio de Mouro', 'Agualva-Cacém', 'Massamá', 'Belas', 'Almargem do Bispo', 'Casal de Cambra',
-        'Monte Abraão', 'Queluz'],
-        datasets: [
-            {
-                label: 'Parcelas nas Freguesias de Sintra',
-                backgroundColor: 'rgba(62, 80, 58, 0.9)',
-                borderColor: 'rgb(62, 80, 58)',
-                data: [35, 12, 69, 46, 2, 84, 82, 34, 56, 90, 42, 26, 98, 19, 78, 38, 50],
+                data: [200, 50, 150, 50, 300, 40, 200, 10],
             },
         ],
     });
@@ -95,26 +78,49 @@ const StatisticsEntity = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="statistics-background">
+            <div className="statistics-entity-background">
                 <Row>
-                    <p></p>
-                    <h2 className="stats-entity-title"> Tipos de Utilização do Solo </h2>
-
                     <Col className="stats-entity-container">
-                        <h6 className="graph-entity-title"> Percentagem por quantidade de parcelas </h6>
-                        <Pie className="util-solo-graph_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
+                        <p></p>
+                        <h4 className="stats-entity-title"> Área total das parcelas </h4>
+                        <h6 className="stats-entity-title"> 562m² </h6>
                     </Col>
 
                     <Col className="stats-entity-container">
-                        <h6 className="graph-entity-title"> Percentagem por área de parcelas </h6>
-                        <Pie className="util-solo-graph_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
+                        <p></p>
+                        <h4 className="stats-entity-title"> Média da área das parcelas </h4>
+                        <h6 className="stats-entity-title"> 804m² </h6>
+                    </Col>
+
+                    <Col className="stats-entity-container">
+                        <p></p>
+                        <h4 className="stats-entity-title"> Perímetro total das parcelas </h4>
+                        <h6 className="stats-entity-title"> 1800m </h6>
+                    </Col>
+
+                    <Col className="stats-entity-container">
+                        <p></p>
+                        <h4 className="stats-entity-title"> Média do perímetro das parcelas </h4>
+                        <h6 className="stats-entity-title"> 804m </h6>
                     </Col>
                 </Row>
 
-                <h2 className="stats-entity-title"> Número de Parcelas num Concelho de uma Freguesia </h2>
+                <Row>
 
-                <Row className="stats-entity-container">
-                    <Bar className="nrParcels-in-concelho-per-freguesia_StatsEntity" data={nrParcelsPerFreguesiaInConcelho} options={{ responsive: true }} />
+                    <p></p>
+                    <p className="stats-entity-paragraph" ></p>
+                    <Col className="stats-entity-container">
+                        <p></p>
+                        <h4 className="stats-entity-title"> Número de parcelas por tipo de utilização do solo </h4>
+                        <Pie className="util-solo-byNumber_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
+                    </Col>
+
+                    <Col className="stats-entity-container">
+                        <p></p>
+                        <h4 className="stats-entity-title"> Área de parcelas por tipo de utilização do solo </h4>
+                        <Pie className="util-solo-byArea_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
+                    </Col>
+
                 </Row>
             </div>
 

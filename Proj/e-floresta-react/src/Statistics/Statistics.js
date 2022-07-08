@@ -8,7 +8,6 @@ import {Pie} from "react-chartjs-2";
 
 
 const Statistics = () => {
-    //   const [freguesiaOptions, setFreguesiaOptions] = useState([]);
 
     const [utilSoloByNumber] = useState({
         labels: ['Privado', 'Comercial', 'Pasto', 'Floresta', 'Agrícola', 'Residencial', 'Transporte', 'Recreativo'],

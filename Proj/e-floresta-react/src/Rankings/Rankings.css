@@ -21,4 +21,6 @@ body{
     margin-bottom: 2%;
     width: 80% !important;
     background-color: #b0c090;
+    color: white;
+    --bs-table-striped-color: white;
 }
