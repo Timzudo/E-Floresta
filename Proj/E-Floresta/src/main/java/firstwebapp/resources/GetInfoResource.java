@@ -156,6 +156,7 @@ public class GetInfoResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
+
         String s = checkUser.getString("user_role");
 
         switch (s){

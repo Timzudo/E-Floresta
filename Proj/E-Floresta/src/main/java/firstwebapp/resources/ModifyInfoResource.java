@@ -1,9 +1,7 @@
 package firstwebapp.resources;
 
 import com.google.cloud.datastore.*;
-import firstwebapp.util.ChangePasswordData;
-import firstwebapp.util.JWToken;
-import firstwebapp.util.ModifyInfoData;
+import firstwebapp.util.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ws.rs.PUT;
@@ -30,13 +28,23 @@ public class ModifyInfoResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        //Cria a key e usa a key para ir buscar a entidade user certa
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
         Entity user = datastore.get(userKey);
-
-        //Se o user n existir
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Key userModifyKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity userModify = datastore.get(userModifyKey);
+        if(userModify == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+
+        if(!tokenInfo.role.contains("A") && !tokenInfo.sub.equals(username)){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         //Cria transacao
@@ -44,15 +52,123 @@ public class ModifyInfoResource {
 
         try{
             //Atualiza a entidade
-            Entity newUser = Entity.newBuilder(user)
+            userModify = Entity.newBuilder(userModify)
                                 .set("user_name", data.name)
                                 .set("user_phone", data.phone)
                                 .set("user_nif", data.nif)
                                 .build();
             //Da update na transacao e commit
-            txn.update(newUser);
+            txn.update(userModify);
             txn.commit();
             LOG.fine("Modified user: " + username);
+            return Response.ok("User modified successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @PUT
+    @Path("/state/{username}")
+    public Response modifyState(@PathParam("username") String username, StateData data){
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        //Verifica o token
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Key userModifyKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity userModify = datastore.get(userModifyKey);
+        if(userModify == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+
+        if(!tokenInfo.role.contains("A")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        //Cria transacao
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            //Atualiza a entidade
+            userModify = Entity.newBuilder(userModify)
+                    .set("user_state", data.newState)
+                    .build();
+            //Da update na transacao e commit
+            txn.update(userModify);
+            txn.commit();
+            return Response.ok("User modified successfully.").build();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
+            }
+        }
+    }
+
+    @PUT
+    @Path("/role/{username}")
+    public Response modifyRole(@PathParam("username") String username, RoleData data){
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        //Verifica o token
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        Key userModifyKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity userModify = datastore.get(userModifyKey);
+        if(userModify == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+
+        if(!tokenInfo.role.contains("A")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        if(tokenInfo.role.equals("A2") && data.newRole.equals("A1")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+
+        //Cria transacao
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            //Atualiza a entidade
+            userModify = Entity.newBuilder(userModify)
+                    .set("user_role", data.newRole)
+                    .build();
+            //Da update na transacao e commit
+            txn.update(userModify);
+            txn.commit();
             return Response.ok("User modified successfully.").build();
         }
         finally {

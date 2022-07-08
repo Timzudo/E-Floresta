@@ -1571,11 +1571,7 @@ public class ParcelResource {
     @POST
     @Path("/getreports/{distrito}/{concelho}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response reviewReport(@PathParam("reportID") String reportID, ReviewData data) {
-        if(!data.isValid()){
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+    public Response gerReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, TokenData data) {
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         //Token valido
         if(tokenInfo == null){
@@ -1598,72 +1594,90 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
 
-        Key reportKey = datastore.newKeyFactory().setKind("Report").newKey(reportID);
-        Entity report = datastore.get(reportKey);
-        if(report == null){
-            return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
+        if(!tokenInfo.role.contains("A") && (tokenInfo.role.equals("B1") && !user.getString("user_concelho").equals(concelho))){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
 
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(report.getString("report_parcel_name"));
-        Entity parcel = datastore.get(parcelKey);
-        if(parcel == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Report")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("report_concelho", concelho),
+                            StructuredQuery.PropertyFilter.eq("report_distrito", distrito)))
+                .build();
+
+
+        QueryResults<Entity> reportListQuery = datastore.run(query);
+
+        List<ReportMiniature> reportList = new ArrayList<>();
+
+        reportListQuery.forEachRemaining(r->{
+            reportList.add(new ReportMiniature(r.getKey().getName(),
+                                                r.getString("report_parcel_name"),
+                                                r.getString("report_sender"),
+                                                r.getString("report_distrito"),
+                                                r.getString("report_concelho"),
+                                                r.getString("report_freguesia"),
+                                                r.getString("report_topic"),
+                                                r.getString("report_message"),
+                                                r.getLong("report_priority")));
+        });
+        return Response.ok(g.toJson(reportList)).build();
+    }
+
+
+    @POST
+    @Path("/getreports/{distrito}/{concelho}/{freguesia}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response gerReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, @PathParam("freguesia") String freguesia, TokenData data) {
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
-
-
-        if(tokenInfo.role.equals("B1") && !user.getString("user_concelho").equals(parcel.getString("parcel_concelho"))){
+        if(!tokenInfo.role.contains("B") && !tokenInfo.role.contains("A")){
             return Response.status(Response.Status.FORBIDDEN).build();
         }
-        if(tokenInfo.role.equals("B2") && !user.getString("user_freguesia").equals(parcel.getString("parcel_freguesia"))){
-            return Response.status(Response.Status.FORBIDDEN).build();
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
         }
 
-        Key senderKey = datastore.newKeyFactory().setKind("User").newKey(report.getString("report_sender"));
-        Entity sender = datastore.get(senderKey);
-
-        Transaction txn = datastore.newTransaction();
-
-
-        try{
-            if(sender != null){
-                int change = 0;
-
-                switch (data.opinion){
-                    case "POSITIVE":
-                        change += 1;
-                        break;
-                    case "NEGATIVE":
-                        change -= 3;
-                        break;
-                }
-
-                long trust = sender.getLong("user_trust");
-                trust += change;
-                if(trust > 200){
-                    trust = 200;
-                }
-                else if(trust < 1){
-                    trust = 1;
-                }
-
-                sender = Entity.newBuilder(sender)
-                        .set("user_trust", trust)
-                        .build();
-                txn.update(sender);
-            }
-
-
-
-            txn.delete(reportKey);
-            txn.commit();
-            return Response.ok().build();
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
-        finally {
-            if(txn.isActive()){
-                txn.rollback();
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Internal error.").build();
-            }
+
+        if(!tokenInfo.role.contains("A") && (tokenInfo.role.equals("B2") && !user.getString("user_freguesia").equals(freguesia))){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Report")
+                .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("report_distrito", distrito),
+                        StructuredQuery.PropertyFilter.eq("report_concelho", concelho),
+                        StructuredQuery.PropertyFilter.eq("report_freguesia", freguesia)))
+                .build();
+
+
+        QueryResults<Entity> reportListQuery = datastore.run(query);
+
+        List<ReportMiniature> reportList = new ArrayList<>();
+
+        reportListQuery.forEachRemaining(r->{
+            reportList.add(new ReportMiniature(r.getKey().getName(),
+                    r.getString("report_parcel_name"),
+                    r.getString("report_sender"),
+                    r.getString("report_distrito"),
+                    r.getString("report_concelho"),
+                    r.getString("report_freguesia"),
+                    r.getString("report_topic"),
+                    r.getString("report_message"),
+                    r.getLong("report_priority")));
+        });
+        return Response.ok(g.toJson(reportList)).build();
     }
 
     //change usage
