@@ -80,3 +80,45 @@
     color: white;
 }
 
+
+
+
+.hero-stats_LoggedHome{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background3.jpg");
+    height:500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.hero-stats-text_LoggedHome{
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-92%, -50%);
+    color: white;
+}
+
+.hero-stats-text_LoggedHome h1{
+    font-size: 60px;
+}
+
+.hero-stats-text_LoggedHome button{
+    border: none;
+    border-radius: 0px;
+    outline: 0;
+    display: inline-block;
+    padding: 10px 25px;
+    color: white;
+    background-color: #32443A;
+    text-align: center;
+    cursor: pointer;
+}
+
+.hero-stats-text_LoggedHome button:hover{
+    background-color: #dddddd;
+    color: black;
+}
+

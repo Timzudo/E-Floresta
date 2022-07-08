@@ -15,6 +15,7 @@ import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import AllParcels from "./AllParcels/AllParcels";
 import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
+import Statistics from "./Statistics/Statistics";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
 import Rankings from "./Rankings/Rankings";
 
@@ -26,8 +27,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-
-
 
 
 
@@ -50,6 +49,7 @@ const App = () => {
           <Route path="/approve-parcels" element={<ApproveParcels />} />
           <Route path="/all-parcels" element={<AllParcels />} />
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
+          <Route path="/statistics" element={<Statistics />} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
           <Route path="/rankings" element={<Rankings />} />
         </Routes>

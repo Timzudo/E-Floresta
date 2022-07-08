@@ -27,7 +27,7 @@ const LoggedHomepage = () => {
                         e selecionando os campos exigidos. Por fim, clique em Submeter. <br/>
                         <p></p>
                         <Link to="/map">
-                            <Button id="buttonHero-register_LoggedHome" variant="dark">Registe já</Button>
+                            <Button variant="dark">Registe já</Button>
                         </Link>
                     </div>
                 </div>
@@ -42,7 +42,19 @@ const LoggedHomepage = () => {
                         Clique em "Editar" para alterar alguma informação sobre a parcela em causa. <br/>
                         <p></p>
                         <Link to="/my-parcels">
-                            <Button id="buttonHero-register_LoggedHome" variant="dark">Verifique as suas parcelas</Button>
+                            <Button variant="dark">Verifique as suas parcelas</Button>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="hero-stats_LoggedHome">
+                    <div className="hero-stats-text_LoggedHome">
+                        <h1><b>Estatísticas personalizadas</b></h1>
+                        O E-Floresta possui estatísticas personalizadas sobre as suas parcelas registadas para facilitar <br/>
+                        ainda mais a organização e o gerenciamento dos seus terrenos. Para lhes aceder, clique na aba "Estatísticas". <br/>
+                        <p></p>
+                        <Link to="/statistics">
+                            <Button variant="dark">Veja as estatísticas</Button>
                         </Link>
                     </div>
                 </div>
