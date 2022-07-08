@@ -44,6 +44,7 @@ const Map = () => {
         distritoList.push(<option>{distritos[i]}</option>)
     }
 
+    const [useGeoFile, setUseGeoFile] = useState(false);
     const [file, setFile] = useState();
     const [documentState, setDocument] = useState();
     const submitHandler = (e) => {
@@ -86,6 +87,53 @@ const Map = () => {
         setFreguesiaOptions(list);
     }
 
+    function loadGeojson(file){
+        const google = window.google;
+
+        let reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = function (evt) {
+            let obj = JSON.parse(evt.target.result);
+            console.log(evt.target.result);
+            if(obj.type !== "Polygon"){
+                alert("Formato inválido");
+                return null;
+            }
+            if(obj.coordinates.length > 1){
+                alert("Formato inválido");
+                return null;
+            }
+
+            let coordinateList = obj.coordinates[0];
+            setMarker([]);
+            setPaths([]);
+
+
+            let arr1 = [];
+            let arr2 = [];
+            for(let i = 0; i<coordinateList.length; i++){
+                arr1.push(<Marker key={markerList.length} id={markerList.length}
+                                                    position={{
+                                                        lat: coordinateList[i][0],
+                                                        lng: coordinateList[i][1]
+                                                    }}
+                                                    icon={{
+                                                        path: google.maps.SymbolPath.CIRCLE,
+                                                        fillColor: "#ff8000",
+                                                        fillOpacity: 1.0,
+                                                        strokeWeight: 0,
+                                                        scale: 5
+                                                    }}/>)
+                arr2.push({
+                    lat: coordinateList[i][0],
+                    lng: coordinateList[i][1]
+                });
+            }
+            setMarker(arr1);
+            setPaths(arr2);
+        }
+    }
+
 
     React.useEffect(() => {
         setPerimeter(getPathLength(paths) + (paths.length>1 ? getDistance(paths[paths.length-1], paths[0]) : 0));
@@ -94,7 +142,6 @@ const Map = () => {
 
 
     function addMarker(lat, lng) {
-        console.log(lat + " - " + lng);
         const google = window.google;
 
         console.log(lat, lng);
@@ -285,9 +332,29 @@ const Map = () => {
                                 required
                                 name="file"
                                 accept = ".pdf"
-                                onChange={(e) => setDocument(e.target.files[0])}
+                                onChange={(e) => {setDocument(e.target.files[0]); console.log(e.target.files[0])}}
                             />
                         </Form.Group>
+
+                        <Form.Check
+                            className="position-relative mt-3"
+                            type="switch"
+                            id="custom-switch"
+                            label="Importar ficheiro Geojson"
+                            onChange={ () => setUseGeoFile(!useGeoFile)}
+                        />
+
+                        {useGeoFile ? <Form.Group className="position-relative mt-3" controlId="formParcelPdf">
+                            <Form.Label> <strong>Ficheiro Geojson</strong> </Form.Label>
+                            <Form.Control
+                                className="map_fields"
+                                type="file"
+                                required
+                                name="file"
+                                accept = ".geojson"
+                                onChange={(e) => loadGeojson(e.target.files[0])}
+                            />
+                        </Form.Group>:<></>}
 
                         <Button className="mt-3 mb-3" variant="success" type="submit">
                             Submeter
