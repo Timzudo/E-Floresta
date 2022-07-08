@@ -14,10 +14,14 @@ import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity
 import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import AllParcels from "./AllParcels/AllParcels";
-import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
 import Statistics from "./Statistics/Statistics";
+import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
+import StatisticsAdmin from "./StatisticsAdmin/StatisticsAdmin";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
 import Rankings from "./Rankings/Rankings";
+import RecoverPassword from "./RecoverPassword/RecoverPassword";
+import RecoverRequest from "./RecoverPassword/RecoverRequest";
+
 
 import Front_img from "./front_img.jpg";
 import React, { Component }  from 'react';
@@ -27,8 +31,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import RecoverPassword from "./RecoverPassword/RecoverPassword";
-import RecoverRequest from "./RecoverPassword/RecoverRequest";
 
 
 
@@ -50,8 +52,9 @@ const App = () => {
           <Route path="/parcels-entity" element={<ParcelsEntity />} />
           <Route path="/approve-parcels" element={<ApproveParcels />} />
           <Route path="/all-parcels" element={<AllParcels />} />
-          <Route path="/statistics-entity" element={<StatisticsEntity />} />
           <Route path="/statistics" element={<Statistics />} />
+          <Route path="/statistics-entity" element={<StatisticsEntity />} />
+          <Route path="/statistics-admin" element={<StatisticsAdmin />} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
           <Route path="/recover" element={<RecoverPassword />} />
           <Route path="/recover-request" element={<RecoverRequest />} />

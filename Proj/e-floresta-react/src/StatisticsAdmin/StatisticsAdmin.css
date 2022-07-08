@@ -1,0 +1,63 @@
+body{
+    margin: 0;
+    height: 100%;
+}
+
+/*
+.statistics-background{
+   background-color: ;
+}
+*/
+
+.stats-admin-title{
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.stats-admin-paragraph{
+    border-bottom: solid 1px #C0C6CF;
+}
+
+.stats-admin-container{
+    margin-left: 3px;
+    border-right: solid 1px #C0C6CF;
+}
+
+.util-solo-byArea_StatsAdmin{
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75% !important;
+    height: 70% !important;
+}
+
+.rankings-title_StatsAdmin{
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.rankings-container_StatsAdmin{
+    border: solid 1px #C0C6CF;
+}
+
+#dropdown-rankings_StatsAdmin{
+    margin-top: 2%;
+    margin-left: 10%;
+}
+
+#mostParcelsNrDist_StatsAdmin,
+#mostParcelsAreaDist_StatsAdmin,
+#mostParcelsNrConc_StatsAdmin,
+#rankingConcNum_StatsAdmin,
+#rankingConcArea_StatsAdmin,
+#rankingFregNum_StatsAdmin,
+#rankingFregArea_StatsAdmin{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 80% !important;
+    background-color: #b0c090;
+    color: white;
+    --bs-table-striped-color: white;
+}

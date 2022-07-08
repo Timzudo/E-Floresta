@@ -103,6 +103,13 @@ const Statistics = () => {
                         <h4 className="stats-title"> Média do perímetro das parcelas </h4>
                         <h6 className="stats-title"> 804m </h6>
                     </Col>
+
+                    <Col className="stats-entity-container">
+                        <p></p>
+                        <h4 className="stats-entity-title"> Número de parcelas que registei </h4>
+                        <h6 className="stats-entity-title"> 11 </h6>
+                    </Col>
+
                 </Row>
 
                 <Row>

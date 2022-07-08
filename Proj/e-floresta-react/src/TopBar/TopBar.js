@@ -34,12 +34,16 @@ const TopBar = () => {
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'C' ? <Link to="/statistics-entity">
+                {localStorage.getItem('role').includes('D') ? <Link to="/statistics">
                     <Button id="option9">Estatísticas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('D') ? <Link to="/statistics">
+                {localStorage.getItem('role') == 'C' ? <Link to="/statistics-entity">
                     <Button id="option11">Estatísticas</Button>
+                </Link> : <></>}
+
+                {localStorage.getItem('role').includes('A') ? <Link to="/statistics-admin">
+                    <Button id="option12">Estatísticas</Button>
                 </Link> : <></>}
 
                 {localStorage.getItem('role').includes('B')  ? <Link to="/approve-parcels">
