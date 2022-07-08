@@ -71,7 +71,8 @@ public class GetInfoResource {
                                     user.getString("user_nif"),
                                     s,
                                     user.getString("user_state"),
-                                    (int) ((user.getLong("user_trust")-1)/40)+1);
+                                    (int) ((user.getLong("user_trust")-1)/40)+1,
+                                    user.getString("user_role"));
 
         return Response.ok(g.toJson(data)).build();
 
@@ -96,8 +97,8 @@ public class GetInfoResource {
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
         }
-        if(user.getString("user_state").equals("ACTIVE")){
-            return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("No such user.").build();
         }
 
 
@@ -187,7 +188,8 @@ public class GetInfoResource {
                 checkUser.getString("user_nif"),
                 s,
                 checkUser.getString("user_state"),
-                (int) ((checkUser.getLong("user_trust")-1)/40)+1);
+                (int) ((checkUser.getLong("user_trust")-1)/40)+1,
+                checkUser.getString("user_role"));
 
         return Response.ok(g.toJson(data)).build();
 

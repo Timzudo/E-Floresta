@@ -10,12 +10,13 @@ public class UserProfileInfo {
     public String type;
     public String state;
     public int grade;
+    public String role;
 
     public UserProfileInfo(){
 
     }
 
-    public UserProfileInfo(String username, String email, String name, String phone, String nif, String type, String state, int grade) {
+    public UserProfileInfo(String username, String email, String name, String phone, String nif, String type, String state, int grade, String role) {
         this.username = username;
         this.email = email;
         this.name = name;
@@ -24,5 +25,6 @@ public class UserProfileInfo {
         this.type = type;
         this.state = state;
         this.grade = grade;
+        this.role = role;
     }
 }
