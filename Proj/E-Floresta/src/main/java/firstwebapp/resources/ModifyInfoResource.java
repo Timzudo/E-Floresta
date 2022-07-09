@@ -158,7 +158,7 @@ public class ModifyInfoResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        //Cria transacao
+        //TODO ALTERAR CONCELHO DISTRITO
         Transaction txn = datastore.newTransaction();
 
         try{
