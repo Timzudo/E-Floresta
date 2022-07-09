@@ -1,0 +1,42 @@
+body{
+    margin: 0;
+    height: 100%;
+}
+
+.report-body_MakeReport{
+    background-color: rgba(189, 216, 196, 0.85);
+    margin: auto;
+    align-self: center;
+    width: 50%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: dimgrey;
+}
+
+.title_MakeReport{
+    margin-top: 5%;
+    margin-left: 30%;
+    align-self: center;
+}
+
+.description_MakeReport{
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
+.report-parcel-form{
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#submit_MakeReport{
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
+#cancel_MakeReport{
+    margin-top: 2%;
+    margin-left: 2%;
+}
+

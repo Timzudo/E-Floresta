@@ -24,6 +24,8 @@ import RecoverRequest from "./RecoverPassword/RecoverRequest";
 import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import ReportsAdmin from "./ReportsAdmin/ReportsAdmin";
+import MakeReport from "./MakeReport/MakeReport";
+
 
 import Front_img from "./front_img.jpg";
 import React, { Component }  from 'react';
@@ -64,6 +66,7 @@ const App = () => {
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/reports-admin" element={<ReportsAdmin />} />
+          <Route path="/make-report" element={<MakeReport />} />
         </Routes>
       </Router>
   )
