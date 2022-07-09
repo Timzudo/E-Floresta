@@ -5,14 +5,25 @@ import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
 import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
+import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
+const containerStyle = {
+    width: '75vw',
+    height: '93.5vh'
+};
+
+const center = {
+    lat: 38.660677,
+    lng: -9.205971
+};
 
 const AllParcels = () => {
 
     const [obj, setObj] = useState({});
+
+    const [paths, setPaths] = useState([]);
 
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
@@ -92,14 +103,26 @@ const AllParcels = () => {
 
                 <ParcelEditModal obj={obj} show={editShow} setShow={setEditShow}/>
 
-            </LoadScript>
+                <div id="allParcelsBody">
 
-            <div className="allParcelsBody">
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={center}
+                        zoom={10}
+                        tilt={0}
+                    >
+                        {paths}
+                    </GoogleMap>
 
-                <div className="container_AllParcels">
-                    {parcelList}
+                    <div className="body_AllParcels">
+                        <div className="container_AllParcels">
+                            {parcelList}
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+            </LoadScript>
+            
         </>
     )
 }

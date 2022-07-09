@@ -7,6 +7,13 @@ html, body{
     height:100%;
 }
 
+.body_AllParcels{
+    background-color: #e0e3d5;
+    height: auto;
+    width: 100%;
+    overflow-y: scroll;
+}
+
 .allParcelsBody{
     background-color: #e0e3d5;
     min-height: calc(100% - 60px);
@@ -21,10 +28,11 @@ html, body{
 .container_AllParcels{
     display: flex;
     justify-content: flex-start;
-    padding-top: 20px;
+    padding-top: 10px;
+    padding-left: 10px;
     flex-wrap: wrap;
     gap: 15px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 .container_AllParcels .card{
@@ -88,4 +96,10 @@ html, body{
 #utilAtSolo-editParcelModal_ApproveParcels,
 #utilPrevSolo-editParcelModal_ApproveParcels{
     margin-top: 2%;
+}
+
+
+#allParcelsBody{
+    display: flex;
+    height: 93.5%
 }
