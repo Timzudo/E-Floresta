@@ -60,9 +60,17 @@ const ParcelNearbyModal = (props) => {
     const navigate = useNavigate();
     const [centerLoc, setCenterLoc] = useState(center);
     const [zoom, setZoom] = useState(15);
-    const handleClose = () => props.setShow(false);
+    const handleClose = () => {props.setShow(false);clearStates()}
     const [nearbyParcels, setNearbyParcels] = useState([]);
     const [infoWindow, setInfoWindow] = useState(<></>);
+
+    function clearStates(){
+        setMapRef(null);
+        setCenterLoc(center);
+        setZoom(15);
+        setNearbyParcels([]);
+        setInfoWindow(<></>);
+    }
 
     function loadModalValues() {
         let myObj = {token:localStorage.getItem('token')};

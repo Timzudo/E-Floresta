@@ -33,7 +33,13 @@ const ParcelDetailsModal = (props) => {
     const [obj, setObj] = useState({});
     const [centerLoc, setCenterLoc] = useState(center);
     const [zoom, setZoom] = useState(15);
-    const handleClose = () => props.setShow(false);
+    const handleClose = () => {props.setShow(false);clearStates()}
+
+    function clearStates(){
+        setObj({});
+        setCenterLoc(center);
+        setZoom(15);
+    }
 
     let xmlhttp = new XMLHttpRequest();
 

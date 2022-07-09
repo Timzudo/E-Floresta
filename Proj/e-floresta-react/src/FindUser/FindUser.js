@@ -54,7 +54,7 @@ const FindUser = () => {
 }
 
 const ParcelDetailsModal = (props) => {
-    const handleClose = () => {props.setShow(false); setChangeState(false); setChangeRole(false)};
+    const handleClose = () => {props.setShow(false); setChangeState(false); setChangeRole(false); changeInfo = false};
     const [changeRole, setChangeRole] = useState(false);
     const [changeState, setChangeState] = useState(false);
     let changeInfo = false;

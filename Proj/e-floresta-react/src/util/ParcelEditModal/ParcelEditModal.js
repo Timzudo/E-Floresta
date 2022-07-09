@@ -58,12 +58,24 @@ const ParcelEditModal = (props) => {
 
     const [managerList, setManager] = useState([]);
 
-    const handleEditClose = () => closeModal();
+    const handleEditClose = () => {closeModal();clearStates()}
+
+    function clearStates(){
+        setMarker([]);
+        setPaths([]);
+        setArea(0);
+        setPerimeter(0);
+        setZoom(0);
+        setmanagerValue("");
+        setmanagerRequestValue("");
+        setChangedInfo(false);
+        setCenterLoc(center);
+        setInfo({});
+        setManager([]);
+    }
 
     function closeModal(){
         props.setShow(false);
-        setMarker([]);
-        setPaths([]);
     }
 
     let xmlhttp = new XMLHttpRequest();
