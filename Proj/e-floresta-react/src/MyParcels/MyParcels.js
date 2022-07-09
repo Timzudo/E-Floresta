@@ -8,6 +8,7 @@ import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
+import ParcelNearbyModal from "../util/ParcelNearbyModal/ParcelNearbyModal";
 
 const containerStyle = {
     width: '75vw',
@@ -40,18 +41,28 @@ const MyParcels = () => {
 
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
+    const [nearbyShow, setNearbyShow] = useState(false);
 
     const handleShow = (obj) => {
         console.log("show")
         setObj(obj);
         setShow(true);
         setEditShow(false);
+        setNearbyShow(false);
     }
     const handleEditShow = (obj) => {
         console.log("showedit")
         setObj(obj);
         setShow(false);
         setEditShow(true);
+        setNearbyShow(false);
+    }
+    const handleNearbyShow = (obj) => {
+        console.log("shownearby")
+        setObj(obj);
+        setShow(false);
+        setEditShow(false);
+        setNearbyShow(true);
     }
 
     const [parcelList, setPList] = useState([]);
@@ -98,6 +109,9 @@ const MyParcels = () => {
                                         <Col>
                                             <Button id="edit-parcel_MyParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
                                         </Col>
+                                        <Col>
+                                            <Button id="nearby-parcel_MyParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleNearbyShow(obj[i])}>Parcelas Próximas</Button>
+                                        </Col>
                                     </Row>
                                 </Card.Body>
                         </Card>);
@@ -134,6 +148,8 @@ const MyParcels = () => {
                 <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
 
                 <ParcelEditModal obj={obj} show={editShow} setShow={setEditShow}/>
+
+                <ParcelNearbyModal obj={obj} show={nearbyShow} setShow={setNearbyShow}/>
 
                 <div id="myParcelsBody">
 

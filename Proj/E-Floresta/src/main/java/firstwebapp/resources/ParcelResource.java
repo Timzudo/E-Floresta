@@ -742,7 +742,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
         }
 
-        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(username+"_"+parcelName);
+        Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelName);
         Entity parcel = datastore.get(parcelKey);
         if(parcel == null){
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
@@ -770,16 +770,17 @@ public class ParcelResource {
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
 
-        List<String> parcelList = new ArrayList<>();
+        List<NearbyParcel> parcelList = new ArrayList<>();
 
         parcelListQuery.forEachRemaining( p -> {
 
-            String path = username + "/" + username + "_" + p.getString("parcel_name");
+            String nearbyParcelName = username + "_" + p.getString("parcel_name");
+            String path = username + "/" + nearbyParcelName;
             Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
             byte[] coordinates = blob.getContent();
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);
 
-            parcelList.add(coordinatesString);
+            parcelList.add(new NearbyParcel(nearbyParcelName, coordinatesString));
         });
 
         return Response.ok(g.toJson(parcelList)).build();

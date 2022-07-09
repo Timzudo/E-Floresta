@@ -53,7 +53,7 @@ const ParcelDetailsModal = (props) => {
         xmlhttp.send(myJson);
     }
 
-    function onLoad(coordinates) {
+    function onLoad() {
         let centerPoint = getCenterOfBounds(JSON.parse(props.obj.coordinates));
         setCenterLoc(centerPoint);
 
