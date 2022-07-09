@@ -43,9 +43,12 @@ const FindUser = () => {
         <>
             <CheckIfLoggedOut />
             <TopBar />
-            <div>
-                <input id="username_finduser" type="text" placeholder="Nome do utilizador"/>
-                <Button onClick={findUser} id="button_finduser" type="button" className="btn btn-success"></Button>
+
+            <div className="body_FindUser">
+                <h2 className="title_FindUser">Encontre um utilizador</h2>
+                <p className="description_FindUser">Verifique ou altere a informação de um utilizador</p>
+                <input id="username_finduser" type="text" placeholder="Username do utilizador"/>
+                <Button onClick={findUser} id="button_FindUser" type="button" className="btn btn-success">Procurar</Button>
             </div>
             <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
         </>
@@ -141,15 +144,15 @@ const ParcelDetailsModal = (props) => {
                     </div>
                     <div id="name_finduser">
                         <label className="label"> Nome Completo: </label>
-                        <input onChange={() => changeInfo = true} id="change-complete-name" type="text" defaultValue={props.obj.name}/>
+                        <input onChange={() => changeInfo = true} className="input-modal_FindUser" id="change-complete-name" type="text" defaultValue={props.obj.name}/>
                     </div>
                     <div id="phone_finduser">
                         <label className="label"> Telemóvel/Telefone: </label>
-                        <input onChange={() => changeInfo = true} id="change-phone" type="number" defaultValue={props.obj.phone} maxLength="9"/>
+                        <input onChange={() => changeInfo = true} className="input-modal_FindUser" id="change-phone" type="number" defaultValue={props.obj.phone} maxLength="9"/>
                     </div>
                     <div id="nif_finduser">
                         <label className="label" htmlFor="change-nif">NIF:</label>
-                        <input onChange={() => changeInfo = true} id="change-nif" type="number" defaultValue={props.obj.nif} maxLength="9"/>
+                        <input onChange={() => changeInfo = true}className="input-modal_FindUser" id="change-nif" type="number" defaultValue={props.obj.nif} maxLength="9"/>
                     </div>
                     <div id="grade_finduser">
                         <p className="label"> Nível do utilizador: {props.obj.grade} </p>
@@ -195,8 +198,9 @@ const ParcelDetailsModal = (props) => {
 
                     <div className="btn-group" id="confirmAndCancel_ChangeProfile">
                         <div id="confirmChanges_ChangeProfile">
-                            <Button onClick={sendRequest} type="button" className="btn btn-success btn-sm">Confirmar
-                                Alterações</Button>
+                            <Button onClick={sendRequest} className="confirm-modal_FindUser" type="button" variant="success" size="sm">
+                                Confirmar Alterações
+                            </Button>
                         </div>
                     </div>
                 </div>

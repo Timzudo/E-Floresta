@@ -1,3 +1,46 @@
-#button_finduser{
-    height: 100%
+body{
+    margin: 0;
+    height: 100%;
+}
+
+.body_FindUser{
+    background-color: rgba(189, 216, 196, 0.85);
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
+    width: 50%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: dimgrey;
+}
+
+.title_FindUser{
+    margin-top: 5%;
+    margin-bottom: 2%;
+    margin-left: 31%;
+    align-self: center;
+}
+
+.description_FindUser{
+    margin-top: -1%;
+    margin-bottom: 2%;
+    margin-left: 30%;
+    align-self: center;
+}
+
+#username_finduser{
+    margin-left: 37%;
+}
+
+#button_FindUser{
+    margin-left: 2%;
+}
+
+.input-modal_FindUser{
+    margin-left: 1%;
+}
+
+.confirm-modal_FindUser{
+    margin-top: 2%;
 }
