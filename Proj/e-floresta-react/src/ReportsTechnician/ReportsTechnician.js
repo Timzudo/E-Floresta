@@ -14,28 +14,37 @@ const ReportsTechnician = () => {
 
             <div className="ReportsTechnicianBody">
                 <Row>
-                    <Card border="dark" style={{ width: '85%', cursor: 'pointer' }}>
+                    <Card border="dark" style={{ width: '85%', cursor: 'pointer'}}>
                         <Card.Header><b>ReportID: 1</b></Card.Header>
                         <Card.Header>Prioridade:</Card.Header>
                         <Card.Body>
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsTechnician">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsTechnician">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsTechnician">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsTechnician">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsTechnician">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>
@@ -50,21 +59,30 @@ const ReportsTechnician = () => {
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsTechnician">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsTechnician">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsTechnician">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsTechnician">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsTechnician">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>
@@ -79,21 +97,30 @@ const ReportsTechnician = () => {
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsTechnician">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsTechnician">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsTechnician">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsTechnician">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsTechnician">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>

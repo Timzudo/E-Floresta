@@ -26,7 +26,13 @@ html, body{
     border: solid 1px #32443A;
 }
 
-#reject-report_ReportsTechnician{
+#ignore-report_ReportsTechnician{
+    background-color: grey;
+    color: white;
+    border: solid 1px grey;
+}
+
+#decline-report_ReportsTechnician{
      background-color: brown;
      color: white;
      border: solid 1px brown;

@@ -66,21 +66,30 @@ const ReportsAdmin = () => {
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsAdmin">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsAdmin">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsAdmin">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsAdmin">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsAdmin">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>
@@ -95,21 +104,30 @@ const ReportsAdmin = () => {
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsAdmin">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsAdmin">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsAdmin">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsAdmin">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsAdmin">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>
@@ -124,21 +142,30 @@ const ReportsAdmin = () => {
                             <Card.Title>Tópico:</Card.Title>
                             <p></p>
                             <Card.Text>
-                                <h6> Nome da Parcela: </h6>
-                                <h6> Autor: </h6>
-                                <h6> Distrito: </h6>
-                                <h6> Concelho: </h6>
-                                <h6> Freguesia: </h6>
-                                <h6> Mensagem: </h6>
+                                <Row>
+                                    <Col>
+                                        <h6> Nome da Parcela: </h6>
+                                        <h6> Autor: </h6>
+                                        <h6> Distrito: </h6>
+                                        <h6> Concelho: </h6>
+                                        <h6> Freguesia: </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6> Mensagem: </h6>
+                                    </Col>
+                                </Row>
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer>
                             <Row>
                                 <Col>
-                                    <Button id="confirm-report_ReportsAdmin">Aceitar</Button>
+                                    <Button id="confirm-report_ReportsAdmin">Confirmar</Button>
                                 </Col>
                                 <Col>
-                                    <Button id="reject-report_ReportsAdmin">Rejeitar</Button>
+                                    <Button id="ignore-report_ReportsAdmin">Ignorar</Button>
+                                </Col>
+                                <Col>
+                                    <Button id="decline-report_ReportsAdmin">Declinar</Button>
                                 </Col>
                             </Row>
                         </Card.Footer>
