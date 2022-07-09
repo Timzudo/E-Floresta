@@ -1,18 +1,18 @@
 import TopBar from '../TopBar/TopBar.js'
 import {Link, useNavigate} from "react-router-dom";
-import { useState } from 'react'
+import {useRef, useState} from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React from 'react'
 import {Button, Dropdown, Form, Modal} from "react-bootstrap";
 import './FindUser.css'
-import {getCenterOfBounds, getDistance, orderByDistance} from "geolib";
+import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
 import {GoogleMap, Polygon} from "@react-google-maps/api";
 import ProfileImage from "../ChangeProfile/profile_picture.png";
 
 const FindUser = () => {
     const [obj, setObj] = useState({});
     const [show, setShow] = useState(false);
-
+    const didMount = useRef(false);
 
 
     function findUser(){
@@ -30,10 +30,14 @@ const FindUser = () => {
             .then((r) => {
                 if(r.ok){
                     r.text().then(t => setObj(JSON.parse(t)))
-                    setShow(true);
                 }
             }).catch(r=>(console.log));
     }
+
+    React.useEffect(() => {
+        if (didMount.current) setShow(true);
+        else didMount.current = true;
+    }, [obj]);
 
     return(
         <>
@@ -68,7 +72,7 @@ const ParcelDetailsModal = (props) => {
             arr.push(sendRole());
         }
 
-        Promise.all(arr).then((r) => {alert("Success"); handleClose()}).catch(() => alert("Error"));
+        Promise.all(arr).then((r) => {alert("Success"); handleClose(); console.log(r)}).catch(() => alert("Error"));
     }
 
     async function sendInfo(){
@@ -105,7 +109,7 @@ const ParcelDetailsModal = (props) => {
 
     async function sendRole(){
         let myObj = {token:localStorage.getItem('token'),
-            newState:document.getElementById("role_select").value};
+            newRole:document.getElementById("role_select").value};
 
         const options = {
             method: 'PUT',
