@@ -14,24 +14,25 @@ html, body{
 
 #dropdown-distrito_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: 140%;
+    margin-left: 90%;
     margin-bottom: 3%;
 }
 
 #dropdown-concelho_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: 80%;
+    margin-left: 75%;
     margin-bottom: 3%;
 }
 
 #dropdown-freg_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: 25%;
+    margin-left: 55%;
     margin-bottom: 3%;
 }
 
 #search_AllParcelsAdmin{
     margin-top: 2%;
+    margin-left: 10%;
     margin-bottom: 3%;
 }
 
