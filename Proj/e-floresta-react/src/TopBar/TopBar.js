@@ -34,6 +34,14 @@ const TopBar = () => {
                     <Button id="option5">Minhas Parcelas</Button>
                 </Link> : <></>}
 
+                {localStorage.getItem('role').includes('A')  ? <Link to="/approve-parcels-admin">
+                    <Button id="option15">Parcelas Pendentes</Button>
+                </Link> : <></>}
+
+                {localStorage.getItem('role').includes('A') ? <Link to="/all-parcels-admin">
+                    <Button id="option16">Visualizar Parcelas</Button>
+                </Link> : <></>}
+
                 {localStorage.getItem('role') == 'C' ? <Link to="/proposed-parcels-entity">
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
@@ -54,16 +62,8 @@ const TopBar = () => {
                     <Button id="option7">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('A')  ? <Link to="/approve-parcels-admin">
-                    <Button id="option15">Parcelas Pendentes</Button>
-                </Link> : <></>}
-
                 {localStorage.getItem('role').includes('B') ? <Link to="/all-parcels">
                     <Button id="option8">Visualizar Parcelas</Button>
-                </Link> : <></>}
-
-                {localStorage.getItem('role').includes('A') ? <Link to="/all-parcels-admin">
-                    <Button id="option16">Visualizar Parcelas</Button>
                 </Link> : <></>}
 
                 <Link to="/rankings">
