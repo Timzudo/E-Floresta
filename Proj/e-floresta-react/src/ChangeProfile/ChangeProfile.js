@@ -97,7 +97,7 @@ const ChangeProfile = () => {
                 </div>
                 <div id="name_ChangeProfile">
                     <label className="label"> Nome Completo: </label>
-                    <input id="change-complete-name" type="text" defaultValue={name}/>
+                    <input id="change-complete-name" type="text" defaultValue={name} maxLength="64"/>
                 </div>
                 <div id="phone_ChangeProfile">
                     <label className="label"> Telemóvel/Telefone: </label>

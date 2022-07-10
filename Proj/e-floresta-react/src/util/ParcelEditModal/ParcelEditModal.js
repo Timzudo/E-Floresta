@@ -413,7 +413,7 @@ const ParcelEditModal = (props) => {
 
 
                 <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
-                    <input onChange={ () => (setChangedInfo(true))} id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.cover} />
+                    <input onChange={ () => (setChangedInfo(true))} id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.cover} maxLength="64"/>
                 </label>
 
                 {showSelects?<><Form.Group className="mt-3" controlId="utilAtSolo-editParcelModal_ApproveParcels">
@@ -450,7 +450,7 @@ const ParcelEditModal = (props) => {
 
                 <label htmlFor="description-editParcelModal_ApproveParcels"><b>Descrição:</b>
                     <input onChange={ () => (setChangedInfo(true))} id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"
-                           type="text" defaultValue={info.description}/>
+                           type="text" maxLength="512" defaultValue={info.description}/>
                 </label><br/>
 
                 <label htmlFor="file-editParcelModal_ApproveParcels"><b>Alterar Documento: </b>

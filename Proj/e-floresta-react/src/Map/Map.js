@@ -257,12 +257,12 @@ const Map = () => {
                     <div id="parcelAddPoint">
                         <div id="addLat">
                             <div className="MapInfo_Map">Latitude</div>
-                            <input className="latlng_input" type="number" id="input_lat" placeholder="Ex: 38.661142"/>
+                            <input className="latlng_input" type="number" id="input_lat" placeholder="Ex: 38.661142" maxLength="64"/>
                         </div>
                         <br/>
                         <div id="addLng">
                             <div className="MapInfo_Map">Longitude</div>
-                            <input className="latlng_input" type="number" id="input_lng" placeholder="Ex: -9.203510"/>
+                            <input className="latlng_input" type="number" id="input_lng" placeholder="Ex: -9.203510" maxLength="64"/>
                         </div>
                         <button type="button" id="submit_latlng" className="btn btn-success" onClick={() => addMarker(Number(document.getElementById("input_lat").value), Number(document.getElementById("input_lng").value))}>Adicionar ponto</button>
                     </div>
@@ -274,7 +274,7 @@ const Map = () => {
                     <Form onSubmit={submitHandler}>
                         <Form.Group className="mt-3" controlId="formParcelName">
                             <Form.Label> <strong>Nome da Parcela</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" />
+                            <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" maxLength="64"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formDistritoDropdown">
@@ -303,7 +303,7 @@ const Map = () => {
 
                         <Form.Group className="mt-3" controlId="formParcelCover">
                             <Form.Label> <strong>Cobertura do solo</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="text" placeholder="Cobertura do solo" />
+                            <Form.Control className="map_fields" required type="text" placeholder="Cobertura do solo" maxLength="64"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelUsage">

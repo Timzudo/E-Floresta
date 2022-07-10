@@ -53,13 +53,13 @@ const ChangePassword = () => {
 
             <div className="body-changePassword">
                 <div id="oldPassword_ChangePassword">
-                    Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password" type="password"/>
+                    Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password" type="password" maxLength="64"/>
                 </div>
                 <div id="newPassword_ChangePassword">
-                    Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password" type="password"/>
+                    Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password" type="password" maxLength="64"/>
                 </div>
                 <div id="confirmPassword_ChangePassword">
-                    Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password" type="password"/>
+                    Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password" type="password" maxLength="64"/>
                 </div>
 
                 <div className="btn-group" id="confirmAndCancel_ChangePassword">

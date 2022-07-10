@@ -116,11 +116,11 @@ const CreateAndLogin = () => {
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="session-form" >
-                <Form.Control type="text" placeholder="Nome de utilizador" id="session-username"/>
+                <Form.Control type="text" placeholder="Nome de utilizador" id="session-username" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="session-form" >
-                <Form.Control type="password" placeholder="Palavra-Passe" id="session-password"/>
+                <Form.Control type="password" placeholder="Palavra-Passe" id="session-password" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="checkbox-container" controlId="loginShowPassCheckbox" >
@@ -147,23 +147,23 @@ const CreateAndLogin = () => {
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="create-form" >
-                <Form.Control required type="text" placeholder="Nome de utilizador" id="create-acc-user" />
+                <Form.Control required type="text" placeholder="Nome de utilizador" id="create-acc-user" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="email" placeholder="E-mail" id="create-acc-email" />
+                <Form.Control required type="email" placeholder="E-mail" id="create-acc-email" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" />
+                <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="password" placeholder="Palavra-Passe" id="create-acc-pass" />
+                <Form.Control required type="password" placeholder="Palavra-Passe" id="create-acc-pass" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="create-form" >
-                <Form.Control required type="password" placeholder="Confirmar Palavra-Passe" id="create-acc-conf-pass" />
+                <Form.Control required type="password" placeholder="Confirmar Palavra-Passe" id="create-acc-conf-pass" maxLength="64"/>
               </Form.Group>
 
               <Form.Group className="create-form" >

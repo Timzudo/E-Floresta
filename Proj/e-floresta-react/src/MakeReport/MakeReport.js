@@ -49,12 +49,12 @@ const MakeReport = () => {
 
                     <Form.Group controlId="makereport_topic" className="report-parcel-form" >
                         <Form.Label>Tópico do problema (descrição breve):</Form.Label>
-                        <Form.Control required type="text" placeholder="Tópico" id="topic_MakeReport" />
+                        <Form.Control required type="text" placeholder="Tópico" id="topic_MakeReport" maxLength="64"/>
                     </Form.Group>
 
                     <Form.Group controlId="makereport_text" className="report-parcel-form" >
                         <Form.Label>Descreva o problema:</Form.Label>
-                        <Form.Control as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" />
+                        <Form.Control as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" maxLength="512"/>
                     </Form.Group>
 
                     <Button id="submit_MakeReport" variant="success" type="submit" onClick={sendReport}>

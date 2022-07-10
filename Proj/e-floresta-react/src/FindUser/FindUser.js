@@ -50,7 +50,7 @@ const FindUser = () => {
             <div className="body_FindUser">
                 <h2 className="title_FindUser">Encontre um utilizador</h2>
                 <p className="description_FindUser">Verifique ou altere a informação de um utilizador</p>
-                <input id="username_finduser" type="text" placeholder="Username do utilizador"/>
+                <input id="username_finduser" type="text" placeholder="Username do utilizador" maxLength="64"/>
                 <Button onClick={findUser} id="button_FindUser" type="button" className="btn btn-success">Procurar</Button>
             </div>
             <FindUserModal obj={obj} show={show} setShow={setShow} csvObj={csvObj}/>
