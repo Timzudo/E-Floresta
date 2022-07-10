@@ -447,10 +447,14 @@ const ParcelEditModal = (props) => {
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>}
 
-
+                <p></p>
                 <label htmlFor="description-editParcelModal_ApproveParcels"><b>Descrição:</b>
-                    <input onChange={ () => (setChangedInfo(true))} id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"
-                           type="text" maxLength="512" defaultValue={info.description}/>
+
+                    <Form.Group controlId="editParcelInput" className="inputs-editParcelModal" >
+                        <Form.Control onChange={ () => (setChangedInfo(true))} required type="text"
+                                      placeholder="Descrição" id="description-editParcelModal_ApproveParcels" maxLength="512"
+                                      as="textarea" rows={4} defaultValue={info.description}/>
+                    </Form.Group>
                 </label><br/>
 
                 <label htmlFor="file-editParcelModal_ApproveParcels"><b>Alterar Documento: </b>

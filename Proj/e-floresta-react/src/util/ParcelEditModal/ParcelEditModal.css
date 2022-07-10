@@ -5,3 +5,23 @@
 .inputs-editParcelModal{
     margin-left: 4px;
 }
+
+#utilAtSolo-editParcelModal_ApproveParcels,
+#utilPrevSolo-editParcelModal_ApproveParcels{
+    margin-top: 0 !important;
+    margin-left: 0;
+}
+
+#description-editParcelModal_ApproveParcels{
+    margin-top: 4%;
+}
+
+#description-editParcelModal_ApproveParcels{
+   margin-left: -2%;
+   width: 545%;
+}
+
+#file-editParcelModal_ApproveParcels,
+#photo-editParcelModal_ApproveParcels{
+    margin-top: 2%;
+}
