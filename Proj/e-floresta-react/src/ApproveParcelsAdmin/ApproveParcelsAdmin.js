@@ -1,16 +1,16 @@
-import "./ApproveParcels.css"
+import "./ApproveParcelsAdmin.css"
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
-import React, { Component }  from 'react';
-import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
-import {GoogleMap, LoadScript} from "@react-google-maps/api";
+import React from 'react';
+import {Button, Card, Col, Dropdown, Row} from "react-bootstrap";
+import {LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
 
-const ApproveParcels = () => {
+const ApproveParcelsAdmin = () => {
     const [obj, setObj] = useState({});
 
     const [show, setShow] = useState(false);
@@ -79,8 +79,8 @@ const ApproveParcels = () => {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_ApproveParcels" style={{ width: '15rem',cursor: "pointer"}}>
-                            <Card.Img className="parcel_picture" variant="top" src={obj[i].photoURL} />
+                        arr.push(<Card className="parcel-card_ApproveParcelsAdmin" style={{ width: '15rem',cursor: "pointer"}}>
+                            <Card.Img className="parcel_picture_ApproveParcelsAdmin" variant="top" src={obj[i].photoURL} />
                             <Card.Body>
                                 <Card.Title>{obj[i].name} </Card.Title>
                                 <Card.Text>
@@ -125,6 +125,57 @@ const ApproveParcels = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
+            <div className="buttons_ApproveParcelsAdmin">
+                <Row>
+                    <Col>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="outline-success" id="dropdown-distrito_ApproveParcelsAdmin">
+                                Distrito
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item> Distrito1 </Dropdown.Item>
+                                <Dropdown.Item> Distrito2 </Dropdown.Item>
+                                <Dropdown.Item> Distrito3 </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+
+                    <Col>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="outline-success" id="dropdown-concelho_ApproveParcelsAdmin">
+                                Concelho
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item>Concelho1</Dropdown.Item>
+                                <Dropdown.Item>Concelho2</Dropdown.Item>
+                                <Dropdown.Item>Concelho3</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+
+                    <Col>
+                        <Dropdown>
+                            <Dropdown.Toggle variant="outline-success" id="dropdown-freg_ApproveParcelsAdmin">
+                                Freguesia
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item>Freguesia1</Dropdown.Item>
+                                <Dropdown.Item>Freguesia2</Dropdown.Item>
+                                <Dropdown.Item>Freguesia3</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+
+                    <Col>
+                        <Button id="search_ApproveParcelsAdmin" variant="success">Procurar</Button>
+                    </Col>
+
+                </Row>
+            </div>
+
             <LoadScript googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ">
 
                 <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
@@ -133,8 +184,8 @@ const ApproveParcels = () => {
 
             </LoadScript>
 
-            <div className="approveParcelsBody">
-                <div className="container_ApproveParcels">
+            <div className="approveParcelsAdminBody">
+                <div className="container_ApproveParcelsAdmin">
                     {parcelList}
                 </div>
             </div>
@@ -142,4 +193,4 @@ const ApproveParcels = () => {
     )
 }
 
-export default ApproveParcels
+export default ApproveParcelsAdmin

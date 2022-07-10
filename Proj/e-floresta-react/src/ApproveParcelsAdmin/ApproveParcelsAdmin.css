@@ -1,0 +1,126 @@
+html, body{
+    margin: 0;
+    height: 100%;
+}
+
+#root{
+    height:100%;
+}
+
+.buttons_ApproveParcelsAdmin{
+    background-color: #e0e3d5;
+}
+
+#dropdown-distrito_ApproveParcelsAdmin{
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-bottom: 3%;
+}
+
+#dropdown-concelho_ApproveParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -75%;
+    margin-bottom: 3%;
+}
+
+#dropdown-freg_ApproveParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -147%;
+    margin-bottom: 3%;
+}
+
+#search_ApproveParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -163%;
+    margin-bottom: 3%;
+}
+
+.approveParcelsAdminBody{
+    background-color: #e0e3d5;
+    min-height: calc(100% - 60px);
+    width: 100%;
+}
+
+.container_ApproveParcelsAdmin{
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 10px;
+    padding-left: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-left: 40px;
+}
+
+.container_ApproveParcels .card{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+}
+
+.container_ApproveParcels .card:hover{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.parcel-card_ApproveParcelsAdmin{
+    margin: 1px;
+    border-color: #32443A;
+    background-color: rgba(218, 240, 252, 1);
+}
+
+.parcel-card_ApproveParcels button{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #B0C090;
+    text-align: center;
+    cursor: pointer;
+}
+
+.parcel-card_ApproveParcels button:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+}
+
+.parcel_picture_ApproveParcelsAdmin{
+    height: 200px;
+    width: 100%;
+}
+
+#confirm-parcel_ApproveParcels{
+    background-color: #3E503A;
+    color: white;
+    border: solid 1px #32443A;
+}
+
+#reject-parcel_ApproveParcels{
+    background-color: brown;
+    color: white;
+}
+
+.buttons-editParcelModal_ApproveParcels{
+    margin-top: 1%;
+}
+
+#rollback-editParcelModal_ApproveParcels,
+#confirmNewCoord-editParcelModal_ApproveParcels{
+    border-radius: 2px;
+    margin-right: 3%;
+}
+
+#newA-editParcelModal_ApproveParcels,
+#newP-editParcelModal_ApproveParcels{
+    margin-left: 1%;
+    margin-right: 5%;
+}
+
+.labels-editParcelModal_ApproveParcels{
+    margin-top: 1%;
+}
+
+#cobertSolo-editParcelModal_ApproveParcels,
+#utilAtSolo-editParcelModal_ApproveParcels,
+#utilPrevSolo-editParcelModal_ApproveParcels{
+    margin-top: 2%;
+}
