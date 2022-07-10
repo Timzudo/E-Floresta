@@ -63,6 +63,7 @@ public class RegisterResource {
                     .set("user_role", "D")
                     .set("user_state", "INACTIVE")
                     .set("user_trust", 40)
+                    .set("user_distrito", "")
                     .set("user_concelho", "")
                     .set("user_freguesia", "")
                     .build();

@@ -72,7 +72,10 @@ public class GetInfoResource {
                                     s,
                                     user.getString("user_state"),
                                     (int) ((user.getLong("user_trust")-1)/40)+1,
-                                    user.getString("user_role"));
+                                    user.getString("user_role"),
+                                    user.getString("user_distrito"),
+                                    user.getString("user_concelho"),
+                                    user.getString("user_freguesia"));
 
         return Response.ok(g.toJson(data)).build();
 
@@ -162,16 +165,16 @@ public class GetInfoResource {
 
         switch (s){
             case "A1":
-                s = "System admin";
+                s = "Administrador de Sistema";
                 break;
             case "A2":
                 s = "Moderador";
                 break;
             case "B1":
-                s = "Técnico camarário";
+                s = "Técnico Camara Municipal";
                 break;
             case "B2":
-                s = "Técnico da junta";
+                s = "Técnico Junta de Freguesia";
                 break;
             case "C":
                 s = "Entidade";
@@ -189,7 +192,10 @@ public class GetInfoResource {
                 s,
                 checkUser.getString("user_state"),
                 (int) ((checkUser.getLong("user_trust")-1)/40)+1,
-                checkUser.getString("user_role"));
+                checkUser.getString("user_role"),
+                checkUser.getString("user_distrito"),
+                checkUser.getString("user_concelho"),
+                checkUser.getString("user_freguesia"));
 
         return Response.ok(g.toJson(data)).build();
 

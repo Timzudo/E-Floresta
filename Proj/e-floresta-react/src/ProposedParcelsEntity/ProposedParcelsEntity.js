@@ -8,6 +8,7 @@ import {Button, ButtonGroup, Card, Col, Modal, Row} from "react-bootstrap";
 import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
+import {useNavigate} from "react-router-dom";
 
 const center = {
     lat: 38.660677,
@@ -21,7 +22,7 @@ const modalContainerStyle = {
 
 const ProposedParcelsEntity = () => {
     const [obj, setObj] = useState({});
-
+    const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleShow = (obj) => {
         console.log("show")
@@ -94,6 +95,9 @@ const ProposedParcelsEntity = () => {
                                 <Row>
                                     <Col>
                                         <Button id="show-parcel-details_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
+                                    </Col>
+                                    <Col>
+                                        <Button id="report-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => navigate("/make-report?id=" + obj[i].owner + "_" + obj[i].name)}>Reportar</Button>
                                     </Col>
                                 </Row>
                                 <Row>

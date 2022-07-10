@@ -1,8 +1,8 @@
 import './ParcelEditModal.css'
 
-import {Button, ButtonGroup, Modal} from "react-bootstrap";
+import {Button, ButtonGroup, Form, Modal, Spinner} from "react-bootstrap";
 import {GoogleMap, Marker, Polygon} from "@react-google-maps/api";
-import {useState} from "react";
+import {useState, useRef} from "react";
 import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
 import React from 'react'
 
@@ -55,10 +55,12 @@ const ParcelEditModal = (props) => {
     const [changedInfo, setChangedInfo] = useState(false);
     const [centerLoc, setCenterLoc] = useState(center);
     const [info, setInfo] = useState({});
+    const [showSelects, setShowSelects] = useState(false);
 
     const [managerList, setManager] = useState([]);
 
     const handleEditClose = () => {closeModal();clearStates()}
+
 
     function clearStates(){
         setMarker([]);
@@ -77,6 +79,13 @@ const ParcelEditModal = (props) => {
     function closeModal(){
         props.setShow(false);
     }
+
+    const didMount = useRef(false);
+    React.useEffect(() => {
+        console.log("useeffect");
+        if (didMount.current) setShowSelects(!showSelects);
+        else didMount.current = true;
+    }, [info]);
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -405,15 +414,39 @@ const ParcelEditModal = (props) => {
 
                 <label for="cobertSolo-editParcelModal_ApproveParcels"><b>Tipo de cobertura do solo:</b>
                     <input onChange={ () => (setChangedInfo(true))} id="cobertSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.cover} />
-                </label><br/>
+                </label>
 
-                <label for="utilAtSolo-editParcelModal_ApproveParcels"><b>Utilização atual do solo:</b>
-                    <input onChange={ () => (setChangedInfo(true))} id="utilAtSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.usage} />
-                </label><br/>
+                {showSelects?<><Form.Group className="mt-3" controlId="utilAtSolo-editParcelModal_ApproveParcels">
+                        <Form.Label> <strong>Utilização atual do solo:</strong> </Form.Label>
+                        <Form.Select defaultValue={info.usage} onChange={ () => (setChangedInfo(true))} className="inputs-editParcelModal">
+                            <option value="Recreacional">Recreacional</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Agricultural">Agricultural</option>
+                            <option value="Residencial">Residencial</option>
+                            <option value="Comercial">Comercial</option>
+                            <option value="Pasto">Pasto</option>
+                            <option value="Floresta">Floresta</option>
+                            <option value="Privado">Privado</option>
+                        </Form.Select>
+                    </Form.Group>
 
-                <label for="utilPrevSolo-editParcelModal_ApproveParcels"><b>Utilização prévia do solo:</b>
-                    <input onChange={ () => (setChangedInfo(true))} id="utilPrevSolo-editParcelModal_ApproveParcels" className="inputs-editParcelModal" type="text" defaultValue={info.oldUsage} />
-                </label><br/>
+
+                    <Form.Group className="mt-3" controlId="utilPrevSolo-editParcelModal_ApproveParcels">
+                        <Form.Label> <strong>Utilização prévia do solo:</strong> </Form.Label>
+                        <Form.Select defaultValue={info.oldUsage} onChange={ () => (setChangedInfo(true))} className="inputs-editParcelModal">
+                            <option value="Recreacional">Recreacional</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Agricultural">Agricultural</option>
+                            <option value="Residencial">Residencial</option>
+                            <option value="Comercial">Comercial</option>
+                            <option value="Pasto">Pasto</option>
+                            <option value="Floresta">Floresta</option>
+                            <option value="Privado">Privado</option>
+                        </Form.Select>
+                    </Form.Group></>:<Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>}
+
 
                 <label htmlFor="description-editParcelModal_ApproveParcels"><b>Descrição:</b>
                     <input onChange={ () => (setChangedInfo(true))} id="description-editParcelModal_ApproveParcels" className="inputs-editParcelModal"

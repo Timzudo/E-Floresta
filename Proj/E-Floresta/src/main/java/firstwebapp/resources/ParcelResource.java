@@ -1572,7 +1572,7 @@ public class ParcelResource {
     @POST
     @Path("/getreports/{distrito}/{concelho}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response gerReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, TokenData data) {
+    public Response getReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, TokenData data) {
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         //Token valido
         if(tokenInfo == null){
@@ -1628,7 +1628,7 @@ public class ParcelResource {
     @POST
     @Path("/getreports/{distrito}/{concelho}/{freguesia}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response gerReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, @PathParam("freguesia") String freguesia, TokenData data) {
+    public Response getReports(@PathParam("distrito") String distrito, @PathParam("concelho") String concelho, @PathParam("freguesia") String freguesia, TokenData data) {
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         //Token valido
         if(tokenInfo == null){
@@ -1681,6 +1681,72 @@ public class ParcelResource {
         return Response.ok(g.toJson(reportList)).build();
     }
 
+
+    @POST
+    @Path("/getreportsAll")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getReports(TokenData data) {
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
+        //Token valido
+        if(tokenInfo == null){
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+        }
+        if(!tokenInfo.role.contains("B")){
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+        String username = tokenInfo.sub;
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+
+        //Owner existe
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+        }
+        String distrito = user.getString("user_distrito");
+        String concelho = user.getString("user_distrito");
+        StructuredQuery.CompositeFilter f;
+
+        if(tokenInfo.role.equals("B2")){
+            String freguesia = user.getString("user_freguesia");
+            f = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("report_concelho", concelho),
+                    StructuredQuery.PropertyFilter.eq("report_distrito", distrito),
+                    StructuredQuery.PropertyFilter.eq("report_freguesia", freguesia));
+        }
+        else{
+            f = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("report_concelho", concelho),
+                    StructuredQuery.PropertyFilter.eq("report_distrito", distrito));
+        }
+
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("Report")
+                .setFilter(f)
+                .build();
+
+
+        QueryResults<Entity> reportListQuery = datastore.run(query);
+
+        List<ReportMiniature> reportList = new ArrayList<>();
+
+        reportListQuery.forEachRemaining(r->{
+            reportList.add(new ReportMiniature(r.getKey().getName(),
+                    r.getString("report_parcel_name"),
+                    r.getString("report_sender"),
+                    r.getString("report_distrito"),
+                    r.getString("report_concelho"),
+                    r.getString("report_freguesia"),
+                    r.getString("report_topic"),
+                    r.getString("report_message"),
+                    r.getLong("report_priority")));
+        });
+        return Response.ok(g.toJson(reportList)).build();
+    }
     //change usage
     /*Comparator<Entry<String, Integer>> valueComparatorInt = new Comparator<Entry<String,Integer>>() {
     	@Override public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) { 

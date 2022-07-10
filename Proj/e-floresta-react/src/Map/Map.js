@@ -72,6 +72,7 @@ const Map = () => {
             list.push(<option>{listC[i]}</option>);
         }
         setConcelhoOptions(list);
+        setFreguesiaOptions([]);
     }
 
     function handleSetConcelho(concelho){
@@ -88,6 +89,8 @@ const Map = () => {
     }
 
     function loadGeojson(file){
+        setMarker([]);
+        setPaths([]);
         const google = window.google;
 
         let reader = new FileReader();
@@ -105,13 +108,11 @@ const Map = () => {
             }
 
             let coordinateList = obj.coordinates[0];
-            setMarker([]);
-            setPaths([]);
 
 
             let arr1 = [];
             let arr2 = [];
-            for(let i = 0; i<coordinateList.length; i++){
+            for(let i = 0; i<coordinateList.length-1; i++){
                 arr1.push(<Marker key={markerList.length} id={markerList.length}
                                                     position={{
                                                         lat: coordinateList[i][0],
@@ -278,21 +279,24 @@ const Map = () => {
 
                         <Form.Group className="mt-3" controlId="formDistritoDropdown">
                             <Form.Label> <strong>Distrito</strong> </Form.Label>
-                            <Form.Select className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
+                            <Form.Select defaultValue="" className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
+                                <option disabled={true} value="">-</option>
                                 {distritoList}
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formConcelhoDropdown">
                             <Form.Label> <strong>Concelho</strong> </Form.Label>
-                            <Form.Select className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
+                            <Form.Select defaultValue="" className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
+                                <option disabled={true} value="">-</option>
                                 {concelhoOptions}
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formFreguesiaDropdown">
                             <Form.Label> <strong>Freguesia</strong> </Form.Label>
-                            <Form.Select className="map_fields">
+                            <Form.Select defaultValue="" className="map_fields">
+                                <option disabled={true} value="">-</option>
                                 {freguesiaOptions}
                             </Form.Select>
                         </Form.Group>
@@ -304,13 +308,32 @@ const Map = () => {
 
                         <Form.Group className="mt-3" controlId="formParcelUsage">
                             <Form.Label> <strong>Utilização do solo</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="text" placeholder="Utilização do solo" />
+                            <Form.Select className="map_fields">
+                                <option value="Recreacional">Recreacional</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Agricultural">Agricultural</option>
+                                <option value="Residencial">Residencial</option>
+                                <option value="Comercial">Comercial</option>
+                                <option value="Pasto">Pasto</option>
+                                <option value="Floresta">Floresta</option>
+                                <option value="Privado">Privado</option>
+                            </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelOldUsage">
                             <Form.Label> <strong>Utilização prévia do solo</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="text" placeholder="Utilização prévia do solo" />
+                            <Form.Select className="map_fields">
+                                <option value="Recreacional">Recreacional</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Agricultural">Agricultural</option>
+                                <option value="Residencial">Residencial</option>
+                                <option value="Comercial">Comercial</option>
+                                <option value="Pasto">Pasto</option>
+                                <option value="Floresta">Floresta</option>
+                                <option value="Privado">Privado</option>
+                            </Form.Select>
                         </Form.Group>
+
 
                         <Form.Group className="position-relative mt-3" controlId="formParcelPhoto">
                             <Form.Label> <strong>Foto</strong> </Form.Label>

@@ -1,8 +1,9 @@
-import {Modal, Toast} from "react-bootstrap";
+import {Button, Modal, Toast} from "react-bootstrap";
 import React from 'react';
 import {GoogleMap, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
 import {getCenterOfBounds, getDistance, orderByDistance} from "geolib";
+import mapCoordinates from 'geojson-apply-right-hand-rule'
 
 
 const center = {
@@ -69,6 +70,49 @@ const ParcelDetailsModal = (props) => {
         setZoom(Math.round(97.1634 - (69.2069*Math.pow((dist*9), 0.0174478)))-1);
     }
 
+    function exportGeoJSON(){
+        let arr = [];
+        let paths = JSON.parse(props.obj.coordinates);
+        for(let i = 0; i<paths.length; i++){
+            let auxArr = [];
+            auxArr.push(paths[i].lat);
+            auxArr.push(paths[i].lng);
+            arr.push(auxArr);
+        }
+        let auxArr = [];
+        auxArr.push(paths[0].lat);
+        auxArr.push(paths[0].lng);
+        arr.push(auxArr);
+
+        const geometry = mapCoordinates(arr);
+
+        download(props.obj.name+".geojson", JSON.stringify(geometry))
+    }
+
+    function download(filename, text) {
+        let element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
+    function checkRightHandRule(paths){
+        let diff = 0;
+
+        for(let i = 0; i<paths.length-1; i++){
+            diff += (paths[i+1].lng - paths[i].lng);
+        }
+
+        console.log(diff);
+        return diff<0;
+    }
+
     return <>
         <Modal
             onShow={loadModalValues}
@@ -113,7 +157,8 @@ const ParcelDetailsModal = (props) => {
                 <label><b>Utilização atual do solo:</b> {obj.usage} </label><br/>
                 <label><b>Utilização prévia do solo:</b> {obj.oldUsage} </label><br/>
                 <label><b>Descrição:</b> {obj.description} </label><br/>
-                <button onClick={() => (window.open(obj.documentURL), '_blank')} type="button">Ver documento</button>
+                <button onClick={() => (window.open(obj.documentURL), '_blank')} type="button">Ver documento</button><br/>
+                <Button type="button" className="btn btn-success btn-sm" onClick={exportGeoJSON}> Exportar fiheiro GeoJSON </Button>
             </Modal.Body>
         </Modal>
     </>

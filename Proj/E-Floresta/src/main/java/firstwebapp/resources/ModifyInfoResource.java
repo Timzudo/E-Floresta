@@ -165,6 +165,9 @@ public class ModifyInfoResource {
             //Atualiza a entidade
             userModify = Entity.newBuilder(userModify)
                     .set("user_role", data.newRole)
+                    .set("user_distrito", data.distrito)
+                    .set("user_concelho", data.concelho)
+                    .set("user_freguesia", data.freguesia)
                     .build();
             //Da update na transacao e commit
             txn.update(userModify);

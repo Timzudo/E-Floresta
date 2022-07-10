@@ -8,11 +8,14 @@ import './FindUser.css'
 import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
 import {GoogleMap, Polygon} from "@react-google-maps/api";
 import ProfileImage from "../ChangeProfile/profile_picture.png";
+import CSVConverter from "../util/CSVConverter";
 
 const FindUser = () => {
     const [obj, setObj] = useState({});
     const [show, setShow] = useState(false);
     const didMount = useRef(false);
+    const csvObj = JSON.parse(localStorage.getItem('csv'));
+
 
 
     function findUser(){
@@ -25,7 +28,6 @@ const FindUser = () => {
             },
             body: JSON.stringify(myObj),
         };
-        console.log("yeet");
         fetch("https://moonlit-oven-349523.appspot.com/rest/info/profileinfo/"+document.getElementById("username_finduser").value, options)
             .then((r) => {
                 if(r.ok){
@@ -41,6 +43,7 @@ const FindUser = () => {
 
     return(
         <>
+            <CSVConverter/>
             <CheckIfLoggedOut />
             <TopBar />
 
@@ -50,22 +53,75 @@ const FindUser = () => {
                 <input id="username_finduser" type="text" placeholder="Username do utilizador"/>
                 <Button onClick={findUser} id="button_FindUser" type="button" className="btn btn-success">Procurar</Button>
             </div>
-            <ParcelDetailsModal obj={obj} show={show} setShow={setShow}/>
+            <FindUserModal obj={obj} show={show} setShow={setShow} csvObj={csvObj}/>
         </>
 
     )
 }
 
-const ParcelDetailsModal = (props) => {
-    const handleClose = () => {props.setShow(false); setChangeState(false); setChangeRole(false); changeInfo = false};
+const FindUserModal = (props) => {
+    const handleClose = () => {props.setShow(false);clearStates()};
     const [changeRole, setChangeRole] = useState(false);
     const [changeState, setChangeState] = useState(false);
     let changeInfo = false;
+    const [newRole, setNewRole] = useState("");
+
+    const [distritoOptions, setDistritoOptions] = useState([]);
+    const [concelhoOptions, setConcelhoOptions] = useState([]);
+    const [freguesiaOptions, setFreguesiaOptions] = useState([]);
+    const [distritoValue, setDistritoValue] = useState("");
+    const [concelhoValue, setConcelhoValue] = useState("");
+    const [freguesiaValue, setFreguesiaValue] = useState("");
+
+
+
+
+    function handleShow(){
+        const distritoList = [];
+        const distritos = Object.keys(props.csvObj);
+        for(let i = 0; i<distritos.length; i++) {
+            distritoList.push(<option>{distritos[i]}</option>)
+        }
+        setDistritoOptions(distritoList);
+        setNewRole(props.obj.role);
+    }
+
+    function clearStates(){
+        setChangeState(false);
+        setChangeRole(false);
+        changeInfo = false;
+        setNewRole(props.obj.role);
+        setDistritoOptions([]);
+        setConcelhoOptions([]);
+        setFreguesiaOptions([]);
+    }
+
+    function handleSetDistrito(distrito){
+        setDistritoValue(distrito);
+        let listC = Object.keys(props.csvObj[distrito]);
+
+        let list = [];
+        for(let i = 0; i<listC.length; i++){
+            list.push(<option>{listC[i]}</option>);
+        }
+        setConcelhoOptions(list);
+        setFreguesiaOptions([]);
+    }
+
+    function handleSetConcelho(concelho){
+        setConcelhoValue(concelho);
+        let listF = Object.keys(props.csvObj[distritoValue][concelho]);
+
+        let list = [];
+        for(let i = 0; i<listF.length; i++){
+            list.push(<option>{listF[i]}</option>);
+        }
+        setFreguesiaOptions(list);
+    }
 
     function sendRequest(){
         let arr = [];
         if(changeInfo){
-            console.log("yau")
             arr.push(sendInfo());
         }
         if(changeState){
@@ -75,7 +131,7 @@ const ParcelDetailsModal = (props) => {
             arr.push(sendRole());
         }
 
-        Promise.all(arr).then((r) => {alert("Success"); handleClose(); console.log(r)}).catch(() => alert("Error"));
+        Promise.all(arr).then((r) => {alert("Success"); handleClose(); console.log(r)}).catch((reason) => console.log(reason));
     }
 
     async function sendInfo(){
@@ -111,8 +167,12 @@ const ParcelDetailsModal = (props) => {
     }
 
     async function sendRole(){
+        console.log(concelhoValue);
         let myObj = {token:localStorage.getItem('token'),
-            newRole:document.getElementById("role_select").value};
+            newRole:document.getElementById("role_select").value,
+            distrito:distritoValue,
+            concelho:concelhoValue,
+            freguesia:freguesiaValue};
 
         const options = {
             method: 'PUT',
@@ -133,6 +193,7 @@ const ParcelDetailsModal = (props) => {
             backdrop="static"
             dialogClassName="modal-xl"
             keyboard={false}
+            onShow={handleShow}
         >
             <Modal.Header closeButton>
                 <Modal.Title> {props.obj.username} </Modal.Title>
@@ -160,6 +221,18 @@ const ParcelDetailsModal = (props) => {
                     <div id="type_finduser">
                         <p className="label"> Tipo de utilizador: {props.obj.type} </p>
                     </div>
+                    <div id="state_finduser">
+                        <p className="label"> Estado do utilizador: {props.obj.state} </p>
+                    </div>
+                    <div id="distrito_finduser">
+                        <p className="label"> Distrito: {props.obj.distrito} </p>
+                    </div>
+                    <div id="concelho_finduser">
+                        <p className="label">Concelho: {props.obj.concelho} </p>
+                    </div>
+                    <div id="freguesia_finduser">
+                        <p className="label"> Freguesia: {props.obj.freguesia} </p>
+                    </div>
                     <Form.Check
                         className="position-relative mt-3"
                         type="switch"
@@ -170,15 +243,43 @@ const ParcelDetailsModal = (props) => {
 
                     {changeRole?<Form.Group className="mt-3" controlId="role_dropdown_finduser">
                         <Form.Label> <strong>Role</strong> </Form.Label>
-                        <Form.Select id="role_select" className="map_fields" defaultValue={props.obj.role}>
-                            {localStorage.getItem('role') === 'A1'?<option value="A1">A1</option>:<></>}
-                            <option value="A2">A2</option>
-                            <option value="B1">B1</option>
-                            <option value="B2">B2</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
+                        <Form.Select onChange={(ce) => setNewRole(ce.target.value)} id="role_select" className="map_fields" defaultValue={props.obj.role}>
+                            {localStorage.getItem('role') === 'A1'?<option value="A1">Administrador de Sistema</option>:<></>}
+                            <option value="A2">Moderador</option>
+                            <option value="B1">Técnico Camara Municipal</option>
+                            <option value="B2">Técnico Junta de Freguesia</option>
+                            <option value="C">Entidade</option>
+                            <option value="D">Utilizador</option>
                         </Form.Select>
                     </Form.Group>:<></>}
+
+
+                    {((String(newRole).includes("B") || newRole === "C") && changeRole)?<>
+                        <Form.Group className="mt-3" controlId="distrito_dropdown_finduser">
+                            <Form.Label> <strong>Distrito</strong> </Form.Label>
+                            <Form.Select onChange={(e) => handleSetDistrito(e.target.value)} id="role_select" className="map_fields" defaultValue="">
+                                <option disabled={true} value="">-</option>
+                                {distritoOptions}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mt-3" controlId="concelho_dropdown_finduser">
+                            <Form.Label> <strong>Concelho</strong> </Form.Label>
+                            <Form.Select onChange={(e) => handleSetConcelho(e.target.value)} id="role_select" className="map_fields" defaultValue="">
+                                <option disabled={true} value="">-</option>
+                                {concelhoOptions}
+                            </Form.Select>
+                        </Form.Group>
+                    </>:<></>}
+
+                    {(newRole === "B2") && changeRole?<>
+                        <Form.Group className="mt-3" controlId="freguesia_dropdown_finduser">
+                            <Form.Label> <strong>Freguesia</strong> </Form.Label>
+                            <Form.Select onChange={(e) =>setFreguesiaValue(e.target.value)} id="role_select" className="map_fields" defaultValue="">
+                                <option disabled={true} value="">-</option>
+                                {freguesiaOptions}
+                            </Form.Select>
+                        </Form.Group>
+                    </>:<></>}
 
                     <Form.Check
                         className="position-relative mt-3"
@@ -188,7 +289,7 @@ const ParcelDetailsModal = (props) => {
                         onChange={ () => setChangeState(!changeState)}
                     />
 
-                    {changeState?<Form.Group className="mt-3" controlId="role_dropdown_finduser">
+                    {changeState?<Form.Group className="mt-3" controlId="state_dropdown_finduser">
                         <Form.Label> <strong>Estado</strong> </Form.Label>
                         <Form.Select id="state_select" className="map_fields" defaultValue={props.obj.state}>
                             <option value="ACTIVE">Ativo</option>

@@ -117,7 +117,7 @@ const ParcelNearbyModal = (props) => {
                 position={{lat:lat, lng:lng}}
                 onCloseClick={ () => setInfoWindow(<></>)}
             >
-                <Button type="submit">Reportar</Button>
+                <Button id="report-parcel_ProposedParcelsEntity" onClick={() => navigate("/make-report?id=" + parcelName)} type="submit">Reportar</Button>
             </InfoWindow>
 
         setInfoWindow(info);
