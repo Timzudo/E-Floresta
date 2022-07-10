@@ -14,6 +14,7 @@ import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity
 import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
 import AllParcels from "./AllParcels/AllParcels";
+import AllParcelsAdmin from "./AllParcelsAdmin/AllParcelsAdmin";
 import Statistics from "./Statistics/Statistics";
 import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
 import StatisticsAdmin from "./StatisticsAdmin/StatisticsAdmin";
@@ -38,6 +39,7 @@ import {
 
 
 
+
 const App = () => {
 
   return (
@@ -56,6 +58,7 @@ const App = () => {
           <Route path="/parcels-entity" element={<ParcelsEntity />} />
           <Route path="/approve-parcels" element={<ApproveParcels />} />
           <Route path="/all-parcels" element={<AllParcels />} />
+          <Route path="/all-parcels-admin" element={<AllParcelsAdmin />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
           <Route path="/statistics-admin" element={<StatisticsAdmin />} />

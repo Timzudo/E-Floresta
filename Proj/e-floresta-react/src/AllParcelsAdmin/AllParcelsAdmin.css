@@ -7,27 +7,50 @@ html, body{
     height:100%;
 }
 
-.body_AllParcels{
+.buttons_AllParcelsAdmin{
+    background-color: #e0e3d5;
+}
+
+#dropdown-distrito_AllParcelsAdmin{
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-bottom: 3%;
+}
+
+#dropdown-concelho_AllParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -75%;
+    margin-bottom: 3%;
+}
+
+#dropdown-freg_AllParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -147%;
+    margin-bottom: 3%;
+}
+
+#search_AllParcelsAdmin{
+    margin-top: 2%;
+    margin-left: -163%;
+    margin-bottom: 3%;
+}
+
+#allParcelsAdminBody{
+    display: flex;
+    background-color: #e0e3d5;
+    min-height: calc(100% - 60px);
+    width: 100%;
+    height: 93.5%;
+}
+
+.body_AllParcelsAdmin{
     background-color: #e0e3d5;
     height: auto;
     width: 100%;
     overflow-y: scroll;
 }
 
-#allParcelsBody{
-    display: flex;
-    background-color: #e0e3d5;
-    min-height: calc(100% - 60px);
-    width: 100%;
-    height: 93.5%
-}
-
-.chooseFreguesia_AllParcels{
-    padding-top: 20px;
-    padding-left: 30px;
-}
-
-.container_AllParcels{
+.container_AllParcelsAdmin{
     display: flex;
     justify-content: flex-start;
     padding-top: 10px;
@@ -37,23 +60,23 @@ html, body{
     margin-left: 20px;
 }
 
-.container_AllParcels .card{
+.container_AllParcelsAdmin .card{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 40%;
 }
 
-.container_AllParcels .card:hover{
+.container_AllParcelsAdmin .card:hover{
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.parcel-card_AllParcels{
+.parcel-card_AllParcelsAdmin{
     margin: 1px;
     border-color: #32443A;
     background-color: rgba(218, 240, 252, 1);
 }
 
-.parcel-card_AllParcels button{
+.parcel-card_AllParcelsAdmin button{
     border: none;
     border-radius: 0;
     outline: 0;
@@ -64,12 +87,12 @@ html, body{
     cursor: pointer;
 }
 
-.parcel-card_AllParcels button:hover{
+.parcel-card_AllParcelsAdmin button:hover{
     background-color: #3E503A;
     border-color: #3E503A;
 }
 
-.parcel_picture{
+.parcel_picture_AllParcelsAdmin{
     height: 200px;
     width: 100%;
 }
@@ -99,4 +122,5 @@ html, body{
 #utilPrevSolo-editParcelModal_ApproveParcels{
     margin-top: 2%;
 }
+
 
