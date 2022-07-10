@@ -49,7 +49,6 @@ public class ParcelResource {
     private static final String PARCEL_PHOTO_BUCKET = "parcel_photo_bucket";
     private static final String PARCEL_THUMBNAIL_BUCKET = "parcel_thumbnail_bucket";
 
-
     private final Gson g = new Gson();
 
     public ParcelResource() throws IOException {
@@ -168,7 +167,7 @@ public class ParcelResource {
                         .set("parcel_usage", usage)
                         .set("parcel_old_usage", oldUsage)
                         .set("parcel_cover", cover)
-                        .set("parcel_description", "teste")
+                        .set("parcel_description", "")
                         .build();
 
             txn.add(parcel);
@@ -183,6 +182,134 @@ public class ParcelResource {
             }
         }
     }
+
+    @POST
+    @Path("/registerAdmin")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response registerParcelAdmin(@FormDataParam("token") String token,
+                                       @FormDataParam("owner") String owner,
+                                       @FormDataParam("name") String name,
+                                       @FormDataParam("distrito") String distrito,
+                                       @FormDataParam("concelho") String concelho,
+                                       @FormDataParam("freguesia") String freguesia,
+                                       @FormDataParam("photo") InputStream photo,
+                                       @FormDataParam("coordinates") String coordinates,
+                                       @FormDataParam("area") String area,
+                                       @FormDataParam("perimeter") String perimeter,
+                                       @FormDataParam("document") InputStream document,
+                                       @FormDataParam("usage") String usage,
+                                       @FormDataParam("oldUsage") String oldUsage,
+                                       @FormDataParam("cover") String cover) throws IOException {
+
+            LOG.fine("Attempt to register parcel.");
+
+            Point[] coordinateList = g.fromJson(coordinates, Point[].class);
+
+            if(!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && document != null && photo != null && !coordinates.equals("")  && !(coordinateList.length >= 3)){
+                return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+            }
+
+            JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
+            if(tokenInfo == null){
+                return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+            }
+            String username = tokenInfo.sub;
+
+            Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+            Entity user = datastore.get(userKey);
+
+            if(user == null){
+                return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+            }
+
+            if(!tokenInfo.role.contains("A") && !tokenInfo.role.contains("B")){
+                return Response.status(Response.Status.FORBIDDEN).build();
+            }
+
+            if(tokenInfo.role.contains("B")){
+                if(!distrito.equals(user.getString("user_distrito")) || !concelho.equals(user.getString("user_concelho"))){
+                    return Response.status(Response.Status.FORBIDDEN).build();
+                }
+                if(tokenInfo.role.equals("B2")){
+                    if(!freguesia.equals(user.getString("user_freguesia"))){
+                        return Response.status(Response.Status.FORBIDDEN).build();
+                    }
+                }
+            }
+
+            Key ownerKey = datastore.newKeyFactory().setKind("User").newKey(owner);
+            Entity ownerUser = datastore.get(ownerKey);
+
+            String parcelId = owner + "_" + name;
+            Key parcelKey = datastore.newKeyFactory().setKind("Parcel").newKey(parcelId);
+            Entity parcel = datastore.get(parcelKey);
+
+            if(parcel != null){
+                return Response.status(Response.Status.CONFLICT).entity("Parcel with name already exists.").build();
+            }
+
+            BlobId blobId = BlobId.of(PARCEL_BUCKET, owner + "/" + parcelId + "_coordinates");
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+            storage.create(blobInfo, coordinates.getBytes(StandardCharsets.UTF_8));
+
+            byte[] bytes = ByteStreams.toByteArray(photo);
+
+            ByteArrayInputStream isThumbnail = new ByteArrayInputStream(bytes);
+
+            BufferedImage img = new BufferedImage(238, 200, BufferedImage.TYPE_INT_RGB);
+            img.createGraphics().drawImage(ImageIO.read(isThumbnail).getScaledInstance(238, 200, Image.SCALE_SMOOTH),0,0,null);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(img, "png", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+            BlobId blobIdThumbnail = BlobId.of(PARCEL_THUMBNAIL_BUCKET, owner + "/" + parcelId + "_thumbnail");
+            BlobInfo blobInfoThumbnail = BlobInfo.newBuilder(blobIdThumbnail).setContentType("image/png").build();
+            storage.create(blobInfoThumbnail, is);
+
+            ByteArrayInputStream isPhoto = new ByteArrayInputStream(bytes);
+            BlobId blobIdPhoto = BlobId.of(PARCEL_PHOTO_BUCKET, owner + "/" + parcelId + "_photo");
+            BlobInfo blobInfoPhoto = BlobInfo.newBuilder(blobIdPhoto).setContentType("image/png").build();
+            storage.create(blobInfoPhoto, isPhoto);
+
+            BlobId blobIdDocument = BlobId.of(PARCEL_DOCUMENT_BUCKET, owner + "/" + parcelId + "_document");
+            BlobInfo blobInfoDocument = BlobInfo.newBuilder(blobIdDocument).setContentType("application/pdf").build();
+            storage.create(blobInfoDocument, document);
+
+            Transaction txn = datastore.newTransaction();
+
+            long areaLong = Long.parseLong(area);
+            long perimeterLong = Long.parseLong(perimeter);
+
+            try{
+                parcel = Entity.newBuilder(parcelKey)
+                        .set("parcel_name", name)
+                        .set("parcel_distrito", distrito)
+                        .set("parcel_concelho", concelho)
+                        .set("parcel_freguesia", freguesia)
+                        .set("parcel_owner", owner)
+                        .set("parcel_manager", "")
+                        .set("parcel_requested_manager", "")
+                        .set("parcel_area", areaLong)
+                        .set("parcel_perimeter", perimeterLong)
+                        .set("parcel_state", "APPROVED")
+                        .set("parcel_usage", usage)
+                        .set("parcel_old_usage", oldUsage)
+                        .set("parcel_cover", cover)
+                        .set("parcel_description", "")
+                        .build();
+
+                txn.add(parcel);
+                txn.commit();
+                LOG.info("Parcel registered: " + parcelId);
+                return Response.ok().build();
+            }
+            finally {
+                if(txn.isActive()){
+                    txn.rollback();
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+                }
+            }
+        }
 
     @POST
     @Path("/owned")

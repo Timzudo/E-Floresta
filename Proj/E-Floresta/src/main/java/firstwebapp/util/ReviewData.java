@@ -9,7 +9,7 @@ public class ReviewData {
 
     }
 
-    public ReviewData(String token, String reportID, String opinion) {
+    public ReviewData(String token, String opinion) {
         this.token = token;
         this.opinion = opinion;
     }

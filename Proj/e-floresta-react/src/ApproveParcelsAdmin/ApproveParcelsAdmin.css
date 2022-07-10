@@ -10,6 +10,7 @@ html, body{
 .buttons_ApproveParcelsAdmin{
     background-color: #BDD8C4;
     border: solid 1px #32443A;
+    height: 60px;
 }
 
 #dropdown-distrito_ApproveParcelsAdmin{
@@ -38,8 +39,9 @@ html, body{
 
 .approveParcelsAdminBody{
     background-color: #e0e3d5;
-    min-height: calc(100% - 60px);
+    min-height: calc(100% - 120px);
     width: 100%;
+    height: calc(100% - 120px);
 }
 
 .container_ApproveParcelsAdmin{

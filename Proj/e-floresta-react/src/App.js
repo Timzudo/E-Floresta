@@ -37,6 +37,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import MapAdmin from "./MapAdmin/MapAdmin";
 
 
 const App = () => {
@@ -70,6 +71,7 @@ const App = () => {
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/reports-admin" element={<ReportsAdmin />} />
           <Route path="/make-report" element={<MakeReport />} />
+          <Route path="/map-admin" element={<MapAdmin />} />
         </Routes>
       </Router>
   )

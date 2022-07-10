@@ -26,11 +26,12 @@ const ReportsTechnician = () => {
                 if(r.ok){
                     r.text().then(t => {
                         let arr = JSON.parse(t);
+                        let auxArr = [];
                         for(let i = 0; i<arr.length; i++){
-                            arr.push(
+                            auxArr.push(
                                 <Row>
                                     <Card border="dark" style={{ width: '85%', cursor: 'pointer'}}>
-                                    <Card.Header><b>ReportID: {arr[i].reportID}</b></Card.Header>
+                                    <Card.Header><b>Autor: {arr[i].sender}</b></Card.Header>
                                     <Card.Header>Prioridade: {arr[i].priority}</Card.Header>
                                     <Card.Body>
                                         <Card.Title>Tópico: {arr[i].topic}</Card.Title>
@@ -39,13 +40,12 @@ const ReportsTechnician = () => {
                                             <Row>
                                                 <Col>
                                                     <h6> Nome da Parcela: {arr[i].parcelName}</h6>
-                                                    <h6> Autor: {arr[i].sender}</h6>
                                                     <h6> Distrito: {arr[i].distrito}</h6>
                                                     <h6> Concelho: {arr[i].concelho}</h6>
                                                     <h6> Freguesia: {arr[i].freguesia}</h6>
                                                 </Col>
                                                 <Col>
-                                                    <h6> Mensagem: {arr[i].mesage}</h6>
+                                                    <h6>{arr[i].message}</h6>
                                                 </Col>
                                             </Row>
                                         </Card.Text>
@@ -53,24 +53,45 @@ const ReportsTechnician = () => {
                                     <Card.Footer>
                                         <Row>
                                             <Col>
-                                                <Button id="confirm-report_ReportsTechnician">Confirmar</Button>
+                                                <Button onClick={() => reviewReport(arr[i].reportID, "POSITIVE")} id="confirm-report_ReportsTechnician">Confirmar</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="ignore-report_ReportsTechnician">Ignorar</Button>
+                                                <Button onClick={() => reviewReport(arr[i].reportID, "NEUTRAL")} id="ignore-report_ReportsTechnician">Ignorar</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="decline-report_ReportsTechnician">Declinar</Button>
+                                                <Button onClick={() => reviewReport(arr[i].reportID, "NEGATIVE")} id="decline-report_ReportsTechnician">Rejeitar</Button>
                                             </Col>
                                         </Row>
                                     </Card.Footer>
                                 </Card>
                             </Row>)
                         }
-                        setReportList(arr);
+                        setReportList(auxArr);
                     })
                 }
             }).catch(console.log);
     }, [])
+
+    function reviewReport(reportID, opinion){
+        let myObj = {token:localStorage.getItem('token'),
+                        opinion:opinion};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/review/"+reportID, options)
+            .then((r) => {
+                if(r.ok){
+                    alert("Success");
+                    window.location.reload();
+                }
+            }).catch(()=>(console.log));
+    }
 
     return(
         <>

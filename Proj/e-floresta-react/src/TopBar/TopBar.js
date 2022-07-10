@@ -18,9 +18,13 @@ const TopBar = () => {
                     <Button id="option1">Página Inicial</Button>
                 </Link>
 
-                <Link to="/map">
+                {localStorage.getItem('role') == 'D' ? <Link to="/map">
                     <Button id="option2">Registar Parcela</Button>
-                </Link>
+                </Link> : <></>}
+
+                {localStorage.getItem('role').includes("A") || localStorage.getItem('role').includes("B") ? <Link to="/map-admin">
+                    <Button id="option17">Registar Parcela</Button>
+                </Link> : <></>}
 
                 {localStorage.getItem('role') == 'D' ? <Link to="/my-parcels">
                     <Button id="option3">Minhas Parcelas</Button>
