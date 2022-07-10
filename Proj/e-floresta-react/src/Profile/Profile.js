@@ -15,6 +15,7 @@ const Profile = () => {
     const [nif, setNif] = useState("");
     const [type, setType] = useState("");
     const [state, setState] = useState(""); //TODO: ver se e preciso
+    const [grade, setGrade] = useState("");
 
 
     let xmlhttp = new XMLHttpRequest();
@@ -32,6 +33,7 @@ const Profile = () => {
                     setNif(obj.nif);
                     setType(obj.type);
                     setState(obj.state);
+                    setGrade(obj.grade);
                 } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
@@ -73,6 +75,12 @@ const Profile = () => {
                 <div id="nif">
                     <p className="label">NIF: {nif===""? "Indefinido":nif}</p>
                 </div>
+                <div id="grade">
+                    <p className="label">Nota: {grade}</p>
+                </div>
+                <div id="state">
+                    <p className="label">Estado: {state === "ACTIVE"?"Ativo":"Inativo"}</p>
+                </div>
                 <div id="type">
                     <p className="label">Tipo de utilizador: {type}</p>
                 </div>
@@ -85,9 +93,7 @@ const Profile = () => {
                     </div>
 
                     <div id="changePassword_Profile">
-                        <Link to="/change-password">
-                            <button type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
-                        </Link>
+                        <button onClick={ () => navigate("/change-password?id="+username)} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
                     </div>
 
                 </div>

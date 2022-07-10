@@ -2,13 +2,14 @@ import './ChangePassword.css'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Button} from "react-bootstrap";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, { Component }  from 'react';
 
 const ChangePassword = () => {
     const navigate = useNavigate();
     let oldPassword, newPassword, confirmation
-
+    const search = useLocation().search;
+    const name = new URLSearchParams(search).get('id');
     let xmlhttp = new XMLHttpRequest();
 
     function changePassword() {
@@ -26,6 +27,7 @@ const ChangePassword = () => {
                     navigate("/");
                 } else {
                     alert("Não foi alterar a palavra-passe.");
+                    console.log(xmlhttp.status)
                 }
             }
         }
@@ -39,7 +41,7 @@ const ChangePassword = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/modify/password");
+        xmlhttp.open("PUT", "https://moonlit-oven-349523.appspot.com/rest/modify/password/"+name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }

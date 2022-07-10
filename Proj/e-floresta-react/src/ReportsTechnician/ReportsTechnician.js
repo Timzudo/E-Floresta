@@ -20,7 +20,7 @@ const ReportsTechnician = () => {
             },
             body: JSON.stringify(myObj),
         };
-        
+
         fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/getreportsAll", options)
             .then((r) => {
                 if(r.ok){

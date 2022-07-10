@@ -62,6 +62,7 @@ const ChangeProfile = () => {
                     navigate("/");
                 }
                 else {
+                    console.log(xmlhttp.status);
                     alert("Não foi possível obter informação.");
                 }
             }
@@ -75,7 +76,7 @@ const ChangeProfile = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/modify/info");
+        xmlhttp.open("PUT", "https://moonlit-oven-349523.appspot.com/rest/modify/info/"+username);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -96,15 +97,15 @@ const ChangeProfile = () => {
                 </div>
                 <div id="name_ChangeProfile">
                     <label className="label"> Nome Completo: </label>
-                    <input id="change-complete-name" type="text" value={name}/>
+                    <input id="change-complete-name" type="text" defaultValue={name}/>
                 </div>
                 <div id="phone_ChangeProfile">
                     <label className="label"> Telemóvel/Telefone: </label>
-                    <input id="change-phone" type="number" value={phone} maxLength="9"/>
+                    <input id="change-phone" type="number" defaultValue={phone} maxLength="9"/>
                 </div>
                 <div id="nif_ChangeProfile">
                     <label className="label" for="change-nif">NIF:</label>
-                    <input id="change-nif" type="number" value={nif} maxLength="9"/>
+                    <input id="change-nif" type="number" defaultValue={nif} maxLength="9"/>
                 </div>
                 <div id="type_ChangeProfile">
                     <p className="label"> Tipo de utilizador: {type} </p>
