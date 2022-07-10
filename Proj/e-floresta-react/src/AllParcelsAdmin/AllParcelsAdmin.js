@@ -11,7 +11,7 @@ import {GoogleMap, LoadScript} from "@react-google-maps/api";
 
 const containerStyle = {
     width: '75vw',
-    height: '93.5vh'
+    height: '85.5vh'
 };
 
 const center = {
