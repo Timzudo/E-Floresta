@@ -8,30 +8,30 @@ html, body{
 }
 
 .buttons_AllParcelsAdmin{
-    background-color: #e0e3d5;
+    background-color: #BDD8C4;
+    border: solid 1px #32443A;
 }
 
 #dropdown-distrito_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: 2%;
+    margin-left: 140%;
     margin-bottom: 3%;
 }
 
 #dropdown-concelho_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: -75%;
+    margin-left: 80%;
     margin-bottom: 3%;
 }
 
 #dropdown-freg_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: -147%;
+    margin-left: 25%;
     margin-bottom: 3%;
 }
 
 #search_AllParcelsAdmin{
     margin-top: 2%;
-    margin-left: -163%;
     margin-bottom: 3%;
 }
 
