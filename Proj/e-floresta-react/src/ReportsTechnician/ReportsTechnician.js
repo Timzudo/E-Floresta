@@ -2,13 +2,15 @@ import "./ReportsTechnician.css"
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import React, {useEffect, useState} from 'react'
-import {Button, Card, Col, Row} from "react-bootstrap";
+import {Button, Card, Col, Row, Spinner} from "react-bootstrap";
 import {Polygon} from "@react-google-maps/api";
 
 
 const ReportsTechnician = () => {
 
+    const [requested, setRequested] = useState(false);
     const [reportList, setReportList] = useState([]);
+
     useEffect(() => {
         console.log("yau?");
         let myObj = {token:localStorage.getItem('token')};
@@ -99,7 +101,9 @@ const ReportsTechnician = () => {
             <TopBar />
 
             <div className="ReportsTechnicianBody">
-                {reportList}
+                {requested? <Spinner id="spinner_ConfirmationPage" variant="success" animation="border" role="status">
+                    <span className="visually-hidden">Carregando...</span>
+                </Spinner> : reportList}
             </div>
         </>
     )
