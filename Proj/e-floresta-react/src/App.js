@@ -48,6 +48,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/create-and-login" element={<CreateAndLogin />} />
           <Route path="/map" element={<RegisterParcel />} />
+          <Route path="/map-admin" element={<MapAdmin />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/homepage" element={<LoggedHomepage />} />
           <Route path="/change-profile" element={<ChangeProfile />} />
@@ -71,7 +72,6 @@ const App = () => {
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/reports-admin" element={<ReportsAdmin />} />
           <Route path="/make-report" element={<MakeReport />} />
-          <Route path="/map-admin" element={<MapAdmin />} />
         </Routes>
       </Router>
   )
