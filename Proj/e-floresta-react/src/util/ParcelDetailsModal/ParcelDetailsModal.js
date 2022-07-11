@@ -1,3 +1,4 @@
+import './ParcelDetailsModal.css'
 import {Button, Modal, Toast} from "react-bootstrap";
 import React from 'react';
 import {GoogleMap, Polygon} from "@react-google-maps/api";
@@ -136,18 +137,19 @@ const ParcelDetailsModal = (props) => {
             </Modal.Body>
 
             <Modal.Body>
-                <label><b>Proprietário:</b> {props.obj.owner} </label><br/>
-                <label><b>Gerente:</b> {props.obj.manager === "" ? " - " : props.obj.manager} </label><br/>
-                <label><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
-                <label><b>Concelho:</b> {props.obj.concelho} </label><br/>
-                <label><b>Distrito:</b> {props.obj.distrito} </label><br/>
-                <label><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
-                <label><b>Tipo de cobertura do solo:</b> {obj.cover} </label><br/>
-                <label><b>Utilização atual do solo:</b> {obj.usage} </label><br/>
-                <label><b>Utilização prévia do solo:</b> {obj.oldUsage} </label><br/>
-                <label><b>Descrição:</b> {obj.description} </label><br/>
-                <Button type="button" className="btn btn-success btn-sm" onClick={() => (window.open(obj.documentURL), '_blank')}> Ver documento </Button><br/>
-                <Button type="button" className="btn btn-success btn-sm" onClick={exportGeoJSON}> Exportar fiheiro GeoJSON </Button>
+                <label className="field_ParcelDetailsModal" id="proprietario_ParcelDetailsModal"><b>Proprietário:</b> {props.obj.owner} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Gerente:</b> {props.obj.manager === "" ? " - " : props.obj.manager} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Concelho:</b> {props.obj.concelho} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Distrito:</b> {props.obj.distrito} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Tipo de cobertura do solo:</b> {obj.cover} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Utilização atual do solo:</b> {obj.usage} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Utilização prévia do solo:</b> {obj.oldUsage} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Descrição:</b> {obj.description} </label><br/>
+                <Button type="button" id="document_ParcelDetailsModal" variant="outline-success" size="sm" onClick={() => (window.open(obj.documentURL), '_blank')}> Ver documento </Button>
+                <Button type="button" id="photo_ParcelDetailsModal" variant="outline-success" size="sm" onClick={() => (window.open(obj.photoURL), '_blank')}> Ver foto </Button><br/>
+                <Button type="button" id="geojson_ParcelDetailsModal" className="btn btn-success btn-sm" onClick={exportGeoJSON}> Exportar fiheiro GeoJSON </Button>
             </Modal.Body>
         </Modal>
     </>
