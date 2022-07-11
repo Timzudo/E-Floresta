@@ -74,9 +74,14 @@ const MyParcels = () => {
     let pathsArr = [];
 
     function isParcelVerified(verified) {
-        if(verified) {
+        if(verified === "APPROVED") {
             return(
                 <Badge pill bg="success">Verificada</Badge>
+            )
+        }
+        else if(verified === "REJECTED") {
+            return(
+                <Badge pill bg="danger">Rejeitada</Badge>
             )
         }
         else{

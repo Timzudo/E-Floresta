@@ -118,9 +118,9 @@ const ApproveParcelsAdmin = () => {
             body: JSON.stringify(myObj),
         };
 
-        let distritoValue = document.getElementById("formDistritoAdmin").value;
-        let concelhoValue = document.getElementById("formConcelhoAdmin").value;
-        let freguesiaValue = document.getElementById("formFreguesiaAdmin").value;
+        let distritoValue = document.getElementById("dropdown-distrito_ApproveParcelsAdmin").value;
+        let concelhoValue = document.getElementById("dropdown-concelho_ApproveParcelsAdmin").value;
+        let freguesiaValue = document.getElementById("dropdown-freg_ApproveParcelsAdmin").value;
 
         fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/pendingbyregion/"+distritoValue+"/"+concelhoValue+"/"+freguesiaValue, options)
             .then((r) => {
@@ -175,7 +175,7 @@ const ApproveParcelsAdmin = () => {
             <div className="buttons_ApproveParcelsAdmin">
                 <Row>
                     <Col>
-                        <Form.Group className="mt-3" controlId="formDistritoAdmin">
+                        <Form.Group className="mt-3" controlId="dropdown-distrito_ApproveParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
                                 <option disabled={true} value="-">Distrito</option>
                                 {distritoList}
@@ -184,7 +184,7 @@ const ApproveParcelsAdmin = () => {
                     </Col>
 
                     <Col>
-                        <Form.Group className="mt-3" controlId="formConcelhoAdmin">
+                        <Form.Group className="mt-3" controlId="dropdown-concelho_ApproveParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
                                 <option disabled={true} value="-">Concelho</option>
                                 {concelhoOptions}
@@ -193,7 +193,7 @@ const ApproveParcelsAdmin = () => {
                     </Col>
 
                     <Col>
-                        <Form.Group className="mt-3" controlId="formFreguesiaAdmin">
+                        <Form.Group className="mt-3" controlId="dropdown-freg_ApproveParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields">
                                 <option value="-">Freguesia</option>
                                 {freguesiaOptions}
