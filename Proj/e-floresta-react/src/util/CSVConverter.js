@@ -1,20 +1,24 @@
 import React, {Component, useEffect} from 'react';
 //import csv from "./teste.csv";
 
+const expirationTime = 1000*60*60*24*7;
 
 const CSVConverter = () => {
 
     function checkCSV() {
 
         let xmlhttp = new XMLHttpRequest();
+        console.log(Date.now());
+        console.log(parseInt(localStorage.getItem('csvTime')));
 
-        if(localStorage.getItem("csv") === null){
+        if(localStorage.getItem("csv") === null || localStorage.getItem("csvTime") === null || (Date.now() > parseInt(localStorage.getItem('csvTime')))){
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4) {
-                    if (xmlhttp.status == 200) {
+                if (xmlhttp.readyState === 4) {
+                    if (xmlhttp.status === 200) {
                         let csv = xmlhttp.responseText;
                         let json = csvJSON(csv);
                         localStorage.setItem('csv', json);
+                        localStorage.setItem('csvTime', (Date.now()+expirationTime).toString());
                     }
                 }
             }
