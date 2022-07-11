@@ -13,28 +13,16 @@ html, body{
     height: 60px;
 }
 
-#dropdown-distrito_ApproveParcelsAdmin{
-    margin-top: 2%;
-    margin-left: 90%;
-    margin-bottom: 3%;
-}
-
-#dropdown-concelho_ApproveParcelsAdmin{
-    margin-top: 2%;
-    margin-left: 75%;
-    margin-bottom: 3%;
-}
-
+#dropdown-distrito_ApproveParcelsAdmin,
+#dropdown-concelho_ApproveParcelsAdmin,
 #dropdown-freg_ApproveParcelsAdmin{
-    margin-top: 2%;
-    margin-left: 55%;
-    margin-bottom: 3%;
+    margin-left: 35%;
+    margin-top: -1%;
 }
 
 #search_ApproveParcelsAdmin{
-    margin-top: 2%;
-    margin-left: 10%;
-    margin-bottom: 3%;
+    margin-top: 3%;
+    margin-left: 35%;
 }
 
 .approveParcelsAdminBody{

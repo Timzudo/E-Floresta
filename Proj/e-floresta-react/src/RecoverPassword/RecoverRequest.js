@@ -47,7 +47,6 @@ const RecoverPassword = () => {
                     <Form onSubmit={submitHandler}></Form>
                 </div>}
 
-            }
         </>
     )
 }
