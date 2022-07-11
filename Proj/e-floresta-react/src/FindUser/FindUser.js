@@ -1,21 +1,21 @@
+import './FindUser.css'
 import TopBar from '../TopBar/TopBar.js'
+import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Link, useNavigate} from "react-router-dom";
 import {useRef, useState} from 'react'
-import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React from 'react'
 import {Button, Dropdown, Form, Modal} from "react-bootstrap";
-import './FindUser.css'
 import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
 import {GoogleMap, Polygon} from "@react-google-maps/api";
 import ProfileImage from "../ChangeProfile/profile_picture.png";
 import CSVConverter from "../util/CSVConverter";
+
 
 const FindUser = () => {
     const [obj, setObj] = useState({});
     const [show, setShow] = useState(false);
     const didMount = useRef(false);
     const csvObj = JSON.parse(localStorage.getItem('csv'));
-
 
 
     function findUser(){

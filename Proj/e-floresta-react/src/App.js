@@ -28,6 +28,7 @@ import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import ReportsAdmin from "./ReportsAdmin/ReportsAdmin";
 import MakeReport from "./MakeReport/MakeReport";
+import UploadCSV from "./UploadCSV/UploadCSV";
 import Error404 from "./ErrorsPages/Error404";
 
 
@@ -39,6 +40,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+
 
 
 const App = () => {
@@ -72,6 +74,7 @@ const App = () => {
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/make-report" element={<MakeReport />} />
+          <Route path="/upload-csv" element={<UploadCSV />} />
           <Route path="/error404" element={<Error404 />} />
         </Routes>
       </Router>
