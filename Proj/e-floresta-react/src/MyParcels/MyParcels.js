@@ -2,7 +2,7 @@ import "./MyParcels.css"
 
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Badge, Button, Card, Col, Row} from "react-bootstrap";
+import {Badge, Button, Card, Col, Row, Spinner} from "react-bootstrap";
 import {useEffect, useState} from 'react'
 import React from 'react';
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
@@ -164,7 +164,9 @@ const MyParcels = () => {
 
                     <div className="body_MyParcels">
                         <div className="container_MyParcels">
-                            {parcelList}
+                            {parcelList.length===0? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                                        <span className="visually-hidden">Carregando...</span>
+                                                    </Spinner>:parcelList}
                         </div>
                     </div>
                 </div>

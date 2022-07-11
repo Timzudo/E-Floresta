@@ -10,7 +10,6 @@ const CreateAndLogin = () => {
   const navigate = useNavigate()
   let xmlhttp = new XMLHttpRequest();
   let token;
-  let type = "personal";
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -88,8 +87,7 @@ const CreateAndLogin = () => {
 
     let myJson = JSON.stringify(myObj);
 
-    console.log(type);
-    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/register/"+ type + "/" + document.getElementById("create-acc-user").value, true);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/register/personal/" + document.getElementById("create-acc-user").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -172,13 +170,6 @@ const CreateAndLogin = () => {
 
               <Form.Group className="create-form" >
                 <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
-              </Form.Group>
-
-              <Form.Group className="create-form" >
-                <Form.Select required controlId="create-acc-type" onChange={(e) => {type = e.target.value}}>
-                  <option value="personal">Conta Pessoal</option>
-                  <option value="entity">Conta de Entidade</option>
-                </Form.Select>
               </Form.Group>
 
               <Button id="create-acc-button" type="submit" onClick={register}>

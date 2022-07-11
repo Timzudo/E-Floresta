@@ -8,6 +8,7 @@ import {Button, Card, Col, Dropdown, Form, Row} from "react-bootstrap";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
+import CSVConverter from "../util/CSVConverter";
 
 const containerStyle = {
     width: '75vw',
@@ -112,25 +113,25 @@ const AllParcelsAdmin = () => {
             .then((r) => {
                 if(r.ok){
                     r.text().then(t => {
-                        let arr = t;
+                        let arr = JSON.parse(t);
                         let auxArr = [];
                         let pathsArr = [];
                         for(let i = 0; i<arr.length; i++){
                             auxArr.push(<Card className="parcel-card_AllParcelsAdmin" style={{ width: '15rem',cursor: "pointer"}}>
-                                <Card.Img className="parcel_picture_AllParcelsAdmin" variant="top" src={obj[i].photoURL} />
+                                <Card.Img className="parcel_picture_AllParcelsAdmin" variant="top" src={arr[i].photoURL} />
                                 <Card.Body>
-                                    <Card.Title>{obj[i].name} </Card.Title>
+                                    <Card.Title>{arr[i].name} </Card.Title>
                                     <Card.Text>
-                                        <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label>
-                                        <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label>
-                                        <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label>
-                                        <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label>
+                                        <label className={"w-100 text-truncate"}>Área: {arr[i].area}m²</label>
+                                        <label className={"w-100 text-truncate"} title={arr[i].freguesia}>Freguesia: {arr[i].freguesia}</label>
+                                        <label className={"w-100 text-truncate"} title={arr[i].concelho}>Concelho: {arr[i].concelho}</label>
+                                        <label className={"w-100 text-truncate"} title={arr[i].distrito}>Distrito: {arr[i].distrito}</label>
                                         <Row>
                                             <Col>
-                                                <Button id="show-parcel-details_AllParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
+                                                <Button id="show-parcel-details_AllParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(arr[i])}>Detalhes</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="edit-parcel_AllParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
+                                                <Button id="edit-parcel_AllParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(arr[i])}>Editar</Button>
                                             </Col>
                                         </Row>
                                     </Card.Text>
@@ -139,7 +140,7 @@ const AllParcelsAdmin = () => {
                             </Card>);
                             pathsArr.push(
                                 <Polygon
-                                    paths={JSON.parse(obj[i].coordinates)}
+                                    paths={JSON.parse(arr[i].coordinates)}
                                     options={optionsPoly}
                                 />
                             );
@@ -152,6 +153,7 @@ const AllParcelsAdmin = () => {
     }
 
     return(<>
+            <CSVConverter/>
         <CheckIfLoggedOut />
         <TopBar />
 

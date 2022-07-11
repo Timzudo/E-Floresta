@@ -207,6 +207,26 @@ const ParcelEditModal = (props) => {
             });
     }
 
+    function deleteParcel(){
+        let myObj = {token:localStorage.getItem('token')};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/delete/" + props.obj.owner + "_" + props.obj.name, options)
+            .then((r) =>{
+                if(r.ok){
+                    alert("Parcela removida.");
+                    window.location.reload();
+                }
+            });
+    }
+
     function loadModalValues() {
         let myObjManager = {token:localStorage.getItem('token')};
 
@@ -467,7 +487,11 @@ const ParcelEditModal = (props) => {
 
                 <p></p>
 
-                <Button type="button" className="btn btn-success btn-sm" onClick={sendNewInfo}> Confirmar Alterações </Button>
+                <div id="edit_modal_buttons">
+                    <Button type="button" className="btn btn-success btn-sm" onClick={sendNewInfo}> Confirmar Alterações </Button>
+                    <Button id="delete_parcel" onClick={() => {deleteParcel()}} className="managerButtons_ParcelEditModal" variant="danger" size="sm">Apagar parcela</Button>
+                </div>
+
 
             </Modal.Body>
         </Modal>

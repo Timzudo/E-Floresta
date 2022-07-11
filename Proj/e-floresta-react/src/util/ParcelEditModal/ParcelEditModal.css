@@ -25,3 +25,6 @@
 #photo-editParcelModal_ApproveParcels{
     margin-top: 2%;
 }
+#delete_parcel{
+    float: right;
+}
