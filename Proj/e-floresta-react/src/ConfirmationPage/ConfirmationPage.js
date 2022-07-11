@@ -1,3 +1,5 @@
+import "./ConfirmationPage.css"
+
 import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import Image from "../logo.png";
@@ -19,14 +21,30 @@ const ConfirmationPage = () => {
 
     function body(){
         if(confirmed){
-            return(<span>O seu e-mail foi confirmado com sucesso, pode voltar à pagina inicial.</span>)
+            return(
+                <div className="bg-img_ConfirmationPage">
+                    <div className="report-body_ConfirmationPage">
+                        <br/>
+                        <h4 className="title_ConfirmationPage"><b>O seu e-mail foi confirmado com sucesso, pode voltar à pagina inicial.</b></h4>
+                    </div>
+                </div>
+            )
         }
         else{
             return(<>
-                <span>A confirmar o seu e-mail, por favor aguarde...</span>
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner></>)
+                <div className="bg-img_ConfirmationPage">
+                    <div className="report-body_ConfirmationPage">
+                        <br/>
+                        <h4 className="title_ConfirmationPage"><b>A confirmar o seu e-mail, por favor aguarde...</b></h4>
+                        <span>
+                            <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                <span className="visually-hidden">Carregando...</span>
+                            </Spinner>
+                        </span>
+                    </div>
+                </div>
+
+            </>)
         }
     }
 
