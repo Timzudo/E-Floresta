@@ -218,7 +218,7 @@ const ApproveParcelsAdmin = () => {
 
             <div className="approveParcelsAdminBody">
                 <div className="container_ApproveParcelsAdmin">
-                    {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                    {requested? <Spinner id="spinner_ConfirmationPage" animation="border" variant="success" role="status">
                                     <span className="visually-hidden">Carregando...</span>
                                 </Spinner> : parcelList}
                 </div>

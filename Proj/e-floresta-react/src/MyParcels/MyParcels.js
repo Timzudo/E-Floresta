@@ -172,7 +172,7 @@ const MyParcels = () => {
 
                     <div className="body_MyParcels">
                         <div className="container_MyParcels">
-                            {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                            {requested? <Spinner id="spinner_ConfirmationPage" variant="success" animation="border" role="status">
                                 <span className="visually-hidden">Carregando...</span>
                             </Spinner> : parcelList}
                         </div>
