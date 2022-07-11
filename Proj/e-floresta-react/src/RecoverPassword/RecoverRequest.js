@@ -1,3 +1,5 @@
+import './RecoverRequest.css'
+
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import Image from "../logo.png";
@@ -30,15 +32,22 @@ const RecoverPassword = () => {
                     <Link to="/"><img src={Image} alt="E-Floresta Logo" className="home_logo" /></Link>
                 </div>
             </div>
-            {sent?<div>Pedido enviado com sucesso!</div>:<Form onSubmit={submitHandler}>
+            {sent?<div>Pedido enviado com sucesso!</div>:
 
-                <Form.Group className="session-form" >
-                    <Form.Control type="text" placeholder="Email" id="session-email"/>
-                </Form.Group>
-                <Button id="session-button" type="submit" onClick={recoverPassword}>
-                    Enviar pedido de recuperação.
-                </Button>
-            </Form>}
+                <div className="bg-img_RecoverRequest">
+                    <div className="body_RecoverRequest">
+                        <br/>
+                        <h2 className="title_RecoverRequest"><b>Esqueceu a sua palavra-passe?</b></h2>
+                        <p className="description_RecoverRequest">Insira o seu e-mail para receber um link de recuperação da sua palavra-passe.</p>
+                        <input id="email_RecoverRequest" type="email" placeholder="Email" maxLength="64"/>
+                        <Button id="button_RecoverRequest" type="submit" variant="success" onClick={recoverPassword}>
+                            Enviar pedido de recuperação
+                        </Button>
+                    </div>
+                    <Form onSubmit={submitHandler}></Form>
+                </div>}
+
+            }
         </>
     )
 }

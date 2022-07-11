@@ -1,3 +1,4 @@
+import "./RecoverPassword.css"
 import React, {useEffect} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import Image from "../logo.png";
@@ -65,23 +66,36 @@ const RecoverPassword = () => {
                     <Link to="/"><img src={Image} alt="E-Floresta Logo" className="home_logo" /></Link>
                 </div>
             </div>
-            <Form onSubmit={submitHandler}>
 
-                <Form.Group className="session-form" >
-                    <Form.Control type="password" placeholder="Palavra-Passe" id="session-password"/>
-                </Form.Group>
-                <Form.Group className="session-form" >
-                    <Form.Control type="password" placeholder="Palavra-Passe" id="session-confirmation"/>
-                </Form.Group>
+            <div className="bg-img_RecoverPassword">
+                <div className="report-body_RecoverPassword">
 
-                <Form.Group className="checkbox-container" controlId="loginShowPassCheckbox" >
-                    <Form.Check id="checkmark-login" type="checkbox" label="Mostrar Palavra-Passe" onClick={showPassword}/>
-                </Form.Group>
+                    <br/>
+                    <h3 className="title_RecoverPassword"><b>Defina a sua nova palavra-passe</b></h3>
+                    <br/>
 
-                <Button id="session-button" type="submit" onClick={recoverPassword}>
-                    Alterar palavra-passe
-                </Button>
-            </Form>
+                    <Form onSubmit={submitHandler}>
+
+                        <Form.Group className="changePassword_RecoverPassword" >
+                            <Form.Label>Escreva a sua nova palavra-passe:</Form.Label>
+                            <Form.Control type="password" placeholder="Nova palavra-passe" id="new-password_RecoverPassword"/>
+                        </Form.Group>
+                        <Form.Group className="changePassword_RecoverPassword" >
+                            <Form.Label>Confirme a sua nova palavra-passe:</Form.Label>
+                            <Form.Control type="password" placeholder="Nova palavra-Passe" id="confirmation_RecoverPassword"/>
+                        </Form.Group>
+
+                        <Form.Group className="checkbox_RecoverPassword" controlId="loginShowPassCheckbox" >
+                            <Form.Check id="checkmark-RecoverPassword" type="checkbox" label="Mostrar Palavra-Passe" onClick={showPassword}/>
+                        </Form.Group>
+
+                        <Button id="confirm-button_RecoverPassword" type="submit" variant="success" onClick={recoverPassword}>
+                            Alterar palavra-passe
+                        </Button>
+                    </Form>
+                </div>
+            </div>
+
         </>
     )
 }

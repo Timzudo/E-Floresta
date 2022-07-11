@@ -39,37 +39,39 @@ const MakeReport = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="report-body_MakeReport">
+            <div className="bg-img_MakeReport">
+                <div className="report-body_MakeReport">
 
-                <h2 className="title_MakeReport"><b>Reporte uma parcela</b></h2>
-                <p className="description_MakeReport">Acha que algo está errado? Conte-nos o problema. <br/>
-                    A sua contribuição ajuda-nos a melhorar o funcionamento do site!</p>
+                    <br/>
+                    <h2 className="title_MakeReport"><b>Reporte uma parcela</b></h2>
+                    <p className="description_MakeReport">Acha que algo está errado? Conte-nos o problema. <br/>
+                        A sua contribuição ajuda-nos a melhorar o funcionamento do site!</p>
 
-                <Form   onSubmit={submitHandler}  >
+                    <Form onSubmit={submitHandler} >
 
-                    <Form.Group controlId="makereport_topic" className="report-parcel-form" >
-                        <Form.Label>Tópico do problema (descrição breve):</Form.Label>
-                        <Form.Control required type="text" placeholder="Tópico" id="topic_MakeReport" maxLength="64"/>
-                    </Form.Group>
+                        <Form.Group controlId="makereport_topic" className="report-parcel-form" >
+                            <Form.Label>Tópico do problema (descrição breve):</Form.Label>
+                            <Form.Control required type="text" placeholder="Tópico" id="topic_MakeReport" maxLength="64"/>
+                        </Form.Group>
 
-                    <Form.Group controlId="makereport_text" className="report-parcel-form" >
-                        <Form.Label>Descreva o problema:</Form.Label>
-                        <Form.Control as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" maxLength="512"/>
-                    </Form.Group>
+                        <Form.Group controlId="makereport_text" className="report-parcel-form" >
+                            <Form.Label>Descreva o problema:</Form.Label>
+                            <Form.Control as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" maxLength="512"/>
+                        </Form.Group>
 
-                    <Button id="submit_MakeReport" variant="success" type="submit" onClick={sendReport}>
-                        Submeter
-                    </Button>
-
-                    <Link to="/homepage">
-                        <Button variant="secondary" id="cancel_MakeReport">
-                            Cancelar
+                        <Button id="submit_MakeReport" variant="success" type="submit" onClick={sendReport}>
+                            Submeter
                         </Button>
-                    </Link>
 
+                        <Link to="/homepage">
+                            <Button variant="secondary" id="cancel_MakeReport">
+                                Cancelar
+                            </Button>
+                        </Link>
 
-                </Form>
+                    </Form>
 
+                </div>
             </div>
 
         </>

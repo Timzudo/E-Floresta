@@ -1,0 +1,46 @@
+body,html{
+    margin: 0;
+    height: 100%;
+}
+
+.bg-img_RecoverRequest{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
+}
+
+.body_RecoverRequest{
+    background-color: rgba(189, 216, 196, 0.85);
+    margin: auto;
+    align-self: center;
+    width: 50%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: dimgrey;
+}
+
+.title_RecoverRequest{
+    margin-bottom: 2%;
+    margin-left: 20%;
+    align-self: center;
+}
+
+.description_RecoverRequest{
+    margin-bottom: -2%;
+    margin-left: 15%;
+    align-self: center;
+}
+
+#email_RecoverRequest{
+    width: 40%;
+    margin-left: 31%;
+    margin-right: 1%;
+}
+
+#button_RecoverRequest{
+    margin-top: 15%;
+    margin-left: -37%;
+}

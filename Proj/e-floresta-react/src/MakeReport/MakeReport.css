@@ -1,6 +1,15 @@
-body{
+body,html{
     margin: 0;
     height: 100%;
+}
+
+.bg-img_MakeReport{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
 }
 
 .report-body_MakeReport{
@@ -14,8 +23,7 @@ body{
 }
 
 .title_MakeReport{
-    margin-top: 5%;
-    margin-left: 30%;
+    margin-left: 29%;
     align-self: center;
 }
 
