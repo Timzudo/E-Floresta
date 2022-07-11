@@ -93,7 +93,7 @@ const Profile = () => {
                     </div>
 
                     <div id="changePassword_Profile">
-                        <button onClick={ () => navigate("/change-password?id="+username)} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                        <button onClick={ () => navigate("/change-password")} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
                     </div>
 
                 </div>

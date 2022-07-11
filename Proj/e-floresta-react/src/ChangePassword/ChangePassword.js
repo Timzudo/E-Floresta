@@ -8,8 +8,6 @@ import React, { Component }  from 'react';
 const ChangePassword = () => {
     const navigate = useNavigate();
     let oldPassword, newPassword, confirmation
-    const search = useLocation().search;
-    const name = new URLSearchParams(search).get('id');
     let xmlhttp = new XMLHttpRequest();
 
     function changePassword() {
@@ -41,7 +39,7 @@ const ChangePassword = () => {
 
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("PUT", "https://moonlit-oven-349523.appspot.com/rest/modify/password/"+name);
+        xmlhttp.open("PUT", "https://moonlit-oven-349523.appspot.com/rest/modify/password");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
