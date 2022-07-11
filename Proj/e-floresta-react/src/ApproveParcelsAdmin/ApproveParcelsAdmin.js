@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React from 'react';
-import {Button, Card, Col, Dropdown, Row} from "react-bootstrap";
+import {Button, Card, Col, Dropdown, Form, Row} from "react-bootstrap";
 import {LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
@@ -15,6 +15,38 @@ const ApproveParcelsAdmin = () => {
 
     const [show, setShow] = useState(false);
     const [editShow, setEditShow] = useState(false);
+
+    const objCSV = JSON.parse(localStorage.getItem('csv'));
+    const distritos = Object.keys(objCSV);
+    const distritoList = [];
+    for(let i = 0; i<distritos.length; i++) {
+        distritoList.push(<option>{distritos[i]}</option>)
+    }
+
+    const [distrito, setDistrito] = useState("");
+    const [concelhoOptions, setConcelhoOptions] = useState([]);
+    const [freguesiaOptions, setFreguesiaOptions] = useState([]);
+
+    function handleSetDistrito(distrito){
+        setDistrito(distrito);
+        let listC = Object.keys(objCSV[distrito]);
+
+        let list = [];
+        for(let i = 0; i<listC.length; i++){
+            list.push(<option>{listC[i]}</option>);
+        }
+        setConcelhoOptions(list);
+        setFreguesiaOptions([]);
+    }
+
+    function handleSetConcelho(concelho){
+        let listF = Object.keys(objCSV[distrito][concelho]);
+        let list = [];
+        for(let i = 0; i<listF.length; i++){
+            list.push(<option>{listF[i]}</option>);
+        }
+        setFreguesiaOptions(list);
+    }
 
     const handleShow = (obj) => {
         console.log("show")
@@ -33,7 +65,6 @@ const ApproveParcelsAdmin = () => {
     const [parcelList, setPList] = useState([]);
 
     let xmlhttp = new XMLHttpRequest();
-    let arr = [];
 
     function approveParcel(parcel) {
         xmlhttp.onreadystatechange = function () {
@@ -73,52 +104,62 @@ const ApproveParcelsAdmin = () => {
         xmlhttp.send(myJson);
     }
 
-    useEffect(() => {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    const obj = JSON.parse(xmlhttp.responseText);
-                    for(let i = 0; i<obj.length; i++){
-                        arr.push(<Card className="parcel-card_ApproveParcelsAdmin" style={{ width: '15rem',cursor: "pointer"}}>
-                            <Card.Img className="parcel_picture_ApproveParcelsAdmin" variant="top" src={obj[i].photoURL} />
-                            <Card.Body>
-                                <Card.Title>{obj[i].name} </Card.Title>
-                                <Card.Text>
-                                    <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label>
-                                    <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label>
-                                    <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label>
-                                    <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label>
-                                    <Row>
-                                        <Col>
-                                            <Button id="show-parcel-details_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
-                                        </Col>
-                                        <Col>
-                                            <Button id="edit-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
-                                        </Col>
-                                        <Col>
-                                            <Button id="confirm-parcel_ApproveParcels" onClick={() => approveParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
-                                        </Col>
-                                        <Col>
-                                            <Button id="reject-parcel_ApproveParcels" onClick={() => rejectParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
-                                        </Col>
-                                    </Row>
-                                </Card.Text>
+    function getParcels(){
+        let myObj = {token:localStorage.getItem('token')};
 
-                            </Card.Body>
-                        </Card>);
-                    }
-                    setPList(arr);
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
+        };
+
+        let distritoValue = document.getElementById("formDistritoAdmin").value;
+        let concelhoValue = document.getElementById("formConcelhoAdmin").value;
+        let freguesiaValue = document.getElementById("formFreguesiaAdmin").value;
+
+        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/pendingbyregion/"+distritoValue+"/"+concelhoValue+"/"+freguesiaValue, options)
+            .then((r) => {
+                if(r.ok){
+                    r.text().then(t => {
+                        let arr = JSON.parse(t);
+                        let auxArr = [];
+
+                        for(let i = 0; i<arr.length; i++){
+                            auxArr.push(<Card className="parcel-card_ApproveParcelsAdmin" style={{ width: '15rem',cursor: "pointer"}}>
+                                <Card.Img className="parcel_picture_ApproveParcelsAdmin" variant="top" src={obj[i].photoURL} />
+                                <Card.Body>
+                                    <Card.Title>{obj[i].name} </Card.Title>
+                                    <Card.Text>
+                                        <label className={"w-100 text-truncate"}>Área: {obj[i].area}m²</label>
+                                        <label className={"w-100 text-truncate"} title={obj[i].freguesia}>Freguesia: {obj[i].freguesia}</label>
+                                        <label className={"w-100 text-truncate"} title={obj[i].concelho}>Concelho: {obj[i].concelho}</label>
+                                        <label className={"w-100 text-truncate"} title={obj[i].distrito}>Distrito: {obj[i].distrito}</label>
+                                        <Row>
+                                            <Col>
+                                                <Button id="show-parcel-details_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(obj[i])}>Detalhes</Button>
+                                            </Col>
+                                            <Col>
+                                                <Button id="edit-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(obj[i])}>Editar</Button>
+                                            </Col>
+                                            <Col>
+                                                <Button id="confirm-parcel_ApproveParcels" onClick={() => approveParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
+                                            </Col>
+                                            <Col>
+                                                <Button id="reject-parcel_ApproveParcels" onClick={() => rejectParcel(obj[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
+                                            </Col>
+                                        </Row>
+                                    </Card.Text>
+
+                                </Card.Body>
+                            </Card>);
+                        }
+                        setPList(auxArr);
+                    });
                 }
-            }
-        }
-
-        var myObj = {token:localStorage.getItem('token')};
-        var myJson = JSON.stringify(myObj);
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/pendingbyregion");
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(myJson);
-    }, [])
+            }).catch(console.log);
+    }
 
     return(
         <>
@@ -128,49 +169,34 @@ const ApproveParcelsAdmin = () => {
             <div className="buttons_ApproveParcelsAdmin">
                 <Row>
                     <Col>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-success" id="dropdown-distrito_ApproveParcelsAdmin">
-                                Distrito
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item> Distrito1 </Dropdown.Item>
-                                <Dropdown.Item> Distrito2 </Dropdown.Item>
-                                <Dropdown.Item> Distrito3 </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Form.Group className="mt-3" controlId="formDistritoAdmin">
+                            <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
+                                <option disabled={true} value="-">Distrito</option>
+                                {distritoList}
+                            </Form.Select>
+                        </Form.Group>
                     </Col>
 
                     <Col>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-success" id="dropdown-concelho_ApproveParcelsAdmin">
-                                Concelho
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Concelho1</Dropdown.Item>
-                                <Dropdown.Item>Concelho2</Dropdown.Item>
-                                <Dropdown.Item>Concelho3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Form.Group className="mt-3" controlId="formConcelhoAdmin">
+                            <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
+                                <option disabled={true} value="-">Concelho</option>
+                                {concelhoOptions}
+                            </Form.Select>
+                        </Form.Group>
                     </Col>
 
                     <Col>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-success" id="dropdown-freg_ApproveParcelsAdmin">
-                                Freguesia
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Freguesia1</Dropdown.Item>
-                                <Dropdown.Item>Freguesia2</Dropdown.Item>
-                                <Dropdown.Item>Freguesia3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Form.Group className="mt-3" controlId="formFreguesiaAdmin">
+                            <Form.Select defaultValue="-" className="map_fields">
+                                <option value="-">Freguesia</option>
+                                {freguesiaOptions}
+                            </Form.Select>
+                        </Form.Group>
                     </Col>
 
                     <Col>
-                        <Button id="search_ApproveParcelsAdmin" variant="success">Procurar</Button>
+                        <Button onClick={getParcels} id="search_ApproveParcelsAdmin" variant="success">Procurar</Button>
                     </Col>
 
                 </Row>

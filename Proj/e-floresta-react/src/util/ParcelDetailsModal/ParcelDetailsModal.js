@@ -102,17 +102,6 @@ const ParcelDetailsModal = (props) => {
         document.body.removeChild(element);
     }
 
-    function checkRightHandRule(paths){
-        let diff = 0;
-
-        for(let i = 0; i<paths.length-1; i++){
-            diff += (paths[i+1].lng - paths[i].lng);
-        }
-
-        console.log(diff);
-        return diff<0;
-    }
-
     return <>
         <Modal
             onShow={loadModalValues}

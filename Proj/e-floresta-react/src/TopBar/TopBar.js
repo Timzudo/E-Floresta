@@ -2,7 +2,7 @@ import LogoImage from './logo.png'
 import './TopBar.css'
 import {Link, useNavigate} from "react-router-dom";
 import {Button, ButtonGroup, Dropdown} from "react-bootstrap";
-import React, {Component} from 'react';
+import React from 'react';
 
 const TopBar = () => {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ const TopBar = () => {
                     <Button id="option1">Página Inicial</Button>
                 </Link>
 
-                {localStorage.getItem('role') == 'D' ? <Link to="/map">
+                {localStorage.getItem('role') === 'D' ? <Link to="/map">
                     <Button id="option2">Registar Parcela</Button>
                 </Link> : <></>}
 
@@ -26,11 +26,11 @@ const TopBar = () => {
                     <Button id="option17">Registar Parcela</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'D' ? <Link to="/my-parcels">
+                {localStorage.getItem('role') === 'D' ? <Link to="/my-parcels">
                     <Button id="option3">Minhas Parcelas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'C' ? <Link to="/parcels-entity">
+                {localStorage.getItem('role') === 'C' ? <Link to="/parcels-entity">
                     <Button id="option5">Minhas Parcelas</Button>
                 </Link> : <></>}
 
@@ -42,7 +42,7 @@ const TopBar = () => {
                     <Button id="option16">Visualizar Parcelas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'C' ? <Link to="/proposed-parcels-entity">
+                {localStorage.getItem('role') === 'C' ? <Link to="/proposed-parcels-entity">
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
@@ -50,7 +50,7 @@ const TopBar = () => {
                     <Button id="option9">Estatísticas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') == 'C' ? <Link to="/statistics-entity">
+                {localStorage.getItem('role') === 'C' ? <Link to="/statistics-entity">
                     <Button id="option11">Estatísticas</Button>
                 </Link> : <></>}
 
