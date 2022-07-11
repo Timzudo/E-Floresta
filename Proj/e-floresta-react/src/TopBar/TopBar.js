@@ -74,6 +74,10 @@ const TopBar = () => {
                     <Button id="option13">Reports</Button>
                 </Link> : <></>}
 
+                {localStorage.getItem('role') === 'A1' ? <Link to="/upload-csv">
+                    <Button id="option17">CSV</Button>
+                </Link> : <></>}
+
 
                 <Link to="/about-us">
                     <Button id="option4">Sobre</Button>
