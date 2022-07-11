@@ -1,0 +1,42 @@
+body,html{
+    margin: 0;
+    height: 100%;
+}
+
+.bg-img_Error404{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
+}
+
+.body_Error404{
+    background-color: rgba(255,255,255, 0.75);
+    margin: auto;
+    align-self: center;
+    width: 50%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: #32443A;
+}
+
+.icon_Error404{
+    width: 25%;
+    margin-left: 37%;
+}
+
+.title_Error404{
+    margin-left: 13%;
+}
+
+.description_Error404{
+    margin-bottom: -2%;
+    margin-left: 4%;
+}
+
+#button_Error404{
+    margin-top: 5%;
+    margin-left: 38%;
+}

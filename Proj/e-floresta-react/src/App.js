@@ -10,6 +10,7 @@ import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 import ChangePassword from "./ChangePassword/ChangePassword";
 import MyParcels from "./MyParcels/MyParcels";
+import MapAdmin from "./MapAdmin/MapAdmin";
 import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity";
 import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
@@ -27,6 +28,7 @@ import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import ReportsAdmin from "./ReportsAdmin/ReportsAdmin";
 import MakeReport from "./MakeReport/MakeReport";
+import Error404 from "./ErrorsPages/Error404";
 
 
 import Front_img from "./front_img.jpg";
@@ -37,7 +39,6 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import MapAdmin from "./MapAdmin/MapAdmin";
 
 
 const App = () => {
@@ -72,6 +73,7 @@ const App = () => {
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/reports-admin" element={<ReportsAdmin />} />
           <Route path="/make-report" element={<MakeReport />} />
+          <Route path="/error404" element={<Error404 />} />
         </Routes>
       </Router>
   )
