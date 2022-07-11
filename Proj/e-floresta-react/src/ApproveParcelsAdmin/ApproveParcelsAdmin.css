@@ -58,7 +58,7 @@ html, body{
     background-color: rgba(218, 240, 252, 1);
 }
 
-.parcel-card_ApproveParcels button{
+.parcel-card_ApproveParcelsAdmin button{
     border: none;
     border-radius: 0;
     outline: 0;
@@ -69,7 +69,7 @@ html, body{
     cursor: pointer;
 }
 
-.parcel-card_ApproveParcels button:hover{
+.parcel-card_ApproveParcelsAdmin button:hover{
     background-color: #3E503A;
     border-color: #3E503A;
 }
@@ -79,23 +79,24 @@ html, body{
     width: 100%;
 }
 
-#confirm-parcel_ApproveParcels{
+#confirm-parcel_ApproveParcelsAdmin{
     background-color: #3E503A;
     color: white;
-    border: solid 1px #32443A;
+    border: solid 1px #3E503A;
 }
 
-#reject-parcel_ApproveParcels{
+#reject-parcel_ApproveParcelsAdmin{
     background-color: brown;
     color: white;
+    border: solid 1px brown;
 }
 
-.buttons-editParcelModal_ApproveParcels{
+.buttons-editParcelModal_ApproveParcelsAdmin{
     margin-top: 1%;
 }
 
-#rollback-editParcelModal_ApproveParcels,
-#confirmNewCoord-editParcelModal_ApproveParcels{
+#rollback-editParcelModal_ApproveParcelsAdmin,
+#confirmNewCoord-editParcelModal_ApproveParcelsAdmin{
     border-radius: 2px;
     margin-right: 3%;
 }

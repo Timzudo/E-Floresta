@@ -142,16 +142,16 @@ const ApproveParcelsAdmin = () => {
                                         <label className={"w-100 text-truncate"} title={arr[i].distrito}>Distrito: {arr[i].distrito}</label>
                                         <Row>
                                             <Col>
-                                                <Button id="show-parcel-details_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(arr[i])}>Detalhes</Button>
+                                                <Button id="show-parcel-details_ApproveParcelsAdmin" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleShow(arr[i])}>Detalhes</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="edit-parcel_ApproveParcels" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(arr[i])}>Editar</Button>
+                                                <Button id="edit-parcel_ApproveParcelsAdmin" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => handleEditShow(arr[i])}>Editar</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="confirm-parcel_ApproveParcels" onClick={() => approveParcel(arr[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
+                                                <Button id="confirm-parcel_ApproveParcelsAdmin" onClick={() => approveParcel(arr[i])} className={"w-100 mb-2"} variant="primary" size="sm">Aprovar</Button>
                                             </Col>
                                             <Col>
-                                                <Button id="reject-parcel_ApproveParcels" onClick={() => rejectParcel(arr[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
+                                                <Button id="reject-parcel_ApproveParcelsAdmin" onClick={() => rejectParcel(arr[i])} className={"w-100 mb-2"} variant="primary" size="sm">Rejeitar</Button>
                                             </Col>
                                         </Row>
                                     </Card.Text>
