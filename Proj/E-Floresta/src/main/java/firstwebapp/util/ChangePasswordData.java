@@ -19,6 +19,6 @@ public class ChangePasswordData {
     }
 
     public boolean validPassword(){
-        return newPassword.equals(confirmation) && newPassword.length()>=6;
+        return newPassword.equals(confirmation) && newPassword.length()>=6 && oldPassword.length()>=6;
     }
 }

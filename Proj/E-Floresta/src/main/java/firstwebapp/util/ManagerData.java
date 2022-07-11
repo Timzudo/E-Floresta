@@ -13,4 +13,8 @@ public class ManagerData {
         this.token = token;
         this.managerName = managerName;
     }
+
+    public boolean isValid(){
+        return !managerName.equals("");
+    }
 }

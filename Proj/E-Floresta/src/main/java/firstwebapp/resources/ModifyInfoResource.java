@@ -22,6 +22,10 @@ public class ModifyInfoResource {
     public Response modifyInfo(@PathParam("username") String username, ModifyInfoData data){
         LOG.fine("Attempt to modify user: " + username);
 
+        if(!data.isValid()){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         //Verifica o token
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         if(tokenInfo == null){
@@ -162,14 +166,12 @@ public class ModifyInfoResource {
         Transaction txn = datastore.newTransaction();
 
         try{
-            //Atualiza a entidade
             userModify = Entity.newBuilder(userModify)
                     .set("user_role", data.newRole)
                     .set("user_distrito", data.distrito)
                     .set("user_concelho", data.concelho)
                     .set("user_freguesia", data.freguesia)
                     .build();
-            //Da update na transacao e commit
             txn.update(userModify);
             txn.commit();
             return Response.ok("User modified successfully.").build();
@@ -184,9 +186,8 @@ public class ModifyInfoResource {
 
 
     @PUT
-    @Path("/password/{username}")
-    public Response changePassword(@PathParam("username") String username, ChangePasswordData data){
-        LOG.fine("Attempt to change password of user: " + username);
+    @Path("/password")
+    public Response changePassword(ChangePasswordData data){
 
         if(!data.validPassword()){
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -197,11 +198,15 @@ public class ModifyInfoResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
         Entity user = datastore.get(userKey);
 
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).entity("No such user.").build();
+        }
+
+        if(!user.getString("user_state").equals("ACTIVE")){
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
 
         String storedPassword = user.getString("user_pwd");
@@ -217,7 +222,6 @@ public class ModifyInfoResource {
                     .build();
             txn.update(newUser);
             txn.commit();
-            LOG.fine("Modified user: " + username);
             return Response.ok("User modified successfully.").build();
         }
         finally {

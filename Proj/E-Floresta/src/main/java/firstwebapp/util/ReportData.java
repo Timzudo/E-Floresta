@@ -15,4 +15,8 @@ public class ReportData {
         this.topic = topic;
         this.text = text;
     }
+
+    public boolean isValid(){
+        return !topic.equals("") && !text.equals("");
+    }
 }

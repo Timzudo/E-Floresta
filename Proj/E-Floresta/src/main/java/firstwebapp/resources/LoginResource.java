@@ -146,6 +146,20 @@ public class LoginResource {
         }
 
         if(System.currentTimeMillis()>forgotPassword.getLong("forgotPassword_expiration")){
+
+            Transaction txn = datastore.newTransaction();
+
+            try{
+
+                txn.delete(forgotPasswordKey);
+                txn.commit();
+            }
+            finally {
+                if(txn.isActive()){
+                    txn.rollback();
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+                }
+            }
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 

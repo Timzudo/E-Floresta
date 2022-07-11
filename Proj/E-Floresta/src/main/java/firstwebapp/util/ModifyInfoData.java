@@ -12,10 +12,14 @@ public class ModifyInfoData {
 
     }
 
-    public ModifyInfoData(  String name, String email, String phone, String nif, String token){
+    public ModifyInfoData(String name, String phone, String nif, String token){
         this.token = token;
         this.name = name;
         this.phone = phone;
         this.nif = nif;
+    }
+
+    public boolean isValid(){
+        return !name.equals("");
     }
 }

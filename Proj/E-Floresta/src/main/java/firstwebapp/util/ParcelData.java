@@ -18,4 +18,9 @@ public class ParcelData {
         this.description = description;
         this.token = token;
     }
+
+    public boolean isValid(){
+        return !cover.equals("") && !usage.equals("") && !oldUsage.equals("");
+
+    }
 }
