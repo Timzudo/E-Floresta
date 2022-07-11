@@ -35,6 +35,7 @@ const options = {
 
 
 const MyParcels = () => {
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [paths, setPaths] = useState([]);
@@ -126,6 +127,7 @@ const MyParcels = () => {
                     setPList(arr);
                     setPaths(pathsArr);
                 }
+                setRequested(false);
             }
         }
 
@@ -135,6 +137,7 @@ const MyParcels = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/owned");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
+        setRequested(true);
     }, [])
 
 
@@ -164,9 +167,9 @@ const MyParcels = () => {
 
                     <div className="body_MyParcels">
                         <div className="container_MyParcels">
-                            {parcelList.length===0? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
-                                                        <span className="visually-hidden">Carregando...</span>
-                                                    </Spinner>:parcelList}
+                            {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                <span className="visually-hidden">Carregando...</span>
+                            </Spinner> : parcelList}
                         </div>
                     </div>
                 </div>

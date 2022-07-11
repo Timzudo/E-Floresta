@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React from 'react';
-import {Button, Card, Col, Dropdown, Form, Row} from "react-bootstrap";
+import {Button, Card, Col, Dropdown, Form, Row, Spinner} from "react-bootstrap";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
@@ -35,6 +35,7 @@ const optionsPoly = {
 
 const AllParcelsAdmin = () => {
 
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [paths, setPaths] = useState([]);
@@ -95,6 +96,7 @@ const AllParcelsAdmin = () => {
     const [parcelList, setPList] = useState([]);
 
     function getParcels(){
+        setRequested(true);
         let myObj = {token:localStorage.getItem('token')};
 
         const options = {
@@ -147,9 +149,11 @@ const AllParcelsAdmin = () => {
                         }
                         setPaths(pathsArr);
                         setPList(auxArr);
+                        setRequested(false);
                     });
                 }
-            }).catch(console.log);
+            }).catch(() => setRequested(false));
+
     }
 
     return(<>
@@ -213,7 +217,9 @@ const AllParcelsAdmin = () => {
 
                     <div className="body_AllParcelsAdmin">
                         <div className="container_AllParcelsAdmin">
-                            {parcelList}
+                            {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                <span className="visually-hidden">Carregando...</span>
+                            </Spinner> : parcelList}
                         </div>
                     </div>
                 </div>

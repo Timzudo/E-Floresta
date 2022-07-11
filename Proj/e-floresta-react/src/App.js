@@ -71,7 +71,6 @@ const App = () => {
           <Route path="/rankings" element={<Rankings />} />
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
-          <Route path="/reports-admin" element={<ReportsAdmin />} />
           <Route path="/make-report" element={<MakeReport />} />
           <Route path="/error404" element={<Error404 />} />
         </Routes>

@@ -2206,12 +2206,16 @@ public class ParcelResource {
             query = Query.newEntityQueryBuilder()
                     .setKind("Report")
                     .setFilter(f)
+                    .setOrderBy(StructuredQuery.OrderBy.desc("report_priority"))
+                    .setLimit(100)
                     .build();
 
         }
         else if(role.contains("A")){
             query = Query.newEntityQueryBuilder()
                     .setKind("Report")
+                    .setOrderBy(StructuredQuery.OrderBy.desc("report_priority"))
+                    .setLimit(100)
                     .build();
         }
 

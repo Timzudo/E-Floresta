@@ -4,13 +4,14 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
+import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row, Spinner} from "react-bootstrap";
 import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 
 
 const ApproveParcels = () => {
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [show, setShow] = useState(false);
@@ -109,6 +110,7 @@ const ApproveParcels = () => {
                     }
                     setPList(arr);
                 }
+                setRequested(false);
             }
         }
 
@@ -118,6 +120,7 @@ const ApproveParcels = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/pendingbyregion");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
+        setRequested(true);
     }, [])
 
     return(
@@ -135,7 +138,9 @@ const ApproveParcels = () => {
 
             <div className="approveParcelsBody">
                 <div className="container_ApproveParcels">
-                    {parcelList}
+                    {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                        <span className="visually-hidden">Carregando...</span>
+                    </Spinner> : parcelList}
                 </div>
             </div>
         </>

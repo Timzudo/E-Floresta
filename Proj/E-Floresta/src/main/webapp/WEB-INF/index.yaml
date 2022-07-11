@@ -1,7 +1,8 @@
 indexes:
 
-  - kind: Parcel
+  - kind: Report
     properties:
-      - name: parcel_owner
-      - name: parcel_area
+      - name: report_concelho
+      - name: report_distrito
+      - name: report_priority
         direction: desc

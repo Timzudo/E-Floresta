@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React from 'react';
-import {Button, Card, Col, Dropdown, Form, Row} from "react-bootstrap";
+import {Button, Card, Col, Dropdown, Form, Row, Spinner} from "react-bootstrap";
 import {LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
@@ -12,6 +12,7 @@ import CSVConverter from "../util/CSVConverter";
 
 
 const ApproveParcelsAdmin = () => {
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [show, setShow] = useState(false);
@@ -106,6 +107,7 @@ const ApproveParcelsAdmin = () => {
     }
 
     function getParcels(){
+        setRequested(true);
         let myObj = {token:localStorage.getItem('token')};
 
         const options = {
@@ -158,9 +160,11 @@ const ApproveParcelsAdmin = () => {
                             </Card>);
                         }
                         setPList(auxArr);
+                        setRequested(false);
                     });
                 }
-            }).catch(console.log);
+            }).catch( () => setRequested(false));
+
     }
 
     return(
@@ -214,7 +218,9 @@ const ApproveParcelsAdmin = () => {
 
             <div className="approveParcelsAdminBody">
                 <div className="container_ApproveParcelsAdmin">
-                    {parcelList}
+                    {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                    <span className="visually-hidden">Carregando...</span>
+                                </Spinner> : parcelList}
                 </div>
             </div>
         </>

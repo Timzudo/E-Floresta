@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {Button, ButtonGroup, Card, Col, Modal, Row} from "react-bootstrap";
+import {Button, ButtonGroup, Card, Col, Modal, Row, Spinner} from "react-bootstrap";
 import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
@@ -21,6 +21,7 @@ const modalContainerStyle = {
 };
 
 const ProposedParcelsEntity = () => {
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
@@ -113,6 +114,7 @@ const ProposedParcelsEntity = () => {
                     }
                     setPList(arr);
                 }
+                setRequested(false);
             }
         }
 
@@ -122,6 +124,7 @@ const ProposedParcelsEntity = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getrequested");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
+        setRequested(true);
     }, [])
 
     return(
@@ -136,7 +139,9 @@ const ProposedParcelsEntity = () => {
 
             <div className="proposedParcelsEntityBody">
                 <div className="container_ProposedParcelsEntity">
-                    {parcelList}
+                    {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                        <span className="visually-hidden">Carregando...</span>
+                    </Spinner> : parcelList}
                 </div>
             </div>
         </>

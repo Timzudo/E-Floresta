@@ -4,7 +4,7 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {useEffect, useState} from 'react'
 import React, { Component }  from 'react';
-import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row} from "react-bootstrap";
+import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row, Spinner} from "react-bootstrap";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
@@ -19,8 +19,21 @@ const center = {
     lng: -9.205971
 };
 
-const AllParcels = () => {
+const options = {
+    fillColor: "Khaki",
+    fillOpacity: 0.3,
+    strokeColor: "DarkOrange",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1
+}
 
+const AllParcels = () => {
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [paths, setPaths] = useState([]);
@@ -55,6 +68,7 @@ const AllParcels = () => {
             if (xmlhttp.readyState == 4) {
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
+                    let pathsArr = [];
                     for(let i = 0; i<obj.length; i++){
 
 
@@ -79,9 +93,17 @@ const AllParcels = () => {
 
                             </Card.Body>
                         </Card>);
+                        pathsArr.push(
+                            <Polygon
+                                paths={JSON.parse(obj[i].coordinates)}
+                                options={options}
+                            />
+                        );
                     }
                     setPList(arr);
+                    setPaths(pathsArr);
                 }
+                setRequested(false);
             }
         }
 
@@ -91,6 +113,7 @@ const AllParcels = () => {
         xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/approvedbyregion");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
+        setRequested(true);
     }, [])
 
     return(<>
@@ -116,7 +139,9 @@ const AllParcels = () => {
 
                     <div className="body_AllParcels">
                         <div className="container_AllParcels">
-                            {parcelList}
+                            {requested? <Spinner id="spinner_ConfirmationPage" animation="border" role="status">
+                                <span className="visually-hidden">Carregando...</span>
+                            </Spinner> : parcelList}
                         </div>
                     </div>
                 </div>
