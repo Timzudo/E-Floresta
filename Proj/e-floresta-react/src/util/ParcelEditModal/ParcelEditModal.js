@@ -143,29 +143,42 @@ const ParcelEditModal = (props) => {
                     <Button onClick={() => removeManager()} id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Remover gerente</Button>
                 </label>
             )
-        } else {
-            return(
-                <label>
-                    <b>Gerente:</b>
+        }
+        else {
+            if(info.managerRequest !== "") {
+                return(
+                    <label>
+                        <span><b>Gerente:</b> Pedido pendente a {info.managerRequest}</span>
+                        <Button id="rmv-pending_MyParcels" className="managerButtons_ParcelEditModal" variant="outline-danger" size="sm">Anular pedido</Button>
+                    </label>
+                )
+            }
+            else {
+                if(props.obj.isApproved === "APPROVED") {
+                    return(
+                        <label>
+                            <b>Gerente:</b>
 
-                    <select id="dropdown-basic" className="managerButtons_ParcelEditModal" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
-                        {managerList}
-                    </select>
+                            <select id="dropdown-basic" className="managerButtons_ParcelEditModal" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
+                                {managerList}
+                            </select>
 
-                    <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="success" size="sm">Adicionar gerente</Button>
+                            <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="success" size="sm">Adicionar gerente</Button>
 
-                </label>
-            )
+                        </label>
+                    )
+                }
+                else {
+                    return(
+                        <label>
+                            <b>Gerente:</b> <span className="red-text">As parcelas devem estar aprovadas para efetuar pedidos de gerenciamento.</span>
+                        </label>
+                    )
+                }
+            }
         }
     }
 
-    function managerRequest(){
-
-        return(<label>
-            <b>Pedido enviado:</b> {managerRequestValue}
-            <Button onClick={() => {removeRequest()}} id="rmv-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="danger" size="sm">Cancelar pedido</Button>
-        </label>)
-    }
 
     function removeManager(){
         let myObj = {token:localStorage.getItem('token')};
@@ -421,7 +434,7 @@ const ParcelEditModal = (props) => {
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Proprietário:</b> {props.obj.owner} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"> {managerRequestValue===""?hasManager():managerRequest()} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"> {hasManager()} </label><br/>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
 
