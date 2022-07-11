@@ -26,7 +26,6 @@ import RecoverPassword from "./RecoverPassword/RecoverPassword";
 import RecoverRequest from "./RecoverPassword/RecoverRequest";
 import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
-import ReportsAdmin from "./ReportsAdmin/ReportsAdmin";
 import MakeReport from "./MakeReport/MakeReport";
 import UploadCSV from "./UploadCSV/UploadCSV";
 import Error404 from "./ErrorsPages/Error404";
