@@ -388,7 +388,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -454,7 +454,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -1441,7 +1441,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -1512,7 +1512,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -1588,7 +1588,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -1660,7 +1660,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));
@@ -1736,7 +1736,7 @@ public class ParcelResource {
                     p.getString("parcel_freguesia"),
                     p.getString("parcel_owner"),
                     p.getString("parcel_manager"),
-                    p.getString("parcel_state").equals("APPROVED"),
+                    p.getString("parcel_state"),
                     url,
                     coordinatesString,
                     p.getLong("parcel_area")));

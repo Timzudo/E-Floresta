@@ -5,6 +5,8 @@ import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
 import {Pie} from "react-chartjs-2";
+import PieChartStatistics from "../util/Statistics/PieChartStatistics";
+import NumberStatistics from "../util/Statistics/NumberStatistics";
 
 
 const Statistics = () => {
@@ -129,8 +131,10 @@ const Statistics = () => {
                     </Col>
 
                 </Row>
-
+                <PieChartStatistics url="asd"></PieChartStatistics>
+                <NumberStatistics url="asd" type="area"></NumberStatistics>
             </div>
+
 
         </>
     );

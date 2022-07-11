@@ -10,7 +10,7 @@ public class ParcelMiniature {
     public String freguesia;
     public String owner;
     public String manager;
-    public boolean isApproved;
+    public String isApproved;
     public URL photoURL;
     public String coordinates;
     public long area;
@@ -19,7 +19,7 @@ public class ParcelMiniature {
 
     }
 
-    public ParcelMiniature(String name, String distrito, String concelho,  String freguesia, String owner, String manager, boolean isApproved, URL photoURL, String coordinates, long area) {
+    public ParcelMiniature(String name, String distrito, String concelho,  String freguesia, String owner, String manager, String isApproved, URL photoURL, String coordinates, long area) {
         this.name = name;
         this.distrito = distrito;
         this.concelho = concelho;

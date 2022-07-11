@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    height: 100%;
+}
+
+/*
+.statistics-background{
+   background-color: ;
+}
+*/
+
+.stats-title{
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.stats-paragraph{
+    border-bottom: solid 1px #C0C6CF;
+}
+
+.stats-container{
+    border-right: solid 1px #C0C6CF;
+}
+
+.util-solo-byNumber_Stats,
+.util-solo-byArea_Stats{
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40% !important;
+    height: 80% !important;
+}
+.statistics_result{
+    color: #247d3c;
+    font-weight: bold;
+}
