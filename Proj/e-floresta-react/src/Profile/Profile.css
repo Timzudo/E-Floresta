@@ -1,21 +1,50 @@
-.profile_info {
-    border: solid lightgrey;
+body,html{
+    margin: 0;
+    height: 100%;
+}
+
+.bg-img_Profile{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
+}
+
+.profile_info{
+    background-color: rgba(189, 216, 196, 1);
+    border: rgba(189, 216, 196, 1);
     border-radius: 5px;
-    width: 20%;
-    height: auto;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
     padding: 5px;
-    margin: 10px;
 }
 
 .profile_pic {
-    width: 90%;
+    width: 60%;
     border: solid grey 0.5px;
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
 
+.label_Profile{
+    margin-left: 2%;
+}
+
 #changeProfileInfo_Profile,
 #changePassword_Profile{
     padding: 5px;
+}
+
+.badge_Profile{
+    height: 30px;
+    width: 10%;
+    font-size: large;
+}
+
+#badge-2_Profile{
+    color: black;
 }

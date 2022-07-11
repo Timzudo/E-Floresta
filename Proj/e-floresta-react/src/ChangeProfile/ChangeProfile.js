@@ -4,7 +4,7 @@ import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
 import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
-import {Button} from "react-bootstrap";
+import {Badge, Button} from "react-bootstrap";
 import {useState} from "react";
 
 const ChangeProfile = () => {
@@ -86,44 +86,47 @@ const ChangeProfile = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="profileInfo_ChangeProfile">
-                <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
-                <p></p>
-                <div id="username_ChangeProfile">
-                    <p className="label" > Username: {username} </p>
-                </div>
-                <div id="email_ChangeProfile">
-                    <p className="label" > E-mail: {email} </p>
-                </div>
-                <div id="name_ChangeProfile">
-                    <label className="label"> Nome Completo: </label>
-                    <input id="change-complete-name" type="text" defaultValue={name} maxLength="64"/>
-                </div>
-                <div id="phone_ChangeProfile">
-                    <label className="label"> Telemóvel/Telefone: </label>
-                    <input id="change-phone" type="number" defaultValue={phone} maxLength="9"/>
-                </div>
-                <div id="nif_ChangeProfile">
-                    <label className="label" for="change-nif">NIF:</label>
-                    <input id="change-nif" type="number" defaultValue={nif} maxLength="9"/>
-                </div>
-                <div id="type_ChangeProfile">
-                    <p className="label"> Tipo de utilizador: {type} </p>
-                </div>
-
-                <div className="btn-group" id="confirmAndCancel_ChangeProfile">
-                    <div id="confirmChanges_ChangeProfile">
-                        <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile} >Confirmar Alterações</Button>
+            <div className="bg-img_ChangeProfile">
+                <div className="profileInfo_ChangeProfile">
+                    <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
+                    <p></p>
+                    <div id="username_ChangeProfile">
+                        <p className="label_ChangeProfile"><b>Username: </b> {username} </p>
+                    </div>
+                    <div id="email_ChangeProfile">
+                        <p className="label_ChangeProfile"><b>E-mail: </b> {email} </p>
+                    </div>
+                    <div id="name_ChangeProfile">
+                        <label className="label_ChangeProfile"><b>Nome Completo: </b> </label>
+                        <input id="change-complete-name" type="text" defaultValue={name} maxLength="64"/>
+                    </div>
+                    <div id="phone_ChangeProfile">
+                        <label className="label_ChangeProfile"><b>Telemóvel/Telefone: </b></label>
+                        <input id="change-phone" type="number" defaultValue={phone} maxLength="9"/>
+                    </div>
+                    <div id="nif_ChangeProfile">
+                        <label className="label_ChangeProfile" htmlFor="change-nif"><b>NIF: </b></label>
+                        <input id="change-nif" type="number" defaultValue={nif} maxLength="9"/>
+                    </div>
+                    <div id="type_ChangeProfile">
+                        <p className="label_ChangeProfile"> <b>Tipo de utilizador: </b> {type} </p>
                     </div>
 
-                    <div id="cancelChanges_ChangeProfile">
-                        <Link to="/profile">
-                            <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
-                        </Link>
+                    <div className="btn-group" id="confirmAndCancel_ChangeProfile">
+                        <div id="confirmChanges_ChangeProfile">
+                            <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile}>Confirmar
+                                Alterações</Button>
+                        </div>
 
+                        <div id="cancelChanges_ChangeProfile">
+                            <Link to="/profile">
+                                <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
+                            </Link>
+
+                        </div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
         </>

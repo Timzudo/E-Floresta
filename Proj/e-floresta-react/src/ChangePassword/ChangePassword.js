@@ -49,30 +49,35 @@ const ChangePassword = () => {
             <CheckIfLoggedOut/>
             <TopBar/>
 
-            <div className="body-changePassword">
-                <div id="oldPassword_ChangePassword">
-                    Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password" type="password" maxLength="64"/>
-                </div>
-                <div id="newPassword_ChangePassword">
-                    Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password" type="password" maxLength="64"/>
-                </div>
-                <div id="confirmPassword_ChangePassword">
-                    Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password" type="password" maxLength="64"/>
-                </div>
-
-                <div className="btn-group" id="confirmAndCancel_ChangePassword">
-                    <div id="confirm_ChangePassword">
-                        <Button type="button" className="btn btn-success btn-sm" onClick={changePassword} >Confirmar Alterações</Button>
+            <div className="bg-img_ChangePassword">
+                <div className="body-changePassword">
+                    <h2 className="title_ChangePassword"><b>Altere a sua palavra-passe</b></h2>
+                    <br/>
+                    <div id="oldPassword_ChangePassword">
+                        Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password_ChangePassword" type="password" maxLength="64"/>
+                    </div>
+                    <div id="newPassword_ChangePassword">
+                        Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password_ChangePassword" type="password" maxLength="64"/>
+                    </div>
+                    <div id="confirmPassword_ChangePassword">
+                        Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password_ChangePassword" type="password" maxLength="64"/>
                     </div>
 
-                    <div id="cancel_ChangePassword">
-                        <Link to="/profile">
-                            <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
-                        </Link>
-                    </div>
-                </div>
+                    <div className="btn-group" id="confirmAndCancel_ChangePassword">
+                        <div id="confirm_ChangePassword">
+                            <Button type="button" className="btn btn-success btn-sm" onClick={changePassword} >Confirmar Alterações</Button>
+                        </div>
 
+                        <div id="cancel_ChangePassword">
+                            <Link to="/profile">
+                                <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
+                            </Link>
+                        </div>
+                    </div>
+
+                </div>
             </div>
+
         </>
     )
 

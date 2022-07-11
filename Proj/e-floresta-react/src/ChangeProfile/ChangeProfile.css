@@ -1,19 +1,36 @@
-.profileInfo_ChangeProfile {
-    border: solid lightgrey;
-    border-radius: 5px;
-    width: 25%;
-    height: auto;
-    padding: 5px;
-    margin: 10px;
+body,html{
+    margin: 0;
+    height: 100%;
 }
 
-.profileInfo_ChangeProfile .label{
-    margin: 4px;
+.bg-img_ChangeProfile{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
+}
+
+.profileInfo_ChangeProfile {
+    background-color: rgba(189, 216, 196, 1);
+    border: rgba(189, 216, 196, 1);
+    border-radius: 5px;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    height: auto;
+}
+
+.label_ChangeProfile{
+    margin-left: 2%;
 }
 
 #change-complete-name,
 #change-phone,
 #change-nif{
+    margin-left: 1%;
     margin-bottom: 8px;
     border: 0.3px solid black;
     border-radius: 0.25rem;

@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React, {useEffect} from 'react'
+import {Badge} from "react-bootstrap";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -53,51 +54,84 @@ const Profile = () => {
         xmlhttp.send(myJson);
     }, [])
 
+
+    function userGrade(grade) {
+        if(grade === 1) {
+            return(
+                <Badge className="badge_Profile" bg="danger">1</Badge>
+            )
+        }
+        else if(grade === 2) {
+            return(
+                <Badge className="badge_Profile" id="badge-2_Profile" bg="warning">2</Badge>
+            )
+        }
+        else if(grade === 3){
+            return(
+                <Badge className="badge_Profile" bg="info">3</Badge>
+            )
+        }
+        else if(grade === 4){
+            return(
+                <Badge className="badge_Profile" bg="primary">4</Badge>
+            )
+        }
+        else{
+            return(
+                <Badge className="badge_Profile" bg="success">5</Badge>
+            )
+        }
+    }
+
+
     return(
         <>
             <CheckIfLoggedOut />
             <TopBar />
-            <div className="profile_info">
-                <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
-                <p></p>
-                <div id="username">
-                    <p className="label">Username: {username}</p>
-                </div>
-                <div id="email">
-                    <p className="label">E-mail: {email}</p>
-                </div>
-                <div id="name">
-                    <p className="label">Nome Completo: {name}</p>
-                </div>
-                <div id="phone">
-                    <p className="label">Telemóvel/Telefone: {phone===""? "Indefinido":phone}</p>
-                </div>
-                <div id="nif">
-                    <p className="label">NIF: {nif===""? "Indefinido":nif}</p>
-                </div>
-                <div id="grade">
-                    <p className="label">Nota: {grade}</p>
-                </div>
-                <div id="state">
-                    <p className="label">Estado: {state === "ACTIVE"?"Ativo":"Inativo"}</p>
-                </div>
-                <div id="type">
-                    <p className="label">Tipo de utilizador: {type}</p>
-                </div>
 
-                <div className="btn-group" id="change-profile-info">
-                    <div id="changeProfileInfo_Profile">
-                        <Link to="/change-profile">
-                            <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
-                        </Link>
+            <div className="bg-img_Profile">
+                <div className="profile_info">
+                    <img src={ProfileImage} alt="Profile picture" className="profile_pic"/>
+                    <p></p>
+                    <div id="username">
+                        <p className="label_Profile"><b>Username: </b> {username}</p>
+                    </div>
+                    <div id="email">
+                        <p className="label_Profile"><b>E-mail: </b> {email}</p>
+                    </div>
+                    <div id="name">
+                        <p className="label_Profile"><b>Nome Completo: </b> {name}</p>
+                    </div>
+                    <div id="phone">
+                        <p className="label_Profile"><b>Telemóvel/Telefone: </b> {phone===""? "Indefinido":phone}</p>
+                    </div>
+                    <div id="nif">
+                        <p className="label_Profile"><b>NIF: </b> {nif===""? "Indefinido":nif}</p>
+                    </div>
+                    <div id="grade">
+                        <p className="label_Profile"><b>Nota: </b> {userGrade(grade)}</p>
+                    </div>
+                    <div id="state">
+                        <p className="label_Profile"><b>Estado: </b> {state === "ACTIVE"?"Ativo":"Inativo"}</p>
+                    </div>
+                    <div id="type">
+                        <p className="label_Profile"><b>Tipo de utilizador: </b> {type}</p>
                     </div>
 
-                    <div id="changePassword_Profile">
-                        <button onClick={ () => navigate("/change-password")} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                    <div className="btn-group" id="change-profile-info">
+                        <div id="changeProfileInfo_Profile">
+                            <Link to="/change-profile">
+                                <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
+                            </Link>
+                        </div>
+
+                        <div id="changePassword_Profile">
+                            <button onClick={ () => navigate("/change-password")} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
 
         </>
