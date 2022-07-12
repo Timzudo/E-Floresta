@@ -60,16 +60,19 @@ public class ParcelResource {
     public ParcelResource() throws IOException {
     }
 
-    private int getArea(Point[] points){
+    private long getArea(Point[] points){
         double area = 0;
 
-        for(int i = 0; i<points.length; i++){
+        for(int i = 0; i<points.length-1; i++){
             Point p1 = points[i];
             Point p2 = points[i+1];
             area += ConvertToRadian(p2.lng - p1.lng) * (2 + Math.sin(ConvertToRadian(p1.lat)) + Math.sin(ConvertToRadian(p2.lat)));
         }
 
-        return (int)area;
+        area += ConvertToRadian(points[0].lng - points[points.length-1].lng) * (2 + Math.sin(ConvertToRadian(points[points.length-1].lat)) + Math.sin(ConvertToRadian(points[0].lat)));
+
+        area = area * 6378137 * 6378137 / 2;
+        return (long) Math.abs(area);
     }
 
     private static double ConvertToRadian(double input)
@@ -110,7 +113,9 @@ public class ParcelResource {
                                    @FormDataParam("document") InputStream document,
                                    @FormDataParam("usage") String usage,
                                    @FormDataParam("oldUsage") String oldUsage,
-                                   @FormDataParam("cover") String cover) throws IOException {
+                                   @FormDataParam("cover") String cover,
+                                   @FormDataParam("section") String section,
+                                   @FormDataParam("article") String article) throws IOException {
 
         LOG.fine("Attempt to register parcel.");
 
@@ -194,6 +199,8 @@ public class ParcelResource {
                         .set("parcel_old_usage", oldUsage)
                         .set("parcel_cover", cover)
                         .set("parcel_description", "")
+                        .set("parcel_section", section)
+                        .set("parcel_article", article)
                         .build();
 
             txn.add(parcel);
@@ -223,7 +230,9 @@ public class ParcelResource {
                                        @FormDataParam("document") InputStream document,
                                        @FormDataParam("usage") String usage,
                                        @FormDataParam("oldUsage") String oldUsage,
-                                       @FormDataParam("cover") String cover) throws IOException {
+                                       @FormDataParam("cover") String cover,
+                                       @FormDataParam("section") String section,
+                                       @FormDataParam("article") String article) throws IOException {
 
             LOG.fine("Attempt to register parcel.");
 
@@ -330,6 +339,8 @@ public class ParcelResource {
                             .set("parcel_old_usage", oldUsage)
                             .set("parcel_cover", cover)
                             .set("parcel_description", "")
+                            .set("parcel_section", section)
+                            .set("parcel_article", article)
                             .build();
 
                 ownerUser = Entity.newBuilder(ownerUser)
@@ -538,7 +549,9 @@ public class ParcelResource {
                                             parcel.getString("parcel_old_usage"),
                                             parcel.getString("parcel_cover"),
                                             parcel.getString("parcel_description"),
-                                            parcel.getString("parcel_requested_manager"));
+                                            parcel.getString("parcel_requested_manager"),
+                                            parcel.getString("parcel_section"),
+                                            parcel.getString("parcel_article"));
 
         return Response.ok(g.toJson(info)).build();
     }
@@ -1168,8 +1181,7 @@ public class ParcelResource {
 
         try{
             parcel = Entity.newBuilder(parcel)
-                    .set("parcel_area", Long.parseLong(data.area))
-                    .set("parcel_perimeter", Long.parseLong(data.perimeter))
+                    .set("parcel_area", getArea(coordinateList))
                     .set("parcel_state", role.equals("D")?"PENDING":parcel.getString("parcel_state"))
                     .build();
 

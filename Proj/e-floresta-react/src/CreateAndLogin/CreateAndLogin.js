@@ -219,7 +219,7 @@ const CreateAndLogin = () => {
                   <option value="personal">Pessoal</option>
                   <option value="entity">Entidade</option>
                 </Form.Select>
-              </Form.Group><br/>
+              </Form.Group>
 
               {type === 'entity'?<><Form.Group className="mt-3" controlId="create_form_distrito">
                                   <Form.Select defaultValue='' onChange={(event) => handleSetDistrito(event.target.value)} className="map_fields">
@@ -231,8 +231,8 @@ const CreateAndLogin = () => {
                                 <Form.Select className="map_fields">
                                   {concelhoOptions}
                                 </Form.Select>
-                              </Form.Group><br/></>:<></>}
-
+                              </Form.Group></>:<></>}
+              <br/>
               <Button id="create-acc-button" type="submit" onClick={register}>
                 Registar
               </Button>

@@ -202,18 +202,18 @@ const Map = () => {
         f.append('freguesia', document.getElementById("formFreguesiaDropdown").value);
         f.append('photo', file);
         f.append('coordinates', JSON.stringify(paths));
-        f.append('area', area.toString());
-        f.append('perimeter', perimeter.toString());
         f.append('document', documentState);
         f.append('usage', document.getElementById("formParcelUsage").value);
         f.append('oldUsage', document.getElementById("formParcelOldUsage").value);
         f.append('cover', document.getElementById("formParcelCover").value);
+        f.append('section', document.getElementById("formParcelSection").value);
+        f.append('article', document.getElementById("formParcelArticalNum").value);
 
         for (var pair of f.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register", true);
+        xmlhttp.open("POST", "http://localhost:8080/rest/parcel/register", true);
         xmlhttp.send(f);
     }
 

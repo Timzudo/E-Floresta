@@ -105,7 +105,7 @@ public class RegisterResource {
         msg.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(data.email, "Caro utilizador"));
         msg.setSubject("Confirme o seu e-mail.");
-        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
+        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "https://moonlit-oven-349523.appspot.com/confirmation?id=" + confirmationID);
         Transport.send(msg);
 
         String token = JWToken.generateToken(username, "D");

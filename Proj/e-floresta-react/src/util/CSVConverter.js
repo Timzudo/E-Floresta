@@ -15,19 +15,17 @@ const CSVConverter = () => {
         console.log(parseInt(localStorage.getItem('csvTime')));
 
         if(localStorage.getItem("csv") === null || localStorage.getItem("csvTime") === null || (Date.now() > parseInt(localStorage.getItem('csvTime')))){
-            xmlhttp.onreadystatechange = function () {
+            xmlhttp.onreadystatechange = async function () {
                 if (xmlhttp.readyState === 4) {
                     if (xmlhttp.status === 200) {
                         let csv = xmlhttp.responseText;
-                        let json = csvJSON(csv);
+                        let json = await csvJSON(csv);
                         localStorage.setItem('csv', json);
-                        localStorage.setItem('csvTime', (Date.now()+expirationTime).toString());
-                    }
-                    else if(xmlhttp.status === 403) {
+                        localStorage.setItem('csvTime', (Date.now() + expirationTime).toString());
+                    } else if (xmlhttp.status === 403) {
                         localStorage.removeItem('token');
                         navigate('/');
-                    }
-                    else {
+                    } else {
                         alert("Erro do sistema. Tente novamente mais tarde.");
                     }
                 }
@@ -36,13 +34,13 @@ const CSVConverter = () => {
             var myObj = { token: localStorage.getItem('token') };
             var myJson = JSON.stringify(myObj);
 
-            xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getCSV", false);
+            xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getCSV", true);
             xmlhttp.setRequestHeader("Content-Type", "application/json");
             xmlhttp.send(myJson);
         }
     }
 
-    function csvJSON(csv){
+    async function  csvJSON(csv){
 
         let lines=csv.split("\n");
         let obj = {};

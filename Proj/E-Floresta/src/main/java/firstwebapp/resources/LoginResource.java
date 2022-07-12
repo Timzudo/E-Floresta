@@ -125,7 +125,7 @@ public class LoginResource {
         msg.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(email, "Caro utilizador"));
         msg.setSubject("Recuperar password E-Floresta");
-        msg.setText("Olá " + username + ". \nClique neste link para recuperar a sua palavra-passe: " + "http://localhost:3000/recover?id=" + confirmationID + "\nEste link é valdio durante 24h.");
+        msg.setText("Olá " + username + ". \nClique neste link para recuperar a sua palavra-passe: " + "https://moonlit-oven-349523.appspot.com/recover?id=" + confirmationID + "\nEste link é valdio durante 24h.");
         Transport.send(msg);
 
         return Response.ok().build();

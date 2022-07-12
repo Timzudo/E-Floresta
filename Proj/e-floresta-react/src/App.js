@@ -76,7 +76,7 @@ const App = () => {
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/make-report" element={<MakeReport />} />
           <Route path="/upload-csv" element={<UploadCSV />} />
-          <Route path="/error404" element={<Error404 />} />
+          <Route path="*" exact={false} element={<Error404 />} />
         </Routes>
       </Router>
   )
