@@ -9,7 +9,7 @@ import {Link, useNavigate} from "react-router-dom";
 
 const LoggedHomepage = () => {
     const navigate = useNavigate();
-    let role = localStorage.getItem('token');
+    let role = localStorage.getItem('role');
 
     function registerButton(){
         if(role === 'D'){
@@ -19,18 +19,21 @@ const LoggedHomepage = () => {
             navigate("/map-admin");
         }
     }
+
     function parcelsButton(){
-        if(role === 'D'){
-            navigate("/my-parcels");
-        }
-        else if(role === "C"){
-            navigate("/parcels-entity");
-        }
-        else if(role.includes("B")){
-            navigate("/all-parcels");
-        }
-        else if(role.includes("A")){
-            navigate("/all-parcels-admin");
+        switch (role) {
+            case 'D':
+                navigate("/my-parcels");
+                break;
+            case 'C':
+                navigate("/parcels-entity");
+                break;
+            case 'B':
+                navigate("/all-parcels");
+                break;
+            case 'A':
+                navigate("/all-parcels-admin");
+                break;
         }
     }
 
