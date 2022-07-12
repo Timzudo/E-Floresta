@@ -85,13 +85,13 @@ const Statistics = () => {
                     <Col className="stats-container">
                         <p></p>
                         <h4 className="stats-title"> Área total das parcelas </h4>
-                        <h6 className="stats-title"> 562m² </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/user/parcel/totalArea" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-container">
                         <p></p>
                         <h4 className="stats-title"> Média da área das parcelas </h4>
-                        <h6 className="stats-title"> 804m² </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/user/parcel/averageArea" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-container">
@@ -109,7 +109,7 @@ const Statistics = () => {
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Número de parcelas que registei </h4>
-                        <h6 className="stats-entity-title"> 11 </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/user/parcel/count" label=""></NumberStatistics>
                     </Col>
 
                 </Row>
@@ -121,18 +121,16 @@ const Statistics = () => {
                     <Col className="stats-container">
                         <p></p>
                         <h4 className="stats-title"> Número de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byNumber_Stats" data={utilSoloByNumber} options={{ responsive: true }} />
+                        <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/user/parcel/byUsage"></PieChartStatistics>
                     </Col>
 
                     <Col className="stats-container">
                         <p></p>
                         <h4 className="stats-title"> Área de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byArea_Stats" data={utilSoloByArea} options={{ responsive: true }} />
+                        <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/user/parcel/totalAreaByUsage"></PieChartStatistics>
                     </Col>
 
                 </Row>
-                <PieChartStatistics url="asd"></PieChartStatistics>
-                <NumberStatistics url="asd" type="area"></NumberStatistics>
             </div>
 
 

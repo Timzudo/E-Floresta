@@ -10,34 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startup/c_pages.dart';
 import 'offline_pages.dart';
 
-class AScreen extends StatelessWidget {
-  const AScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Inicial Admin'),
-        automaticallyImplyLeading: false,
-        bottom: const TabBar(
-          tabs: <Widget>[
-            Tab(
-              text: "Parcelas",
-            ),
-            Tab(
-              text: "Estatísticas",
-            ),
-          ],
-        ),
-      ),
-      body: const TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ParcelListA(), OfflineMap()],
-      ),
-    );
-  }
-}
-
 class ParcelListA extends StatefulWidget {
   const ParcelListA({super.key});
 
@@ -227,8 +199,18 @@ class _ParcelListStateA extends State<ParcelListA> {
                 );
               },
               trailing: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.exit_to_app_rounded)),
+                  onPressed: () {
+                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<LatLng> polygonCoords = [];
+
+                    for (int i = 0; i < coordsList.length; i++) {
+                      polygonCoords.add(
+                          LatLng(coordsList[i]['lat'], coordsList[i]['lng']));
+                    }
+
+                    saveOfflineParcel(polygonCoords, context);
+                  },
+                  icon: const Icon(Icons.download)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -435,7 +417,7 @@ class _EditMapStateA extends State<EditMapA> {
                     MaterialPageRoute(
                       builder: (context) => const DefaultTabController(
                         length: 2,
-                        child: AScreen(),
+                        child: ParcelListA(),
                       ),
                     ),
                   )

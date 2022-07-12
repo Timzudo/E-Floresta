@@ -28,7 +28,6 @@ import RecoverRequest from "./RecoverPassword/RecoverRequest";
 import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import MakeReport from "./MakeReport/MakeReport";
-import UploadCSV from "./UploadCSV/UploadCSV";
 import Error404 from "./ErrorsPages/Error404";
 
 
@@ -75,7 +74,6 @@ const App = () => {
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/make-report" element={<MakeReport />} />
-          <Route path="/upload-csv" element={<UploadCSV />} />
           <Route path="*" exact={false} element={<Error404 />} />
         </Routes>
       </Router>

@@ -5,6 +5,8 @@ import Chart from 'chart.js/auto';
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
+import PieChartStatistics from "../util/Statistics/PieChartStatistics";
+import NumberStatistics from "../util/Statistics/NumberStatistics";
 
 
 const StatisticsEntity = () => {
@@ -83,13 +85,13 @@ const StatisticsEntity = () => {
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Área total das parcelas </h4>
-                        <h6 className="stats-entity-title"> 562m² </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/entity/parcel/totalArea" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Média da área das parcelas </h4>
-                        <h6 className="stats-entity-title"> 804m² </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/entity/parcel/averageArea" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-entity-container">
@@ -107,7 +109,7 @@ const StatisticsEntity = () => {
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Número de parcelas que registei </h4>
-                        <h6 className="stats-entity-title"> 11 </h6>
+                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/entity/parcel/count" label=""></NumberStatistics>
                     </Col>
                 </Row>
 
@@ -118,13 +120,13 @@ const StatisticsEntity = () => {
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Número de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byNumber_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
+                        <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/entity/parcel/byUsage"></PieChartStatistics>
                     </Col>
 
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Área de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byArea_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
+                        <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/entity/parcel/totalAreaByUsage"></PieChartStatistics>
                     </Col>
 
                 </Row>

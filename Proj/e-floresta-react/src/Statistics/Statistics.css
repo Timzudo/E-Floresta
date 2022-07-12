@@ -3,10 +3,6 @@ body, html{
     height: 100%;
 }
 
-.statistics-background{
-    background-color: rgba(189, 216, 196, 0.25);
-}
-
 .stats-title{
     margin-top: 1%;
     margin-left: 1%;

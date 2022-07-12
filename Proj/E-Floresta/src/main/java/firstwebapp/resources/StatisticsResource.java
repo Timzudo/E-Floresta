@@ -21,7 +21,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,16 +42,18 @@ public class StatisticsResource {
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
+    private Cache cache;
+
     private final Gson g = new Gson();
 
 
-    Cache cache;
-    public StatisticsResource() throws IOException {
+    public StatisticsResource() {
         try {
             CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
             Map<Object, Object> properties = new HashMap<>();
-            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.MINUTES.toSeconds(30));
-            cache = cacheFactory.createCache(properties);
+            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.SECONDS.toSeconds(30));
+            this.cache = cacheFactory.createCache(properties);
+
         } catch (CacheException e) {
             LOG.fine("Failed to get Instance of memcache.");
         }
@@ -201,13 +202,58 @@ public class StatisticsResource {
         results.forEachRemaining(
                 p -> finalParcelCountByUsage.compute(
                         p.getString("parcel_usage"),
-                        (k, v) -> v == null ? 0 : v+1
+                        (k, v) -> v == null ? 1 : v+1
                 )
         );
 
         cache.put("user_parcel_count_by_usage", parcelCountByUsage);
 
         return Response.ok(g.toJson(parcelCountByUsage)).build();
+    }
+
+
+    @POST
+    @Path("/user/parcel/count")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response statisticsParcelCount(TokenData tokenData) {
+        LOG.fine("Getting user parcel count");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        if (!tokenInfo.role.equals(USER_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"));
+
+        if (count.get() != null)
+            return Response.ok(g.toJson(count.get())).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_owner", tokenInfo.sub))
+                        .build()
+        );
+
+        count.set(0L);
+
+        results.forEachRemaining(p -> count.updateAndGet(v -> v+1));
+
+        cache.put("user_parcel_count", count.get());
+
+        return Response.ok(g.toJson(count.get())).build();
     }
 
 
@@ -254,7 +300,7 @@ public class StatisticsResource {
         results.forEachRemaining(
                 p -> finalTotalAreaByUsage.compute(
                         p.getString("parcel_usage"),
-                        (k, v) -> v == null ? 0 : v + p.getLong("parcel_area")
+                        (k, v) -> v == null ? p.getLong("parcel_area") : v + p.getLong("parcel_area")
                 )
         );
 
@@ -477,7 +523,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("entity_parcel_count_by_usage");
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("entity_parcel_total_area_by_usage");
 
         if (totalAreaByUsage != null)
             return Response.ok(g.toJson(totalAreaByUsage)).build();
@@ -502,7 +548,54 @@ public class StatisticsResource {
                 )
         );
 
-        return Response.ok(g.toJson(totalAreaByUsage)).build();
+        cache.put("entity_parcel_total_area_by_usage", finalTotalAreaByUsage);
+
+        return Response.ok(g.toJson(finalTotalAreaByUsage)).build();
+    }
+
+
+    @POST
+    @Path("/entity/parcel/count")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response statisticsEntityParcelCount(TokenData tokenData) {
+        LOG.fine("Getting entity parcel count");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if(tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        if (!tokenInfo.role.equals(USER_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"));
+
+        if (count.get() != null)
+            return Response.ok(g.toJson(count.get())).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_manager", tokenInfo.sub))
+                        .build()
+        );
+
+        count.set(0L);
+
+        results.forEachRemaining(p -> count.updateAndGet(v -> v+1));
+
+        cache.put("entity_parcel_count", count.get());
+
+        return Response.ok(g.toJson(count.get())).build();
     }
 
 
@@ -865,6 +958,50 @@ public class StatisticsResource {
         cache.put("entity_by_parcel_count", entityWithParcelCountList);
 
         return Response.ok(g.toJson(entityWithParcelCountList)).build();
+    }
+
+
+    @POST
+    @Path("/areaTotal")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response areaTotal(TokenData tokenData) {
+        LOG.fine("Getting area usage in distrito: ");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(SYSADMIN_ROLE) && !tokenInfo.role.equals(MODERATOR_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        AtomicReference<Long> areaUsage = new AtomicReference<>((Long) cache.get("area_usage_in_"));
+
+        if (areaUsage.get() != null)
+            return Response.ok(areaUsage.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .build()
+        );
+
+        areaUsage.set(0L);
+
+        results.forEachRemaining(p -> areaUsage.updateAndGet(v -> v + p.getLong("parcel_area")));
+
+        cache.put("area_usage_in_", areaUsage.get());
+
+        return Response.ok(areaUsage.get()).build();
     }
 
 
@@ -1438,6 +1575,50 @@ public class StatisticsResource {
         return Response.ok(avgArea.get()).build();
     }
 
+    @POST
+    @Path("/rankings/parcelCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response parcelTotalCountAdmin(TokenData tokenData) {
+        LOG.fine("Getting avg parcel area");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(SYSADMIN_ROLE) && !tokenInfo.role.equals(MODERATOR_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        AtomicReference<Long> parcelCount = new AtomicReference<>((Long) cache.get("parcel_count_admin"));
+
+        if (parcelCount.get() != null)
+            return Response.ok(parcelCount.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .build()
+        );
+
+        parcelCount.set(0L);
+
+        results.forEachRemaining(p -> parcelCount.updateAndGet(v -> v + 1));
+
+
+        cache.put("parcel_count_admin", parcelCount.get());
+
+        return Response.ok(parcelCount.get()).build();
+    }
+
 
     /***********************************+
      * Tecnico B1
@@ -1551,6 +1732,56 @@ public class StatisticsResource {
         return Response.ok(totalArea.get()).build();
     }
 
+
+    @POST
+    @Path("/rankings/parcelCountInConcelho")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response parcelCountInConfcelho(TokenData tokenData) {
+        LOG.fine("Getting total parcel area in concelho");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(COUNTY_TECHNICIAN_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        String distrito = user.getString("user_distrito");
+        String concelho = user.getString("user_concelho");
+        String freguesia = user.getString("user_freguesia");
+
+        AtomicReference<Long> totalArea = new AtomicReference<>();
+
+        if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .build()
+        );
+
+        totalArea.set(0L);
+
+        results.forEachRemaining(p -> totalArea.updateAndGet(v -> v + 1));
+
+
+        cache.put("parcel_count_in_concelho_"+freguesia+"_"+concelho+"_"+distrito, totalArea.get());
+
+        return Response.ok(totalArea.get()).build();
+    }
+
     @POST
     @Path("/rankings/parcelAreaInConcelhoByUsage")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -1578,8 +1809,7 @@ public class StatisticsResource {
         String concelho = user.getString("user_concelho");
         String freguesia = user.getString("user_freguesia");
 
-        AtomicReference<ArrayList<NamedCount>> list =
-                new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_in_concelho_by_usage_"+freguesia+"_"+concelho+"_"+distrito));
+        AtomicReference<HashMap<String, Long>> list = new AtomicReference<>();
 
         if (list.get() != null)
             return Response.ok(g.toJson(list)).build();
@@ -1588,35 +1818,76 @@ public class StatisticsResource {
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
                         .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_distrito", user.getString("user_distrito")))
                         .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia")))
                         .build()
         );
 
-        list.set(new ArrayList<>());
-
-        Map<String, Long> distritoToParcelCount = new HashMap<>();
+        list.set(new HashMap<>());
 
         results.forEachRemaining(p -> {
-            distritoToParcelCount.compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
-        });
-
-        for (Map.Entry<String, Long> entry : distritoToParcelCount.entrySet()) {
-            list.updateAndGet(v -> {
-                v.add(new NamedCount(entry.getKey(), entry.getValue()));
-                return v;
-            });
-        }
-
-        list.updateAndGet(v -> {
-            v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(10, v.size())));
+            list.get().compute(p.getString("parcel_usage"), (k, v) -> v == null ? p.getLong("parcel_area") : v+p.getLong("parcel_area"));
         });
 
         cache.put("parcel_area_in_concelho_by_usage_"+freguesia+"_"+concelho+"_"+distrito, list.get());
 
         return Response.ok(g.toJson(list.get())).build();
+    }
+
+    @POST
+    @Path("/rankings/parcelCountInConcelhoByUsage")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response parcelCountInConcelhoByUsage(TokenData tokenData) {
+        LOG.fine("Getting total parcel area in concelho");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(COUNTY_TECHNICIAN_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        String distrito = user.getString("user_distrito");
+        String concelho = user.getString("user_concelho");
+        String freguesia = user.getString("user_freguesia");
+
+        AtomicReference<HashMap<String, Long>> totalArea = new AtomicReference<>();
+
+        if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho))
+                        .build()
+        );
+
+        totalArea.set(new HashMap<>());
+
+        results.forEachRemaining(
+                p -> totalArea.updateAndGet(
+                        v -> {
+                            v.compute(
+                                    p.getString("parcel_usage"),
+                                    (k, val) -> val == null ? 1 : val + 1
+                            );
+                            return v;
+                        }));
+
+
+        cache.put("parcel_count_in_concelho_" + freguesia + "_" + concelho + "_" + distrito, totalArea.get());
+
+        return Response.ok(g.toJson(totalArea.get())).build();
     }
 
 
@@ -1755,13 +2026,12 @@ public class StatisticsResource {
         if (!tokenInfo.role.equals(PARISH_TECHNICIAN_ROLE))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-
         String distrito = user.getString("user_distrito");
         String concelho = user.getString("user_concelho");
         String freguesia = user.getString("user_freguesia");
 
-        AtomicReference<ArrayList<NamedCount>> list =
-                new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_in_freguesia_by_usage_"+freguesia+"_"+concelho+"_"+distrito));
+        AtomicReference<HashMap<String, Long>> list =
+                new AtomicReference<>();
 
         if (list.get() != null)
             return Response.ok(g.toJson(list)).build();
@@ -1776,29 +2046,123 @@ public class StatisticsResource {
                         .build()
         );
 
-        list.set(new ArrayList<>());
-
-        Map<String, Long> distritoToParcelCount = new HashMap<>();
+        list.set(new HashMap<>());
 
         results.forEachRemaining(p -> {
-            distritoToParcelCount.compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
-        });
-
-        for (Map.Entry<String, Long> entry : distritoToParcelCount.entrySet()) {
-            list.updateAndGet(v -> {
-                v.add(new NamedCount(entry.getKey(), entry.getValue()));
-                return v;
-            });
-        }
-
-        list.updateAndGet(v -> {
-            v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(10, v.size())));
+            list.get().compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
         });
 
         cache.put("parcel_area_in_freguesia_by_usage_"+freguesia+"_"+concelho+"_"+distrito, list.get());
 
         return Response.ok(g.toJson(list.get())).build();
+    }
+
+
+    @POST
+    @Path("/rankings/parcelCountInFreguesiaByUsage")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response parcelCountInFreguesiaByUsage(TokenData tokenData) {
+        LOG.fine("Getting total parcel area in concelho");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(PARISH_TECHNICIAN_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        String distrito = user.getString("user_distrito");
+        String concelho = user.getString("user_concelho");
+        String freguesia = user.getString("user_freguesia");
+
+        AtomicReference<HashMap<String, Long>> totalArea = new AtomicReference<>();
+
+        if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia")))
+                        .build()
+        );
+
+        totalArea.set(new HashMap<>());
+
+        results.forEachRemaining(
+                p -> totalArea.updateAndGet(
+                        v ->  {
+                            v.compute(
+                                    p.getString("parcel_usage"),
+                                    (k, val) -> val == null ? 1 : val+1
+                            );
+                            return v;
+                        }));
+
+
+        cache.put("parcel_count_in_freguesia_"+freguesia+"_"+concelho+"_"+distrito, totalArea.get());
+
+        return Response.ok(g.toJson(totalArea.get())).build();
+    }
+
+
+    @POST
+    @Path("/rankings/parcelCountInFreguesia")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response parcelCountInFreguesia(TokenData tokenData) {
+        LOG.fine("Getting total parcel area in concelho");
+
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
+        if (tokenInfo == null)
+            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(tokenInfo.sub);
+        Entity user = datastore.get(userKey);
+
+        if (user == null)
+            return Response.status(Response.Status.NOT_FOUND).entity("User does not exist.").build();
+
+        if (!user.getString("user_state").equals("ACTIVE"))
+            return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
+
+        if (!tokenInfo.role.equals(PARISH_TECHNICIAN_ROLE))
+            return Response.status(Response.Status.FORBIDDEN).build();
+
+        String distrito = user.getString("user_distrito");
+        String concelho = user.getString("user_concelho");
+        String freguesia = user.getString("user_freguesia");
+
+        AtomicReference<Long> totalArea = new AtomicReference<>();
+
+        if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();
+
+        QueryResults<Entity> results = datastore.run(
+                Query.newEntityQueryBuilder()
+                        .setKind("Parcel")
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia")))
+                        .build()
+        );
+
+        totalArea.set(0L);
+
+        results.forEachRemaining(p -> totalArea.updateAndGet(v -> v+1));
+
+
+        cache.put("parcel_count_in_freguesia_"+freguesia+"_"+concelho+"_"+distrito, totalArea.get());
+
+        return Response.ok(totalArea.get()).build();
     }
 
 }

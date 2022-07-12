@@ -11,34 +11,6 @@ import 'package:startup/c_pages.dart';
 import 'offline_pages.dart';
 
 
-class BScreen extends StatelessWidget {
-  const BScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Inicial Técnico'),
-        automaticallyImplyLeading: false,
-        bottom: const TabBar(
-          tabs: <Widget>[
-            Tab(
-              text: "Parcelas",
-            ),
-            Tab(
-              text: "Estatísticas",
-            ),
-          ],
-        ),
-      ),
-      body: const TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ParcelListB(), OfflineMap()],
-      ),
-    );
-  }
-}
-
 class ParcelListB extends StatefulWidget {
   const ParcelListB({super.key});
 
@@ -87,8 +59,8 @@ class _ParcelListStateB extends State<ParcelListB> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-          title: const Text("Lista de parcelas"),
+      appBar: AppBar(
+          title: const Text("Parcelas Técnico"),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -98,7 +70,7 @@ class _ParcelListStateB extends State<ParcelListB> {
                 },
                 icon: const Icon(Icons.exit_to_app_rounded))
           ],
-        ),*/
+        ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
@@ -129,18 +101,17 @@ class _ParcelListStateB extends State<ParcelListB> {
               },
               trailing: IconButton(
                   onPressed: () {
-                    /*removeParcel(parcelList[index]['name']);
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DefaultTabController(
-                              length: 2,
-                              child: OfflineScreen(),
-                            )),
-                      );*/
+                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<LatLng> polygonCoords = [];
+
+                    for (int i = 0; i < coordsList.length; i++) {
+                      polygonCoords.add(
+                          LatLng(coordsList[i]['lat'], coordsList[i]['lng']));
+                    }
+
+                    saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.exit_to_app_rounded)),
+                  icon: const Icon(Icons.download)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -347,7 +318,7 @@ class _EditMapStateB extends State<EditMapB> {
                 MaterialPageRoute(
                   builder: (context) => const DefaultTabController(
                     length: 2,
-                    child: BScreen(),
+                    child: ParcelListB(),
                   ),
                 ),
               )

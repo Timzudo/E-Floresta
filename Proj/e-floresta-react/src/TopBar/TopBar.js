@@ -74,11 +74,6 @@ const TopBar = () => {
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role') === 'A1' ? <Link to="/upload-csv">
-                    <Button id="option18">CSV</Button>
-                </Link> : <></>}
-
-
                 {localStorage.getItem('role').includes('D') ? <Link to="/statistics">
                     <Button id="option9">Estatísticas</Button>
                 </Link> : <></>}

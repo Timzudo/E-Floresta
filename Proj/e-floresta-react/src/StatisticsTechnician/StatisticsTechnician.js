@@ -5,9 +5,13 @@ import Chart from 'chart.js/auto';
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
+import NumberStatistics from "../util/Statistics/NumberStatistics";
+import PieChartStatistics from "../util/Statistics/PieChartStatistics";
 
 
 const StatisticsTechnician = () => {
+
+    let role = localStorage.getItem("role");
 
     const [utilSoloByNumber] = useState({
         labels: ['Privado', 'Comercial', 'Pasto', 'Floresta', 'Agrícola', 'Residencial', 'Transporte', 'Recreativo'],
@@ -72,7 +76,6 @@ const StatisticsTechnician = () => {
         ],
     });
 
-
     return (
         <>
             <CheckIfLoggedOut />
@@ -83,13 +86,21 @@ const StatisticsTechnician = () => {
                     <Col className="stats-technician-container">
                         <p></p>
                         <h4 className="stats-technician-title"> Área total das parcelas </h4>
-                        <h6 className="stats-technician-title"> 562m² </h6>
+                        {
+                            role === "B1" ?
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/totalParcelAreaInConcelho" label="m²"></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/totalParcelAreaInFreguesia" label="m²"></NumberStatistics>
+                        }
                     </Col>
 
                     <Col className="stats-technician-container">
                         <p></p>
                         <h4 className="stats-technician-title"> Média da área das parcelas </h4>
-                        <h6 className="stats-technician-title"> 804m² </h6>
+                        {
+                            role === "B1" ?
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAvgAreaInConcelho" label="m²"></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAvgAreaInFreguesia" label="m²"></NumberStatistics>
+                        }
                     </Col>
 
                     <Col className="stats-technician-container">
@@ -107,7 +118,11 @@ const StatisticsTechnician = () => {
                     <Col className="stats-technician-container">
                         <p></p>
                         <h4 className="stats-technician-title"> Número de parcelas que registei </h4>
-                        <h6 className="stats-technician-title"> 11 </h6>
+                        {
+                            role === "B1" ?
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInConcelho" label=""></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInFreguesia" label=""></NumberStatistics>
+                        }
                     </Col>
                 </Row>
 
@@ -118,13 +133,21 @@ const StatisticsTechnician = () => {
                     <Col className="stats-technician-container">
                         <p></p>
                         <h4 className="stats-technician-title"> Número de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byNumber_StatsTechnician" data={utilSoloByNumber} options={{ responsive: true }} />
+                        {
+                            role === "B1" ?
+                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInConcelhoByUsage"></PieChartStatistics>:
+                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInFreguesiaByUsage"></PieChartStatistics>
+                        }
                     </Col>
 
                     <Col className="stats-technician-container">
                         <p></p>
                         <h4 className="stats-technician-title"> Área de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byArea_StatsTechnician" data={utilSoloByArea} options={{ responsive: true }} />
+                        {
+                            role === "B1" ?
+                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAreaInConcelhoByUsage"></PieChartStatistics>:
+                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAreaInFreguesiaByUsage"></PieChartStatistics>
+                        }
                     </Col>
 
                 </Row>

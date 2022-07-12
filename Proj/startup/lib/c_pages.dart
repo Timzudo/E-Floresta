@@ -8,33 +8,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'offline_pages.dart';
 
-class CScreen extends StatelessWidget {
-  const CScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Inicial Entidade'),
-        automaticallyImplyLeading: false,
-        bottom: const TabBar(
-          tabs: <Widget>[
-            Tab(
-              text: "Parcelas",
-            ),
-            Tab(
-              text: "Estatísticas",
-            ),
-          ],
-        ),
-      ),
-      body: const TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ParcelListC(), OfflineMap()],
-      ),
-    );
-  }
-}
 
 class ParcelListC extends StatefulWidget {
   const ParcelListC({super.key});
@@ -84,8 +57,8 @@ class _ParcelListStateC extends State<ParcelListC> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-          title: const Text("Lista de parcelas"),
+      appBar: AppBar(
+          title: const Text("Parcelas Entidade"),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -95,7 +68,7 @@ class _ParcelListStateC extends State<ParcelListC> {
                 },
                 icon: const Icon(Icons.exit_to_app_rounded))
           ],
-        ),*/
+        ),
       body:
       ListView.builder(
           padding: const EdgeInsets.all(16.0),
@@ -127,18 +100,17 @@ class _ParcelListStateC extends State<ParcelListC> {
               },
               trailing: IconButton(
                   onPressed: () {
-                    /*removeParcel(parcelList[index]['name']);
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DefaultTabController(
-                              length: 2,
-                              child: OfflineScreen(),
-                            )),
-                      );*/
+                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<LatLng> polygonCoords = [];
+
+                    for (int i = 0; i < coordsList.length; i++) {
+                      polygonCoords.add(
+                          LatLng(coordsList[i]['lat'], coordsList[i]['lng']));
+                    }
+
+                    saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.exit_to_app_rounded)),
+                  icon: const Icon(Icons.download)),
             );
           }),
       floatingActionButton: FloatingActionButton(

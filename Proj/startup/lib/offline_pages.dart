@@ -118,20 +118,6 @@ class _OfflineParcelsState extends State<OfflineParcels> {
                         coordsList: (parcelList[index]['coordinates'])),
                   ));
             },
-            trailing: IconButton(
-                onPressed: () {
-                  removeParcel(parcelList[index]['name']);
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DefaultTabController(
-                              length: 2,
-                              child: OfflineScreen(),
-                            )),
-                  );
-                },
-                icon: const Icon(Icons.exit_to_app_rounded)),
           );
         },
       ),

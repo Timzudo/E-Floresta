@@ -11,14 +11,42 @@ import 'package:startup/c_pages.dart';
 import 'a_pages.dart';
 import 'b_pages.dart';
 import 'offline_pages.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+
+Future<void> requestPermissions() async {
+  Map<Permission, PermissionStatus> statuses = await [
+  Permission.location,
+      Permission.locationAlways,
+    Permission.locationWhenInUse
+  ].request();
+  openAppSettings();
+  print(statuses[Permission.location]);
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    requestPermissions();
+    print("asd");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,10 +266,7 @@ void loginRequest(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: MainScreen(),
-              ),
+              builder: (context) => const ParcelList(),
             ),
           );
         }
@@ -249,10 +274,7 @@ void loginRequest(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: CScreen(),
-              ),
+              builder: (context) => const ParcelListC(),
             ),
           );
         }
@@ -260,10 +282,7 @@ void loginRequest(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: BScreen(),
-              ),
+              builder: (context) => const ParcelListB(),
             ),
           );
         }
@@ -271,10 +290,7 @@ void loginRequest(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: AScreen(),
-              ),
+              builder: (context) => const ParcelListA(),
             ),
           );
         }
@@ -358,10 +374,7 @@ void registerRequest(String username, String email, String name,
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: MainScreen(),
-              ),
+              builder: (context) => const ParcelList(),
             ),
           );
         }
@@ -369,10 +382,23 @@ void registerRequest(String username, String email, String name,
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: CScreen(),
-              ),
+              builder: (context) => const ParcelListC(),
+            ),
+          );
+        }
+        else if(role == 'B1' || role == 'B2'){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ParcelListB(),
+            ),
+          );
+        }
+        else if(role == 'A1' || role == 'A2'){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ParcelListA(),
             ),
           );
         }
@@ -421,33 +447,7 @@ void registerRequest(String username, String email, String name,
   }
 }
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Inicial Utilizador'),
-        automaticallyImplyLeading: false,
-        bottom: const TabBar(
-          tabs: <Widget>[
-            Tab(
-              text: "Parcelas",
-            ),
-            Tab(
-              text: "Estatísticas",
-            ),
-          ],
-        ),
-      ),
-      body: const TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ParcelList(), OfflineMap()],
-      ),
-    );
-  }
-}
 
 class ParcelList extends StatefulWidget {
   const ParcelList({super.key});
@@ -497,8 +497,8 @@ class _ParcelListState extends State<ParcelList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-          title: const Text("Lista de parcelas"),
+      appBar: AppBar(
+          title: const Text("Parcelas Utilizador"),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -508,7 +508,7 @@ class _ParcelListState extends State<ParcelList> {
                 },
                 icon: const Icon(Icons.exit_to_app_rounded))
           ],
-        ),*/
+        ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
@@ -525,7 +525,7 @@ class _ParcelListState extends State<ParcelList> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Map(
+                      builder: (context) => MapM(
                             lat: 39.137251,
                             lng: -8.378835,
                             coordsList:
@@ -539,18 +539,18 @@ class _ParcelListState extends State<ParcelList> {
               },
               trailing: IconButton(
                   onPressed: () {
-                    /*removeParcel(parcelList[index]['name']);
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DefaultTabController(
-                              length: 2,
-                              child: OfflineScreen(),
-                            )),
-                      );*/
+
+                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<LatLng> polygonCoords = [];
+
+                    for (int i = 0; i < coordsList.length; i++) {
+                      polygonCoords.add(
+                          LatLng(coordsList[i]['lat'], coordsList[i]['lng']));
+                    }
+
+                    saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.exit_to_app_rounded)),
+                  icon: const Icon(Icons.download)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -572,14 +572,14 @@ class _ParcelListState extends State<ParcelList> {
   }
 }
 
-class Map extends StatefulWidget {
+class MapM extends StatefulWidget {
   final double lat;
   final double lng;
   final List<dynamic> coordsList;
   final String parcelName;
   final String parcelID;
 
-  const Map(
+  const MapM(
       {Key? key,
       required this.lat,
       required this.lng,
@@ -592,7 +592,7 @@ class Map extends StatefulWidget {
   _MapState createState() => _MapState();
 }
 
-class _MapState extends State<Map> {
+class _MapState extends State<MapM> {
   late GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -755,10 +755,7 @@ class _EditMapState extends State<EditMap> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const DefaultTabController(
-                        length: 2,
-                        child: MainScreen(),
-                      ),
+                      builder: (context) => const ParcelList(),
                     ),
                   )
                 }
