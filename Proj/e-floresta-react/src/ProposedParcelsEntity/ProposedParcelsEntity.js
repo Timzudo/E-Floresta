@@ -45,6 +45,19 @@ const ProposedParcelsEntity = () => {
                     alert("Parcel accepted successfully");
                     window.location.reload();
                 }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else if(xmlhttp.status === 409){
+                    alert("A parcela já tem um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             }
         }
         let myObj = {
@@ -63,6 +76,19 @@ const ProposedParcelsEntity = () => {
                 if (xmlhttp.status === 200) {
                     alert("Parcel rejected successfully");
                     window.location.reload();
+                }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else if(xmlhttp.status === 409){
+                    alert("A parcela já tem um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -113,6 +139,16 @@ const ProposedParcelsEntity = () => {
                         </Card>);
                     }
                     setPList(arr);
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 setRequested(false);
             }

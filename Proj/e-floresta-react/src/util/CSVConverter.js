@@ -1,9 +1,12 @@
 import React, {Component, useEffect} from 'react';
+import {useNavigate} from "react-router-dom";
 //import csv from "./teste.csv";
 
 const expirationTime = 1000*60*60*24*7;
 
 const CSVConverter = () => {
+
+    const navigate = useNavigate();
 
     function checkCSV() {
 
@@ -19,6 +22,13 @@ const CSVConverter = () => {
                         let json = csvJSON(csv);
                         localStorage.setItem('csv', json);
                         localStorage.setItem('csvTime', (Date.now()+expirationTime).toString());
+                    }
+                    else if(xmlhttp.status === 403) {
+                        localStorage.removeItem('token');
+                        navigate('/');
+                    }
+                    else {
+                        alert("Erro do sistema. Tente novamente mais tarde.");
                     }
                 }
             }

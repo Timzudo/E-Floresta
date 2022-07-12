@@ -5,6 +5,7 @@ import {GoogleMap, Marker, Polygon} from "@react-google-maps/api";
 import {useState, useRef} from "react";
 import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderByDistance} from "geolib";
 import React from 'react'
+import {useNavigate} from "react-router-dom";
 
 
 const center = {
@@ -44,6 +45,8 @@ const modalContainerStyle = {
 
 
 const ParcelEditModal = (props) => {
+    const navigate = useNavigate();
+
     const [markerList, setMarker] = useState([]);
     const [paths, setPaths] = useState([]);
     const [area, setArea] = useState(0);
@@ -197,6 +200,16 @@ const ParcelEditModal = (props) => {
                     alert("Gerente removido.");
                     window.location.reload();
                 }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             });
     }
 
@@ -217,6 +230,19 @@ const ParcelEditModal = (props) => {
                     alert("Pedido removido.");
                     window.location.reload();
                 }
+                else if(r.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404){
+                    alert("Proprietário ou parcela não existe.");
+                }
+                else if(r.status === 409){
+                    alert("Esta parcela já possui um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             });
     }
 
@@ -236,6 +262,16 @@ const ParcelEditModal = (props) => {
                 if(r.ok){
                     alert("Parcela removida.");
                     window.location.reload();
+                }
+                else if(r.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404){
+                    alert("Proprietário ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             });
     }
@@ -265,6 +301,16 @@ const ParcelEditModal = (props) => {
                         setManager(arr);
                     })
                 }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             });
 
 
@@ -273,6 +319,16 @@ const ParcelEditModal = (props) => {
                 if (xmlhttp.status === 200) {
                     setInfo(JSON.parse(xmlhttp.responseText));
                     setmanagerRequestValue(JSON.parse(xmlhttp.responseText).managerRequest);
+                }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -289,6 +345,22 @@ const ParcelEditModal = (props) => {
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
                     alert("Pedido enviado.")
+                }
+                else if(xmlhttp.status === 400) {
+                    alert("Todos os campos obrigatórios devem ser preenchidos corretamente.");
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Proprietário, parcela ou gerente não existe.");
+                }
+                else if(xmlhttp.status === 409){
+                    alert("Esta parcela já possui um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }

@@ -4,9 +4,11 @@ import TopBar from "../TopBar/TopBar";
 import React, {useEffect, useState} from 'react'
 import {Button, Card, Col, Row, Spinner} from "react-bootstrap";
 import {Polygon} from "@react-google-maps/api";
+import {useNavigate} from "react-router-dom";
 
 
 const ReportsTechnician = () => {
+    const navigate = useNavigate();
 
     const [requested, setRequested] = useState(false);
     const [reportList, setReportList] = useState([]);
@@ -71,6 +73,16 @@ const ReportsTechnician = () => {
                         setReportList(auxArr);
                     })
                 }
+                else if(r.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404){
+                    alert("O proprietário não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             }).catch(console.log);
     }, [])
 
@@ -91,6 +103,19 @@ const ReportsTechnician = () => {
                 if(r.ok){
                     alert("Success");
                     window.location.reload();
+                }
+                else if(r.status === 400) {
+                    alert("Todos os campos devem ser preenchidos corretamente.");
+                }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404) {
+                    alert("O proprietário ou a parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }).catch(()=>(console.log));
     }

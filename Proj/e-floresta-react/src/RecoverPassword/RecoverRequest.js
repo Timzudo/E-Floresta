@@ -21,6 +21,12 @@ const RecoverPassword = () => {
                 if(r.ok){
                     setSent(true);
                 }
+                else if(r.status === 404) {
+                    alert("Não existe nenhum utilizador com o e-mail introduzido.");
+                }
+                else if(r.status === 500) {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             }).catch(console.log);
     }
 

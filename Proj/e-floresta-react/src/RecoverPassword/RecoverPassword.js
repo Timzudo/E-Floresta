@@ -18,10 +18,6 @@ const RecoverPassword = () => {
         e.preventDefault();
     }
 
-    /*useEffect(() => {
-        fetch("https://moonlit-oven-349523.appspot.com/rest/register/confirm/" + name).then(r => setConfirmed(true)).catch( () =>alert("yau"));
-    }, [])*/
-
     function showPassword() {
         var x = document.getElementById("session-password");
         if (x.type === "password") {
@@ -54,6 +50,19 @@ const RecoverPassword = () => {
             .then((r) => {
                 if(r.ok){
                     navigate("/create-and-login");
+                }
+                else if(r.status === 400) {
+                    alert("Todos os campos devem ser preenchidos corretamente.");
+                }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404) {
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             });
     }

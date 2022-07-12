@@ -5,6 +5,7 @@ import {GoogleMap, Polygon} from "@react-google-maps/api";
 import {useState} from "react";
 import {getCenterOfBounds, getDistance, orderByDistance} from "geolib";
 import mapCoordinates from 'geojson-apply-right-hand-rule'
+import {useNavigate} from "react-router-dom";
 
 
 const center = {
@@ -31,6 +32,7 @@ const modalContainerStyle = {
 };
 
 const ParcelDetailsModal = (props) => {
+    const navigate = useNavigate();
 
     const [obj, setObj] = useState({});
     const [centerLoc, setCenterLoc] = useState(center);
@@ -50,6 +52,16 @@ const ParcelDetailsModal = (props) => {
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
                     setObj(JSON.parse(xmlhttp.responseText));
+                }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }

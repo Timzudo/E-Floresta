@@ -35,10 +35,13 @@ const Profile = () => {
                     setType(obj.type);
                     setState(obj.state);
                     setGrade(obj.grade);
-                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                } else if(xmlhttp.status === 403 ||xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");
+                }
+                else if(xmlhttp.status === 500) {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 else {
                     alert("Não foi possível obter informação.");

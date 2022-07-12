@@ -108,6 +108,16 @@ const ParcelNearbyModal = (props) => {
                         setNearbyParcels(arr);
                     })
                 }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             });
     }
 
