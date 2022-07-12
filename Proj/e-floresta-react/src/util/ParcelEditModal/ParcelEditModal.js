@@ -368,15 +368,18 @@ const ParcelEditModal = (props) => {
     }
 
     async function sendCoordinates(paths){
-        let formData = new FormData();
-        formData.append('token', localStorage.getItem('token'));
-        formData.append('coordinates', JSON.stringify(paths));
-        formData.append('area', area.toString());
-        formData.append('perimeter', perimeter.toString());
+        let myObj = {token:localStorage.getItem('token'),
+            coordinates:JSON.stringify(paths),
+            area:area.toString(),
+            perimeter:perimeter.toString()};
+        console.log(JSON.stringify(myObj));
 
         const options = {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(myObj),
         };
 
         return fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/modify/" + props.obj.owner + "_" + props.obj.name+"/coordinates", options);

@@ -111,6 +111,85 @@ public class RegisterResource {
         return Response.ok(token).build();
     }
 
+    @POST
+    @Path("/entity/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registerEntity(@PathParam("username") String username, RegistrationData data) throws UnsupportedEncodingException, MessagingException {
+        LOG.fine("Attempt to register personal account: " + username);
+
+        if(!data.validRegistration() || username.equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter").build();
+        }
+
+        Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+        Entity user = datastore.get(userKey);
+        if(user != null){
+            return Response.status(Response.Status.CONFLICT).entity("User already exists").build();
+        }
+
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("User")
+                .setFilter(StructuredQuery.PropertyFilter.eq("user_email", data.email))
+                .build();
+
+
+        QueryResults<Entity> userListQuery = datastore.run(query);
+
+        if(userListQuery.hasNext()){
+            return Response.status(Response.Status.CONFLICT).entity("Email already in use").build();
+        }
+
+        String confirmationID = UUID.randomUUID().toString();
+        Key confirmationKey = datastore.newKeyFactory().setKind("Confirmation").newKey(confirmationID);
+
+        Transaction txn = datastore.newTransaction();
+
+        try{
+            user = Entity.newBuilder(userKey)
+                    .set("user_name", data.name)
+                    .set("user_pwd", DigestUtils.sha512Hex(data.password))
+                    .set("user_email", data.email)
+                    .set("user_phone", data.phone)
+                    .set("user_nif", data.nif)
+                    .set("user_creation_time", Timestamp.now())
+                    .set("user_role", "C")
+                    .set("user_state", "INACTIVE")
+                    .set("user_trust", 40)
+                    .set("user_distrito", data.distrito)
+                    .set("user_concelho", data.concelho)
+                    .set("user_freguesia", "")
+                    .set("user_total_parcel_area", 0)
+                    .set("user_parcel_count", 0)
+                    .build();
+
+            Entity confirmation = Entity.newBuilder(confirmationKey)
+                    .set("confirmation_username", username)
+                    .build();
+
+
+            txn.add(user, confirmation);
+            LOG.info("Personal user registered " + username);
+            txn.commit();
+        }
+        finally {
+            if(txn.isActive()){
+                txn.rollback();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("eflorestaapdc@gmail.com", "Equipa E-Floresta"));
+        msg.addRecipient(Message.RecipientType.TO,
+                new InternetAddress(data.email, "Caro utilizador"));
+        msg.setSubject("Confirme o seu e-mail.");
+        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
+        Transport.send(msg);
+
+        String token = JWToken.generateToken(username, "D");
+        return Response.ok(token).build();
+    }
+
     @GET
     @Path("/confirm/{id}")
     public Response confirmEmail(@PathParam("id") String id){

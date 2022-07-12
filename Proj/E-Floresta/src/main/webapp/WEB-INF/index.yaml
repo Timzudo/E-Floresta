@@ -1,8 +1,44 @@
 indexes:
 
-  - kind: Report
+  - kind: Parcel
     properties:
-      - name: report_concelho
-      - name: report_distrito
-      - name: report_priority
+      - name: parcel_owner
+      - name: parcel_manager
+      - name: parcel_area
+        direction: desc
+
+  - kind: Parcel
+    properties:
+      - name: parcel_owner
+      - name: parcel_perimeter
+        direction: desc
+
+  - kind: Parcel
+    properties:
+      - name: parcel_manager
+      - name: parcel_area
+        direction: desc
+
+  - kind: Parcel
+    properties:
+      - name: parcel_manager
+      - name: parcel_perimeter
+        direction: desc
+
+  - kind: User
+    properties:
+      - name: user_role
+      - name: user_trust
+        direction: desc
+
+  - kind: User
+    properties:
+      - name: user_role
+      - name: user_total_parcel_area
+        direction: desc
+
+  - kind: User
+    properties:
+      - name: user_role
+      - name: user_parcel_count
         direction: desc

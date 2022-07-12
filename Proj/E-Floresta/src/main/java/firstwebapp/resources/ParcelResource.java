@@ -1094,21 +1094,18 @@ public class ParcelResource {
 
     @POST
     @Path("/modify/{parcelName}/coordinates")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response modifyParcelCoordinates(@PathParam("parcelName") String parcelName,
-                                            @FormDataParam("token") String token,
-                                            @FormDataParam("coordinates") String coordinates,
-                                            @FormDataParam("area") String area,
-                                            @FormDataParam("perimeter") String perimeter) {
+                                            ModifyParcelCoordinatesData data) {
         LOG.fine("Attempt to get add managers to: " + parcelName);
 
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(token);
+        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
         if(tokenInfo == null){
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        Point[] coordinateList = g.fromJson(coordinates, Point[].class);
-        if(coordinateList.length < 3 || parcelName.equals("") || area.equals("") || perimeter.equals("")){
+        Point[] coordinateList = g.fromJson(data.coordinates, Point[].class);
+        if(coordinateList.length < 3 || parcelName.equals("")){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -1149,7 +1146,7 @@ public class ParcelResource {
 
         BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelName + "_coordinates");
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
-        storage.create(blobInfo, coordinates.getBytes(StandardCharsets.UTF_8));
+        storage.create(blobInfo, data.coordinates.getBytes(StandardCharsets.UTF_8));
 
 
         Transaction txn = datastore.newTransaction();
@@ -1160,22 +1157,18 @@ public class ParcelResource {
 
         try{
             parcel = Entity.newBuilder(parcel)
-                    .set("parcel_area", Long.parseLong(area))
-                    .set("parcel_perimeter", Long.parseLong(perimeter))
+                    .set("parcel_area", Long.parseLong(data.area))
+                    .set("parcel_perimeter", Long.parseLong(data.perimeter))
                     .set("parcel_state", role.equals("D")?"PENDING":parcel.getString("parcel_state"))
                     .build();
 
-            if(role.equals("D")){
+            if(role.equals("D") && parcel.getString("parcel_state").equals("APPROVED")){
                 owner = Entity.newBuilder(owner)
                         .set("user_total_parcel_area", user.getLong("user_total_parcel_area")-parcel.getLong("parcel_area"))
                         .set("user_parcel_count", user.getLong("user_parcel_count")-1)
                         .build();
             }
-            else{
-                owner = Entity.newBuilder(parcel)
-                        .set("user_total_parcel_area", (owner.getLong("user_total_parcel_area") - parcel.getLong("parcel_area")) + Long.parseLong(area))
-                        .build();
-            }
+
 
 
             txn.update(owner);
