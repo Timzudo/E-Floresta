@@ -39,6 +39,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
+import CSVConverter from "./util/CSVConverter";
 
 
 
@@ -83,6 +84,7 @@ const App = () => {
 const Home = () => {
   return (
       <>
+          <CSVConverter/>
         <CheckIfLoggedIn />
 
         <div className="home_top">

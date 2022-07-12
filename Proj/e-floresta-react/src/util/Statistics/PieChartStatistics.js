@@ -59,13 +59,14 @@ const PieChartStatistics = (props) => {
                 if(r.ok){
                     r.text().then(t => {
                         let text = JSON.parse(t);
-                        let array = Array.from(text, ([name, value]) => ({ name, value }));
+                        console.log(text)
                         let auxLabelList = [];
                         let auxDataList = [];
-                        for(let i = 0; i<array.length; i++){
-                            auxLabelList.push(array[i].name);
-                            auxDataList.push(array[i].value);
+                        for (let key in text) {
+                            auxLabelList.push(key);
+                            auxDataList.push(text[key]);
                         }
+
                         setLabelList(auxLabelList);
                         setDataList(auxDataList);
                     })

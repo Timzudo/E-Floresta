@@ -86,11 +86,6 @@ public class ParcelResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/plain; charset=utf-8")
     public Response getCSV(TokenData data){
-        JWToken.TokenInfo tokenInfo = JWToken.verifyToken(data.token);
-        if(tokenInfo == null){
-            return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
-        }
-
         Blob blob = storage.get("efloresta_util", "freguesias.txt");
 
         byte[] csvContent = blob.getContent();

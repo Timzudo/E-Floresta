@@ -381,8 +381,6 @@ class _EditMapStateB extends State<EditMapB> {
       body: jsonEncode(<String, String>{
         'token': token,
         'coordinates': jsonEncode(c),
-        'area': area.abs().toInt().toString(),
-        'perimeter': perimeter.abs().toInt().toString()
       }),
     );
 

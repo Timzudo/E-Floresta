@@ -27,8 +27,10 @@ Future<void> requestPermissions() async {
       Permission.locationAlways,
     Permission.locationWhenInUse
   ].request();
-  openAppSettings();
-  print(statuses[Permission.location]);
+
+  if(statuses[Permission.location].toString() != 'PermissionStatus.granted' && statuses[Permission.locationAlways].toString() != 'PermissionStatus.granted' && statuses[Permission.locationWhenInUse].toString() != 'PermissionStatus.granted'){
+    openAppSettings();
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -816,9 +818,7 @@ class _EditMapState extends State<EditMap> {
       },
       body: jsonEncode(<String, String>{
         'token': token,
-        'coordinates': jsonEncode(c),
-        'area': area.abs().toInt().toString(),
-        'perimeter': perimeter.abs().toInt().toString()
+        'coordinates': jsonEncode(c)
       }),
     );
 
