@@ -102,7 +102,7 @@ const TopBar = () => {
 
 
                 <Link to="/about-us">
-                    <Button id="option4">Sobre</Button>
+                    <Button id="option4">Sobre Nós</Button>
                 </Link>
             </ButtonGroup>
 

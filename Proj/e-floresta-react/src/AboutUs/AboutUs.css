@@ -1,9 +1,62 @@
-.about-us{
-    padding: 2%;
-    float: left;
+body,html{
+    margin: 0;
+    height: 100%;
 }
 
-.initial-text{
-    padding: 2%;
-    float: left;
+.bg-img_AboutUs{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
 }
+
+.body_AboutUs{
+    background-color: rgba(189, 216, 196, 0.9);
+    margin: auto;
+    align-self: center;
+    width: 60%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: dimgrey;
+}
+
+.title_AboutUs{
+    margin-left: 2%;
+}
+
+.initial-text_AboutUs{
+    margin: 2%;
+}
+
+.title2_AboutUs{
+    margin-left: 56%;
+}
+
+#card1-name_AboutUs{
+    margin-top: 5%;
+    margin-left: 19%;
+}
+
+#card1-text_AboutUs{
+    margin-left: 5%;
+}
+
+#card2-name_AboutUs{
+    margin-top: 5%;
+    margin-left: 26%;
+}
+
+#card2-text_AboutUs{
+    margin-left: 12%;
+}
+
+#card-title_AboutUs{
+    margin-left: 1%;
+}
+
+#card-p_AboutUs{
+    margin-left: 5%;
+}
+
