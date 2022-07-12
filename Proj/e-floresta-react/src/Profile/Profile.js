@@ -15,7 +15,7 @@ const Profile = () => {
     const [phone, setPhone] = useState("");
     const [nif, setNif] = useState("");
     const [type, setType] = useState("");
-    const [state, setState] = useState(""); //TODO: ver se e preciso
+    const [state, setState] = useState("");
     const [grade, setGrade] = useState("");
 
 

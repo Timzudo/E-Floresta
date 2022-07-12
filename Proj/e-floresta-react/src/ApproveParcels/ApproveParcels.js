@@ -66,7 +66,7 @@ const ApproveParcels = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/approve/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/approve/"+parcel.owner+"_"+parcel.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -98,7 +98,7 @@ const ApproveParcels = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/reject/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/reject/"+parcel.owner+"_"+parcel.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }

@@ -65,7 +65,7 @@ const ProposedParcelsEntity = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/acceptrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/acceptrequest/"+parcel.owner+"_"+parcel.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -97,7 +97,7 @@ const ProposedParcelsEntity = () => {
         };
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/rejectrequest/"+parcel.owner+"_"+parcel.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/rejectrequest/"+parcel.owner+"_"+parcel.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -105,7 +105,6 @@ const ProposedParcelsEntity = () => {
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
-                console.log("yau");
                 if (xmlhttp.status == 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){

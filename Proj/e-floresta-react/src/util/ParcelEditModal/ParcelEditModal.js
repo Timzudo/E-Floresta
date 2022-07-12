@@ -369,7 +369,7 @@ const ParcelEditModal = (props) => {
         console.log(myObj);
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -379,7 +379,6 @@ const ParcelEditModal = (props) => {
 
         if(changedInfo){
             arr.push(sendInfo());
-            console.log("yau");
         }
         if(document.getElementById("file-editParcelModal_ApproveParcels").files[0] !== undefined){
             arr.push(sendDocument(document.getElementById("file-editParcelModal_ApproveParcels").files[0]));
