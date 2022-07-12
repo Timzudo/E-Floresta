@@ -9,9 +9,12 @@ import {LoadScript} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import CSVConverter from "../util/CSVConverter";
+import {useNavigate} from "react-router-dom";
 
 
 const ApproveParcelsAdmin = () => {
+    const navigate = useNavigate();
+
     const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
@@ -70,10 +73,23 @@ const ApproveParcelsAdmin = () => {
 
     function approveParcel(parcel) {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Parcel approved successfully");
                     window.location.reload();
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else if(xmlhttp.status === 409){
+                    alert("A parcela já tem um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -89,10 +105,23 @@ const ApproveParcelsAdmin = () => {
 
     function rejectParcel(parcel) {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Parcel approved successfully");
                     window.location.reload();
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else if(xmlhttp.status === 409){
+                    alert("A parcela já tem um gerente.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -162,6 +191,16 @@ const ApproveParcelsAdmin = () => {
                         setPList(auxArr);
                         setRequested(false);
                     });
+                }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }).catch( () => setRequested(false));
 

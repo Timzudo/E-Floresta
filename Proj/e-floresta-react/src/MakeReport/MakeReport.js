@@ -28,6 +28,19 @@ const MakeReport = () => {
                     alert("success!");
                     navigate("/");
                 }
+                else if(r.status === 400) {
+                    alert("Todos os campos devem ser preenchidos.");
+                }
+                else if(r.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404){
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
+                }
             }).catch(console.log);
     }
 
@@ -56,7 +69,7 @@ const MakeReport = () => {
 
                         <Form.Group controlId="makereport_text" className="report-parcel-form" >
                             <Form.Label>Descreva o problema:</Form.Label>
-                            <Form.Control as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" maxLength="512"/>
+                            <Form.Control required as="textarea" rows={4} placeholder="Mensagem" id="msg_MakeReport" maxLength="512"/>
                         </Form.Group>
 
                         <Button id="submit_MakeReport" variant="success" type="submit" onClick={sendReport}>

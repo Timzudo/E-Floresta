@@ -13,19 +13,21 @@ const ChangePassword = () => {
     function changePassword() {
 
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     alert("Palavra-passe alterada com sucesso.");
                     navigate("/profile");
-                } else if (xmlhttp.status == 400) {
-                    alert("A nova palavra-passe e a confirmação não coincidem.")
-                } else if (xmlhttp.status == 403 || xmlhttp.status == 404) {  //TODO: tratar de forma diferente se a pessoa errar a oldPassword
+                } else if (xmlhttp.status === 400) {
+                    alert("A nova palavra-passe e a confirmação não cumprem os requisitos.")
+                } else if (xmlhttp.status === 403 || xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");
+                } else if (xmlhttp.status === 500) {
+                        alert("Erro do sistema. Tente novamente mais tarde.");
                 } else {
                     alert("Não foi alterar a palavra-passe.");
-                    console.log(xmlhttp.status)
+                    console.log(xmlhttp.status);
                 }
             }
         }

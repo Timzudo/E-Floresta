@@ -12,6 +12,8 @@ import CSVConverter from "../util/CSVConverter";
 
 
 const FindUser = () => {
+    const navigate = useNavigate();
+
     const [obj, setObj] = useState({});
     const [show, setShow] = useState(false);
     const didMount = useRef(false);
@@ -32,6 +34,16 @@ const FindUser = () => {
             .then((r) => {
                 if(r.ok){
                     r.text().then(t => setObj(JSON.parse(t)))
+                }
+                else if(r.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404) {
+                    alert("O utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }).catch(r=>(console.log));
     }

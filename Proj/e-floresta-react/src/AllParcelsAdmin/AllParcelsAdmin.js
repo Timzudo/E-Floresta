@@ -9,6 +9,7 @@ import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import CSVConverter from "../util/CSVConverter";
+import {useNavigate} from "react-router-dom";
 
 const containerStyle = {
     width: '75vw',
@@ -34,6 +35,7 @@ const optionsPoly = {
 }
 
 const AllParcelsAdmin = () => {
+    const navigate = useNavigate();
 
     const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
@@ -151,6 +153,16 @@ const AllParcelsAdmin = () => {
                         setPList(auxArr);
                         setRequested(false);
                     });
+                }
+                else if(r.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(r.status === 404){
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }).catch(() => setRequested(false));
 

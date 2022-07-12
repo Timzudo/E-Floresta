@@ -20,8 +20,8 @@ const ChangeProfile = () => {
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     setUsername(obj.username);
                     setEmail(obj.email)
@@ -29,10 +29,13 @@ const ChangeProfile = () => {
                     setPhone(obj.phone);
                     setNif(obj.nif);
                     setType(obj.type);
-                } else if(xmlhttp.status == 403 ||xmlhttp.status == 404) {
+                } else if(xmlhttp.status === 403 || xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");
+                }
+                else if (xmlhttp.status === 500){
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 else {
                     alert("Não foi possível obter informação.");

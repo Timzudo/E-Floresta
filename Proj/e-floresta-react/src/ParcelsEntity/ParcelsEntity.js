@@ -36,8 +36,9 @@ const options = {
 
 
 const ParcelsEntity = () => {
-    const [requested, setRequested] = useState(false);
     const navigate = useNavigate();
+
+    const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
     const [paths, setPaths] = useState([]);
@@ -62,9 +63,19 @@ const ParcelsEntity = () => {
     function removeManager(parcelName, owner){
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     navigate("/parcels-entity");
+                }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador ou parcela não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -79,8 +90,8 @@ const ParcelsEntity = () => {
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     for(let i = 0; i<obj.length; i++){
                         arr.push(<Card className="parcel-card_ParcelsEntity" style={{ width: '15rem',cursor: "pointer"}}>
@@ -118,6 +129,16 @@ const ParcelsEntity = () => {
                     }
                     setPList(arr);
                     setPaths(pathsArr);
+                }
+                else if(xmlhttp.status === 403) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404) {
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 setRequested(false);
             }

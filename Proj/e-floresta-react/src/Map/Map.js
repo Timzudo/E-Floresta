@@ -182,13 +182,15 @@ const Map = () => {
                     navigate("/map");
                 } else if(xmlhttp.status === 400) {
                     alert("Todos os campos obrigatórios devem ser preenchidos.");
-                    alert(xmlhttp.responseText);
                 } else if(xmlhttp.status === 403 || xmlhttp.status === 404) {
                     alert("Não tem permissões para efetuar esta operação.");
                     localStorage.removeItem("token");
                     navigate("/");
                 } else if(xmlhttp.status === 409) {
                     alert("Já possui uma parcela com o mesmo nome.")
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
             }
         }
@@ -211,8 +213,7 @@ const Map = () => {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
-
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register?token=" + localStorage.getItem("token"), true);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register", true);
         xmlhttp.send(f);
     }
 

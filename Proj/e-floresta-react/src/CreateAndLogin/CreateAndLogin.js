@@ -19,21 +19,26 @@ const CreateAndLogin = () => {
   function login() {
 
     xmlhttp.onreadystatechange = function () {
-      if (xmlhttp.readyState == 4) {
-        if (xmlhttp.status == 200) {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200) {
           token = xmlhttp.responseText;
           let obj = JSON.parse(atob(token.split(".")[1]));
-          //console.log(atob(token));
           console.log(obj);
           alert("Login efetuado com sucesso.");
+
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
           navigate('/homepage');
-        } else if(xmlhttp.status == 403) {
+        } else if(xmlhttp.status === 403) {
           alert("O username ou a password introduzidas estão erradas.");
-        } else if(xmlhttp.status == 404) {
+        }
+        else if(xmlhttp.status === 404) {
           alert("O username introduzido não existe.");
-        } else {
+        }
+        else if(xmlhttp.status === 500) {
+          alert("Erro do sistema. Tente novamente mais tarde.");
+        }
+        else {
           alert("Não foi possível efetuar o login.");
         }
         console.log(xmlhttp.status);
@@ -59,8 +64,8 @@ const CreateAndLogin = () => {
 
   function register() {
     xmlhttp.onreadystatechange = function() {
-      if(xmlhttp.readyState == 4) {
-        if(xmlhttp.status == 200){
+      if(xmlhttp.readyState === 4) {
+        if(xmlhttp.status === 200){
           token = xmlhttp.responseText;
           let obj = JSON.parse(atob(token.split(".")[1]));
           console.log(obj);
@@ -68,10 +73,12 @@ const CreateAndLogin = () => {
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
           navigate('/homepage');
-        } else if(xmlhttp.status == 400) {
-          alert("Todos os campos obrigatórios devem ser preenchidos.");
-        } else if(xmlhttp.status == 409) {
-          alert("Já existe um utilizador com o mesmo nome.");
+        } else if(xmlhttp.status === 400) {
+          alert("Todos os campos obrigatórios devem ser preenchidos corretamente.");
+        } else if(xmlhttp.status === 409) {
+          alert("Utilizador ou e-mail já registado.");
+        } else if(xmlhttp.status === 500) {
+          alert("Erro do sistema. Tente novamente mais tarde.");
         } else {
           alert("Não foi possível registar o utilizador.");
         }

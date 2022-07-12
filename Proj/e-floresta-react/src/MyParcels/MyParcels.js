@@ -9,6 +9,7 @@ import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import ParcelNearbyModal from "../util/ParcelNearbyModal/ParcelNearbyModal";
+import {useNavigate} from "react-router-dom";
 
 const containerStyle = {
     width: '75vw',
@@ -35,6 +36,8 @@ const options = {
 
 
 const MyParcels = () => {
+    const navigate = useNavigate();
+
     const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
@@ -131,6 +134,16 @@ const MyParcels = () => {
                     }
                     setPList(arr);
                     setPaths(pathsArr);
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 setRequested(false);
             }

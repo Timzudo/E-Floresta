@@ -8,6 +8,7 @@ import {Button, ButtonGroup, Card, Col, Container, Dropdown, Modal, Row, Spinner
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
+import {useNavigate} from "react-router-dom";
 
 const containerStyle = {
     width: '75vw',
@@ -33,6 +34,8 @@ const options = {
 }
 
 const AllParcels = () => {
+    const navigate = useNavigate();
+
     const [requested, setRequested] = useState(false);
     const [obj, setObj] = useState({});
 
@@ -65,8 +68,8 @@ const AllParcels = () => {
 
     useEffect(() => {
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     const obj = JSON.parse(xmlhttp.responseText);
                     let pathsArr = [];
                     for(let i = 0; i<obj.length; i++){
@@ -102,6 +105,16 @@ const AllParcels = () => {
                     }
                     setPList(arr);
                     setPaths(pathsArr);
+                }
+                else if(xmlhttp.status === 403){
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+                else if(xmlhttp.status === 404){
+                    alert("Utilizador não existe.");
+                }
+                else {
+                    alert("Erro do sistema. Tente novamente mais tarde.");
                 }
                 setRequested(false);
             }
