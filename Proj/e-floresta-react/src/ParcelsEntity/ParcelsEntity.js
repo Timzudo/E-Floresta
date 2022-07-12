@@ -114,7 +114,7 @@ const ParcelsEntity = () => {
                                         <Button id="remove-parcel_ParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => removeManager(obj[i].name, obj[i].owner)}>Remover</Button>
                                     </Col>
                                     <Col>
-                                        <Button id="report-parcel_ProposedParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => navigate("/make-report?id=" + obj[i].owner + "_" + obj[i].name)}>Reportar</Button>
+                                        <Button id="report-parcel_ParcelsEntity" className={"w-100 mb-2"} variant="primary" size="sm" onClick={() => navigate("/make-report?id=" + obj[i].owner + "_" + obj[i].name)}>Reportar</Button>
                                     </Col>
                                 </Row>
                             </Card.Body>

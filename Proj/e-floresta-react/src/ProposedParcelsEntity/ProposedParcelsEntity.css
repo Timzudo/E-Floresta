@@ -73,6 +73,7 @@ html, body{
 }
 
 #report-parcel_ProposedParcelsEntity{
-    background-color: #9d4040;
-    border: solid 1px #654444;
+    background-color: #800000;
+    border: solid 1px #800000;
+    color: white;
 }

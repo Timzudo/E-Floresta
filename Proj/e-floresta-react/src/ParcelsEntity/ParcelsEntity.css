@@ -72,3 +72,9 @@ html, body{
     color: white;
 }
 
+#report-parcel_ParcelsEntity{
+    background-color: #800000;
+    border: solid 1px #800000;
+    color: white;
+}
+
