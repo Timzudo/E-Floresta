@@ -1,5 +1,6 @@
 package firstwebapp.resources;
 
+import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.datastore.*;
@@ -12,6 +13,10 @@ import firstwebapp.util.Point;
 import org.apache.http.client.entity.EntityBuilder;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
 import javax.imageio.ImageIO;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,9 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -103,8 +107,6 @@ public class ParcelResource {
                                    @FormDataParam("freguesia") String freguesia,
                                    @FormDataParam("photo") InputStream photo,
                                    @FormDataParam("coordinates") String coordinates,
-                                   @FormDataParam("area") String area,
-                                   @FormDataParam("perimeter") String perimeter,
                                    @FormDataParam("document") InputStream document,
                                    @FormDataParam("usage") String usage,
                                    @FormDataParam("oldUsage") String oldUsage,
@@ -115,7 +117,7 @@ public class ParcelResource {
         Point[] coordinateList = g.fromJson(coordinates, Point[].class);
 
         if(!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && document != null && photo != null && !coordinates.equals("")  && !(coordinateList.length >= 3) &&
-            !area.equals("") && !perimeter.equals("") && !usage.equals("") && !oldUsage.equals("") && !cover.equals("")){
+            !usage.equals("") && !oldUsage.equals("") && !cover.equals("")){
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
 
@@ -175,8 +177,7 @@ public class ParcelResource {
 
         Transaction txn = datastore.newTransaction();
 
-        long areaLong = Long.parseLong(area);
-        long perimeterLong = Long.parseLong(perimeter);
+        long areaLong = getArea(coordinateList);
 
         try{
             parcel = Entity.newBuilder(parcelKey)
@@ -188,7 +189,6 @@ public class ParcelResource {
                         .set("parcel_manager", "")
                         .set("parcel_requested_manager", "")
                         .set("parcel_area", areaLong)
-                        .set("parcel_perimeter", perimeterLong)
                         .set("parcel_state", "PENDING")
                         .set("parcel_usage", usage)
                         .set("parcel_old_usage", oldUsage)
@@ -220,8 +220,6 @@ public class ParcelResource {
                                        @FormDataParam("freguesia") String freguesia,
                                        @FormDataParam("photo") InputStream photo,
                                        @FormDataParam("coordinates") String coordinates,
-                                       @FormDataParam("area") String area,
-                                       @FormDataParam("perimeter") String perimeter,
                                        @FormDataParam("document") InputStream document,
                                        @FormDataParam("usage") String usage,
                                        @FormDataParam("oldUsage") String oldUsage,
@@ -232,7 +230,7 @@ public class ParcelResource {
             Point[] coordinateList = g.fromJson(coordinates, Point[].class);
 
         if(!name.equals("") && !distrito.equals("")  && !concelho.equals("")  && !freguesia.equals("")  && document != null && photo != null && !coordinates.equals("")  && !(coordinateList.length >= 3) &&
-                !area.equals("") && !perimeter.equals("") && !usage.equals("") && !oldUsage.equals("") && !cover.equals("")){
+                !usage.equals("") && !oldUsage.equals("") && !cover.equals("")){
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
         }
 
@@ -315,8 +313,7 @@ public class ParcelResource {
 
             Transaction txn = datastore.newTransaction();
 
-            long areaLong = Long.parseLong(area);
-            long perimeterLong = Long.parseLong(perimeter);
+            long areaLong = getArea(coordinateList);
 
             try{
                 parcel = Entity.newBuilder(parcelKey)
@@ -328,7 +325,6 @@ public class ParcelResource {
                             .set("parcel_manager", "")
                             .set("parcel_requested_manager", "")
                             .set("parcel_area", areaLong)
-                            .set("parcel_perimeter", perimeterLong)
                             .set("parcel_state", "APPROVED")
                             .set("parcel_usage", usage)
                             .set("parcel_old_usage", oldUsage)

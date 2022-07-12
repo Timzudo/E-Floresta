@@ -21,6 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,18 +43,16 @@ public class StatisticsResource {
 
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
-    private Cache cache;
-
     private final Gson g = new Gson();
 
 
-    public StatisticsResource() {
+    Cache cache;
+    public StatisticsResource() throws IOException {
         try {
             CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
             Map<Object, Object> properties = new HashMap<>();
-            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.SECONDS.toSeconds(30));
-            this.cache = cacheFactory.createCache(properties);
-
+            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.MINUTES.toSeconds(30));
+            cache = cacheFactory.createCache(properties);
         } catch (CacheException e) {
             LOG.fine("Failed to get Instance of memcache.");
         }

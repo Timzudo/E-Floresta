@@ -18,7 +18,7 @@ class AScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Página Inicial Admin'),
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         bottom: const TabBar(
           tabs: <Widget>[
             Tab(
@@ -214,7 +214,7 @@ class _ParcelListStateA extends State<ParcelListA> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MapC(
+                      builder: (context) => MapA(
                             lat: 39.137251,
                             lng: -8.378835,
                             coordsList:

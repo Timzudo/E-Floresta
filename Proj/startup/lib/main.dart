@@ -327,7 +327,7 @@ void registerRequest(String username, String email, String name,
     String password, String confirmation, BuildContext context) async {
   final response = await http.post(
     Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/register/personal/"$username'),
+        'https://moonlit-oven-349523.oa.r.appspot.com/rest/register/personal/$username'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -429,7 +429,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Página Inicial Utilizador'),
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         bottom: const TabBar(
           tabs: <Widget>[
             Tab(

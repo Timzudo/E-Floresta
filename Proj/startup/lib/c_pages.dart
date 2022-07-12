@@ -16,7 +16,7 @@ class CScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Página Inicial Entidade'),
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         bottom: const TabBar(
           tabs: <Widget>[
             Tab(
