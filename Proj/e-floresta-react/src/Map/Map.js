@@ -213,7 +213,7 @@ const Map = () => {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
-        xmlhttp.open("POST", "http://localhost:8080/rest/parcel/register", true);
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register", true);
         xmlhttp.send(f);
     }
 
