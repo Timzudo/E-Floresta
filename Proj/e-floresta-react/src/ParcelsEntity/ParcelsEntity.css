@@ -9,7 +9,7 @@ html, body{
 
 
 .body_ParcelsEntity{
-    background-color: #e0e3d5;
+    background-color: rgba(189, 216, 196, 0.65);
     height: auto;
     width: 100%;
     overflow-y: scroll;
@@ -38,7 +38,7 @@ html, body{
 .parcel-card_ParcelsEntity{
     margin: 1px;
     border-color: #32443A;
-    background-color: rgba(218, 240, 252, 1);
+    background-color: rgba(255,255,255,0.6);
 }
 
 .parcel-card_ParcelsEntity button{

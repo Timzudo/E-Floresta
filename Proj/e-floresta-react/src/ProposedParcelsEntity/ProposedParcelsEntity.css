@@ -8,7 +8,7 @@ html, body{
 }
 
 .proposedParcelsEntityBody{
-    background-color: #e0e3d5;
+    background-color: rgba(189, 216, 196, 0.65);
     min-height: calc(100% - 60px);
     width: 100%;
 }
@@ -36,7 +36,7 @@ html, body{
 .parcel-card_ProposedParcelsEntity{
     margin: 1px;
     border-color: #32443A;
-    background-color: rgba(218, 240, 252, 1);
+    background-color: rgba(255,255,255,0.6);
 }
 
 .parcel-card_ProposedParcelsEntity button{
