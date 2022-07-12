@@ -1,13 +1,7 @@
-body{
+body, html{
     margin: 0;
     height: 100%;
 }
-
-/*
-.statistics-background{
-   background-color: ;
-}
-*/
 
 .stats-title{
     margin-top: 1%;

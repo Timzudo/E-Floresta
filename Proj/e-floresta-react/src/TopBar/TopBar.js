@@ -18,11 +18,25 @@ const TopBar = () => {
                     <Button id="option1">Página Inicial</Button>
                 </Link>
 
+                {localStorage.getItem('role').includes("A") ?
+                    <Dropdown>
+                        <Dropdown.Toggle className="dropdown_TopBar">
+                            Parcelas
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="dropdown-parcels-content_TopBar">
+                            <Dropdown.Item onClick={() => navigate("/map-admin")}><b>Registar Parcela</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/all-parcels-admin")}><b>Visualizar Parcelas</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/approve-parcels-admin")}><b>Parcelas Pendentes</b></Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                 : <></>}
+
                 {localStorage.getItem('role') === 'D' ? <Link to="/map">
                     <Button id="option2">Registar Parcela</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes("A") || localStorage.getItem('role').includes("B") ? <Link to="/map-admin">
+                {localStorage.getItem('role').includes("B") ? <Link to="/map-admin">
                     <Button id="option17">Registar Parcela</Button>
                 </Link> : <></>}
 
@@ -39,10 +53,6 @@ const TopBar = () => {
                     <Button id="option8">Visualizar Parcelas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('A') ? <Link to="/all-parcels-admin">
-                    <Button id="option16">Visualizar Parcelas</Button>
-                </Link> : <></>}
-
 
                 {localStorage.getItem('role') === 'C' ? <Link to="/proposed-parcels-entity">
                     <Button id="option6">Parcelas Pendentes</Button>
@@ -52,9 +62,6 @@ const TopBar = () => {
                     <Button id="option7">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('A')  ? <Link to="/approve-parcels-admin">
-                    <Button id="option15">Parcelas Pendentes</Button>
-                </Link> : <></>}
 
 
                 {localStorage.getItem('role').includes('A') || localStorage.getItem('role').includes('B') ? <Link to="/reports-technician">
@@ -62,8 +69,13 @@ const TopBar = () => {
                 </Link> : <></>}
 
 
+                {localStorage.getItem('role').includes('A') ? <Link to="/find-user">
+                    <Button id="option19">Encontrar Utilizador</Button>
+                </Link> : <></>}
+
+
                 {localStorage.getItem('role') === 'A1' ? <Link to="/upload-csv">
-                    <Button id="option17">CSV</Button>
+                    <Button id="option18">CSV</Button>
                 </Link> : <></>}
 
 
@@ -76,12 +88,13 @@ const TopBar = () => {
                 </Link> : <></>}
 
                 {localStorage.getItem('role').includes('B') ? <Link to="/statistics-technician">
-                    <Button id="option11">Estatísticas</Button>
+                    <Button id="option14">Estatísticas</Button>
                 </Link> : <></>}
 
                 {localStorage.getItem('role').includes('A') ? <Link to="/statistics-admin">
                     <Button id="option12">Estatísticas</Button>
                 </Link> : <></>}
+
 
                 <Link to="/rankings">
                     <Button id="option10">Rankings</Button>
@@ -92,6 +105,7 @@ const TopBar = () => {
                     <Button id="option4">Sobre</Button>
                 </Link>
             </ButtonGroup>
+
 
             <Dropdown className="my-account-dropdown_TopBar">
                 <Dropdown.Toggle className="dropdown_TopBar">
