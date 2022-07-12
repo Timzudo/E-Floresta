@@ -125,7 +125,7 @@ const ReportsTechnician = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="ReportsTechnicianBody">
+            <div className="body_ReportsTechnician">
                 {requested? <Spinner id="spinner_ConfirmationPage" variant="success" animation="border" role="status">
                     <span className="visually-hidden">Carregando...</span>
                 </Spinner> : reportList}
