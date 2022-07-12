@@ -514,9 +514,9 @@ const ParcelEditModal = (props) => {
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"><b>Secção da Parcela:</b> {info.section} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"><b>Secção:</b> {info.section} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"><b>Nº de Artigo da Parcela:</b> {info.article} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"><b>Nº de Artigo:</b> {info.article} </label><br/>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
 
