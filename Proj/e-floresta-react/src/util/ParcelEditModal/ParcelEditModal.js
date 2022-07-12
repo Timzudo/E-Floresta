@@ -152,7 +152,7 @@ const ParcelEditModal = (props) => {
                 return(
                     <label>
                         <span><b>Gerente:</b> Pedido pendente a {info.managerRequest}</span>
-                        <Button id="rmv-pending_MyParcels" className="managerButtons_ParcelEditModal" variant="outline-danger" size="sm">Anular pedido</Button>
+                        <Button onClick={() => removeRequest()} id="rmv-pending_MyParcels" className="managerButtons_ParcelEditModal" variant="outline-danger" size="sm">Anular pedido</Button>
                     </label>
                 )
             }
@@ -440,9 +440,7 @@ const ParcelEditModal = (props) => {
 
     async function sendCoordinates(paths){
         let myObj = {token:localStorage.getItem('token'),
-            coordinates:JSON.stringify(paths),
-            area:area.toString(),
-            perimeter:perimeter.toString()};
+            coordinates:JSON.stringify(paths)};
         console.log(JSON.stringify(myObj));
 
         const options = {
