@@ -5,9 +5,49 @@ import {Button, Carousel, Modal} from "react-bootstrap";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import React, { Component }  from 'react';
 import CSVConverter from "../util/CSVConverter";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const LoggedHomepage = () => {
+    const navigate = useNavigate();
+    let role = localStorage.getItem('token');
+
+    function registerButton(){
+        if(role === 'D'){
+            navigate("/map");
+        }
+        else if(role.includes("A") || role.includes("B")){
+            navigate("/map-admin");
+        }
+    }
+    function parcelsButton(){
+        if(role === 'D'){
+            navigate("/my-parcels");
+        }
+        else if(role === "C"){
+            navigate("/parcels-entity");
+        }
+        else if(role.includes("B")){
+            navigate("/all-parcels");
+        }
+        else if(role.includes("A")){
+            navigate("/all-parcels-admin");
+        }
+    }
+
+    function statisticsButton(){
+        if(role === 'D'){
+            navigate("/statistics");
+        }
+        else if(role === "C"){
+            navigate("/statistics-entity");
+        }
+        else if(role.includes("B")){
+            navigate("/statistics-technician");
+        }
+        else if(role.includes("A")){
+            navigate("/statistics-admin");
+        }
+    }
 
     return(
         <>
@@ -26,9 +66,7 @@ const LoggedHomepage = () => {
                         os seus limites e registe as informações respetivas ao mesmo do lado direito, preenchendo <br/>
                         e selecionando os campos exigidos. Por fim, clique em Submeter. <br/>
                         <p></p>
-                        <Link to="/map">
-                            <Button variant="dark">Registe já</Button>
-                        </Link>
+                            <Button onClick={() => registerButton()} variant="dark">Registe já</Button>
                     </div>
                 </div>
 
@@ -42,7 +80,7 @@ const LoggedHomepage = () => {
                         Clique em "Editar" para alterar alguma informação sobre a parcela em causa. <br/>
                         <p></p>
                         <Link to="/my-parcels">
-                            <Button variant="dark">Verifique as suas parcelas</Button>
+                            <Button onClick={() => parcelsButton()} variant="dark">Verifique as suas parcelas</Button>
                         </Link>
                     </div>
                 </div>
@@ -54,13 +92,12 @@ const LoggedHomepage = () => {
                         ainda mais a organização e o gerenciamento dos seus terrenos. Para lhes aceder, clique na aba "Estatísticas". <br/>
                         <p></p>
                         <Link to="/statistics">
-                            <Button variant="dark">Veja as estatísticas</Button>
+                            <Button onClick={() => statisticsButton()} variant="dark">Veja as estatísticas</Button>
                         </Link>
                     </div>
                 </div>
 
             </div>
-
         </>
     )
 }
