@@ -115,7 +115,7 @@ const Profile = () => {
                         <p className="label_Profile"><b>Nota: </b> {userGrade(grade)}</p>
                     </div>
                     <div id="state">
-                        <p className="label_Profile"><b>Estado: </b> {state === "ACTIVE"?"Ativo":"Inativo"}</p>
+                        <p className="label_Profile"><b>Estado: </b> {state}</p>
                     </div>
                     <div id="type">
                         <p className="label_Profile"><b>Tipo de utilizador: </b> {type}</p>

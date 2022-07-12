@@ -56,6 +56,23 @@ public class ParcelResource {
     public ParcelResource() throws IOException {
     }
 
+    private int getArea(Point[] points){
+        double area = 0;
+
+        for(int i = 0; i<points.length; i++){
+            Point p1 = points[i];
+            Point p2 = points[i+1];
+            area += ConvertToRadian(p2.lng - p1.lng) * (2 + Math.sin(ConvertToRadian(p1.lat)) + Math.sin(ConvertToRadian(p2.lat)));
+        }
+
+        return (int)area;
+    }
+
+    private static double ConvertToRadian(double input)
+    {
+        return input * Math.PI / 180;
+    }
+
 
     @POST
     @Path("/getCSV")
@@ -492,9 +509,7 @@ public class ParcelResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Parcel with name not found.").build();
         }
 
-        if(!parcel.getString("parcel_owner").equals(username) && !parcel.getString("parcel_manager").equals(username) && !parcel.getString("parcel_requested_manager").equals(username)){
-            return Response.status(Response.Status.FORBIDDEN).entity("Parcel with name not found.").build();
-        }
+
         String role = user.getString("user_role");
 
         if(role.equals("D") && (!parcel.getString("parcel_owner").equals(username))){
@@ -1144,7 +1159,7 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
-        BlobId blobId = BlobId.of(PARCEL_BUCKET, username + "/" + parcelName + "_coordinates");
+        BlobId blobId = BlobId.of(PARCEL_BUCKET, parcel.getString("parcel_owner") + "/" + parcelName + "_coordinates");
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
         storage.create(blobInfo, data.coordinates.getBytes(StandardCharsets.UTF_8));
 

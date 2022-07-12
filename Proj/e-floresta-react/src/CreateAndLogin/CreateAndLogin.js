@@ -3,13 +3,34 @@ import './CreateAndLogin.css'
 import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedIn from "../util/CheckIfLoggedOut";
 import {Button, Form, InputGroup} from "react-bootstrap";
-import React, { Component }  from 'react';
+import React, {Component, useState} from 'react';
+import CSVConverter from "../util/CSVConverter";
 
 
 const CreateAndLogin = () => {
   const navigate = useNavigate()
+  const [type, setType] = useState("personal");
   let xmlhttp = new XMLHttpRequest();
   let token;
+
+  const obj = JSON.parse(localStorage.getItem('csv'));
+  const distritos = Object.keys(obj);
+  const distritoList = [];
+  for(let i = 0; i<distritos.length; i++) {
+    distritoList.push(<option>{distritos[i]}</option>)
+  }
+
+  const [concelhoOptions, setConcelhoOptions] = useState([]);
+
+  function handleSetDistrito(distrito){
+    let listC = Object.keys(obj[distrito]);
+
+    let list = [];
+    for(let i = 0; i<listC.length; i++){
+      list.push(<option>{listC[i]}</option>);
+    }
+    setConcelhoOptions(list);
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -85,16 +106,30 @@ const CreateAndLogin = () => {
       }
     }
 
-    let myObj = {password:document.getElementById("create-acc-pass").value,
-                  confirmation:document.getElementById("create-acc-conf-pass").value,
-                  email:document.getElementById("create-acc-email").value,
-                  name:document.getElementById("create-acc-name").value,
-                  phone:document.getElementById("create-acc-phone").value,
-                  nif:document.getElementById("create-acc-nif").value};
+    let myObj;
+
+    if(type === 'personal'){
+      myObj = { password:document.getElementById("create-acc-pass").value,
+                confirmation:document.getElementById("create-acc-conf-pass").value,
+                email:document.getElementById("create-acc-email").value,
+                name:document.getElementById("create-acc-name").value,
+                phone:document.getElementById("create-acc-phone").value,
+                nif:document.getElementById("create-acc-nif").value};
+    }
+    else{
+      myObj = { password:document.getElementById("create-acc-pass").value,
+        confirmation:document.getElementById("create-acc-conf-pass").value,
+        email:document.getElementById("create-acc-email").value,
+        name:document.getElementById("create-acc-name").value,
+        phone:document.getElementById("create-acc-phone").value,
+        nif:document.getElementById("create-acc-nif").value,
+        distrito:document.getElementById("create_form_distrito").value,
+        concelho:document.getElementById("create_form_concelho").value};
+    }
 
     let myJson = JSON.stringify(myObj);
 
-    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/register/personal/" + document.getElementById("create-acc-user").value, true);
+    xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/register/"+ type +"/" + document.getElementById("create-acc-user").value, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(myJson);
   }
@@ -102,7 +137,7 @@ const CreateAndLogin = () => {
 
   return (
     <>
-
+      <CSVConverter/>
       <div className="cl_top">
 
         <div>
@@ -178,6 +213,25 @@ const CreateAndLogin = () => {
               <Form.Group className="create-form" >
                 <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
               </Form.Group>
+
+              <Form.Group className="mt-3" controlId="create_form">
+                <Form.Select onChange={(event) => setType(event.target.value)}  defaultValue={"personal"} className="map_fields">
+                  <option value="personal">Pessoal</option>
+                  <option value="entity">Entidade</option>
+                </Form.Select>
+              </Form.Group><br/>
+
+              {type === 'entity'?<><Form.Group className="mt-3" controlId="create_form_distrito">
+                                  <Form.Select defaultValue='' onChange={(event) => handleSetDistrito(event.target.value)} className="map_fields">
+                                    <option disabled={true} value=''>-</option>
+                                    {distritoList}
+                                  </Form.Select>
+                                </Form.Group>
+                              <Form.Group className="mt-3" controlId="create_form_concelho">
+                                <Form.Select className="map_fields">
+                                  {concelhoOptions}
+                                </Form.Select>
+                              </Form.Group><br/></>:<></>}
 
               <Button id="create-acc-button" type="submit" onClick={register}>
                 Registar

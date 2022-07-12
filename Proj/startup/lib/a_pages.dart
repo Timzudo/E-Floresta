@@ -8,427 +8,16 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startup/c_pages.dart';
-import 'a_pages.dart';
-import 'b_pages.dart';
 import 'offline_pages.dart';
 
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'E-Floresta',
-      theme: ThemeData(
-        // Add the 5 lines from here...
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-        ),
-      ),
-      home: const DefaultTabController(
-        length: 2,
-        child: LoginScreen(),
-      ),
-    );
-  }
-}
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class AScreen extends StatelessWidget {
+  const AScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('E-Floresta'),
-        bottom: const TabBar(
-          tabs: <Widget>[
-            Tab(
-              text: "Iniciar sessão",
-            ),
-            Tab(
-              /*icon: Icon(Icons.beach_access_sharp),*/
-              text: "Criar conta",
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: OfflineScreen(),
-              ),
-            ),
-          )
-        },
-        heroTag: null,
-        child: const Icon(Icons.map),
-      ),
-      body: TabBarView(
-        children: <Widget>[
-          Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              heightFactor: 0.8,
-              child: LoginForm(),
-            ),
-          ),
-          Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              heightFactor: 0.8,
-              child: RegisterForm(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class LoginForm extends StatelessWidget {
-  LoginForm({Key? key}) : super(key: key);
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        Image.asset(
-          'assets/images/logo.png',
-          height: 200,
-          width: 200,
-        ),
-        const SizedBox(height: 30),
-        TextField(
-            controller: usernameController,
-            decoration: const InputDecoration(
-              hintText: 'Username',
-            )),
-        const SizedBox(height: 18),
-        TextField(
-            obscureText: true,
-            controller: passwordController,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-            )),
-        const SizedBox(height: 18),
-        SizedBox(
-            width: 400,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.green),
-                onPressed: () => loginRequest(
-                    usernameController.text, passwordController.text, context),
-                child: const Text('LOGIN')))
-      ],
-    );
-  }
-}
-
-class RegisterForm extends StatelessWidget {
-  RegisterForm({Key? key}) : super(key: key);
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmationController = TextEditingController();
-  final emailController = TextEditingController();
-  final nameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        const SizedBox(height: 20),
-        TextField(
-            controller: usernameController,
-            decoration: const InputDecoration(
-              hintText: 'Username',
-            )),
-        const SizedBox(height: 18),
-        TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'E-mail',
-            )),
-        const SizedBox(height: 18),
-        TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              hintText: 'Nome completo',
-            )),
-        const SizedBox(height: 18),
-        TextField(
-            obscureText: true,
-            controller: passwordController,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-            )),
-        const SizedBox(height: 18),
-        TextField(
-            obscureText: true,
-            controller: confirmationController,
-            decoration: const InputDecoration(
-              hintText: 'Confirmation',
-            )),
-        const SizedBox(height: 18),
-        SizedBox(
-            width: 400,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.green),
-                onPressed: () => registerRequest(
-                    usernameController.text,
-                    emailController.text,
-                    nameController.text,
-                    passwordController.text,
-                    confirmationController.text,
-                    context),
-                child: const Text('CRIAR CONTA')))
-      ],
-    );
-  }
-}
-
-void loginRequest(
-    String username, String password, BuildContext context) async {
-  final response = await http.post(
-    Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/login/$username'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'password': password,
-    }),
-  );
-
-  if (response.statusCode == 200) {
-    final prefs = await SharedPreferences.getInstance();
-    String token = response.body;
-    String payload = token.split('.')[1];
-    int length = payload.length;
-    var decoded = base64.decode(base64.normalize(payload));
-    String obj = utf8.decode(decoded);
-    String role = jsonDecode(obj)['role'];
-    await prefs.setString('role', role);
-    await prefs.setString('token', token);
-
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () {
-        print(role);
-
-        Navigator.of(context).pop();
-        if(role == 'D'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: MainScreen(),
-              ),
-            ),
-          );
-        }
-        else if(role == 'C'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: CScreen(),
-              ),
-            ),
-          );
-        }
-        else if(role == 'B1' || role == 'B2'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: BScreen(),
-              ),
-            ),
-          );
-        }
-        else if(role == 'A1' || role == 'A2'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: AScreen(),
-              ),
-            ),
-          );
-        }
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("LOGIN"),
-      content: Text("User $username logged in successfully."),
-      actions: [
-        okButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  } else {
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () => {
-        Navigator.of(context).pop(),
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("LOGIN"),
-      content: const Text("There was an error loggin in."),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-void registerRequest(String username, String email, String name,
-    String password, String confirmation, BuildContext context) async {
-  final response = await http.post(
-    Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/register/personal/"$username'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'password': password,
-      'confirmation': confirmation,
-      'email': email,
-      'name': name,
-      'phone': "",
-      'nif': ""
-    }),
-  );
-
-  if (response.statusCode == 200) {
-    final prefs = await SharedPreferences.getInstance();
-    String token = response.body;
-    var decoded = base64.decode(token.split('.')[0]);
-    String obj = utf8.decode(decoded);
-    String role = jsonDecode(obj)['role'];
-    await prefs.setString('role', role);
-    await prefs.setString('token', token);
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () {
-        Navigator.of(context).pop();
-        if(role == 'D'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: MainScreen(),
-              ),
-            ),
-          );
-        }
-        else if(role == 'C'){
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const DefaultTabController(
-                length: 2,
-                child: CScreen(),
-              ),
-            ),
-          );
-        }
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("LOGIN"),
-      content: Text("User $username created successfully."),
-      actions: [
-        okButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  } else {
-    // set up the button
-    Widget okButton = TextButton(
-      child: const Text("OK"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("LOGIN"),
-      content: const Text("There was an error creating the account."),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Página Inicial Utilizador'),
+        title: const Text('Página Inicial Admin'),
         automaticallyImplyLeading: true,
         bottom: const TabBar(
           tabs: <Widget>[
@@ -443,35 +32,96 @@ class MainScreen extends StatelessWidget {
       ),
       body: const TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[ParcelList(), OfflineMap()],
+        children: <Widget>[ParcelListA(), OfflineMap()],
       ),
     );
   }
 }
 
-class ParcelList extends StatefulWidget {
-  const ParcelList({super.key});
+class ParcelListA extends StatefulWidget {
+  const ParcelListA({super.key});
 
   @override
-  State<ParcelList> createState() => _ParcelListState();
+  State<ParcelListA> createState() => _ParcelListStateA();
 }
 
-class _ParcelListState extends State<ParcelList> {
+class _ParcelListStateA extends State<ParcelListA> {
   List<dynamic> parcelList = [];
+
+  /*List<String> lista = ['Aveiro', 'Two', 'Three', 'Four'];
+  List<String> _distritoList = ['Aveiro', 'Two', 'Three', 'Four'];
+  Map<String, dynamic> _someMap = {};*/
+
+  /*void getCSV() async{
+    final prefs = await SharedPreferences.getInstance();
+
+    if(prefs.getString('csv') == null || prefs.getInt('csvTime') == null || DateTime.now().millisecondsSinceEpoch.toInt()>prefs.getInt('csvTime')!){
+      final response = await http.post(
+        Uri.parse(
+            'https://moonlit-oven-349523.appspot.com/rest/parcel/getCSV'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'token': prefs.getString('token')!
+        }),
+      );
+
+      if(response.statusCode == 200){
+        try{
+          String csv = response.body;
+          List lines = csv.split('\n');
+          final Map<String, Map<String, Map<String, String>>> someMap = {};
+
+          for(var i = 1; i<lines.length; i++){
+            List currentLine = lines[i].split(';');
+
+            if(!(currentLine == null) && currentLine.isNotEmpty && currentLine.length>1){
+              String distrito = currentLine[1];
+              someMap.putIfAbsent(distrito, () => {});
+
+              String concelho = currentLine[2];
+              someMap[distrito]?.putIfAbsent(concelho, () => {});
+
+              String freguesia = currentLine[3];
+              someMap[distrito]![concelho]?.putIfAbsent(freguesia, () => currentLine[4]);
+            }
+          }
+          String mapString = jsonEncode(someMap);
+          prefs.setString('csv', mapString);
+          prefs.setInt('csvTime', DateTime.now().millisecondsSinceEpoch.toInt() + (1000*60*60*24*7));
+        }
+        catch(e){
+          print("Catch Exception is $e");
+          print(e.toString());
+        }
+      }
+    }
+    else{
+      String mapString = prefs.getString('csv')!;
+
+      setState(() {
+        _someMap = jsonDecode(mapString);
+        _distritoList = _someMap.keys.toList();
+      });
+      print(_distritoList);
+    }
+  }
 
   @override
   void initState() {
-    getOwned().whenComplete(() => setState(() {}));
+    getCSV();
     super.initState();
-  }
+  }*/
 
-  Future<List<dynamic>> getOwned() async {
+  Future<List<dynamic>> getOwned(
+      String distrito, String concelho, String freguesia) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? "";
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned/'),
+          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/approvedbyregion/$distrito/$concelho/$freguesia'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -486,29 +136,68 @@ class _ParcelListState extends State<ParcelList> {
       map = response.statusCode;
     }
 
+    setState(() {});
     return map;
-  }
-
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
   }
 
   @override
   Widget build(BuildContext context) {
+    final distrito = TextEditingController();
+    final concelho = TextEditingController();
+    final freguesia = TextEditingController();
     return Scaffold(
-      /*appBar: AppBar(
-          title: const Text("Lista de parcelas"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  logout();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.exit_to_app_rounded))
-          ],
-        ),*/
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          /*const DropDown(
+              optionList: valueList,
+              option: value),
+          DropDown(
+              optionList: lista,
+              option: dropdownValue2),
+          DropDown(
+              optionList: lista,
+              option: dropdownValue2),*/
+          SizedBox(
+            height: 20.0,
+            width: 100.0,
+            child: TextField(
+              controller: distrito,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Distrito',
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+            width: 100.0,
+            child: TextField(
+              controller: concelho,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Concelho',
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20.0,
+            width: 100.0,
+            child: TextField(
+              controller: freguesia,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Freguesia',
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_circle),
+            onPressed: () =>
+                {getOwned(distrito.text, concelho.text, freguesia.text)},
+          )
+        ],
+      ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
@@ -525,7 +214,7 @@ class _ParcelListState extends State<ParcelList> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Map(
+                      builder: (context) => MapC(
                             lat: 39.137251,
                             lng: -8.378835,
                             coordsList:
@@ -538,18 +227,7 @@ class _ParcelListState extends State<ParcelList> {
                 );
               },
               trailing: IconButton(
-                  onPressed: () {
-                    /*removeParcel(parcelList[index]['name']);
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DefaultTabController(
-                              length: 2,
-                              child: OfflineScreen(),
-                            )),
-                      );*/
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.exit_to_app_rounded)),
             );
           }),
@@ -572,14 +250,14 @@ class _ParcelListState extends State<ParcelList> {
   }
 }
 
-class Map extends StatefulWidget {
+class MapA extends StatefulWidget {
   final double lat;
   final double lng;
   final List<dynamic> coordsList;
   final String parcelName;
   final String parcelID;
 
-  const Map(
+  const MapA(
       {Key? key,
       required this.lat,
       required this.lng,
@@ -589,10 +267,10 @@ class Map extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MapState createState() => _MapState();
+  _MapStateA createState() => _MapStateA();
 }
 
-class _MapState extends State<Map> {
+class _MapStateA extends State<MapA> {
   late GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -635,7 +313,7 @@ class _MapState extends State<Map> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => EditMap(
+                        builder: (context) => EditMapA(
                             parcelName: widget.parcelName,
                             parcelID: widget.parcelID,
                             coordsList: widget.coordsList)))
@@ -672,11 +350,11 @@ class _MapState extends State<Map> {
   }
 }
 
-class EditMap extends StatefulWidget {
+class EditMapA extends StatefulWidget {
   final String parcelName;
   final String parcelID;
   final List<dynamic> coordsList;
-  const EditMap(
+  const EditMapA(
       {Key? key,
       required this.parcelName,
       required this.parcelID,
@@ -684,10 +362,10 @@ class EditMap extends StatefulWidget {
       : super(key: key);
 
   @override
-  _EditMapState createState() => _EditMapState();
+  _EditMapStateA createState() => _EditMapStateA();
 }
 
-class _EditMapState extends State<EditMap> {
+class _EditMapStateA extends State<EditMapA> {
   late GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -757,7 +435,7 @@ class _EditMapState extends State<EditMap> {
                     MaterialPageRoute(
                       builder: (context) => const DefaultTabController(
                         length: 2,
-                        child: MainScreen(),
+                        child: AScreen(),
                       ),
                     ),
                   )
@@ -912,7 +590,7 @@ class _EditMapState extends State<EditMap> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ShowCoords(pointList)))
+                                  builder: (context) => ShowCoordsA(pointList)))
                         },
                     icon: const Icon(Icons.save)),
               )
@@ -922,8 +600,8 @@ class _EditMapState extends State<EditMap> {
   }
 }
 
-class ShowCoords extends StatelessWidget {
-  const ShowCoords(this.coords);
+class ShowCoordsA extends StatelessWidget {
+  const ShowCoordsA(this.coords);
 
   final List<LatLng> coords;
 
@@ -951,6 +629,45 @@ class ShowCoords extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class DropDown extends StatefulWidget {
+  final List<String> optionList;
+  final String option;
+  const DropDown({Key? key, required this.optionList, required this.option})
+      : super(key: key);
+
+  @override
+  State<DropDown> createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+  String dropdownValue = 'One';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue!;
+        });
+      },
+      items: widget.optionList.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }

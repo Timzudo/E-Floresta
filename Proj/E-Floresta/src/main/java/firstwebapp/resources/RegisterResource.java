@@ -5,6 +5,7 @@ import com.google.cloud.datastore.*;
 import com.google.gson.Gson;
 import firstwebapp.util.EntityRegistrationData;
 import firstwebapp.util.JWToken;
+import firstwebapp.util.PersonalRegistrationData;
 import firstwebapp.util.RegistrationData;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -35,7 +36,7 @@ public class RegisterResource {
     @POST
     @Path("/personal/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerPersonal(@PathParam("username") String username, RegistrationData data) throws UnsupportedEncodingException, MessagingException {
+    public Response registerPersonal(@PathParam("username") String username, PersonalRegistrationData data) throws UnsupportedEncodingException, MessagingException {
         LOG.fine("Attempt to register personal account: " + username);
 
         if(!data.validRegistration() || username.equals("")) {
@@ -208,9 +209,17 @@ public class RegisterResource {
 
         Transaction txn = datastore.newTransaction();
         try{
-            user = Entity.newBuilder(user)
-                    .set("user_state", "ACTIVE")
-                    .build();
+            if(user.getString("user_role").equals("C")){
+                user = Entity.newBuilder(user)
+                        .set("user_state", "CONFIRMED")
+                        .build();
+            }
+            else{
+                user = Entity.newBuilder(user)
+                        .set("user_state", "ACTIVE")
+                        .build();
+            }
+
 
             txn.update(user);
             txn.delete(confirmationKey);

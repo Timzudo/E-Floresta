@@ -105,14 +105,14 @@ class _OfflineParcelsState extends State<OfflineParcels> {
           final index = i ~/ 2;
           return ListTile(
             leading: const Icon(Icons.landscape_outlined),
-            title: Text(parcelList[index]['name'].split("_")[0]),
+            title: Text(parcelList[index]['name'].split("_")[1]),
             tileColor: Colors.green,
             textColor: Colors.white,
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Map(
+                    builder: (context) => MapO(
                         lat: 39.137251,
                         lng: -8.378835,
                         coordsList: (parcelList[index]['coordinates'])),
@@ -324,12 +324,12 @@ void saveOfflineParcel(List<LatLng> pointList, BuildContext context) async {
   );
 }
 
-class Map extends StatefulWidget {
+class MapO extends StatefulWidget {
   final double lat;
   final double lng;
   final List<dynamic> coordsList;
 
-  const Map(
+  const MapO(
       {Key? key,
       required this.lat,
       required this.lng,
@@ -340,7 +340,7 @@ class Map extends StatefulWidget {
   _MapState createState() => _MapState();
 }
 
-class _MapState extends State<Map> {
+class _MapState extends State<MapO> {
   late GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
