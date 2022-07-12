@@ -3,21 +3,21 @@ body, html{
     height: 100%;
 }
 
-.stats-entity-title{
+.stats-technician-title{
     margin-top: 1%;
     margin-left: 1%;
 }
 
-.stats-entity-paragraph{
+.stats-technician-paragraph{
     border-bottom: solid 1px #C0C6CF;
 }
 
-.stats-entity-container{
+.stats-technician-container{
     border-right: solid 1px #C0C6CF;
 }
 
-.util-solo-byNumber_StatsEntity,
-.util-solo-byArea_StatsEntity{
+.util-solo-byNumber_StatsTechnician,
+.util-solo-byArea_StatsTechnician{
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;

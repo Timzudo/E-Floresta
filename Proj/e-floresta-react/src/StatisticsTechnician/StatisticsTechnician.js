@@ -1,4 +1,4 @@
-import './StatisticsEntity.css'
+import './StatisticsTechnician.css'
 import React, { useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
@@ -7,7 +7,7 @@ import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
 
 
-const StatisticsEntity = () => {
+const StatisticsTechnician = () => {
 
     const [utilSoloByNumber] = useState({
         labels: ['Privado', 'Comercial', 'Pasto', 'Floresta', 'Agrícola', 'Residencial', 'Transporte', 'Recreativo'],
@@ -78,53 +78,53 @@ const StatisticsEntity = () => {
             <CheckIfLoggedOut />
             <TopBar />
 
-            <div className="statistics-entity-background">
+            <div className="statistics-technician-background">
                 <Row>
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Área total das parcelas </h4>
-                        <h6 className="stats-entity-title"> 562m² </h6>
+                        <h4 className="stats-technician-title"> Área total das parcelas </h4>
+                        <h6 className="stats-technician-title"> 562m² </h6>
                     </Col>
 
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Média da área das parcelas </h4>
-                        <h6 className="stats-entity-title"> 804m² </h6>
+                        <h4 className="stats-technician-title"> Média da área das parcelas </h4>
+                        <h6 className="stats-technician-title"> 804m² </h6>
                     </Col>
 
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Perímetro total das parcelas </h4>
-                        <h6 className="stats-entity-title"> 1800m </h6>
+                        <h4 className="stats-technician-title"> Perímetro total das parcelas </h4>
+                        <h6 className="stats-technician-title"> 1800m </h6>
                     </Col>
 
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Média do perímetro das parcelas </h4>
-                        <h6 className="stats-entity-title"> 804m </h6>
+                        <h4 className="stats-technician-title"> Média do perímetro das parcelas </h4>
+                        <h6 className="stats-technician-title"> 804m </h6>
                     </Col>
 
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Número de parcelas que registei </h4>
-                        <h6 className="stats-entity-title"> 11 </h6>
+                        <h4 className="stats-technician-title"> Número de parcelas que registei </h4>
+                        <h6 className="stats-technician-title"> 11 </h6>
                     </Col>
                 </Row>
 
                 <Row>
 
                     <p></p>
-                    <p className="stats-entity-paragraph" ></p>
-                    <Col className="stats-entity-container">
+                    <p className="stats-technician-paragraph" ></p>
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Número de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byNumber_StatsEntity" data={utilSoloByNumber} options={{ responsive: true }} />
+                        <h4 className="stats-technician-title"> Número de parcelas por tipo de utilização do solo </h4>
+                        <Pie className="util-solo-byNumber_StatsTechnician" data={utilSoloByNumber} options={{ responsive: true }} />
                     </Col>
 
-                    <Col className="stats-entity-container">
+                    <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Área de parcelas por tipo de utilização do solo </h4>
-                        <Pie className="util-solo-byArea_StatsEntity" data={utilSoloByArea} options={{ responsive: true }} />
+                        <h4 className="stats-technician-title"> Área de parcelas por tipo de utilização do solo </h4>
+                        <Pie className="util-solo-byArea_StatsTechnician" data={utilSoloByArea} options={{ responsive: true }} />
                     </Col>
 
                 </Row>
@@ -135,4 +135,4 @@ const StatisticsEntity = () => {
 };
 
 
-export default StatisticsEntity;
+export default StatisticsTechnician;

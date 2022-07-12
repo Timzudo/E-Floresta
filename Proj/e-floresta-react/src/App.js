@@ -19,6 +19,7 @@ import AllParcels from "./AllParcels/AllParcels";
 import AllParcelsAdmin from "./AllParcelsAdmin/AllParcelsAdmin";
 import Statistics from "./Statistics/Statistics";
 import StatisticsEntity from "./StatisticsEntity/StatisticsEntity";
+import StatisticsTechnician from "./StatisticsTechnician/StatisticsTechnician";
 import StatisticsAdmin from "./StatisticsAdmin/StatisticsAdmin";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage";
 import Rankings from "./Rankings/Rankings";
@@ -65,6 +66,7 @@ const App = () => {
           <Route path="/all-parcels-admin" element={<AllParcelsAdmin />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/statistics-entity" element={<StatisticsEntity />} />
+          <Route path="/statistics-technician" element={<StatisticsTechnician />} />
           <Route path="/statistics-admin" element={<StatisticsAdmin />} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
           <Route path="/recover" element={<RecoverPassword />} />
