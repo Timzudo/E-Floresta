@@ -263,12 +263,12 @@ const MapAdmin = () => {
                     </div>
                     <div id="parcelAddPoint">
                         <div id="addLat">
-                            <div className="MapInfo_Map">Latitude</div>
+                            <div id="lat-MapInfo_Map" className="MapInfo_Map">Latitude</div>
                             <input className="latlng_input" type="number" id="input_lat" placeholder="Ex: 38.661142"/>
                         </div>
                         <br/>
                         <div id="addLng">
-                            <div className="MapInfo_Map">Longitude</div>
+                            <div id="lng-MapInfo_Map" className="MapInfo_Map">Longitude</div>
                             <input className="latlng_input" type="number" id="input_lng" placeholder="Ex: -9.203510"/>
                         </div>
                         <button type="button" id="submit_latlng" className="btn btn-success" onClick={() => addMarker(Number(document.getElementById("input_lat").value), Number(document.getElementById("input_lng").value))}>Adicionar ponto</button>

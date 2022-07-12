@@ -43,6 +43,11 @@
     border-color: #8c8468;
 }
 
+#lat-MapInfo_Map,
+#lng-MapInfo_Map{
+    color: black;
+}
+
 .latlng_input{
     width: 90%;
     margin: auto;
