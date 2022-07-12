@@ -369,7 +369,7 @@ const ParcelEditModal = (props) => {
         console.log(myObj);
         var myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/sendrequest/" + props.obj.owner + "_" + props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -379,7 +379,6 @@ const ParcelEditModal = (props) => {
 
         if(changedInfo){
             arr.push(sendInfo());
-            console.log("yau");
         }
         if(document.getElementById("file-editParcelModal_ApproveParcels").files[0] !== undefined){
             arr.push(sendDocument(document.getElementById("file-editParcelModal_ApproveParcels").files[0]));
@@ -511,11 +510,15 @@ const ParcelEditModal = (props) => {
 
                 <label className="labels-editParcelModal_ApproveParcels"> {hasManager()} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"><b>Distrito:</b> {props.obj.distrito} </label><br/>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Concelho:</b> {props.obj.concelho} </label><br/>
 
-                <label className="labels-editParcelModal_ApproveParcels"><b>Distrito:</b> {props.obj.distrito} </label><br/>
+                <label className="labels-editParcelModal_ApproveParcels"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
+
+                <label className="labels-editParcelModal_ApproveParcels"><b>Secção da Parcela:</b> {info.section} </label><br/>
+
+                <label className="labels-editParcelModal_ApproveParcels"><b>Nº de Artigo da Parcela:</b> {info.article} </label><br/>
 
                 <label className="labels-editParcelModal_ApproveParcels"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
 

@@ -68,7 +68,7 @@ const ParcelDetailsModal = (props) => {
         let myObj = {token:localStorage.getItem('token')};
         let myJson = JSON.stringify(myObj);
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name); //TODO:alterar link
+        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/parcelInfo?parcelName="+props.obj.owner+"_"+props.obj.name);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
     }
@@ -154,6 +154,8 @@ const ParcelDetailsModal = (props) => {
                 <label className="field_ParcelDetailsModal"><b>Freguesia:</b> {props.obj.freguesia} </label><br/>
                 <label className="field_ParcelDetailsModal"><b>Concelho:</b> {props.obj.concelho} </label><br/>
                 <label className="field_ParcelDetailsModal"><b>Distrito:</b> {props.obj.distrito} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Secção da Parcela:</b> {obj.section} </label><br/>
+                <label className="field_ParcelDetailsModal"><b>Nº de Artigo da Parcela:</b> {obj.article} </label><br/>
                 <label className="field_ParcelDetailsModal"><b>Área da parcela:</b> {props.obj.area}m² </label><br/>
                 <label className="field_ParcelDetailsModal"><b>Tipo de cobertura do solo:</b> {obj.cover} </label><br/>
                 <label className="field_ParcelDetailsModal"><b>Utilização atual do solo:</b> {obj.usage} </label><br/>

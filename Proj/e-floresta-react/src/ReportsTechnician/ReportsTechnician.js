@@ -14,7 +14,6 @@ const ReportsTechnician = () => {
     const [reportList, setReportList] = useState([]);
 
     useEffect(() => {
-        console.log("yau?");
         let myObj = {token:localStorage.getItem('token')};
 
         const options = {
