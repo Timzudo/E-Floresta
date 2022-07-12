@@ -1,6 +1,15 @@
-body{
+body, html{
     margin: 0;
     height: 100%;
+}
+
+#root{
+    height:100%;
+}
+
+.rankings-background{
+    margin-top: -0.95%;
+    background-color: rgba(189, 216, 196, 0.35);
 }
 
 .rankings-title{
