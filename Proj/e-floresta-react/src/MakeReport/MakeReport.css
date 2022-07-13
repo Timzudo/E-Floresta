@@ -3,6 +3,10 @@ body,html{
     height: 100%;
 }
 
+#root{
+    height: 100%;
+}
+
 .bg-img_MakeReport{
     background-image: url("background-image.png");
     background-position: center;
