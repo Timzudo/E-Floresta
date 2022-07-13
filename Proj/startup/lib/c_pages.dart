@@ -31,7 +31,7 @@ class _ParcelListStateC extends State<ParcelListC> {
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/managed/'),
+          'https://moonlit-oven-349523.appspot.com/rest/parcel/managed/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

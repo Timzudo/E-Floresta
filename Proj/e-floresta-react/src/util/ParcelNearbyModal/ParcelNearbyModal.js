@@ -84,7 +84,7 @@ const ParcelNearbyModal = (props) => {
         };
 
         let parcelName = props.obj.owner + "_" + props.obj.name;
-        fetch("https://moonlit-oven-349523.appspot.com/rest/parcel/nearby?parcelName="+parcelName, options)
+        fetch("http://localhost:8080/rest/parcel/nearby?parcelName="+parcelName, options)
             .then((r) => {
                 if(r.ok){
                     r.text().then(t => {

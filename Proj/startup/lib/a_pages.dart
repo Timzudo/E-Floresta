@@ -93,7 +93,7 @@ class _ParcelListStateA extends State<ParcelListA> {
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/approvedbyregion/$distrito/$concelho/$freguesia'),
+          'https://moonlit-oven-349523.appspot.com/rest/parcel/approvedbyregion/$distrito/$concelho/$freguesia'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -473,7 +473,7 @@ class _EditMapStateA extends State<EditMapA> {
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/${widget.parcelID}/coordinates'),
+          'https://moonlit-oven-349523.appspot.com/rest/parcel/modify/${widget.parcelID}/coordinates'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

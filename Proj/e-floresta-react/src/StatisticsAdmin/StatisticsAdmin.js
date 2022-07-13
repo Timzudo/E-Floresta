@@ -52,13 +52,13 @@ const StatisticsAdmin = () => {
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Área total das parcelas registadas </h4>
-                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/areaTotal" label="m²"></NumberStatistics>
+                        <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/areaTotal" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Média da área das parcelas registadas </h4>
-                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAvgArea" label="m²"></NumberStatistics>
+                        <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAvgArea" label="m²"></NumberStatistics>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -76,7 +76,7 @@ const StatisticsAdmin = () => {
                     <Col className="stats-admin-container">
                         <p></p>
                         <h4 className="stats-admin-title"> Número de parcelas registadas </h4>
-                        <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCount" label=""></NumberStatistics>
+                        <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelCount" label=""></NumberStatistics>
                     </Col>
                     <p></p>
                 </Row>

@@ -237,7 +237,7 @@ void loginRequest(
     String username, String password, BuildContext context) async {
   final response = await http.post(
     Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/login/$username'),
+        'https://moonlit-oven-349523.appspot.com/rest/login/$username'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -345,7 +345,7 @@ void registerRequest(String username, String email, String name,
     String password, String confirmation, BuildContext context) async {
   final response = await http.post(
     Uri.parse(
-        'https://moonlit-oven-349523.oa.r.appspot.com/rest/register/personal/$username'),
+        'https://moonlit-oven-349523.appspot.com/rest/register/personal/$username'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -473,7 +473,7 @@ class _ParcelListState extends State<ParcelList> {
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/owned/'),
+          'https://moonlit-oven-349523.appspot.com/rest/parcel/owned/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -812,7 +812,7 @@ class _EditMapState extends State<EditMap> {
 
     final response = await http.post(
       Uri.parse(
-          'https://moonlit-oven-349523.oa.r.appspot.com/rest/parcel/modify/${widget.parcelID}/coordinates'),
+          'https://moonlit-oven-349523.appspot.com/rest/parcel/modify/${widget.parcelID}/coordinates'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

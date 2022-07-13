@@ -88,8 +88,8 @@ const StatisticsTechnician = () => {
                         <h4 className="stats-technician-title"> Área total das parcelas </h4>
                         {
                             role === "B1" ?
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/totalParcelAreaInConcelho" label="m²"></NumberStatistics> :
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/totalParcelAreaInFreguesia" label="m²"></NumberStatistics>
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/totalParcelAreaInConcelho" label="m²"></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/totalParcelAreaInFreguesia" label="m²"></NumberStatistics>
                         }
                     </Col>
 
@@ -98,8 +98,8 @@ const StatisticsTechnician = () => {
                         <h4 className="stats-technician-title"> Média da área das parcelas </h4>
                         {
                             role === "B1" ?
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAvgAreaInConcelho" label="m²"></NumberStatistics> :
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAvgAreaInFreguesia" label="m²"></NumberStatistics>
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAvgAreaInConcelho" label="m²"></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAvgAreaInFreguesia" label="m²"></NumberStatistics>
                         }
                     </Col>
 
@@ -120,8 +120,8 @@ const StatisticsTechnician = () => {
                         <h4 className="stats-technician-title"> Número de parcelas que registei </h4>
                         {
                             role === "B1" ?
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInConcelho" label=""></NumberStatistics> :
-                                <NumberStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInFreguesia" label=""></NumberStatistics>
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelCountInConcelho" label=""></NumberStatistics> :
+                                <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelCountInFreguesia" label=""></NumberStatistics>
                         }
                     </Col>
                 </Row>
@@ -135,8 +135,8 @@ const StatisticsTechnician = () => {
                         <h4 className="stats-technician-title"> Número de parcelas por tipo de utilização do solo </h4>
                         {
                             role === "B1" ?
-                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInConcelhoByUsage"></PieChartStatistics>:
-                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelCountInFreguesiaByUsage"></PieChartStatistics>
+                                <PieChartStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelCountInConcelhoByUsage"></PieChartStatistics>:
+                                <PieChartStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelCountInFreguesiaByUsage"></PieChartStatistics>
                         }
                     </Col>
 
@@ -145,8 +145,8 @@ const StatisticsTechnician = () => {
                         <h4 className="stats-technician-title"> Área de parcelas por tipo de utilização do solo </h4>
                         {
                             role === "B1" ?
-                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAreaInConcelhoByUsage"></PieChartStatistics>:
-                                <PieChartStatistics url="https://moonlit-oven-349523.oa.r.appspot.com/rest/statistics/rankings/parcelAreaInFreguesiaByUsage"></PieChartStatistics>
+                                <PieChartStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAreaInConcelhoByUsage"></PieChartStatistics>:
+                                <PieChartStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAreaInFreguesiaByUsage"></PieChartStatistics>
                         }
                     </Col>
 

@@ -1097,8 +1097,10 @@ public class ParcelResource {
 
         parcelListQuery.forEachRemaining( p -> {
 
-            String nearbyParcelName = username + "_" + p.getString("parcel_name");
-            String path = username + "/" + nearbyParcelName;
+            String owner = p.getString("parcel_owner");
+
+            String nearbyParcelName = owner + "_" + p.getString("parcel_name");
+            String path = owner + "/" + nearbyParcelName;
             Blob blob = storage.get(PARCEL_BUCKET, path+"_coordinates");
             byte[] coordinates = blob.getContent();
             String coordinatesString = new String(coordinates, StandardCharsets.UTF_8);

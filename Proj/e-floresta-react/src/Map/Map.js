@@ -221,7 +221,7 @@ const Map = () => {
     return (
         <div className="mapDiv_Map">
             <CSVConverter/><LoadScript
-            googleMapsApiKey="AIzaSyAzmUVpLtuvY1vhrHL_-rcDyk_krHMdSjQ"
+            googleMapsApiKey="AIzaSyC3yXGtu-O5HD8LhlQ18w68dby2HQ2X3O4"
         >
 
             <GoogleMap
