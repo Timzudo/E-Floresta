@@ -7,7 +7,10 @@ const CheckIfLoggedIn = () => {
 
     React.useEffect(() => {
         let token = localStorage.getItem('token');
-        if(token != null) {
+        let role = localStorage.getItem('role');
+        let state = localStorage.getItem('state');
+        if(token != null && role != null && state != null) {
+            console.log("login")
             //O utilizador saiu da pag sem fazer logout e ainda tem um token valido, logo nao precisa de fazer login novamente
             navigate("/homepage");
         }

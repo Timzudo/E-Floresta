@@ -9,9 +9,10 @@ const RankingListStatistics = (props) => {
     const [result, setResult] = useState([]);
     const [request, setRequest] = useState(false);
 
-    let type = props.type;
-    let labelA = props.labelA;
-    let labelB = props.labelB;
+    const type = props.type;
+    const labelA = props.labelA;
+    const labelB = props.labelB;
+    console.log(type);
 
     useEffect(() => {
         setRequest(true);

@@ -158,18 +158,27 @@ const ParcelEditModal = (props) => {
             }
             else {
                 if(props.obj.isApproved === "APPROVED") {
-                    return(
+                    if(managerList.length > 0){
+                        return(
+                            <label>
+                                <b>Gerente:</b>
+
+                                <select id="dropdown-basic" className="managerButtons_ParcelEditModal" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
+                                    {managerList}
+                                </select>
+
+                                <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="success" size="sm">Adicionar gerente</Button>
+
+                            </label>
+                        )
+                    }
+                    else{
+                        return(
                         <label>
-                            <b>Gerente:</b>
+                            <b>Gerente:</b> <span className="red-text">Não existem entidades disponíveis no concelho da parcela.</span>
+                        </label>);
+                    }
 
-                            <select id="dropdown-basic" className="managerButtons_ParcelEditModal" onChange={(e) => {setmanagerValue(e.target.value)}/*(e) => {managerValue = e}*/}>
-                                {managerList}
-                            </select>
-
-                            <Button onClick={() => {sendManagerRequest()}} id="add-manager_MyParcels" className="managerButtons_ParcelEditModal" variant="success" size="sm">Adicionar gerente</Button>
-
-                        </label>
-                    )
                 }
                 else {
                     return(

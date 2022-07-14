@@ -8,12 +8,10 @@ const CheckIfLoggedOut = () => {
 
     React.useEffect(() => {
         let token = localStorage.getItem('token');
-        let role = localStorage.getItem('token');
-        let state = localStorage.getItem('token');
-        console.log(token);
-        console.log(role);
-        console.log(state);
+        let role = localStorage.getItem('role');
+        let state = localStorage.getItem('state');
         if(token == null || role == null || state == null) {
+            console.log("logout")
             //O utilizador nao tem um token valido, logo nao tem acesso as pags que precisam de login para lhes aceder
             navigate('/');}
     }, []);

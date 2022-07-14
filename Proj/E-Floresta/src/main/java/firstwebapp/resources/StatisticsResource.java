@@ -68,7 +68,7 @@ public class StatisticsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response statisticsUserParcelTotalArea(TokenData tokenData) {
         LOG.fine("Getting user total parcel area");
-
+        //TODO
         JWToken.TokenInfo tokenInfo = JWToken.verifyToken(tokenData.token);
         if(tokenInfo == null)
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
@@ -87,8 +87,8 @@ public class StatisticsResource {
 
         final Long[] totalArea = {(Long) cache.get("user_by_total_parcel_area"+tokenInfo.sub)};
 
-        if (totalArea[0] != null)
-            return Response.ok(totalArea[0]).build();
+        /*if (totalArea[0] != null)
+            return Response.ok(totalArea[0]).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -135,8 +135,8 @@ public class StatisticsResource {
 
         final Long[] totalPerimeter = {(Long) cache.get("user_by_total_parcel_perimeter"+tokenInfo.sub)};
 
-        if (totalPerimeter[0] != null)
-            return Response.ok(totalPerimeter[0]).build();
+        /*if (totalPerimeter[0] != null)
+            return Response.ok(totalPerimeter[0]).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -183,8 +183,8 @@ public class StatisticsResource {
 
         Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("user_parcel_count_by_usage"+tokenInfo.sub);
 
-        if (parcelCountByUsage != null)
-            return Response.ok(g.toJson(parcelCountByUsage)).build();
+        /*if (parcelCountByUsage != null)
+            return Response.ok(g.toJson(parcelCountByUsage)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -236,8 +236,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"+tokenInfo.sub));
 
-        if (count.get() != null)
-            return Response.ok(g.toJson(count.get())).build();
+        /*if (count.get() != null)
+            return Response.ok(g.toJson(count.get())).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -281,8 +281,8 @@ public class StatisticsResource {
 
         Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_total_area_by_usage"+tokenInfo.sub);
 
-        if (totalAreaByUsage != null)
-            return Response.ok(g.toJson(totalAreaByUsage)).build();
+        /*if (totalAreaByUsage != null)
+            return Response.ok(g.toJson(totalAreaByUsage)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -332,8 +332,8 @@ public class StatisticsResource {
 
         Long avgParcelArea = (Long) cache.get("user_by_average_parcel_area"+tokenInfo.sub);
 
-        if (avgParcelArea != null)
-            return Response.ok(avgParcelArea).build();
+        /*if (avgParcelArea != null)
+            return Response.ok(avgParcelArea).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -378,8 +378,8 @@ public class StatisticsResource {
 
         final Long[] totalArea = {(Long) cache.get("entity_by_total_parcel_area"+tokenInfo.sub)};
 
-        if (totalArea[0] != null)
-            return Response.ok(totalArea[0]).build();
+        /*if (totalArea[0] != null)
+            return Response.ok(totalArea[0]).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -426,8 +426,8 @@ public class StatisticsResource {
 
         final Long[] totalPerimeter = {(Long) cache.get("entity_by_total_parcel_perimeter"+tokenInfo.sub)};
 
-        if (totalPerimeter[0] != null)
-            return Response.ok(totalPerimeter[0]).build();
+        /*if (totalPerimeter[0] != null)
+            return Response.ok(totalPerimeter[0]).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -472,8 +472,8 @@ public class StatisticsResource {
 
         Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("entity_parcel_count_by_usage"+tokenInfo.sub);
 
-        if (parcelCountByUsage != null)
-            return Response.ok(g.toJson(parcelCountByUsage)).build();
+        /*if (parcelCountByUsage != null)
+            return Response.ok(g.toJson(parcelCountByUsage)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -525,8 +525,8 @@ public class StatisticsResource {
 
         Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("entity_parcel_total_area_by_usage"+tokenInfo.sub);
 
-        if (totalAreaByUsage != null)
-            return Response.ok(g.toJson(totalAreaByUsage)).build();
+        /*if (totalAreaByUsage != null)
+            return Response.ok(g.toJson(totalAreaByUsage)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -578,8 +578,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"+tokenInfo.sub));
 
-        if (count.get() != null)
-            return Response.ok(g.toJson(count.get())).build();
+        /*if (count.get() != null)
+            return Response.ok(g.toJson(count.get())).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -623,8 +623,8 @@ public class StatisticsResource {
 
         Long avgParcelArea = (Long) cache.get("entity_by_average_parcel_area"+tokenInfo.sub);
 
-        if (avgParcelArea != null)
-            return Response.ok(avgParcelArea).build();
+        /*if (avgParcelArea != null)
+            return Response.ok(avgParcelArea).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -672,8 +672,8 @@ public class StatisticsResource {
 
         List<EntityWithUserTrust> userByUserTrust = (List<EntityWithUserTrust>) cache.get("user_by_usertrust");
 
-        if (userByUserTrust != null)
-            return Response.ok(g.toJson(userByUserTrust)).build();
+        /*if (userByUserTrust != null)
+            return Response.ok(g.toJson(userByUserTrust)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -724,8 +724,8 @@ public class StatisticsResource {
 
         List<EntityWithParcelArea> userWithParcelAreaList = (List<EntityWithParcelArea>) cache.get("user_by_parcel_area");
 
-        if (userWithParcelAreaList != null)
-            return Response.ok(g.toJson(userWithParcelAreaList)).build();
+        /*if (userWithParcelAreaList != null)
+            return Response.ok(g.toJson(userWithParcelAreaList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -776,8 +776,8 @@ public class StatisticsResource {
 
         List<EntityWithParcelCount> userParcelCountList = (List<EntityWithParcelCount>) cache.get("user_by_parcel_count");
 
-        if (userParcelCountList != null)
-            return Response.ok(g.toJson(userParcelCountList)).build();
+        /*if (userParcelCountList != null)
+            return Response.ok(g.toJson(userParcelCountList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -828,8 +828,8 @@ public class StatisticsResource {
 
         List<EntityWithUserTrust> entityWithUserTrustList = (List<EntityWithUserTrust>) cache.get("entity_by_usertrust");
 
-        if (entityWithUserTrustList != null)
-            return Response.ok(g.toJson(entityWithUserTrustList)).build();
+        /*if (entityWithUserTrustList != null)
+            return Response.ok(g.toJson(entityWithUserTrustList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -879,8 +879,8 @@ public class StatisticsResource {
 
         List<EntityWithParcelArea> entityWithParcelAreaList = (List<EntityWithParcelArea>) cache.get("entity_by_parcel_area");
 
-        if (entityWithParcelAreaList != null)
-            return Response.ok(g.toJson(entityWithParcelAreaList)).build();
+        /*if (entityWithParcelAreaList != null)
+            return Response.ok(g.toJson(entityWithParcelAreaList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -931,8 +931,8 @@ public class StatisticsResource {
 
         List<EntityWithParcelCount> entityWithParcelCountList = (List<EntityWithParcelCount>) cache.get("entity_by_parcel_count");
 
-        if (entityWithParcelCountList != null)
-            return Response.ok(g.toJson(entityWithParcelCountList)).build();;
+        /*if (entityWithParcelCountList != null)
+            return Response.ok(g.toJson(entityWithParcelCountList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -985,8 +985,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> areaUsage = new AtomicReference<>((Long) cache.get("area_usage_in_"));
 
-        if (areaUsage.get() != null)
-            return Response.ok(areaUsage.get()).build();
+        /*if (areaUsage.get() != null)
+            return Response.ok(areaUsage.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1029,8 +1029,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> areaUsage = new AtomicReference<>((Long) cache.get("area_usage_in_"+distrito));
 
-        if (areaUsage.get() != null)
-            return Response.ok(areaUsage).build();
+        /*if (areaUsage.get() != null)
+            return Response.ok(areaUsage).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1075,8 +1075,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> areaUsage = new AtomicReference<>((Long) cache.get("area_usage_in_"+distrito+"_"+concelho));
 
-        if (areaUsage.get() != null)
-            return Response.ok(areaUsage).build();
+        /*if (areaUsage.get() != null)
+            return Response.ok(areaUsage).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1128,8 +1128,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> areaUsage = new AtomicReference<>((Long) cache.get("area_usage_in_"+distrito+"_"+concelho+"_"+freguesia));
 
-        if (areaUsage.get() != null)
-            return Response.ok(areaUsage).build();
+        /*if (areaUsage.get() != null)
+            return Response.ok(areaUsage).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1177,8 +1177,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> distritoWithParcelCountsList =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("distrito_by_parcel_count"));
 
-        if (distritoWithParcelCountsList.get() != null)
-            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();
+        /*if (distritoWithParcelCountsList.get() != null)
+            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1237,8 +1237,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> distritoWithParcelCountsList =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("concelho_by_parcel_count"));
 
-        if (distritoWithParcelCountsList.get() != null)
-            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();
+        /*if (distritoWithParcelCountsList.get() != null)
+            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1297,8 +1297,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> distritoWithParcelCountsList =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("freguesia_by_parcel_count"));
 
-        if (distritoWithParcelCountsList.get() != null)
-            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();
+        /*if (distritoWithParcelCountsList.get() != null)
+            return Response.ok(g.toJson(distritoWithParcelCountsList)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1357,8 +1357,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> list =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+distrito));
 
-        if (list.get() != null)
-            return Response.ok(g.toJson(list)).build();
+        /*if (list.get() != null)
+            return Response.ok(g.toJson(list)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1422,8 +1422,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> list =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+concelho+"_"+distrito));
 
-        if (list.get() != null)
-            return Response.ok(g.toJson(list)).build();
+        /*f (list.get() != null)
+            return Response.ok(g.toJson(list)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1488,8 +1488,8 @@ public class StatisticsResource {
         AtomicReference<ArrayList<NamedCount>> list =
                 new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+freguesia+"_"+concelho+"_"+distrito));
 
-        if (list.get() != null)
-            return Response.ok(g.toJson(list)).build();
+        /*if (list.get() != null)
+            return Response.ok(g.toJson(list)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1550,8 +1550,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> avgArea = new AtomicReference<>((Long) cache.get("avg_total_parcel_area"));
 
-        if (avgArea.get() != null)
-            return Response.ok(avgArea.get()).build();
+        /*if (avgArea.get() != null)
+            return Response.ok(avgArea.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1599,8 +1599,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> parcelCount = new AtomicReference<>((Long) cache.get("parcel_count_admin"));
 
-        if (parcelCount.get() != null)
-            return Response.ok(parcelCount.get()).build();
+        /*if (parcelCount.get() != null)
+            return Response.ok(parcelCount.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1651,8 +1651,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> avgArea = new AtomicReference<>((Long) cache.get("average_parcel_area_in_concelho_"+freguesia+"_"+concelho+"_"+distrito));
 
-        if (avgArea.get() != null)
-            return Response.ok(avgArea.get()).build();
+        /*if (avgArea.get() != null)
+            return Response.ok(avgArea.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1709,8 +1709,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> totalArea = new AtomicReference<>((Long) cache.get("total_parcel_area_in_concelho_"+freguesia+"_"+concelho+"_"+distrito));
 
-        if (totalArea.get() != null)
-            return Response.ok(totalArea.get()).build();
+        /*if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1922,8 +1922,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> avgArea = new AtomicReference<>((Long) cache.get("parcel_avg_area_in_freguesia_"+freguesia+"_"+concelho+"_"+distrito));
 
-        if (avgArea.get() != null)
-            return Response.ok(avgArea.get()).build();
+        /*if (avgArea.get() != null)
+            return Response.ok(avgArea.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
@@ -1981,8 +1981,8 @@ public class StatisticsResource {
 
         AtomicReference<Long> totalArea = new AtomicReference<>((Long) cache.get("total_parcel_area_in_freguesia_"+freguesia+"_"+concelho+"_"+distrito));
 
-        if (totalArea.get() != null)
-            return Response.ok(totalArea.get()).build();
+        /*if (totalArea.get() != null)
+            return Response.ok(totalArea.get()).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()

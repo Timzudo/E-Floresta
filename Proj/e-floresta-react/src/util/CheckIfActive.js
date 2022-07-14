@@ -7,9 +7,14 @@ const CheckIfActive = () => {
 
     React.useEffect(() => {
         let state = localStorage.getItem('state');
+        if(state == null){
+            console.log("state null")
+            localStorage.removeItem('token');
+            navigate('/');
+        }
         if(state !== 'ACTIVE') {
+            console.log("nactive");
             //O utilizador nao tem uma conta ativa
-            console.log("Not active")
             localStorage.removeItem('token');
             localStorage.removeItem('state');
             navigate('/wait-for-verif');

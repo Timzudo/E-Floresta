@@ -6,6 +6,7 @@ import React from 'react';
 
 const TopBar = () => {
     const navigate = useNavigate();
+    const role = localStorage.getItem('role') != null?localStorage.getItem('role'):'MISSING';
     return (
         <div className="topBar_top">
 
@@ -18,7 +19,7 @@ const TopBar = () => {
                     <Button id="option1">Página Inicial</Button>
                 </Link>
 
-                {localStorage.getItem('role').includes("A")?
+                {role.includes("A")?
                     <Dropdown>
                         <Dropdown.Toggle className="dropdown_TopBar">
                             Parcelas
@@ -32,7 +33,7 @@ const TopBar = () => {
                     </Dropdown>
                  : <></>}
 
-                {localStorage.getItem('role').includes("B")?
+                {role.includes("B")?
                     <Dropdown>
                         <Dropdown.Toggle className="dropdown_TopBar">
                             Parcelas
@@ -46,48 +47,48 @@ const TopBar = () => {
                     </Dropdown>
                     : <></>}
 
-                {localStorage.getItem('role') === 'D' ? <Link to="/map">
+                {role === 'D' ? <Link to="/map">
                     <Button id="option2">Registar Parcela</Button>
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role') === 'D' ? <Link to="/my-parcels">
+                {role === 'D' ? <Link to="/my-parcels">
                     <Button id="option3">Minhas Parcelas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') === 'C' ? <Link to="/parcels-entity">
+                {role === 'C' ? <Link to="/parcels-entity">
                     <Button id="option5">Minhas Parcelas</Button>
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role') === 'C' ? <Link to="/proposed-parcels-entity">
+                {role === 'C' ? <Link to="/proposed-parcels-entity">
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role').includes('A') || localStorage.getItem('role').includes('B') ? <Link to="/reports-technician">
+                {role.includes('A') || role.includes('B') ? <Link to="/reports-technician">
                     <Button id="option13">Denúncias</Button>
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role').includes('A') ? <Link to="/find-user">
+                {role.includes('A') ? <Link to="/find-user">
                     <Button id="option19">Encontrar Utilizador</Button>
                 </Link> : <></>}
 
 
-                {localStorage.getItem('role').includes('D') ? <Link to="/statistics">
+                {role.includes('D') ? <Link to="/statistics">
                     <Button id="option9">Estatísticas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role') === 'C' ? <Link to="/statistics-entity">
+                {role === 'C' ? <Link to="/statistics-entity">
                     <Button id="option11">Estatísticas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('B') ? <Link to="/statistics-technician">
+                {role.includes('B') ? <Link to="/statistics-technician">
                     <Button id="option14">Estatísticas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('A') ? <Link to="/statistics-admin">
+                {role.includes('A') ? <Link to="/statistics-admin">
                     <Button id="option12">Estatísticas</Button>
                 </Link> : <></>}
 

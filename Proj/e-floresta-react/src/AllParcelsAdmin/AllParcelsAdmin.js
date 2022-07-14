@@ -59,23 +59,35 @@ const AllParcelsAdmin = () => {
 
     function handleSetDistrito(distrito){
         setDistrito(distrito);
-        let listC = Object.keys(objCSV[distrito]);
+        if(distrito !== '-'){
+            let listC = Object.keys(objCSV[distrito]);
 
-        let list = [];
-        for(let i = 0; i<listC.length; i++){
-            list.push(<option>{listC[i]}</option>);
+            let list = [];
+            for(let i = 0; i<listC.length; i++){
+                list.push(<option>{listC[i]}</option>);
+            }
+            setConcelhoOptions(list);
         }
-        setConcelhoOptions(list);
+        else{
+            setConcelhoOptions([]);
+        }
+
         setFreguesiaOptions([]);
     }
 
     function handleSetConcelho(concelho){
-        let listF = Object.keys(objCSV[distrito][concelho]);
-        let list = [];
-        for(let i = 0; i<listF.length; i++){
-            list.push(<option>{listF[i]}</option>);
+        if(concelho !== '-'){
+            let listF = Object.keys(objCSV[distrito][concelho]);
+            let list = [];
+            for(let i = 0; i<listF.length; i++){
+                list.push(<option>{listF[i]}</option>);
+            }
+            setFreguesiaOptions(list);
         }
-        setFreguesiaOptions(list);
+        else{
+            setFreguesiaOptions([]);
+        }
+
     }
 
 
@@ -180,7 +192,7 @@ const AllParcelsAdmin = () => {
                     <Col>
                         <Form.Group className="mt-3" controlId="dropdown-distrito_AllParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
-                                <option disabled={true} value="-">Distrito</option>
+                                <option value="-">Todos os Distritos</option>
                                 {distritoList}
                             </Form.Select>
                         </Form.Group>
@@ -189,7 +201,7 @@ const AllParcelsAdmin = () => {
                     <Col>
                         <Form.Group className="mt-3" controlId="dropdown-concelho_AllParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
-                                <option disabled={true} value="-">Concelho</option>
+                                <option value="-">Todos os Concelhos</option>
                                 {concelhoOptions}
                             </Form.Select>
                         </Form.Group>
@@ -198,7 +210,7 @@ const AllParcelsAdmin = () => {
                     <Col>
                         <Form.Group className="mt-3" controlId="dropdown-freg_AllParcelsAdmin">
                             <Form.Select defaultValue="-" className="map_fields">
-                                <option value="-">Freguesia</option>
+                                <option value="-">Todas as Freguesias</option>
                                 {freguesiaOptions}
                             </Form.Select>
                         </Form.Group>

@@ -698,7 +698,7 @@ public class ParcelResource {
                     .set("parcel_requested_manager", "")
                     .build();
 
-            user = Entity.newBuilder(parcel)
+            user = Entity.newBuilder(user)
                     .set("user_total_parcel_area", user.getLong("user_total_parcel_area")+area)
                     .set("user_parcel_count", user.getLong("user_parcel_count")+1)
                     .build();
@@ -944,12 +944,16 @@ public class ParcelResource {
                         .build();
                 Key ownerKey = datastore.newKeyFactory().setKind("User").newKey(parcel.getString("parcel_owner"));
                 Entity owner = datastore.get(ownerKey);
-                owner = Entity.newBuilder(owner)
-                        .set("user_total_parcel_area", user.getLong("user_total_parcel_area")-parcel.getLong("parcel_area"))
-                        .set("user_parcel_count", user.getLong("user_parcel_count")-1)
-                        .build();
 
-                txn.update(owner);
+                if(parcel.getString("parcel_state").equals("APPROVED")){
+                    owner = Entity.newBuilder(owner)
+                            .set("user_total_parcel_area", user.getLong("user_total_parcel_area")-parcel.getLong("parcel_area"))
+                            .set("user_parcel_count", user.getLong("user_parcel_count")-1)
+                            .build();
+
+                    txn.update(owner);
+                }
+
                 txn.update(parcel);
                 txn.commit();
             }
@@ -1024,12 +1028,14 @@ public class ParcelResource {
 
                 Key ownerKey = datastore.newKeyFactory().setKind("User").newKey(parcel.getString("parcel_owner"));
                 Entity owner = datastore.get(ownerKey);
-                owner = Entity.newBuilder(owner)
-                        .set("user_total_parcel_area", user.getLong("user_total_parcel_area")-parcel.getLong("parcel_area"))
-                        .set("user_parcel_count", user.getLong("user_parcel_count")-1)
-                        .build();
+                if(parcel.getString("parcel_state").equals("APPROVED")){
+                    owner = Entity.newBuilder(owner)
+                            .set("user_total_parcel_area", user.getLong("user_total_parcel_area")-parcel.getLong("parcel_area"))
+                            .set("user_parcel_count", user.getLong("user_parcel_count")-1)
+                            .build();
 
-                txn.update(owner);
+                    txn.update(owner);
+                }
                 txn.update(parcel);
                 txn.commit();
             }
@@ -1562,24 +1568,42 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        StructuredQuery.CompositeFilter filter;
-
-        if(freguesia.equals("-")){
-            filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"),
-                                                            StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
-                                                            StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho));
+        Query<Entity> query;
+        
+        if(!distrito.equals("-")){
+            StructuredQuery.CompositeFilter filter;
+            if(!concelho.equals("-")){
+                if(!freguesia.equals("-")){
+                    filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"),
+                            StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
+                            StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho),
+                            StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia)); 
+                }
+                else{
+                    filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"),
+                            StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
+                            StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho));
+                }
+            }
+            else{
+                filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"),
+                        StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito));
+            }
+            query = Query.newEntityQueryBuilder()
+                    .setKind("Parcel")
+                    .setFilter(filter)
+                    .setLimit(50)
+                    .build();
         }
         else{
-            filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING"),
-                    StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
-                    StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho),
-                    StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia));
+            StructuredQuery.PropertyFilter filter;
+            filter = StructuredQuery.PropertyFilter.eq("parcel_state", "PENDING");
+            query = Query.newEntityQueryBuilder()
+                    .setKind("Parcel")
+                    .setFilter(filter)
+                    .setLimit(50)
+                    .build();
         }
-
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("Parcel")
-                .setFilter(filter)
-                .build();
 
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
@@ -1712,24 +1736,42 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).entity("Invalid token.").build();
         }
 
-        StructuredQuery.CompositeFilter filter;
+        Query<Entity> query;
 
-        if(freguesia.equals("-")){
-            filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED"),
-                    StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
-                    StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho));
+        if(!distrito.equals("-")){
+            StructuredQuery.CompositeFilter filter;
+            if(!concelho.equals("-")){
+                if(!freguesia.equals("-")){
+                    filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED"),
+                            StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
+                            StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho),
+                            StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia));
+                }
+                else{
+                    filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED"),
+                            StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
+                            StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho));
+                }
+            }
+            else{
+                filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED"),
+                        StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito));
+            }
+            query = Query.newEntityQueryBuilder()
+                    .setKind("Parcel")
+                    .setFilter(filter)
+                    .setLimit(50)
+                    .build();
         }
         else{
-            filter = StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED"),
-                    StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito),
-                    StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho),
-                    StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia));
+            StructuredQuery.PropertyFilter filter;
+            filter = StructuredQuery.PropertyFilter.eq("parcel_state", "APPROVED");
+            query = Query.newEntityQueryBuilder()
+                    .setKind("Parcel")
+                    .setFilter(filter)
+                    .setLimit(50)
+                    .build();
         }
-
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("Parcel")
-                .setFilter(filter)
-                .build();
 
 
         QueryResults<Entity> parcelListQuery = datastore.run(query);
@@ -1821,6 +1863,9 @@ public class ParcelResource {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
 
+        Key ownerKey = datastore.newKeyFactory().setKind("User").newKey(parcel.getString("parcel_owner"));
+        Entity owner = datastore.get(ownerKey);
+
 
         Transaction txn = datastore.newTransaction();
 
@@ -1829,12 +1874,12 @@ public class ParcelResource {
                     .set("parcel_state", "APPROVED")
                     .build();
 
-            user = Entity.newBuilder(user)
+            owner =  Entity.newBuilder(owner)
                     .set("user_total_parcel_area", user.getLong("user_total_parcel_area")+parcel.getLong("parcel_area"))
                     .set("user_parcel_count", user.getLong("user_parcel_count")+1)
                     .build();
 
-            txn.update(user);
+            txn.update(owner);
             txn.update(parcel);
             txn.commit();
             return Response.ok("Manager added successfully.").build();
@@ -1986,7 +2031,7 @@ public class ParcelResource {
                         .build();
                 txn.update(manager);
             }
-            if(parcel.getString("parcel_state").equals("ACTIVE")){
+            if(parcel.getString("parcel_state").equals("APPROVED")){
                 Key ownerKey = datastore.newKeyFactory().setKind("User").newKey(parcel.getString("parcel_owner"));
                 Entity owner = datastore.get(ownerKey);
 
