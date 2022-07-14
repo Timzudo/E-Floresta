@@ -113,7 +113,7 @@ const TopBar = () => {
 
                 <Dropdown.Menu className="dropdown-content_TopBar">
                     <Dropdown.Item onClick={() => navigate("/profile")}>Perfil</Dropdown.Item>
-                    <Dropdown.Item onClick={() => {localStorage.removeItem('token'); navigate("/")}}><b>Encerrar sessão</b></Dropdown.Item>
+                    <Dropdown.Item onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('role'); localStorage.removeItem('state'); navigate("/")}}><b>Encerrar sessão</b></Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 

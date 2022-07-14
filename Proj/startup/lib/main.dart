@@ -617,7 +617,7 @@ class _ParcelListState extends State<ParcelList> {
 
                     saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.file_copy, color: Colors.white)),
+                  icon: const Icon(Icons.download, color: Colors.white)),
             );
           }),
       floatingActionButton: FloatingActionButton(

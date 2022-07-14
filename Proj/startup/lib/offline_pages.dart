@@ -155,7 +155,7 @@ class _OfflineParcelsState extends State<OfflineParcels> {
                       );
                       Clipboard.setData(ClipboardData(
                           text:
-                          'https://moonlit-oven-349523.appspot.com/map?coords=${jsonEncode(parcelList[index]['coordinates'])}'));
+                          'https://moonlit-oven-349523.appspot.com/map?coords=${base64.encode(utf8.encode(jsonEncode(parcelList[index]['coordinates'])))}'));
                     },
                     icon: const Icon(Icons.file_copy, color: Colors.white))
               ],
@@ -325,7 +325,6 @@ void saveOfflineParcel(List<LatLng> pointList, BuildContext context) async {
     onPressed: () {
       Future<void> v = saveParcel();
       v.whenComplete(() => {
-        Navigator.of(context).pop(),
         Navigator.of(context).pop(),
         Navigator.push(
           context,

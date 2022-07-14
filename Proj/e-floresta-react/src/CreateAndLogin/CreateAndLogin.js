@@ -49,6 +49,7 @@ const CreateAndLogin = () => {
 
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
+          localStorage.setItem('state', obj["state"]);
           navigate('/homepage');
         } else if(xmlhttp.status === 403) {
           alert("O username ou a password introduzidas estão erradas.");
@@ -93,6 +94,7 @@ const CreateAndLogin = () => {
           alert("Registo efetuado com sucesso.");
           localStorage.setItem('token', token);
           localStorage.setItem('role', obj["role"]);
+          localStorage.setItem('state', 'INACTIVE');
           navigate('/homepage');
         } else if(xmlhttp.status === 400) {
           alert("Todos os campos obrigatórios devem ser preenchidos corretamente.");

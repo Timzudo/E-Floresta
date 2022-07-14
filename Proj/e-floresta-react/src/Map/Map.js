@@ -7,9 +7,10 @@ import "./Map.css"
 import {Button, Form} from "react-bootstrap";
 import {getAreaOfPolygon, getDistance, getPathLength} from 'geolib';
 import CSVConverter from "../util/CSVConverter";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const google = window.google;
+const googlemapswindow = google.maps;
 
 const containerStyle = {
     width: '75vw',
@@ -36,6 +37,9 @@ const options = {
 
 
 const Map = () => {
+    const role = localStorage.getItem('role');
+    const search = useLocation().search;
+    const queryCoords = new URLSearchParams(search).get('coords');
     const navigate = useNavigate();
     const obj = JSON.parse(localStorage.getItem('csv'));
     const distritos = Object.keys(obj);
@@ -141,6 +145,41 @@ const Map = () => {
         setArea(Math.round(getAreaOfPolygon(paths)));
     }, [paths]);
 
+    React.useEffect(() => {
+        if(queryCoords != null){
+            try {
+                const queryCoordsObj = JSON.parse(atob(queryCoords));
+                console.log(queryCoordsObj);
+                let arr1 = [];
+                let arr2 = [];
+                for(let i = 0; i<queryCoordsObj.length-1; i++){
+                    arr1.push(<Marker key={i} id={i}
+                                      position={{
+                                          lat: queryCoordsObj[i].lat,
+                                          lng: queryCoordsObj[i].lng
+                                      }}
+                                      icon={{
+                                          path: googlemapswindow.SymbolPath.CIRCLE,
+                                          fillColor: "#ff8000",
+                                          fillOpacity: 1.0,
+                                          strokeWeight: 0,
+                                          scale: 5
+                                      }}/>)
+                    arr2.push({
+                        lat: queryCoordsObj[i].lat,
+                        lng: queryCoordsObj[i].lng
+                    });
+                }
+                setMarker(arr1);
+                setPaths(arr2);
+            }
+            catch (e){
+                console.log(e);
+            }
+
+        }
+    }, []);
+
 
     function addMarker(lat, lng) {
         const google = window.google;
@@ -195,7 +234,13 @@ const Map = () => {
             }
         }
 
+        let url = "https://moonlit-oven-349523.appspot.com/rest/parcel/register";
+
         f.append('token', localStorage.getItem('token'));
+        if(role !== 'D'){
+            f.append('owner', document.getElementById("formOwnerName").value);
+            url = "https://moonlit-oven-349523.appspot.com/rest/parcel/register";
+        }
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
         f.append('concelho', document.getElementById("formConcelhoDropdown").value);
@@ -213,7 +258,7 @@ const Map = () => {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
-        xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/register", true);
+        xmlhttp.open("POST", url, true);
         xmlhttp.send(f);
     }
 
@@ -273,6 +318,11 @@ const Map = () => {
 
                 <div className="submit_Map">
                     <Form onSubmit={submitHandler}>
+                        {role === "D"?<></>:<Form.Group className="mt-3" controlId="formOwnerName">
+                            <Form.Label> <strong>Nome do Dono</strong> </Form.Label>
+                            <Form.Control className="map_fields" required type="text" placeholder="Nome do Dono" />
+                        </Form.Group>}
+
                         <Form.Group className="mt-3" controlId="formParcelName">
                             <Form.Label> <strong>Nome da Parcela</strong> </Form.Label>
                             <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" maxLength="64"/>
