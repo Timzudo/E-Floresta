@@ -1,6 +1,7 @@
 import './FAQUnlogged.css'
 import React from 'react'
-import {Accordion} from "react-bootstrap";
+import {Accordion, Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 const FAQUnlogged = () => {
     return(
@@ -43,6 +44,13 @@ const FAQUnlogged = () => {
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
+
+                    <div className="button_FAQUnlogged">
+                        <Link to="/">
+                            <Button id="faqButton" type="button">Voltar à página inicial</Button>
+                        </Link>
+                    </div>
+
                 </div>
             </div>
 

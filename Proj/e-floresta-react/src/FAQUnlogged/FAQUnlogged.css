@@ -52,3 +52,21 @@ body,html{
 .accordion-button:not(.collapsed) {
     color: #212529;
 }
+
+.button_FAQUnlogged button{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: #b0c090;
+    text-align: center;
+    cursor: pointer;
+    transform: translate(160%, 10%);
+}
+
+.button_FAQUnlogged button:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+}
+
