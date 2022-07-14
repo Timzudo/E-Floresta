@@ -33,7 +33,7 @@ body{
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    gap: 120px;
+    gap: 90px;
 }
 
 .session-body .create-account,
@@ -42,7 +42,7 @@ body{
     flex-direction: column;
     align-items: center;
     color: dimgrey;
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 .session-body .session-form {
@@ -59,7 +59,7 @@ body{
 .session-body .division{
     background-color: darkgrey;
     padding: 0.8px;
-    height: 470px;
+    height: 500px;
     margin-top: 50px;
 }
 
@@ -69,8 +69,21 @@ body{
     border-radius: 0.25rem;
 }
 
+.session-body .create-form-special-outside {
+    margin-bottom: 8px;
+}
+
+.create-form-special-inside {
+    border: 0.3px solid black;
+    border-radius: 0.25rem;
+}
+
 .create-account form{
     margin-top: 8px;
+}
+
+.green-text{
+    color: #3E503A;
 }
 
 .session-body button{

@@ -184,8 +184,7 @@ const CreateAndLogin = () => {
           <div className="create-account">
 
             <h2 className="align-content"><b>Registe-se</b></h2>
-            <p className="align-content">Ainda não tem conta?</p>
-            <p className="align-content">Registe-se agora!</p>
+            <p className="align-content">Ainda não tem conta? Registe-se agora!</p>
 
             <Form onSubmit={submitHandler}>
               <Form.Group className="create-form" >
@@ -200,13 +199,18 @@ const CreateAndLogin = () => {
                 <Form.Control required type="text" placeholder="Nome Completo" id="create-acc-name" maxLength="64"/>
               </Form.Group>
 
-              <Form.Group className="create-form" >
-                <Form.Control required type="password" placeholder="Palavra-Passe" id="create-acc-pass" maxLength="64"/>
+              <Form.Group className="create-form-special-outside" >
+                <Form.Control className="create-form-special-inside"  required type="password" placeholder="Palavra-Passe" id="create-acc-pass" maxLength="64"/>
+                <Form.Text className="text-muted">
+                  Deve conter no mínimo 6 caracteres.
+                </Form.Text>
               </Form.Group>
 
               <Form.Group className="create-form" >
                 <Form.Control required type="password" placeholder="Confirmar Palavra-Passe" id="create-acc-conf-pass" maxLength="64"/>
               </Form.Group>
+
+              <p className="green-text"><b>Campos opcionais:</b></p>
 
               <Form.Group className="create-form" >
                 <Form.Control placeholder="Telemóvel/Telefone" maxLength="9" id="create-acc-phone" />
@@ -216,7 +220,7 @@ const CreateAndLogin = () => {
                 <Form.Control placeholder="NIF" maxLength="9" id="create-acc-nif" />
               </Form.Group>
 
-              <Form.Group className="mt-3" controlId="create_form">
+              <Form.Group className="mt-2" controlId="create_form">
                 <Form.Select onChange={(event) => setType(event.target.value)}  defaultValue={"personal"} className="map_fields">
                   <option value="personal">Pessoal</option>
                   <option value="entity">Entidade</option>
@@ -225,7 +229,7 @@ const CreateAndLogin = () => {
 
               {type === 'entity'?<><Form.Group className="mt-3" controlId="create_form_distrito">
                                   <Form.Select defaultValue='' onChange={(event) => handleSetDistrito(event.target.value)} className="map_fields">
-                                    <option disabled={true} value=''>-</option>
+                                    <option disabled={true} value=''>Distrito</option>
                                     {distritoList}
                                   </Form.Select>
                                 </Form.Group>
