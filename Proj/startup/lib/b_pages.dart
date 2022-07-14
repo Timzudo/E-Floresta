@@ -8,8 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startup/c_pages.dart';
+import 'main.dart';
 import 'offline_pages.dart';
-
 
 class ParcelListB extends StatefulWidget {
   const ParcelListB({super.key});
@@ -30,6 +30,7 @@ class _ParcelListStateB extends State<ParcelListB> {
   Future<List<dynamic>> getOwned() async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? "";
+    final String state = prefs.getString('state') ?? "";
 
     final response = await http.post(
       Uri.parse(
@@ -45,6 +46,38 @@ class _ParcelListStateB extends State<ParcelListB> {
       map = jsonDecode(utf8.decode(response.bodyBytes));
       parcelList = map;
     } else {
+      String title;
+      String msg;
+      if(state == "ACTIVE"){
+        title = 'Sessão expirada';
+        msg = 'Volte a iniciar sessão.';
+      }
+      else{
+        title = 'Conta inativa';
+        msg = 'Confirme o seu e-mail para continuar ou aguarde que a sua conta seja ativada.';
+      }
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: [
+          okButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
       map = response.statusCode;
     }
 
@@ -54,23 +87,24 @@ class _ParcelListStateB extends State<ParcelListB> {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove('role');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Parcelas Técnico"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  logout();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.exit_to_app_rounded))
-          ],
-        ),
+        title: const Text("Parcelas Técnico"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                logout();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.exit_to_app_rounded))
+        ],
+      ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
@@ -78,7 +112,7 @@ class _ParcelListStateB extends State<ParcelListB> {
             if (i.isOdd) return const Divider();
             final index = i ~/ 2;
             return ListTile(
-              leading: const Icon(Icons.landscape_outlined),
+              leading: getIcon(parcelList[index]['usage']),
               title: Text(parcelList[index]['name']),
               tileColor: Colors.green,
               textColor: Colors.white,
@@ -101,7 +135,8 @@ class _ParcelListStateB extends State<ParcelListB> {
               },
               trailing: IconButton(
                   onPressed: () {
-                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<dynamic> coordsList =
+                    jsonDecode(parcelList[index]['coordinates']);
                     List<LatLng> polygonCoords = [];
 
                     for (int i = 0; i < coordsList.length; i++) {
@@ -111,7 +146,7 @@ class _ParcelListStateB extends State<ParcelListB> {
 
                     saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.download)),
+                  icon: const Icon(Icons.download, color: Colors.white)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -127,7 +162,7 @@ class _ParcelListStateB extends State<ParcelListB> {
           )
         },
         heroTag: null,
-        child: const Icon(Icons.map),
+        child: const Icon(Icons.wifi_off),
       ),
     );
   }
@@ -191,7 +226,7 @@ class _MapStateB extends State<MapB> {
           automaticallyImplyLeading: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.edit),
               onPressed: () => {
                 Navigator.push(
                     context,
@@ -401,7 +436,7 @@ class _EditMapStateB extends State<EditMapB> {
             automaticallyImplyLeading: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.check_box_rounded),
                 onPressed: () => {confirmRequest()},
               ),
               // add more IconButton
@@ -451,7 +486,7 @@ class _EditMapStateB extends State<EditMapB> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: addPoint,
-                    icon: const Icon(Icons.add_box_rounded)),
+                    icon: const Icon(Icons.add_location_alt_rounded)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -459,57 +494,11 @@ class _EditMapStateB extends State<EditMapB> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: removePoint,
-                    icon: const Icon(Icons.assignment_return_rounded)),
+                    icon: const Icon(Icons.undo)),
               ),
               const Center(child: Icon(Icons.adjust)),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
-                child: IconButton(
-                    iconSize: 40.0,
-                    onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ShowCoordsB(pointList)))
-                    },
-                    icon: const Icon(Icons.save)),
-              )
             ],
           )),
-    );
-  }
-}
-
-class ShowCoordsB extends StatelessWidget {
-  const ShowCoordsB(this.coords);
-
-  final List<LatLng> coords;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lista de pontos"),
-      ),
-      body: ListView.builder(
-        itemCount: coords.isNotEmpty ? coords.length * 2 : 0,
-        itemBuilder: (context, i) {
-          if (i.isOdd) return const Divider();
-          final index = i ~/ 2;
-          double lat =
-          double.parse((coords[index].latitude).toStringAsFixed(6));
-          double lng =
-          double.parse((coords[index].longitude).toStringAsFixed(6));
-          return ListTile(
-            leading: const Icon(Icons.landscape_outlined),
-            title: Text((index + 1).toString()),
-            tileColor: Colors.green,
-            textColor: Colors.white,
-            subtitle: Text("Lat: $lat \nLng: $lng"),
-          );
-        },
-      ),
     );
   }
 }

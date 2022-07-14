@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 import 'offline_pages.dart';
-
 
 class ParcelListC extends StatefulWidget {
   const ParcelListC({super.key});
@@ -28,10 +28,10 @@ class _ParcelListStateC extends State<ParcelListC> {
   Future<List<dynamic>> getOwned() async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? "";
+    final String state = prefs.getString('state') ?? "";
 
     final response = await http.post(
-      Uri.parse(
-          'https://moonlit-oven-349523.appspot.com/rest/parcel/managed/'),
+      Uri.parse('https://moonlit-oven-349523.appspot.com/rest/parcel/managed/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -43,6 +43,38 @@ class _ParcelListStateC extends State<ParcelListC> {
       map = jsonDecode(utf8.decode(response.bodyBytes));
       parcelList = map;
     } else {
+      String title;
+      String msg;
+      if(state == "ACTIVE"){
+        title = 'Sessão expirada';
+        msg = 'Volte a iniciar sessão.';
+      }
+      else{
+        title = 'Conta inativa';
+        msg = 'Confirme o seu e-mail para continuar ou aguarde que a sua conta seja ativada.';
+      }
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: const Text("Sessão expirada"),
+        content: const Text("Volte a iniciar sessão ou confirme o seu e-mail."),
+        actions: [
+          okButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
       map = response.statusCode;
     }
 
@@ -52,32 +84,32 @@ class _ParcelListStateC extends State<ParcelListC> {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    await prefs.remove('role');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Parcelas Entidade"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  logout();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.exit_to_app_rounded))
-          ],
-        ),
-      body:
-      ListView.builder(
+        title: const Text("Parcelas Entidade"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                logout();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.exit_to_app_rounded))
+        ],
+      ),
+      body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
           itemBuilder: (context, i) {
             if (i.isOdd) return const Divider();
             final index = i ~/ 2;
             return ListTile(
-              leading: const Icon(Icons.landscape_outlined),
+              leading: getIcon(parcelList[index]['usage']),
               title: Text(parcelList[index]['name']),
               tileColor: Colors.green,
               textColor: Colors.white,
@@ -100,7 +132,8 @@ class _ParcelListStateC extends State<ParcelListC> {
               },
               trailing: IconButton(
                   onPressed: () {
-                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<dynamic> coordsList =
+                    jsonDecode(parcelList[index]['coordinates']);
                     List<LatLng> polygonCoords = [];
 
                     for (int i = 0; i < coordsList.length; i++) {
@@ -110,7 +143,10 @@ class _ParcelListStateC extends State<ParcelListC> {
 
                     saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.download)),
+                  icon: const Icon(
+                    Icons.download,
+                    color: Colors.white,
+                  )),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -126,7 +162,7 @@ class _ParcelListStateC extends State<ParcelListC> {
           )
         },
         heroTag: null,
-        child: const Icon(Icons.map),
+        child: const Icon(Icons.wifi_off),
       ),
     );
   }

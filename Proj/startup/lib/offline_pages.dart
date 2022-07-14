@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,11 +12,13 @@ import 'dart:ui' as ui;
 
 Future<Uint8List?> getBytesFromAsset(String path, int width) async {
   ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetWidth: width);
   ui.FrameInfo fi = await codec.getNextFrame();
-  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))?.buffer.asUint8List();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+      ?.buffer
+      .asUint8List();
 }
-
 
 class OfflineScreen extends StatelessWidget {
   const OfflineScreen({Key? key}) : super(key: key);
@@ -104,7 +107,8 @@ class _OfflineParcelsState extends State<OfflineParcels> {
           if (i.isOdd) return const Divider();
           final index = i ~/ 2;
           return ListTile(
-            leading: const Icon(Icons.landscape_outlined),
+            leading: const Icon(Icons.landscape_outlined,
+                color: Colors.white),
             title: Text(parcelList[index]['name'].split("_")[1]),
             tileColor: Colors.green,
             textColor: Colors.white,
@@ -118,6 +122,44 @@ class _OfflineParcelsState extends State<OfflineParcels> {
                         coordsList: (parcelList[index]['coordinates'])),
                   ));
             },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      removeParcel(parcelList[index]['name']);
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DefaultTabController(
+                            length: 2,
+                            child: OfflineScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.white)),
+                const SizedBox(
+                  width: 40.0,
+                ),
+                IconButton(
+                    onPressed: () {
+                      Fluttertoast.showToast(
+                        msg: "URL copiado",
+                        toastLength: Toast.LENGTH_LONG,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                      Clipboard.setData(ClipboardData(
+                          text:
+                          'https://moonlit-oven-349523.appspot.com/map?coords=${jsonEncode(parcelList[index]['coordinates'])}'));
+                    },
+                    icon: const Icon(Icons.file_copy, color: Colors.white))
+              ],
+            ),
           );
         },
       ),
@@ -139,7 +181,6 @@ class _OfflineMapState extends State<OfflineMap> {
     mapController = controller;
   }
 
-
   List<LatLng> pointList = [];
   LatLng _lastMapPosition = const LatLng(38.660787, -9.207663);
   MapType _currentMapType = MapType.normal;
@@ -158,6 +199,9 @@ class _OfflineMapState extends State<OfflineMap> {
   }
 
   void addPoint() {
+    LatLng pos = LatLng(
+        double.parse(_lastMapPosition.latitude.toStringAsFixed(6)),
+        double.parse(_lastMapPosition.longitude.toStringAsFixed(6)));
     pointList.add(_lastMapPosition);
     setState(() {
       _currentMapType = _currentMapType;
@@ -219,7 +263,7 @@ class _OfflineMapState extends State<OfflineMap> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: addPoint,
-                    icon: const Icon(Icons.add_box_rounded)),
+                    icon: const Icon(Icons.add_location_alt_rounded)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -227,12 +271,12 @@ class _OfflineMapState extends State<OfflineMap> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: removePoint,
-                    icon: const Icon(Icons.assignment_return_rounded)),
+                    icon: const Icon(Icons.undo)),
               ),
               const Center(child: Icon(Icons.adjust)),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
+                const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: () => {saveOfflineParcel(pointList, context)},
@@ -269,7 +313,9 @@ void saveOfflineParcel(List<LatLng> pointList, BuildContext context) async {
         parcelList = "";
       }
       List newList = parcelList.isEmpty ? [] : jsonDecode(parcelList);
-      newList.add("offline_$name");
+      if(!newList.contains("offline_$name")){
+        newList.add("offline_$name");
+      }
       await prefs.setString("offline", jsonEncode(newList));
     }
   }
@@ -279,17 +325,17 @@ void saveOfflineParcel(List<LatLng> pointList, BuildContext context) async {
     onPressed: () {
       Future<void> v = saveParcel();
       v.whenComplete(() => {
-            Navigator.of(context).pop(),
-            Navigator.of(context).pop(),
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const DefaultTabController(
-                        length: 2,
-                        child: OfflineScreen(),
-                      )),
-            )
-          });
+        Navigator.of(context).pop(),
+        Navigator.of(context).pop(),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const DefaultTabController(
+                length: 2,
+                child: OfflineScreen(),
+              )),
+        )
+      });
     },
   );
 
@@ -317,9 +363,9 @@ class MapO extends StatefulWidget {
 
   const MapO(
       {Key? key,
-      required this.lat,
-      required this.lng,
-      required this.coordsList})
+        required this.lat,
+        required this.lng,
+        required this.coordsList})
       : super(key: key);
 
   @override

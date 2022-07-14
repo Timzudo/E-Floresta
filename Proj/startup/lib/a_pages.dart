@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startup/c_pages.dart';
+import 'main.dart';
 import 'offline_pages.dart';
 
 class ParcelListA extends StatefulWidget {
@@ -90,6 +91,7 @@ class _ParcelListStateA extends State<ParcelListA> {
       String distrito, String concelho, String freguesia) async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? "";
+    final String state = prefs.getString('state') ?? "";
 
     final response = await http.post(
       Uri.parse(
@@ -105,6 +107,38 @@ class _ParcelListStateA extends State<ParcelListA> {
       map = jsonDecode(utf8.decode(response.bodyBytes));
       parcelList = map;
     } else {
+      String title;
+      String msg;
+      if(state == "ACTIVE"){
+        title = 'Sessão expirada';
+        msg = 'Volte a iniciar sessão.';
+      }
+      else{
+        title = 'Conta inativa';
+        msg = 'Confirme o seu e-mail para continuar ou aguarde que a sua conta seja ativada.';
+      }
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: [
+          okButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
       map = response.statusCode;
     }
 
@@ -164,9 +198,9 @@ class _ParcelListStateA extends State<ParcelListA> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.add_circle),
+            icon: const Icon(Icons.search),
             onPressed: () =>
-                {getOwned(distrito.text, concelho.text, freguesia.text)},
+            {getOwned(distrito.text, concelho.text, freguesia.text)},
           )
         ],
       ),
@@ -177,7 +211,7 @@ class _ParcelListStateA extends State<ParcelListA> {
             if (i.isOdd) return const Divider();
             final index = i ~/ 2;
             return ListTile(
-              leading: const Icon(Icons.landscape_outlined),
+              leading: getIcon(parcelList[index]['usage']),
               title: Text(parcelList[index]['name']),
               tileColor: Colors.green,
               textColor: Colors.white,
@@ -187,20 +221,21 @@ class _ParcelListStateA extends State<ParcelListA> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => MapA(
-                            lat: 39.137251,
-                            lng: -8.378835,
-                            coordsList:
-                                jsonDecode(parcelList[index]['coordinates']),
-                            parcelName: parcelList[index]['name'],
-                            parcelID: (parcelList[index]['owner'] +
-                                '_' +
-                                parcelList[index]['name']),
-                          )),
+                        lat: 39.137251,
+                        lng: -8.378835,
+                        coordsList:
+                        jsonDecode(parcelList[index]['coordinates']),
+                        parcelName: parcelList[index]['name'],
+                        parcelID: (parcelList[index]['owner'] +
+                            '_' +
+                            parcelList[index]['name']),
+                      )),
                 );
               },
               trailing: IconButton(
                   onPressed: () {
-                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<dynamic> coordsList =
+                    jsonDecode(parcelList[index]['coordinates']);
                     List<LatLng> polygonCoords = [];
 
                     for (int i = 0; i < coordsList.length; i++) {
@@ -210,7 +245,7 @@ class _ParcelListStateA extends State<ParcelListA> {
 
                     saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.download)),
+                  icon: const Icon(Icons.download, color: Colors.white)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -226,7 +261,7 @@ class _ParcelListStateA extends State<ParcelListA> {
           )
         },
         heroTag: null,
-        child: const Icon(Icons.map),
+        child: const Icon(Icons.wifi_off),
       ),
     );
   }
@@ -241,11 +276,11 @@ class MapA extends StatefulWidget {
 
   const MapA(
       {Key? key,
-      required this.lat,
-      required this.lng,
-      required this.coordsList,
-      required this.parcelName,
-      required this.parcelID})
+        required this.lat,
+        required this.lng,
+        required this.coordsList,
+        required this.parcelName,
+        required this.parcelID})
       : super(key: key);
 
   @override
@@ -290,7 +325,7 @@ class _MapStateA extends State<MapA> {
           automaticallyImplyLeading: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.edit_outlined),
               onPressed: () => {
                 Navigator.push(
                     context,
@@ -338,9 +373,9 @@ class EditMapA extends StatefulWidget {
   final List<dynamic> coordsList;
   const EditMapA(
       {Key? key,
-      required this.parcelName,
-      required this.parcelID,
-      required this.coordsList})
+        required this.parcelName,
+        required this.parcelID,
+        required this.coordsList})
       : super(key: key);
 
   @override
@@ -406,23 +441,23 @@ class _EditMapStateA extends State<EditMapA> {
       child: const Text("OK"),
       onPressed: () {
         sendEditRequest().then((value) => {
-              if (value)
-                {
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DefaultTabController(
-                        length: 2,
-                        child: ParcelListA(),
-                      ),
-                    ),
-                  )
-                }
-            });
+          if (value)
+            {
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DefaultTabController(
+                    length: 2,
+                    child: ParcelListA(),
+                  ),
+                ),
+              )
+            }
+        });
       },
     );
 
@@ -450,7 +485,7 @@ class _EditMapStateA extends State<EditMapA> {
     for (var i = 0; i < pointList.length; i++) {
       if (i < pointList.length - 1) {
         area += ConvertToRadian(
-                pointList[i + 1].longitude - pointList[i].longitude) *
+            pointList[i + 1].longitude - pointList[i].longitude) *
             (sin(ConvertToRadian(pointList[i].latitude)) +
                 sin(ConvertToRadian(pointList[i + 1].latitude)));
         perimeter += sqrt(
@@ -460,13 +495,13 @@ class _EditMapStateA extends State<EditMapA> {
       c.add({'lat': pointList[i].latitude, 'lng': pointList[i].longitude});
     }
     area += ConvertToRadian(pointList[0].longitude -
-            pointList[pointList.length - 1].longitude) *
+        pointList[pointList.length - 1].longitude) *
         (sin(ConvertToRadian(pointList[pointList.length - 1].latitude)) +
             sin(ConvertToRadian(pointList[0].latitude)));
     area = area * 6378137 * 6378137 / 2;
     perimeter += sqrt(pow(
-            pointList[0].latitude - pointList[pointList.length - 1].latitude,
-            2) +
+        pointList[0].latitude - pointList[pointList.length - 1].latitude,
+        2) +
         pow(pointList[0].longitude - pointList[pointList.length - 1].longitude,
             2));
     perimeter *= 100000;
@@ -500,7 +535,7 @@ class _EditMapStateA extends State<EditMapA> {
             automaticallyImplyLeading: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.check_box_rounded),
                 onPressed: () => {confirmRequest()},
               ),
               // add more IconButton
@@ -550,7 +585,7 @@ class _EditMapStateA extends State<EditMapA> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: addPoint,
-                    icon: const Icon(Icons.add_box_rounded)),
+                    icon: const Icon(Icons.add_location_alt_rounded)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -558,22 +593,9 @@ class _EditMapStateA extends State<EditMapA> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: removePoint,
-                    icon: const Icon(Icons.assignment_return_rounded)),
+                    icon: const Icon(Icons.undo)),
               ),
-              const Center(child: Icon(Icons.adjust)),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
-                child: IconButton(
-                    iconSize: 40.0,
-                    onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ShowCoordsA(pointList)))
-                        },
-                    icon: const Icon(Icons.save)),
-              )
+              const Center(child: Icon(Icons.adjust))
             ],
           )),
     );
@@ -597,9 +619,9 @@ class ShowCoordsA extends StatelessWidget {
           if (i.isOdd) return const Divider();
           final index = i ~/ 2;
           double lat =
-              double.parse((coords[index].latitude).toStringAsFixed(6));
+          double.parse((coords[index].latitude).toStringAsFixed(6));
           double lng =
-              double.parse((coords[index].longitude).toStringAsFixed(6));
+          double.parse((coords[index].longitude).toStringAsFixed(6));
           return ListTile(
             leading: const Icon(Icons.landscape_outlined),
             title: Text((index + 1).toString()),

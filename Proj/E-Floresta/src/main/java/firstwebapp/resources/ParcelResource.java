@@ -410,7 +410,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
         return Response.ok(g.toJson(parcelList)).build();
     }
@@ -476,7 +477,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         }
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -1457,7 +1459,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
         return Response.ok(g.toJson(parcelList)).build();
     }
@@ -1528,7 +1531,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -1604,7 +1608,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -1676,7 +1681,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
 
         return Response.ok(g.toJson(parcelList)).build();
@@ -1752,7 +1758,8 @@ public class ParcelResource {
                     p.getString("parcel_state"),
                     url,
                     coordinatesString,
-                    p.getLong("parcel_area")));
+                    p.getLong("parcel_area"),
+                    p.getString("parcel_usage")));
         });
 
         return Response.ok(g.toJson(parcelList)).build();

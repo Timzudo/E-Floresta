@@ -23,12 +23,13 @@ public class JWToken {
     private static final Gson g = new Gson();
     private static final Base64 base64 = new Base64();
 
-    public static String generateToken(String username, String role){
+    public static String generateToken(String username, String role, String state){
         return JWT.create()
                 .withIssuer("E-Floresta")
                 .withExpiresAt(getDateAfterTwoWeeks(new Date()))
                 .withSubject(username)
                 .withClaim("role", role)
+                .withClaim("state", state)
                 .sign(algorithm);
     }
 
@@ -37,8 +38,7 @@ public class JWToken {
             DecodedJWT jwt = verifier.verify(token);
 
             String payload = new String(base64.decode(jwt.getPayload()));
-            TokenInfo ti = g.fromJson(payload, TokenInfo.class);
-            return ti;
+            return g.fromJson(payload, TokenInfo.class);
         }
         catch (JWTVerificationException exception){
             return null;
@@ -58,12 +58,14 @@ public class JWToken {
         public String role;
         public String iss;
         public String exp;
+        public String state;
 
-        private TokenInfo(String sub, String role, String iss, String exp){
+        private TokenInfo(String sub, String role, String iss, String exp, String state){
             this.sub = sub;
             this.role = role;
             this.iss = iss;
             this.exp = exp;
+            this.state = state;
         }
     }
 }

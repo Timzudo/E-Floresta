@@ -13,25 +13,66 @@ import 'b_pages.dart';
 import 'offline_pages.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
 
-
+Icon getIcon(String usage){
+  switch(usage){
+    case 'Recreacional':{
+      return const Icon(Icons.sports_tennis_outlined, color: Colors.white);
+    }
+    case 'Transporte':{
+      return const Icon(Icons.directions_bus, color: Colors.white);
+    }
+    break;
+    case 'Agricultural':{
+      return const Icon(Icons.agriculture_outlined, color: Colors.white);
+    }
+    break;
+    case 'Residencial':{
+      return const Icon(Icons.house_outlined, color: Colors.white);
+    }
+    break;
+    case 'Comercial':{
+      return const Icon(Icons.shopping_bag_outlined, color: Colors.white);
+    }
+    case 'Pasto':{
+      return const Icon(Icons.grass, color: Colors.white);
+    }
+    break;
+    case 'Floresta':{
+      return const Icon(Icons.forest_outlined, color: Colors.white);
+    }
+    break;
+    case 'Privado':{
+      return const Icon(Icons.sports_tennis_outlined, color: Colors.white);
+    }
+    break;
+    default: {
+      return const Icon(Icons.landscape_outlined, color: Colors.white);
+    }
+    break;
+  }
+}
 
 Future<void> requestPermissions() async {
+  Permission.location.request();
   Map<Permission, PermissionStatus> statuses = await [
-  Permission.location,
-      Permission.locationAlways,
+    Permission.location,
+    Permission.locationAlways,
     Permission.locationWhenInUse
   ].request();
 
-  if(statuses[Permission.location].toString() != 'PermissionStatus.granted' && statuses[Permission.locationAlways].toString() != 'PermissionStatus.granted' && statuses[Permission.locationWhenInUse].toString() != 'PermissionStatus.granted'){
+  if (statuses[Permission.location].toString() != 'PermissionStatus.granted' &&
+      statuses[Permission.locationAlways].toString() !=
+          'PermissionStatus.granted' &&
+      statuses[Permission.locationWhenInUse].toString() !=
+          'PermissionStatus.granted') {
     openAppSettings();
   }
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -40,13 +81,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     requestPermissions();
-    print("asd");
     super.initState();
   }
 
@@ -61,9 +99,9 @@ class _MyAppState extends State<MyApp> {
           foregroundColor: Colors.white,
         ),
       ),
-      home: const DefaultTabController(
+      home: DefaultTabController(
         length: 2,
-        child: LoginScreen(),
+        child: WillPopScope(onWillPop: () async {return false;}, child: const LoginScreen()),
       ),
     );
   }
@@ -236,8 +274,7 @@ class RegisterForm extends StatelessWidget {
 void loginRequest(
     String username, String password, BuildContext context) async {
   final response = await http.post(
-    Uri.parse(
-        'https://moonlit-oven-349523.appspot.com/rest/login/$username'),
+    Uri.parse('https://moonlit-oven-349523.appspot.com/rest/login/$username'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -256,6 +293,7 @@ void loginRequest(
     String role = jsonDecode(obj)['role'];
     await prefs.setString('role', role);
     await prefs.setString('token', token);
+    await prefs.setString('state', jsonDecode(obj)['state']);
 
     // set up the button
     Widget okButton = TextButton(
@@ -264,31 +302,28 @@ void loginRequest(
         print(role);
 
         Navigator.of(context).pop();
-        if(role == 'D'){
+        if (role == 'D') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelList(),
             ),
           );
-        }
-        else if(role == 'C'){
+        } else if (role == 'C') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelListC(),
             ),
           );
-        }
-        else if(role == 'B1' || role == 'B2'){
+        } else if (role == 'B1' || role == 'B2') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelListB(),
             ),
           );
-        }
-        else if(role == 'A1' || role == 'A2'){
+        } else if (role == 'A1' || role == 'A2') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -362,41 +397,39 @@ void registerRequest(String username, String email, String name,
   if (response.statusCode == 200) {
     final prefs = await SharedPreferences.getInstance();
     String token = response.body;
-    var decoded = base64.decode(token.split('.')[0]);
+    var decoded = base64.decode(base64.normalize(token.split('.')[1]));
     String obj = utf8.decode(decoded);
     String role = jsonDecode(obj)['role'];
     await prefs.setString('role', role);
     await prefs.setString('token', token);
+    await prefs.setString('state', 'INACTIVE');
     // set up the button
     Widget okButton = TextButton(
       child: const Text("OK"),
       onPressed: () {
         Navigator.of(context).pop();
-        if(role == 'D'){
+        if (role == 'D') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelList(),
             ),
           );
-        }
-        else if(role == 'C'){
+        } else if (role == 'C') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelListC(),
             ),
           );
-        }
-        else if(role == 'B1' || role == 'B2'){
+        } else if (role == 'B1' || role == 'B2') {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const ParcelListB(),
             ),
           );
-        }
-        else if(role == 'A1' || role == 'A2'){
+        } else if (role == 'A1' || role == 'A2') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -449,8 +482,6 @@ void registerRequest(String username, String email, String name,
   }
 }
 
-
-
 class ParcelList extends StatefulWidget {
   const ParcelList({super.key});
 
@@ -470,10 +501,10 @@ class _ParcelListState extends State<ParcelList> {
   Future<List<dynamic>> getOwned() async {
     final prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? "";
+    final String state = prefs.getString('state') ?? "";
 
     final response = await http.post(
-      Uri.parse(
-          'https://moonlit-oven-349523.appspot.com/rest/parcel/owned/'),
+      Uri.parse('https://moonlit-oven-349523.appspot.com/rest/parcel/owned/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -485,6 +516,39 @@ class _ParcelListState extends State<ParcelList> {
       map = jsonDecode(utf8.decode(response.bodyBytes));
       parcelList = map;
     } else {
+      String title;
+      String msg;
+      if(state == "ACTIVE"){
+        title = 'Sessão expirada';
+        msg = 'Volte a iniciar sessão.';
+      }
+      else{
+        title = 'Conta inativa';
+        msg = 'Confirme o seu e-mail para continuar.';
+      }
+
+      Widget okButton = TextButton(
+        child: const Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: [
+          okButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
       map = response.statusCode;
     }
 
@@ -500,17 +564,17 @@ class _ParcelListState extends State<ParcelList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Parcelas Utilizador"),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  logout();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.exit_to_app_rounded))
-          ],
-        ),
+        title: const Text("Parcelas Utilizador"),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                logout();
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.exit_to_app_rounded))
+        ],
+      ),
       body: ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: parcelList.isNotEmpty ? parcelList.length * 2 : 0,
@@ -518,7 +582,8 @@ class _ParcelListState extends State<ParcelList> {
             if (i.isOdd) return const Divider();
             final index = i ~/ 2;
             return ListTile(
-              leading: const Icon(Icons.landscape_outlined),
+              leading:
+              getIcon(parcelList[index]['usage']),
               title: Text(parcelList[index]['name']),
               tileColor: Colors.green,
               textColor: Colors.white,
@@ -528,21 +593,21 @@ class _ParcelListState extends State<ParcelList> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => MapM(
-                            lat: 39.137251,
-                            lng: -8.378835,
-                            coordsList:
-                                jsonDecode(parcelList[index]['coordinates']),
-                            parcelName: parcelList[index]['name'],
-                            parcelID: (parcelList[index]['owner'] +
-                                '_' +
-                                parcelList[index]['name']),
-                          )),
+                        lat: 39.137251,
+                        lng: -8.378835,
+                        coordsList:
+                        jsonDecode(parcelList[index]['coordinates']),
+                        parcelName: parcelList[index]['name'],
+                        parcelID: (parcelList[index]['owner'] +
+                            '_' +
+                            parcelList[index]['name']),
+                      )),
                 );
               },
               trailing: IconButton(
                   onPressed: () {
-
-                    List<dynamic> coordsList = jsonDecode(parcelList[index]['coordinates']);
+                    List<dynamic> coordsList =
+                    jsonDecode(parcelList[index]['coordinates']);
                     List<LatLng> polygonCoords = [];
 
                     for (int i = 0; i < coordsList.length; i++) {
@@ -552,7 +617,7 @@ class _ParcelListState extends State<ParcelList> {
 
                     saveOfflineParcel(polygonCoords, context);
                   },
-                  icon: const Icon(Icons.download)),
+                  icon: const Icon(Icons.file_copy, color: Colors.white)),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -568,7 +633,7 @@ class _ParcelListState extends State<ParcelList> {
           )
         },
         heroTag: null,
-        child: const Icon(Icons.map),
+        child: const Icon(Icons.wifi_off),
       ),
     );
   }
@@ -583,11 +648,11 @@ class MapM extends StatefulWidget {
 
   const MapM(
       {Key? key,
-      required this.lat,
-      required this.lng,
-      required this.coordsList,
-      required this.parcelName,
-      required this.parcelID})
+        required this.lat,
+        required this.lng,
+        required this.coordsList,
+        required this.parcelName,
+        required this.parcelID})
       : super(key: key);
 
   @override
@@ -632,7 +697,7 @@ class _MapState extends State<MapM> {
           automaticallyImplyLeading: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings),
+              icon: const Icon(Icons.edit_outlined),
               onPressed: () => {
                 Navigator.push(
                     context,
@@ -680,9 +745,9 @@ class EditMap extends StatefulWidget {
   final List<dynamic> coordsList;
   const EditMap(
       {Key? key,
-      required this.parcelName,
-      required this.parcelID,
-      required this.coordsList})
+        required this.parcelName,
+        required this.parcelID,
+        required this.coordsList})
       : super(key: key);
 
   @override
@@ -748,20 +813,20 @@ class _EditMapState extends State<EditMap> {
       child: const Text("OK"),
       onPressed: () {
         sendEditRequest().then((value) => {
-              if (value)
-                {
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.of(context).pop(),
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ParcelList(),
-                    ),
-                  )
-                }
-            });
+          if (value)
+            {
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.of(context).pop(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ParcelList(),
+                ),
+              )
+            }
+        });
       },
     );
 
@@ -789,7 +854,7 @@ class _EditMapState extends State<EditMap> {
     for (var i = 0; i < pointList.length; i++) {
       if (i < pointList.length - 1) {
         area += ConvertToRadian(
-                pointList[i + 1].longitude - pointList[i].longitude) *
+            pointList[i + 1].longitude - pointList[i].longitude) *
             (sin(ConvertToRadian(pointList[i].latitude)) +
                 sin(ConvertToRadian(pointList[i + 1].latitude)));
         perimeter += sqrt(
@@ -799,13 +864,13 @@ class _EditMapState extends State<EditMap> {
       c.add({'lat': pointList[i].latitude, 'lng': pointList[i].longitude});
     }
     area += ConvertToRadian(pointList[0].longitude -
-            pointList[pointList.length - 1].longitude) *
+        pointList[pointList.length - 1].longitude) *
         (sin(ConvertToRadian(pointList[pointList.length - 1].latitude)) +
             sin(ConvertToRadian(pointList[0].latitude)));
     area = area * 6378137 * 6378137 / 2;
     perimeter += sqrt(pow(
-            pointList[0].latitude - pointList[pointList.length - 1].latitude,
-            2) +
+        pointList[0].latitude - pointList[pointList.length - 1].latitude,
+        2) +
         pow(pointList[0].longitude - pointList[pointList.length - 1].longitude,
             2));
     perimeter *= 100000;
@@ -816,10 +881,8 @@ class _EditMapState extends State<EditMap> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'token': token,
-        'coordinates': jsonEncode(c)
-      }),
+      body: jsonEncode(
+          <String, String>{'token': token, 'coordinates': jsonEncode(c)}),
     );
 
     return response.statusCode == 200;
@@ -839,7 +902,7 @@ class _EditMapState extends State<EditMap> {
             automaticallyImplyLeading: true,
             actions: [
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.check_box_rounded),
                 onPressed: () => {confirmRequest()},
               ),
               // add more IconButton
@@ -889,7 +952,7 @@ class _EditMapState extends State<EditMap> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: addPoint,
-                    icon: const Icon(Icons.add_box_rounded)),
+                    icon: const Icon(Icons.add_location_alt_rounded)),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -897,21 +960,11 @@ class _EditMapState extends State<EditMap> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: removePoint,
-                    icon: const Icon(Icons.assignment_return_rounded)),
+                    icon: const Icon(Icons.undo)),
               ),
               const Center(child: Icon(Icons.adjust)),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
-                child: IconButton(
-                    iconSize: 40.0,
-                    onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ShowCoords(pointList)))
-                        },
-                    icon: const Icon(Icons.save)),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
               )
             ],
           )),
@@ -936,9 +989,9 @@ class ShowCoords extends StatelessWidget {
           if (i.isOdd) return const Divider();
           final index = i ~/ 2;
           double lat =
-              double.parse((coords[index].latitude).toStringAsFixed(6));
+          double.parse((coords[index].latitude).toStringAsFixed(6));
           double lng =
-              double.parse((coords[index].longitude).toStringAsFixed(6));
+          double.parse((coords[index].longitude).toStringAsFixed(6));
           return ListTile(
             leading: const Icon(Icons.landscape_outlined),
             title: Text((index + 1).toString()),

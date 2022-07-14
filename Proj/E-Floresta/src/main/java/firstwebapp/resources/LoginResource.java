@@ -59,7 +59,7 @@ public class LoginResource {
             if (storedPassword.equals(DigestUtils.sha512Hex(data.password))) {
 
                 //Gera um token
-                String token = JWToken.generateToken(username, user.getString("user_role"));
+                String token = JWToken.generateToken(username, user.getString("user_role"), user.getString("user_state"));
 
                 return Response.ok(token).build();
             } else {

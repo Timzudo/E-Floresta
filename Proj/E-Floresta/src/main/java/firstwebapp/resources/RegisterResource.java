@@ -108,7 +108,7 @@ public class RegisterResource {
         msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "https://moonlit-oven-349523.appspot.com/confirmation?id=" + confirmationID);
         Transport.send(msg);
 
-        String token = JWToken.generateToken(username, "D");
+        String token = JWToken.generateToken(username, "D", "INACTIVE");
         return Response.ok(token).build();
     }
 
@@ -187,7 +187,7 @@ public class RegisterResource {
         msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
         Transport.send(msg);
 
-        String token = JWToken.generateToken(username, "D");
+        String token = JWToken.generateToken(username, "C", "INACTIVE");
         return Response.ok(token).build();
     }
 
