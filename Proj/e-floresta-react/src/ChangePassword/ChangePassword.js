@@ -33,9 +33,9 @@ const ChangePassword = () => {
         }
 
         var myObj = {
-            oldPassword: document.getElementById("old-password").value,
-            newPassword: document.getElementById("new-password").value,
-            confirmation: document.getElementById("confirm-password").value,
+            oldPassword: document.getElementById("oldPassword").value,
+            newPassword: document.getElementById("newPassword").value,
+            confirmation: document.getElementById("confirmation").value,
             token: localStorage.getItem('token')
         };
 
@@ -67,7 +67,7 @@ const ChangePassword = () => {
 
                     <div className="btn-group" id="confirmAndCancel_ChangePassword">
                         <div id="confirm_ChangePassword">
-                            <Button type="button" className="btn btn-success btn-sm" onClick={changePassword} >Confirmar Alterações</Button>
+                            <Button type="button" className="btn btn-success btn-sm" onClick={changePassword}> Confirmar Alterações</Button>
                         </div>
 
                         <div id="cancel_ChangePassword">
