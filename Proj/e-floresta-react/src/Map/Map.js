@@ -343,12 +343,12 @@ const Map = () => {
 
                         <Form.Group className="mt-3" controlId="formParcelSection">
                             <Form.Label> <strong>Secção da Parcela</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="text" placeholder="Secção da Parcela" maxLength="2"/>
+                            <Form.Control className="map_fields" required type="text" placeholder="Secção da Parcela (Ex: SA)" maxLength="2"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelArticalNum">
                             <Form.Label> <strong>Nº de Artigo da Parcela</strong> </Form.Label>
-                            <Form.Control className="map_fields" required type="number" placeholder="Nº de Artigo" maxLength="3"/>
+                            <Form.Control className="map_fields" required type="number" placeholder="Nº de Artigo (Ex: 105)" maxLength="3"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelCover">

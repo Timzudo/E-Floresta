@@ -53,6 +53,25 @@
     margin: auto;
 }
 
+#submit_latlng{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #b0c090;
+    text-align: center;
+    cursor: pointer;
+    height: 27% !important;
+    width: 75% !important;
+    font-size: 15px;
+}
+
+#submit_latlng:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+}
+
 #rollback{
     border-radius: 0 0 5px 0;
     height: 33%;
