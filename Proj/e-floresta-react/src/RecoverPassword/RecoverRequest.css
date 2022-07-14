@@ -42,5 +42,36 @@ body,html{
 
 #button_RecoverRequest{
     margin-top: 15%;
-    margin-left: -37%;
+    margin-left: -36%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #3E503A;
+    text-align: center;
+    cursor: pointer;
+}
+
+#button_RecoverRequest:hover{
+    background-color: #b0c090;
+    border-color: #b0c090;
+    color: black;
+}
+
+.button-return_RecoverRequest button{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: #b0c090;
+    text-align: center;
+    cursor: pointer;
+    transform: translate(174%, 50%);
+}
+
+.button-return_RecoverRequest button:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
 }

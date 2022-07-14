@@ -49,8 +49,19 @@ const RecoverPassword = () => {
                         <Button id="button_RecoverRequest" type="submit" variant="success" onClick={recoverPassword}>
                             Enviar pedido de recuperação
                         </Button>
+
+                        <br/>
+                        <div className="button-return_RecoverRequest">
+                            <Link to="/">
+                                <Button id="faqButton" type="button">Voltar à página inicial</Button>
+                            </Link>
+                        </div>
+                        <br/>
+
                     </div>
+
                     <Form onSubmit={submitHandler}></Form>
+
                 </div>}
         </>
     )
