@@ -18,7 +18,7 @@ const TopBar = () => {
                     <Button id="option1">Página Inicial</Button>
                 </Link>
 
-                {localStorage.getItem('role').includes("A") ?
+                {localStorage.getItem('role').includes("A")?
                     <Dropdown>
                         <Dropdown.Toggle className="dropdown_TopBar">
                             Parcelas
@@ -27,17 +27,27 @@ const TopBar = () => {
                         <Dropdown.Menu className="dropdown-parcels-content_TopBar">
                             <Dropdown.Item onClick={() => navigate("/map-admin")}><b>Registar Parcela</b></Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate("/all-parcels-admin")}><b>Visualizar Parcelas</b></Dropdown.Item>
-                            <Dropdown.Item onClick={() => navigate("/approve-parcels-admin")}><b>Parcelas Pendentes</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/approve-parcels-admin")}><b>Aprovar Parcelas</b></Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                  : <></>}
 
+                {localStorage.getItem('role').includes("B")?
+                    <Dropdown>
+                        <Dropdown.Toggle className="dropdown_TopBar">
+                            Parcelas
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="dropdown-parcels-content_TopBar">
+                            <Dropdown.Item onClick={() => navigate("/map-admin")}><b>Registar Parcela</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/all-parcels")}><b>Visualizar Parcelas</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/approve-parcels")}><b>Aprovar Parcelas</b></Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    : <></>}
+
                 {localStorage.getItem('role') === 'D' ? <Link to="/map">
                     <Button id="option2">Registar Parcela</Button>
-                </Link> : <></>}
-
-                {localStorage.getItem('role').includes("B") ? <Link to="/map-admin">
-                    <Button id="option17">Registar Parcela</Button>
                 </Link> : <></>}
 
 
@@ -49,19 +59,10 @@ const TopBar = () => {
                     <Button id="option5">Minhas Parcelas</Button>
                 </Link> : <></>}
 
-                {localStorage.getItem('role').includes('B') ? <Link to="/all-parcels">
-                    <Button id="option8">Visualizar Parcelas</Button>
-                </Link> : <></>}
-
 
                 {localStorage.getItem('role') === 'C' ? <Link to="/proposed-parcels-entity">
                     <Button id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
-
-                {localStorage.getItem('role').includes('B')  ? <Link to="/approve-parcels">
-                    <Button id="option7">Parcelas Pendentes</Button>
-                </Link> : <></>}
-
 
 
                 {localStorage.getItem('role').includes('A') || localStorage.getItem('role').includes('B') ? <Link to="/reports-technician">
@@ -95,6 +96,9 @@ const TopBar = () => {
                     <Button id="option10">Rankings</Button>
                 </Link>
 
+                <Link to="/faq">
+                    <Button id="option20">FAQ</Button>
+                </Link>
 
                 <Link to="/about-us">
                     <Button id="option4">Sobre Nós</Button>

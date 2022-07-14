@@ -52,6 +52,10 @@ const LoggedHomepage = () => {
         }
     }
 
+    function faqButton(){
+        navigate("/faq");
+    }
+
     return(
         <>
             <CheckIfLoggedOut />
@@ -96,6 +100,19 @@ const LoggedHomepage = () => {
                         <p></p>
                         <Link to="/statistics">
                             <Button onClick={() => statisticsButton()} variant="dark">Veja as estatísticas</Button>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="hero-faq_LoggedHome">
+                    <div className="hero-faq-text_LoggedHome">
+                        <h1><b>Dúvidas sobre o site?</b></h1>
+                        O nosso site possui uma área onde reunimos algumas das dúvidas mais comuns relativamente <br/>
+                        ao funcionamento do mesmo. Talvez alguma das suas perguntas esteja respondido nessa área. <br/>
+                        Para lhe aceder, clique na aba "FAQ". <br/>
+                        <p></p>
+                        <Link to="/faq">
+                            <Button onClick={() => faqButton()} variant="dark">Perguntas frequentes</Button>
                         </Link>
                     </div>
                 </div>

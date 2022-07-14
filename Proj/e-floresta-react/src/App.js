@@ -28,7 +28,11 @@ import RecoverRequest from "./RecoverPassword/RecoverRequest";
 import FindUser from "./FindUser/FindUser";
 import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import MakeReport from "./MakeReport/MakeReport";
+import FAQ from "./FAQ/FAQ";
+import FAQUnlogged from "./FAQUnlogged/FAQUnlogged";
 import Error404 from "./ErrorsPages/Error404";
+import CSVConverter from "./util/CSVConverter";
+
 
 
 import Front_img from "./front_img.jpg";
@@ -39,7 +43,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from "react-router-dom"
-import CSVConverter from "./util/CSVConverter";
+
 
 
 
@@ -75,6 +79,8 @@ const App = () => {
           <Route path="/find-user" element={<FindUser />} />
           <Route path="/reports-technician" element={<ReportsTechnician />} />
           <Route path="/make-report" element={<MakeReport />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/faq-unlogged" element={<FAQUnlogged />} />
           <Route path="*" exact={false} element={<Error404 />} />
         </Routes>
       </Router>
@@ -84,7 +90,7 @@ const App = () => {
 const Home = () => {
   return (
       <>
-          <CSVConverter/>
+        <CSVConverter/>
         <CheckIfLoggedIn />
 
         <div className="home_top">
@@ -130,8 +136,19 @@ const Home = () => {
                 <div>
                     <img src={Front_img}/>
                 </div>
-
             </div>
+
+            <div className="hero-image-faq_Home">
+                <div className="hero-text-faq_Home">
+                    <h1><b>Perguntas frequentes</b></h1>
+                    <p>Tem alguma pergunta sobre a utilização do nosso site? </p>
+                    <p>Verifique a página de perguntas frequentes! </p>
+                    <Link to="/faq-unlogged">
+                        <Button id="button-hero_Home" variant="dark">FAQ</Button>
+                    </Link>
+                </div>
+            </div>
+
         </div>
 
       </>
