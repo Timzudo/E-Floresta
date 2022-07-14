@@ -9,6 +9,7 @@ import {GoogleMap, LoadScript} from "@react-google-maps/api";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 const center = {
     lat: 38.660677,
@@ -165,6 +166,7 @@ const ProposedParcelsEntity = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <LoadScript googleMapsApiKey="AIzaSyC3yXGtu-O5HD8LhlQ18w68dby2HQ2X3O4">

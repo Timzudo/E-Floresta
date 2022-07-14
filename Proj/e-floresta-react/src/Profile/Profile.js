@@ -6,6 +6,7 @@ import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React, {useEffect} from 'react'
 import {Badge} from "react-bootstrap";
+import CheckIfActive from "../util/CheckIfActive";
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -90,6 +91,7 @@ const Profile = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_Profile">

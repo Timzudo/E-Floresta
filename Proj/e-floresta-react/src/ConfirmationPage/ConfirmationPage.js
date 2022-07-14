@@ -1,22 +1,23 @@
 import "./ConfirmationPage.css"
 
 import React, {useEffect} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Image from "../logo.png";
 import {Spinner} from "react-bootstrap";
 import {useLocation} from "react-router-dom";
 import {useState} from "react";
 
 
-
 const ConfirmationPage = () => {
+    const navigate = useNavigate();
+
     const [confirmed, setConfirmed] = useState(false);
     const search = useLocation().search;
     const name = new URLSearchParams(search).get('id');
     console.log(name);
 
     useEffect(() => {
-        fetch("https://moonlit-oven-349523.appspot.com/rest/register/confirm/" + name).then(r => setConfirmed(true)).catch( () =>alert("yau"));
+        fetch("https://moonlit-oven-349523.appspot.com/rest/register/confirm/" + name).then(r => {setConfirmed(true); navigate("/create-and-login")}).catch( () =>console.log);
     }, [])
 
     function body(){

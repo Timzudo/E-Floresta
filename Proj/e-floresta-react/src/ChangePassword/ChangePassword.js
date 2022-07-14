@@ -4,6 +4,7 @@ import TopBar from "../TopBar/TopBar";
 import {Button} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, { Component }  from 'react';
+import CheckIfActive from "../util/CheckIfActive";
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -49,6 +50,7 @@ const ChangePassword = () => {
     return (
         <>
             <CheckIfLoggedOut/>
+            <CheckIfActive />
             <TopBar/>
 
             <div className="bg-img_ChangePassword">

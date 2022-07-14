@@ -10,6 +10,7 @@ import CSVConverter from "../util/CSVConverter";
 import {useNavigate} from "react-router-dom";
 import TopBar from "../TopBar/TopBar";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
+import CheckIfActive from "../util/CheckIfActive";
 
 const google = window.google;
 
@@ -224,6 +225,7 @@ const MapAdmin = () => {
 
     return (<>
         <TopBar />
+        <CheckIfActive />
         <CheckIfLoggedOut />
         <div className="mapDiv_Map">
             <CSVConverter/><LoadScript

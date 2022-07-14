@@ -3,11 +3,13 @@ import TopBar from '../TopBar/TopBar.js'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React, { Component }  from 'react';
 import {Card, Col, Row} from "react-bootstrap";
+import CheckIfActive from "../util/CheckIfActive";
 
 const AboutUs = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_AboutUs">

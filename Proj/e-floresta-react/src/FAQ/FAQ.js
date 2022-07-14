@@ -3,11 +3,13 @@ import TopBar from '../TopBar/TopBar.js'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React from 'react'
 import {Accordion} from "react-bootstrap";
+import CheckIfActive from "../util/CheckIfActive";
 
 const FAQ = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_FAQ">

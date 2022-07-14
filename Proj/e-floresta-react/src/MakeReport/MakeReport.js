@@ -4,6 +4,7 @@ import TopBar from "../TopBar/TopBar";
 import React from 'react'
 import {Button, Form} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 const MakeReport = () => {
     const search = useLocation().search;
@@ -50,6 +51,7 @@ const MakeReport = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_MakeReport">

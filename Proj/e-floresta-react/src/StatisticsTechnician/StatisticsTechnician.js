@@ -7,6 +7,7 @@ import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
 import NumberStatistics from "../util/Statistics/NumberStatistics";
 import PieChartStatistics from "../util/Statistics/PieChartStatistics";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const StatisticsTechnician = () => {
@@ -79,6 +80,7 @@ const StatisticsTechnician = () => {
     return (
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="statistics-technician-background">

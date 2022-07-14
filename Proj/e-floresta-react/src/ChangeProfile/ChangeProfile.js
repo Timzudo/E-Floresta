@@ -6,6 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import {Badge, Button} from "react-bootstrap";
 import {useState} from "react";
+import CheckIfActive from "../util/CheckIfActive";
 
 const ChangeProfile = () => {
     const navigate = useNavigate();
@@ -87,6 +88,7 @@ const ChangeProfile = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_ChangeProfile">

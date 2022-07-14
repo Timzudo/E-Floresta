@@ -7,6 +7,7 @@ import {Col, Row} from "react-bootstrap";
 import {Pie} from "react-chartjs-2";
 import PieChartStatistics from "../util/Statistics/PieChartStatistics";
 import NumberStatistics from "../util/Statistics/NumberStatistics";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const Statistics = () => {
@@ -78,6 +79,7 @@ const Statistics = () => {
     return (
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="statistics-background">

@@ -10,6 +10,7 @@ import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import ParcelNearbyModal from "../util/ParcelNearbyModal/ParcelNearbyModal";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 const containerStyle = {
     width: '75vw',
@@ -162,6 +163,7 @@ const MyParcels = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <LoadScript googleMapsApiKey="AIzaSyC3yXGtu-O5HD8LhlQ18w68dby2HQ2X3O4">

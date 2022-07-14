@@ -30,6 +30,7 @@ import ReportsTechnician from "./ReportsTechnician/ReportsTechnician";
 import MakeReport from "./MakeReport/MakeReport";
 import FAQ from "./FAQ/FAQ";
 import FAQUnlogged from "./FAQUnlogged/FAQUnlogged";
+import WaitForVerif from "./WaitForVerif/WaitForVerif";
 import Error404 from "./ErrorsPages/Error404";
 import CSVConverter from "./util/CSVConverter";
 
@@ -81,6 +82,7 @@ const App = () => {
           <Route path="/make-report" element={<MakeReport />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/faq-unlogged" element={<FAQUnlogged />} />
+          <Route path="/wait-for-verif" element={<WaitForVerif />} />
           <Route path="*" exact={false} element={<Error404 />} />
         </Routes>
       </Router>

@@ -5,6 +5,7 @@ import React, {useEffect, useState} from 'react'
 import {Button, Card, Col, Row, Spinner} from "react-bootstrap";
 import {Polygon} from "@react-google-maps/api";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const ReportsTechnician = () => {
@@ -122,6 +123,7 @@ const ReportsTechnician = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="body_ReportsTechnician">

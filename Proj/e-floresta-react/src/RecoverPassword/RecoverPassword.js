@@ -12,7 +12,6 @@ const RecoverPassword = () => {
     const navigate = useNavigate();
     const search = useLocation().search;
     const name = new URLSearchParams(search).get('id');
-    console.log(name);
 
     const submitHandler = (e) => {
         e.preventDefault();

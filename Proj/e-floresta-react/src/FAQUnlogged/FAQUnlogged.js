@@ -2,10 +2,17 @@ import './FAQUnlogged.css'
 import React from 'react'
 import {Accordion, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import Image from "../logo.png";
 
 const FAQUnlogged = () => {
     return(
         <>
+
+            <div className="home_top">
+                <div>
+                    <Link to="/"><img src={Image} alt="E-Floresta Logo" className="home_logo" /></Link>
+                </div>
+            </div>
 
             <div className="bg-img_FAQ">
                 <div className="body_FAQ">

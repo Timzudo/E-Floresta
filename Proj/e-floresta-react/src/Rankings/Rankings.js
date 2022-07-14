@@ -4,6 +4,7 @@ import Chart from 'chart.js/auto';
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
 import {Row, Table} from "react-bootstrap";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const Rankings = () => {
@@ -12,6 +13,7 @@ const Rankings = () => {
     return (
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="rankings-background">

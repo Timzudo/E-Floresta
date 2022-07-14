@@ -10,6 +10,7 @@ import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import CSVConverter from "../util/CSVConverter";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 const containerStyle = {
     width: '75vw',
@@ -171,6 +172,7 @@ const AllParcelsAdmin = () => {
     return(<>
             <CSVConverter/>
         <CheckIfLoggedOut />
+        <CheckIfActive />
         <TopBar />
 
             <div className="buttons_AllParcelsAdmin">

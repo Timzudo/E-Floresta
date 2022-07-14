@@ -9,6 +9,7 @@ import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const containerStyle = {
@@ -157,6 +158,7 @@ const ParcelsEntity = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <LoadScript googleMapsApiKey="AIzaSyC3yXGtu-O5HD8LhlQ18w68dby2HQ2X3O4">

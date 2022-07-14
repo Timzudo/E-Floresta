@@ -6,6 +6,7 @@ import {GoogleMap, LoadScript, Polygon} from "@react-google-maps/api";
 import React, { Component }  from 'react';
 import CSVConverter from "../util/CSVConverter";
 import {Link, useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 const LoggedHomepage = () => {
     const navigate = useNavigate();
@@ -59,6 +60,7 @@ const LoggedHomepage = () => {
     return(
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <CSVConverter/>

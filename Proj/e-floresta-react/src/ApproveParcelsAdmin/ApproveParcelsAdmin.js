@@ -10,6 +10,7 @@ import ParcelDetailsModal from "../util/ParcelDetailsModal/ParcelDetailsModal";
 import ParcelEditModal from "../util/ParcelEditModal/ParcelEditModal";
 import CSVConverter from "../util/CSVConverter";
 import {useNavigate} from "react-router-dom";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const ApproveParcelsAdmin = () => {
@@ -209,6 +210,7 @@ const ApproveParcelsAdmin = () => {
     return(
         <><CSVConverter/>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="buttons_ApproveParcelsAdmin">

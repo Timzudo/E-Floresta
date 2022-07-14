@@ -7,6 +7,7 @@ import TopBar from "../TopBar/TopBar";
 import {Col, Row} from "react-bootstrap";
 import PieChartStatistics from "../util/Statistics/PieChartStatistics";
 import NumberStatistics from "../util/Statistics/NumberStatistics";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const StatisticsEntity = () => {
@@ -78,6 +79,7 @@ const StatisticsEntity = () => {
     return (
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="statistics-entity-background">

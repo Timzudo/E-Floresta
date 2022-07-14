@@ -9,6 +9,7 @@ import {getAreaOfPolygon, getCenterOfBounds, getDistance, getPathLength, orderBy
 import {GoogleMap, Polygon} from "@react-google-maps/api";
 import ProfileImage from "../ChangeProfile/profile_picture.png";
 import CSVConverter from "../util/CSVConverter";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const FindUser = () => {
@@ -57,6 +58,7 @@ const FindUser = () => {
         <>
             <CSVConverter/>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="bg-img_FindUser">

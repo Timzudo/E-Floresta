@@ -5,6 +5,7 @@ import TopBar from "../TopBar/TopBar";
 import {Col, Dropdown, Row, Table} from "react-bootstrap";
 import { Pie } from 'react-chartjs-2';
 import NumberStatistics from "../util/Statistics/NumberStatistics";
+import CheckIfActive from "../util/CheckIfActive";
 
 
 const StatisticsAdmin = () => {
@@ -45,6 +46,7 @@ const StatisticsAdmin = () => {
     return (
         <>
             <CheckIfLoggedOut />
+            <CheckIfActive />
             <TopBar />
 
             <div className="statistics-admin-background">

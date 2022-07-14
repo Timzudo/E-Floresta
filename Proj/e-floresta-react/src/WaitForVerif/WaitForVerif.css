@@ -1,0 +1,37 @@
+body,html{
+    margin: 0;
+    height: 100%;
+}
+
+#root{
+    height: 100%;
+}
+
+.bg-img_WFV{
+    background-image: url("background-image.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: calc(100% - 60px);
+    position: relative;
+}
+
+.body_WFV{
+    background-color: rgba(189, 216, 196, 0.85);
+    margin: auto;
+    align-self: center;
+    width: 50%;
+    padding-bottom: 2%;
+    border-radius: 10px;
+    color: dimgrey;
+}
+
+.title_WFV{
+    margin-left: 12%;
+    align-self: center;
+}
+
+.description_WFV{
+    margin-top: 2%;
+    margin-left: 2%;
+}
