@@ -99,9 +99,9 @@ class _MyAppState extends State<MyApp> {
           foregroundColor: Colors.white,
         ),
       ),
-      home: DefaultTabController(
+      home: const DefaultTabController(
         length: 2,
-        child: WillPopScope(onWillPop: () async {return false;}, child: const LoginScreen()),
+        child: LoginScreen(),
       ),
     );
   }
@@ -306,28 +306,28 @@ void loginRequest(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelList(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelList()),
             ),
           );
         } else if (role == 'C') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListC(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListC()),
             ),
           );
         } else if (role == 'B1' || role == 'B2') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListB(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListB()),
             ),
           );
         } else if (role == 'A1' || role == 'A2') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListA(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListA()),
             ),
           );
         }
@@ -412,28 +412,28 @@ void registerRequest(String username, String email, String name,
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelList(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelList()),
             ),
           );
         } else if (role == 'C') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListC(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListC()),
             ),
           );
         } else if (role == 'B1' || role == 'B2') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListB(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListB()),
             ),
           );
         } else if (role == 'A1' || role == 'A2') {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const ParcelListA(),
+              builder: (context) => WillPopScope(onWillPop: () async {return false;}, child: const ParcelListA()),
             ),
           );
         }
