@@ -10,7 +10,6 @@ import RegisterParcel from './RegisterParcel/RegisterParcel'
 import CheckIfLoggedIn from './util/CheckIfLoggedIn'
 import ChangePassword from "./ChangePassword/ChangePassword";
 import MyParcels from "./MyParcels/MyParcels";
-import MapAdmin from "./MapAdmin/MapAdmin";
 import ProposedParcelsEntity from "./ProposedParcelsEntity/ProposedParcelsEntity";
 import ParcelsEntity from "./ParcelsEntity/ParcelsEntity";
 import ApproveParcels from "./ApproveParcels/ApproveParcels";
@@ -56,7 +55,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/create-and-login" element={<CreateAndLogin />} />
           <Route path="/map" element={<RegisterParcel />} />
-          <Route path="/map-admin" element={<MapAdmin />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/homepage" element={<LoggedHomepage />} />
           <Route path="/change-profile" element={<ChangeProfile />} />

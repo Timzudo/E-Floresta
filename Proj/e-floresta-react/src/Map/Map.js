@@ -4,14 +4,12 @@ import {Marker} from '@react-google-maps/api';
 import {useState} from 'react'
 import {Polygon} from '@react-google-maps/api';
 import "./Map.css"
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, Spinner} from "react-bootstrap";
 import {getAreaOfPolygon, getDistance, getPathLength} from 'geolib';
 import CSVConverter from "../util/CSVConverter";
 import {useLocation, useNavigate} from "react-router-dom";
 
 const google = window.google;
-const googlemapswindow = google.maps;
-
 const containerStyle = {
     width: '75vw',
     height: 'calc(100vh - 60px)'
@@ -37,6 +35,7 @@ const options = {
 
 
 const Map = () => {
+    const [request, setRequest] = useState(false);
     const role = localStorage.getItem('role');
     const search = useLocation().search;
     const queryCoords = new URLSearchParams(search).get('coords');
@@ -145,32 +144,19 @@ const Map = () => {
         setArea(Math.round(getAreaOfPolygon(paths)));
     }, [paths]);
 
-    React.useEffect(() => {
+
+
+    function importQuery(){
         if(queryCoords != null){
             try {
                 const queryCoordsObj = JSON.parse(atob(queryCoords));
-                console.log(queryCoordsObj);
-                let arr1 = [];
                 let arr2 = [];
                 for(let i = 0; i<queryCoordsObj.length-1; i++){
-                    arr1.push(<Marker key={i} id={i}
-                                      position={{
-                                          lat: queryCoordsObj[i].lat,
-                                          lng: queryCoordsObj[i].lng
-                                      }}
-                                      icon={{
-                                          path: googlemapswindow.SymbolPath.CIRCLE,
-                                          fillColor: "#ff8000",
-                                          fillOpacity: 1.0,
-                                          strokeWeight: 0,
-                                          scale: 5
-                                      }}/>)
                     arr2.push({
                         lat: queryCoordsObj[i].lat,
                         lng: queryCoordsObj[i].lng
                     });
                 }
-                setMarker(arr1);
                 setPaths(arr2);
             }
             catch (e){
@@ -178,7 +164,7 @@ const Map = () => {
             }
 
         }
-    }, []);
+    }
 
 
     function addMarker(lat, lng) {
@@ -231,6 +217,7 @@ const Map = () => {
                 else {
                     alert("Erro do sistema. Tente novamente mais tarde.");
                 }
+                setRequest(false);
             }
         }
 
@@ -260,6 +247,7 @@ const Map = () => {
 
         xmlhttp.open("POST", url, true);
         xmlhttp.send(f);
+        setRequest(true);
     }
 
 
@@ -277,6 +265,7 @@ const Map = () => {
                 onClick={ev => {
                     addMarker(ev.latLng.lat(), ev.latLng.lng())
                 }}
+                onLoad={() => importQuery()}
             >
                 <Polygon
                     paths={paths}
@@ -441,7 +430,9 @@ const Map = () => {
                         </Form.Group>:<></>}
 
                         <Button className="mt-3 mb-3" variant="success" type="submit">
-                            Submeter
+                            {request?<Spinner id="spinne_ConfirmationPage" variant="light" animation="border" role="status">
+                            <span className="visually-hidden">Carregando...</span>
+                        </Spinner>:"Submeter"}
                         </Button>
                     </Form>
                 </div>

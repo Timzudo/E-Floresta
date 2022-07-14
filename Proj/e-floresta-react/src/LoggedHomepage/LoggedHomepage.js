@@ -11,6 +11,7 @@ import CheckIfActive from "../util/CheckIfActive";
 const LoggedHomepage = () => {
     const navigate = useNavigate();
     let role = localStorage.getItem('role');
+    console.log(role);
 
     function registerButton(){
         if(role === 'D'){

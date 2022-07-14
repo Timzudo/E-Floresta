@@ -1,16 +1,20 @@
 import React, { Component }  from 'react';
 import {useNavigate} from "react-router-dom";
+import {getAreaOfPolygon, getDistance, getPathLength} from "geolib";
 
 const CheckIfActive = () => {
     const navigate = useNavigate();
-    let state = localStorage.getItem('state');
-    if(state !== 'ACTIVE') {
-        //O utilizador nao tem uma conta ativa
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('state');
-        navigate('/wait-for-verif');
-    }
+
+    React.useEffect(() => {
+        let state = localStorage.getItem('state');
+        if(state !== 'ACTIVE') {
+            //O utilizador nao tem uma conta ativa
+            console.log("Not active")
+            localStorage.removeItem('token');
+            localStorage.removeItem('state');
+            navigate('/wait-for-verif');
+        }
+    }, []);
 
     return(
         <></>

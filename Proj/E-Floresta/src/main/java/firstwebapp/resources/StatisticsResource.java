@@ -51,7 +51,7 @@ public class StatisticsResource {
         try {
             CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
             Map<Object, Object> properties = new HashMap<>();
-            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.SECONDS.toSeconds(30));
+            properties.put(GCacheFactory.EXPIRATION_DELTA, TimeUnit.HOURS.toSeconds(1));
             this.cache = cacheFactory.createCache(properties);
 
         } catch (CacheException e) {
@@ -85,7 +85,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        final Long[] totalArea = {(Long) cache.get("user_by_total_parcel_area")};
+        final Long[] totalArea = {(Long) cache.get("user_by_total_parcel_area"+tokenInfo.sub)};
 
         if (totalArea[0] != null)
             return Response.ok(totalArea[0]).build();
@@ -106,7 +106,7 @@ public class StatisticsResource {
             totalArea[0] += area;
         });
 
-        cache.put("user_by_total_parcel_area", totalArea[0]);
+        cache.put("user_by_total_parcel_area"+tokenInfo.sub, totalArea[0]);
 
         return Response.ok(totalArea[0]).build();
     }
@@ -133,7 +133,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        final Long[] totalPerimeter = {(Long) cache.get("user_by_total_parcel_perimeter")};
+        final Long[] totalPerimeter = {(Long) cache.get("user_by_total_parcel_perimeter"+tokenInfo.sub)};
 
         if (totalPerimeter[0] != null)
             return Response.ok(totalPerimeter[0]).build();
@@ -154,7 +154,7 @@ public class StatisticsResource {
             totalPerimeter[0] += perimeter;
         });
 
-        cache.put("user_by_total_parcel_perimeter", totalPerimeter[0]);
+        cache.put("user_by_total_parcel_perimeter"+tokenInfo.sub, totalPerimeter[0]);
 
         return Response.ok(totalPerimeter[0]).build();
     }
@@ -181,7 +181,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("user_parcel_count_by_usage");
+        Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("user_parcel_count_by_usage"+tokenInfo.sub);
 
         if (parcelCountByUsage != null)
             return Response.ok(g.toJson(parcelCountByUsage)).build();
@@ -206,7 +206,7 @@ public class StatisticsResource {
                 )
         );
 
-        cache.put("user_parcel_count_by_usage", parcelCountByUsage);
+        cache.put("user_parcel_count_by_usage"+tokenInfo.sub, parcelCountByUsage);
 
         return Response.ok(g.toJson(parcelCountByUsage)).build();
     }
@@ -234,7 +234,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"));
+        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"+tokenInfo.sub));
 
         if (count.get() != null)
             return Response.ok(g.toJson(count.get())).build();
@@ -251,7 +251,7 @@ public class StatisticsResource {
 
         results.forEachRemaining(p -> count.updateAndGet(v -> v+1));
 
-        cache.put("user_parcel_count", count.get());
+        cache.put("user_parcel_count"+tokenInfo.sub, count.get());
 
         return Response.ok(g.toJson(count.get())).build();
     }
@@ -279,7 +279,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_total_area_by_usage");
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_total_area_by_usage"+tokenInfo.sub);
 
         if (totalAreaByUsage != null)
             return Response.ok(g.toJson(totalAreaByUsage)).build();
@@ -330,7 +330,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Long avgParcelArea = (Long) cache.get("user_by_average_parcel_area");
+        Long avgParcelArea = (Long) cache.get("user_by_average_parcel_area"+tokenInfo.sub);
 
         if (avgParcelArea != null)
             return Response.ok(avgParcelArea).build();
@@ -353,7 +353,7 @@ public class StatisticsResource {
 
         long average = totalAreaAndParcelCount[0] / totalAreaAndParcelCount[1];
 
-        cache.put("user_by_average_parcel_area", average);
+        cache.put("user_by_average_parcel_area"+tokenInfo.sub, average);
 
         return Response.ok(average).build();
     }
@@ -376,7 +376,7 @@ public class StatisticsResource {
         if (!tokenInfo.role.equals(ENTITY_ROLE))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-        final Long[] totalArea = {(Long) cache.get("entity_by_total_parcel_area")};
+        final Long[] totalArea = {(Long) cache.get("entity_by_total_parcel_area"+tokenInfo.sub)};
 
         if (totalArea[0] != null)
             return Response.ok(totalArea[0]).build();
@@ -397,7 +397,7 @@ public class StatisticsResource {
             totalArea[0] += area;
         });
 
-        cache.put("entity_by_total_parcel_area", totalArea[0]);
+        cache.put("entity_by_total_parcel_area"+tokenInfo.sub, totalArea[0]);
 
         return Response.ok(totalArea[0]).build();
     }
@@ -424,7 +424,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        final Long[] totalPerimeter = {(Long) cache.get("entity_by_total_parcel_perimeter")};
+        final Long[] totalPerimeter = {(Long) cache.get("entity_by_total_parcel_perimeter"+tokenInfo.sub)};
 
         if (totalPerimeter[0] != null)
             return Response.ok(totalPerimeter[0]).build();
@@ -470,7 +470,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("entity_parcel_count_by_usage");
+        Map<String, Long> parcelCountByUsage = (Map<String, Long>) cache.get("entity_parcel_count_by_usage"+tokenInfo.sub);
 
         if (parcelCountByUsage != null)
             return Response.ok(g.toJson(parcelCountByUsage)).build();
@@ -495,7 +495,7 @@ public class StatisticsResource {
                 )
         );
 
-        cache.put("entity_parcel_count_by_usage", parcelCountByUsage);
+        cache.put("entity_parcel_count_by_usage"+tokenInfo.sub, parcelCountByUsage);
 
         return Response.ok(g.toJson(parcelCountByUsage)).build();
     }
@@ -523,7 +523,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("entity_parcel_total_area_by_usage");
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("entity_parcel_total_area_by_usage"+tokenInfo.sub);
 
         if (totalAreaByUsage != null)
             return Response.ok(g.toJson(totalAreaByUsage)).build();
@@ -548,7 +548,7 @@ public class StatisticsResource {
                 )
         );
 
-        cache.put("entity_parcel_total_area_by_usage", finalTotalAreaByUsage);
+        cache.put("entity_parcel_total_area_by_usage"+tokenInfo.sub, finalTotalAreaByUsage);
 
         return Response.ok(g.toJson(finalTotalAreaByUsage)).build();
     }
@@ -576,7 +576,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"));
+        AtomicReference<Long> count = new AtomicReference<>((Long) cache.get("user_parcel_count"+tokenInfo.sub));
 
         if (count.get() != null)
             return Response.ok(g.toJson(count.get())).build();
@@ -593,7 +593,7 @@ public class StatisticsResource {
 
         results.forEachRemaining(p -> count.updateAndGet(v -> v+1));
 
-        cache.put("entity_parcel_count", count.get());
+        cache.put("entity_parcel_count"+tokenInfo.sub, count.get());
 
         return Response.ok(g.toJson(count.get())).build();
     }
@@ -621,7 +621,7 @@ public class StatisticsResource {
         if (!user.getString("user_state").equals("ACTIVE"))
             return Response.status(Response.Status.FORBIDDEN).entity("User does not exist.").build();
 
-        Long avgParcelArea = (Long) cache.get("entity_by_average_parcel_area");
+        Long avgParcelArea = (Long) cache.get("entity_by_average_parcel_area"+tokenInfo.sub);
 
         if (avgParcelArea != null)
             return Response.ok(avgParcelArea).build();
@@ -644,7 +644,7 @@ public class StatisticsResource {
 
         long average = totalAreaAndParcelCount[0] / totalAreaAndParcelCount[1];
 
-        cache.put("entity_by_average_parcel_area", average);
+        cache.put("entity_by_average_parcel_area"+tokenInfo.sub, average);
 
         return Response.ok(average).build();
     }

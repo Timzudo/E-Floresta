@@ -25,7 +25,7 @@ const TopBar = () => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="dropdown-parcels-content_TopBar">
-                            <Dropdown.Item onClick={() => navigate("/map-admin")}><b>Registar Parcela</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/map")}><b>Registar Parcela</b></Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate("/all-parcels-admin")}><b>Visualizar Parcelas</b></Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate("/approve-parcels-admin")}><b>Aprovar Parcelas</b></Dropdown.Item>
                         </Dropdown.Menu>
@@ -39,7 +39,7 @@ const TopBar = () => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="dropdown-parcels-content_TopBar">
-                            <Dropdown.Item onClick={() => navigate("/map-admin")}><b>Registar Parcela</b></Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate("/map")}><b>Registar Parcela</b></Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate("/all-parcels")}><b>Visualizar Parcelas</b></Dropdown.Item>
                             <Dropdown.Item onClick={() => navigate("/approve-parcels")}><b>Aprovar Parcelas</b></Dropdown.Item>
                         </Dropdown.Menu>

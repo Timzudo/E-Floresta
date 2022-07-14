@@ -15,11 +15,11 @@ const CSVConverter = () => {
         console.log(parseInt(localStorage.getItem('csvTime')));
 
         if(localStorage.getItem("csv") === null || localStorage.getItem("csvTime") === null || (Date.now() > parseInt(localStorage.getItem('csvTime')))){
-            xmlhttp.onreadystatechange = async function () {
+            xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState === 4) {
                     if (xmlhttp.status === 200) {
                         let csv = xmlhttp.responseText;
-                        let json = await csvJSON(csv);
+                        let json = csvJSON(csv);
                         localStorage.setItem('csv', json);
                         localStorage.setItem('csvTime', (Date.now() + expirationTime).toString());
                     } else if (xmlhttp.status === 403) {
@@ -34,13 +34,13 @@ const CSVConverter = () => {
             var myObj = { token: localStorage.getItem('token') };
             var myJson = JSON.stringify(myObj);
 
-            xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getCSV", true);
+            xmlhttp.open("POST", "https://moonlit-oven-349523.appspot.com/rest/parcel/getCSV", false);
             xmlhttp.setRequestHeader("Content-Type", "application/json");
             xmlhttp.send(myJson);
         }
     }
 
-    async function  csvJSON(csv){
+     function  csvJSON(csv){
 
         let lines=csv.split("\n");
         let obj = {};
