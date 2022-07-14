@@ -279,7 +279,7 @@ class _OfflineMapState extends State<OfflineMap> {
                 const EdgeInsets.symmetric(vertical: 54.0, horizontal: 4.0),
                 child: IconButton(
                     iconSize: 40.0,
-                    onPressed: () => {saveOfflineParcel(pointList, context)},
+                    onPressed: () => { Navigator.of(context).pop(), saveOfflineParcel(pointList, context)},
                     icon: const Icon(Icons.save)),
               )
             ],
