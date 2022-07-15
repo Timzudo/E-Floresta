@@ -536,7 +536,7 @@ const ParcelEditModal = (props) => {
 
                 {showSelects?<><Form.Group className="mt-3" controlId="utilAtSolo-editParcelModal_ApproveParcels">
                         <Form.Label> <strong>Utilização atual do solo:</strong> </Form.Label>
-                        <Form.Select defaultValue={info.usage} onChange={ () => (setChangedInfo(true))} className="inputs-editParcelModal">
+                        <Form.Select defaultValue={info.usage} onChange={ () => (setChangedInfo(true))} className="inputs2-editParcelModal">
                             <option value="Recreacional">Recreacional</option>
                             <option value="Transporte">Transporte</option>
                             <option value="Agricultural">Agricultural</option>
@@ -551,7 +551,7 @@ const ParcelEditModal = (props) => {
 
                     <Form.Group className="mt-3" controlId="utilPrevSolo-editParcelModal_ApproveParcels">
                         <Form.Label> <strong>Utilização prévia do solo:</strong> </Form.Label>
-                        <Form.Select defaultValue={info.oldUsage} onChange={ () => (setChangedInfo(true))} className="inputs-editParcelModal">
+                        <Form.Select defaultValue={info.oldUsage} onChange={ () => (setChangedInfo(true))} className="inputs2-editParcelModal">
                             <option value="Recreacional">Recreacional</option>
                             <option value="Transporte">Transporte</option>
                             <option value="Agricultural">Agricultural</option>
@@ -570,8 +570,8 @@ const ParcelEditModal = (props) => {
 
                     <Form.Group controlId="editParcelInput" className="inputs-editParcelModal" >
                         <Form.Control onChange={ () => (setChangedInfo(true))} required type="text"
-                                      placeholder="Descrição" id="description-editParcelModal_ApproveParcels" maxLength="512"
-                                      as="textarea" rows={4} defaultValue={info.description}/>
+                                      placeholder="Descrição" className="inputs2-editParcelModal" id="description-editParcelModal_ApproveParcels"
+                                      maxLength="512" as="textarea" rows={4} defaultValue={info.description}/>
                     </Form.Group>
                 </label><br/>
 
@@ -586,7 +586,7 @@ const ParcelEditModal = (props) => {
                 <p></p>
 
                 <div id="edit_modal_buttons">
-                    <Button type="button" className="btn btn-success btn-sm" onClick={sendNewInfo}> Confirmar Alterações </Button>
+                    <Button id="confirm-changes_ParcelEditModal" type="button" className="btn btn-success btn-sm" onClick={sendNewInfo}> Confirmar Alterações </Button>
                     <Button id="delete_parcel" onClick={() => {deleteParcel()}} className="managerButtons_ParcelEditModal" variant="danger" size="sm">Apagar parcela</Button>
                 </div>
 

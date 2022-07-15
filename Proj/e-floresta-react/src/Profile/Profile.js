@@ -126,12 +126,13 @@ const Profile = () => {
                     <div className="btn-group" id="change-profile-info">
                         <div id="changeProfileInfo_Profile">
                             <Link to="/change-profile">
-                                <button type="button" className="btn btn-secondary btn-sm">Editar Perfil</button>
+                                <button type="button" id="changeProfileButton_Profile" className="btn btn-secondary btn-sm">Editar Perfil</button>
                             </Link>
                         </div>
 
                         <div id="changePassword_Profile">
-                            <button onClick={ () => navigate("/change-password")} type="button" className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
+                            <button onClick={ () => navigate("/change-password")} type="button" id="changePasswordButton_Profile"
+                                    className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
                         </div>
 
                     </div>

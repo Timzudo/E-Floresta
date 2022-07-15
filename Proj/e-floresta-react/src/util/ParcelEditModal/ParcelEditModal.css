@@ -25,10 +25,64 @@
 #photo-editParcelModal_ApproveParcels{
     margin-top: 2%;
 }
+
+#confirm-changes_ParcelEditModal{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: #b0c090;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+#confirm-changes_ParcelEditModal:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+    color: white;
+}
+
+
 #delete_parcel{
     float: right;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: brown;
+    text-align: center;
+    cursor: pointer;
+}
+
+#delete_parcel:hover{
+    background-color: maroon;
+    border-color: maroon;
 }
 
 .red-text{
     color: #9d4040;
+}
+
+#rmv-manager_MyParcels{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: brown;
+    text-align: center;
+    cursor: pointer;
+}
+
+#rmv-manager_MyParcels:hover{
+    background-color: maroon;
+    border-color: maroon;
+}
+
+.inputs2-editParcelModal{
+    border: 0.3px solid black;
+    border-radius: 0.25rem;
 }

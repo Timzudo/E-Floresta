@@ -41,12 +41,40 @@ body,html{
 
 #button_FindUser{
     margin-left: 3%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #3E503A;
+    text-align: center;
+    cursor: pointer;
+}
+
+#button_FindUser:hover{
+    background-color: #b0c090;
+    border-color: #b0c090;
+    color: black;
 }
 
 .input-modal_FindUser{
     margin-left: 1%;
 }
 
-.confirm-modal_FindUser{
+#confirm-modal_FindUser{
     margin-top: 4%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: #b0c090;
+    text-align: center;
+    cursor: pointer;
+}
+
+#confirm-modal_FindUser:hover{
+    background-color: #3E503A;
+    border-color: #3E503A;
+    color: white;
 }

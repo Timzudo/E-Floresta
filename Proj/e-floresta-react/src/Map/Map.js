@@ -429,7 +429,7 @@ const Map = () => {
                             />
                         </Form.Group>:<></>}
 
-                        <Button className="mt-3 mb-3" variant="success" type="submit">
+                        <Button id="submit-button_Map" className="mt-3 mb-3" variant="success" type="submit">
                             {request?<Spinner id="spinne_ConfirmationPage" variant="light" animation="border" role="status">
                             <span className="visually-hidden">Carregando...</span>
                         </Spinner>:"Submeter"}

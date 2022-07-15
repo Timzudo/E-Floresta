@@ -11,13 +11,40 @@
     margin-bottom: 1%;
 }
 
+#document_ParcelDetailsModal:hover{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    color: black;
+    background-color: #b0c090;
+    border-color: #b0c090;
+}
 
 #photo_ParcelDetailsModal{
     margin-left: 1%;
 }
 
+#photo_ParcelDetailsModal:hover{
+    margin-left: 1%;
+    color: black;
+    background-color: #b0c090;
+    border-color: #b0c090;
+}
+
 #geojson_ParcelDetailsModal{
     margin-top: 1%;
     margin-bottom: 1%;
+    color: black;
+    background-color: #b0c090;
+    border-color: #b0c090;
 }
+
+#geojson_ParcelDetailsModal:hover{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    color: white;
+    background-color: #3E503A;
+    border-color: #3E503A;
+}
+
+
 
