@@ -98,18 +98,6 @@ const StatisticsEntity = () => {
 
                     <Col className="stats-entity-container">
                         <p></p>
-                        <h4 className="stats-entity-title"> Perímetro total das parcelas </h4>
-                        <h6 className="stats-entity-title"> 1800m </h6>
-                    </Col>
-
-                    <Col className="stats-entity-container">
-                        <p></p>
-                        <h4 className="stats-entity-title"> Média do perímetro das parcelas </h4>
-                        <h6 className="stats-entity-title"> 804m </h6>
-                    </Col>
-
-                    <Col className="stats-entity-container">
-                        <p></p>
                         <h4 className="stats-entity-title"> Número de parcelas que registei </h4>
                         <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/entity/parcel/count" label=""></NumberStatistics>
                     </Col>

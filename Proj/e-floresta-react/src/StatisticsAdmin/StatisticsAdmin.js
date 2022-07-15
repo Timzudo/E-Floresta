@@ -6,6 +6,7 @@ import {Col, Dropdown, Row, Table} from "react-bootstrap";
 import { Pie } from 'react-chartjs-2';
 import NumberStatistics from "../util/Statistics/NumberStatistics";
 import CheckIfActive from "../util/CheckIfActive";
+import PieChartLocationStatistics from "../util/Statistics/PieChartLocationStatistics";
 
 
 const StatisticsAdmin = () => {
@@ -61,18 +62,6 @@ const StatisticsAdmin = () => {
                         <p></p>
                         <h4 className="stats-admin-title"> Média da área das parcelas registadas </h4>
                         <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/rankings/parcelAvgArea" label="m²"></NumberStatistics>
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Perímetro total das parcelas registadas </h4>
-                        <h5 className="stats-admin-title statistics_result"> 25963m </h5>
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Média do perímetro das parcelas registadas </h4>
-                        <h5 className="stats-admin-title statistics_result"> 1204m² </h5>
                     </Col>
 
                     <Col className="stats-admin-container">
@@ -142,125 +131,12 @@ const StatisticsAdmin = () => {
 
                 </Row>
 
-                <Row>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Perímetro total das parcelas no distrito de: </h4>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Distrito
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Distrito1</Dropdown.Item>
-                                <Dropdown.Item>Distrito2</Dropdown.Item>
-                                <Dropdown.Item>Distrito3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <h5 className="stats-admin-title statistics_result"> 16204m </h5>
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Perímetro total das parcelas no concelho de: </h4>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Concelho
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Concelho1</Dropdown.Item>
-                                <Dropdown.Item>Concelho2</Dropdown.Item>
-                                <Dropdown.Item>Concelho3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <h5 className="stats-admin-title statistics_result"> 1204m </h5>
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Perímetro total das parcelas na freguesia de: </h4>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Freguesia
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Freguesia1</Dropdown.Item>
-                                <Dropdown.Item>Freguesia2</Dropdown.Item>
-                                <Dropdown.Item>Freguesia3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <h5 className="stats-admin-title statistics_result"> 204m </h5>
-                    </Col>
-
-                </Row>
-
 
                 <Row>
 
                     <p></p>
                     <p className="stats-admin-paragraph" ></p>
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Área das parcelas por tipo de utilização do solo no distrito de:</h4>
-
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Distrito
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Distrito1</Dropdown.Item>
-                                <Dropdown.Item>Distrito2</Dropdown.Item>
-                                <Dropdown.Item>Distrito3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Pie className="util-solo-byArea_StatsAdmin" data={utilSoloByArea} options={{ responsive: true }} />
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Área das parcelas por tipo de utilização do solo no concelho de:</h4>
-
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Concelho
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Concelho1</Dropdown.Item>
-                                <Dropdown.Item>Concelho2</Dropdown.Item>
-                                <Dropdown.Item>Concelho3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Pie className="util-solo-byArea_StatsAdmin" data={utilSoloByArea} options={{ responsive: true }} />
-                    </Col>
-
-                    <Col className="stats-admin-container">
-                        <p></p>
-                        <h4 className="stats-admin-title"> Área das parcelas por tipo de utilização do solo na freguesia de:</h4>
-
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-                                Freguesia
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item>Freguesia1</Dropdown.Item>
-                                <Dropdown.Item>Freguesia2</Dropdown.Item>
-                                <Dropdown.Item>Freguesia3</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
-                        <Pie className="util-solo-byArea_StatsAdmin" data={utilSoloByArea} options={{ responsive: true }} />
-                    </Col>
+                    <PieChartLocationStatistics/>
 
                 </Row>
 

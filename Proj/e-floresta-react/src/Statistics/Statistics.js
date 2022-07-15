@@ -96,18 +96,6 @@ const Statistics = () => {
                         <NumberStatistics url="https://moonlit-oven-349523.appspot.com/rest/statistics/user/parcel/averageArea" label="m²"></NumberStatistics>
                     </Col>
 
-                    <Col className="stats-container">
-                        <p></p>
-                        <h4 className="stats-title"> Perímetro total das parcelas </h4>
-                        <h6 className="stats-title"> 1800m </h6>
-                    </Col>
-
-                    <Col className="stats-container">
-                        <p></p>
-                        <h4 className="stats-title"> Média do perímetro das parcelas </h4>
-                        <h6 className="stats-title"> 804m </h6>
-                    </Col>
-
                     <Col className="stats-entity-container">
                         <p></p>
                         <h4 className="stats-entity-title"> Número de parcelas que registei </h4>

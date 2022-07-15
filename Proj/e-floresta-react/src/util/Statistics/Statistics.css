@@ -22,6 +22,11 @@ body{
     border-right: solid 1px #C0C6CF;
 }
 
+.pie-loc{
+    width: 60%;
+}
+
+
 .util-solo-byNumber_Stats,
 .util-solo-byArea_Stats{
     margin-top: 30px;

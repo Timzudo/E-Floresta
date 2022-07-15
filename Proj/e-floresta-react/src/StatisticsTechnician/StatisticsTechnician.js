@@ -107,18 +107,6 @@ const StatisticsTechnician = () => {
 
                     <Col className="stats-technician-container">
                         <p></p>
-                        <h4 className="stats-technician-title"> Perímetro total das parcelas </h4>
-                        <h6 className="stats-technician-title"> 1800m </h6>
-                    </Col>
-
-                    <Col className="stats-technician-container">
-                        <p></p>
-                        <h4 className="stats-technician-title"> Média do perímetro das parcelas </h4>
-                        <h6 className="stats-technician-title"> 804m </h6>
-                    </Col>
-
-                    <Col className="stats-technician-container">
-                        <p></p>
                         <h4 className="stats-technician-title"> Número de parcelas que registei </h4>
                         {
                             role === "B1" ?

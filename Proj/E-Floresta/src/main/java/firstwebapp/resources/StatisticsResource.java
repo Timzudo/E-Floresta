@@ -1354,8 +1354,7 @@ public class StatisticsResource {
         if (!tokenInfo.role.equals(SYSADMIN_ROLE) && !tokenInfo.role.equals(MODERATOR_ROLE))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-        AtomicReference<ArrayList<NamedCount>> list =
-                new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+distrito));
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_area_by_usage_"+tokenInfo.sub);
 
         /*if (list.get() != null)
             return Response.ok(g.toJson(list)).build();*/
@@ -1363,34 +1362,25 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito)))
                         .build()
         );
 
-        list.updateAndGet(v -> new ArrayList<>());
+        totalAreaByUsage = new HashMap<>();
 
-        Map<String, Long> distritoToParcelCount = new HashMap<>();
+        final Map<String, Long> finalTotalAreaByUsage = totalAreaByUsage;
 
-        results.forEachRemaining(p -> {
-            distritoToParcelCount.compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
-        });
 
-        for (Map.Entry<String, Long> entry : distritoToParcelCount.entrySet()) {
-            list.updateAndGet(v -> {
-                v.add(new NamedCount(entry.getKey(), entry.getValue()));
-                return v;
-            });
-        }
+        results.forEachRemaining(p -> finalTotalAreaByUsage.compute(
+                p.getString("parcel_usage"),
+                (k, v) -> v == null ? p.getLong("parcel_area") : v + p.getLong("parcel_area")
+        ));
 
-        list.updateAndGet(v -> {
-            v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(10, v.size())));
-        });
 
-        cache.put("parcel_area_by_usage_"+distrito, list.get());
+        cache.put("parcel_area_by_usage_"+distrito, finalTotalAreaByUsage);
 
-        return Response.ok(g.toJson(list.get())).build();
+        return Response.ok(g.toJson(finalTotalAreaByUsage)).build();
     }
 
 
@@ -1419,44 +1409,33 @@ public class StatisticsResource {
         if (!tokenInfo.role.equals(SYSADMIN_ROLE) && !tokenInfo.role.equals(MODERATOR_ROLE))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-        AtomicReference<ArrayList<NamedCount>> list =
-                new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+concelho+"_"+distrito));
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_area_by_usage_"+tokenInfo.sub);
 
-        /*f (list.get() != null)
+        /*if (list.get() != null)
             return Response.ok(g.toJson(list)).build();*/
 
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho)))
                         .build()
         );
 
-        list.updateAndGet(v -> new ArrayList<>());
+        totalAreaByUsage = new HashMap<>();
 
-        Map<String, Long> distritoToParcelCount = new HashMap<>();
+        final Map<String, Long> finalTotalAreaByUsage = totalAreaByUsage;
 
-        results.forEachRemaining(p -> {
-            distritoToParcelCount.compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
-        });
 
-        for (Map.Entry<String, Long> entry : distritoToParcelCount.entrySet()) {
-            list.updateAndGet(v -> {
-                v.add(new NamedCount(entry.getKey(), entry.getValue()));
-                return v;
-            });
-        }
+        results.forEachRemaining(p -> finalTotalAreaByUsage.compute(
+                p.getString("parcel_usage"),
+                (k, v) -> v == null ? p.getLong("parcel_area") : v + p.getLong("parcel_area")
+        ));
 
-        list.updateAndGet(v -> {
-            v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(20, v.size())));
-        });
 
-        cache.put("parcel_area_by_usage_"+concelho+"_"+distrito, list.get());
+        cache.put("parcel_area_by_usage_"+concelho, finalTotalAreaByUsage);
 
-        return Response.ok(g.toJson(list.get())).build();
+        return Response.ok(g.toJson(finalTotalAreaByUsage)).build();
     }
 
     @POST
@@ -1485,8 +1464,7 @@ public class StatisticsResource {
         if (!tokenInfo.role.equals(SYSADMIN_ROLE) && !tokenInfo.role.equals(MODERATOR_ROLE))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-        AtomicReference<ArrayList<NamedCount>> list =
-                new AtomicReference<>((ArrayList<NamedCount>) cache.get("parcel_area_by_usage_"+freguesia+"_"+concelho+"_"+distrito));
+        Map<String, Long> totalAreaByUsage = (Map<String, Long>) cache.get("parcel_area_by_usage_"+tokenInfo.sub);
 
         /*if (list.get() != null)
             return Response.ok(g.toJson(list)).build();*/
@@ -1494,36 +1472,25 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_distrito", distrito))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_freguesia", freguesia)))
                         .build()
         );
 
-        list.updateAndGet(v -> new ArrayList<>());
+        totalAreaByUsage = new HashMap<>();
 
-        Map<String, Long> distritoToParcelCount = new HashMap<>();
+        final Map<String, Long> finalTotalAreaByUsage = totalAreaByUsage;
 
-        results.forEachRemaining(p -> {
-            distritoToParcelCount.compute(p.getString("parcel_usage"), (k, v) -> v == null ? 1 : v+p.getLong("parcel_area"));
-        });
 
-        for (Map.Entry<String, Long> entry : distritoToParcelCount.entrySet()) {
-            list.updateAndGet(v -> {
-                v.add(new NamedCount(entry.getKey(), entry.getValue()));
-                return v;
-            });
-        }
+        results.forEachRemaining(p -> finalTotalAreaByUsage.compute(
+                p.getString("parcel_usage"),
+                (k, v) -> v == null ? p.getLong("parcel_area") : v + p.getLong("parcel_area")
+        ));
 
-        list.updateAndGet(v -> {
-            v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(30, v.size())));
-        });
 
-        cache.put("parcel_area_by_usage_"+freguesia+"_"+concelho+"_"+distrito, list.get());
+        cache.put("parcel_area_by_usage_"+freguesia, finalTotalAreaByUsage);
 
-        return Response.ok(g.toJson(list.get())).build();
+        return Response.ok(g.toJson(finalTotalAreaByUsage)).build();
     }
 
     @POST
@@ -1657,8 +1624,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"))))
                         .build()
         );
 
@@ -1715,8 +1682,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"))))
                         .build()
         );
 
@@ -1767,8 +1734,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"))))
                         .build()
         );
 
@@ -1817,8 +1784,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"))))
                         .build()
         );
 
@@ -1867,8 +1834,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", concelho))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho"))))
                         .build()
         );
 
@@ -1928,8 +1895,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia"))))
                         .build()
         );
 
@@ -1987,8 +1954,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                        StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia"))))
                         .build()
         );
 
@@ -2039,10 +2006,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_distrito", user.getString("user_distrito")))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_concelho", user.getString("user_concelho")))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia"))))
                         .build()
         );
 
@@ -2092,8 +2057,8 @@ public class StatisticsResource {
         QueryResults<Entity> results = datastore.run(
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
-                        .setFilter(StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia")))
+                        .setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE),
+                                StructuredQuery.PropertyFilter.eq("parcel_freguesia", user.getString("user_freguesia"))))
                         .build()
         );
 
