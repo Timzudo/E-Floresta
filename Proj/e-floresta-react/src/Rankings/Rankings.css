@@ -8,7 +8,7 @@ body, html{
 }
 
 .rankings-background{
-    margin-top: -0.95%;
+    padding: 0.5%;
     background-color: rgba(189, 216, 196, 0.35);
 }
 
