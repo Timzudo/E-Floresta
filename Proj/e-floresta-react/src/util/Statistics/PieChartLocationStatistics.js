@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import {Col, Dropdown, Form, Spinner} from "react-bootstrap";
 
 
-const PieChartStatistics = (props) => {
+const PieChartLocationStatistics = (props) => {
 
     const objCSV = JSON.parse(localStorage.getItem('csv'));
     const distritos = Object.keys(objCSV);
@@ -357,4 +357,4 @@ const PieChartStatistics = (props) => {
 };
 
 
-export default PieChartStatistics;
+export default PieChartLocationStatistics;

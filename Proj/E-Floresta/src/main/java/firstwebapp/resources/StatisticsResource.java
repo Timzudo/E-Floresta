@@ -1184,6 +1184,7 @@ public class StatisticsResource {
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
                         .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setLimit(20)
                         .build()
         );
 
@@ -1204,7 +1205,7 @@ public class StatisticsResource {
 
         distritoWithParcelCountsList.updateAndGet(v -> {
             v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(10, v.size())));
+            return v;
         });
 
         cache.put("distrito_by_parcel_count", distritoWithParcelCountsList.get());
@@ -1244,6 +1245,7 @@ public class StatisticsResource {
                 Query.newEntityQueryBuilder()
                         .setKind("Parcel")
                         .setFilter(StructuredQuery.PropertyFilter.eq("parcel_state", PARCEL_ACCEPTED_STATE))
+                        .setLimit(20)
                         .build()
         );
 
@@ -1264,7 +1266,7 @@ public class StatisticsResource {
 
         distritoWithParcelCountsList.updateAndGet(v -> {
             v.sort((o1, o2) -> -o1.getCount().compareTo(o2.getCount()));
-            return new ArrayList<>(v.subList(0, Math.min(20, v.size())));
+            return v;
         });
 
         cache.put("concelho_by_parcel_count", distritoWithParcelCountsList.get());
