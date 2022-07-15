@@ -76,7 +76,7 @@ public class RegisterResource {
                     .set("user_creation_time", Timestamp.now())
                     .set("user_role", "D")
                     .set("user_state", "INACTIVE")
-                    .set("user_trust", 40)
+                    .set("user_trust", 50)
                     .set("user_distrito", "")
                     .set("user_concelho", "")
                     .set("user_freguesia", "")
@@ -155,7 +155,7 @@ public class RegisterResource {
                     .set("user_creation_time", Timestamp.now())
                     .set("user_role", "C")
                     .set("user_state", "INACTIVE")
-                    .set("user_trust", 40)
+                    .set("user_trust", 50)
                     .set("user_distrito", data.distrito)
                     .set("user_concelho", data.concelho)
                     .set("user_freguesia", "")
@@ -184,7 +184,7 @@ public class RegisterResource {
         msg.addRecipient(Message.RecipientType.TO,
                 new InternetAddress(data.email, "Caro utilizador"));
         msg.setSubject("Confirme o seu e-mail.");
-        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "http://localhost:3000/confirmation?id=" + confirmationID);
+        msg.setText("Olá " + data.name + " criou recentemente uma conta no serviço E-Floresta. \nClique neste link para confirmar o seu e-mail: " + "https://moonlit-oven-349523.appspot.com/confirmation?id=" + confirmationID);
         Transport.send(msg);
 
         String token = JWToken.generateToken(username, "C", "INACTIVE");

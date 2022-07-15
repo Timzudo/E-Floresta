@@ -226,7 +226,7 @@ const Map = () => {
         f.append('token', localStorage.getItem('token'));
         if(role !== 'D'){
             f.append('owner', document.getElementById("formOwnerName").value);
-            url = "https://moonlit-oven-349523.appspot.com/rest/parcel/register";
+            url = "https://moonlit-oven-349523.appspot.com/rest/parcel/registerAdmin";
         }
         f.append('name', document.getElementById("formParcelName").value);
         f.append('distrito', document.getElementById("formDistritoDropdown").value);
@@ -245,6 +245,7 @@ const Map = () => {
             console.log(pair[0]+ ', ' + pair[1]);
         }
 
+        console.log(url);
         xmlhttp.open("POST", url, true);
         xmlhttp.send(f);
         setRequest(true);
