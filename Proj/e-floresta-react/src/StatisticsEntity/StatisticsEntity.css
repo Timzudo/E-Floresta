@@ -3,6 +3,10 @@ body, html{
     height: 100%;
 }
 
+.statistics-entity-background{
+    padding: 0.5%;
+}
+
 .stats-entity-title{
     margin-top: 1%;
     margin-left: 1%;
