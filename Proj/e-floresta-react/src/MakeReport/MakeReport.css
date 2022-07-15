@@ -42,13 +42,48 @@ body,html{
     margin-right: 2%;
 }
 
+#topic_MakeReport,
+#msg_MakeReport{
+    border: 1px solid black;
+    border-radius: 0.25rem;
+}
+
 #submit_MakeReport{
     margin-top: 2%;
     margin-left: 2%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #3E503A;
+    text-align: center;
+    cursor: pointer;
+}
+
+#submit_MakeReport:hover{
+    background-color: #b0c090;
+    border-color: #b0c090;
+    color: black;
 }
 
 #cancel_MakeReport{
     margin-top: 2%;
     margin-left: 2%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: darkgrey;
+    text-align: center;
+    cursor: pointer;
 }
+
+#cancel_MakeReport:hover{
+    background-color: gray;
+    border-color: gray;
+    color: white;
+}
+
 

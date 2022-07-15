@@ -7,9 +7,11 @@ html, body{
     height:100%;
 }
 
+/*
 .body_ReportsTechnician{
     background-color: rgba(189, 216, 196, 0.65);
 }
+ */
 
 .card{
     margin-left: auto;
@@ -25,20 +27,57 @@ html, body{
 }
 
 #confirm-report_ReportsTechnician{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
     background-color: #3E503A;
     color: white;
-    border: solid 1px #32443A;
+    text-align: center;
+    cursor: pointer;
+}
+
+#confirm-report_ReportsTechnician:hover{
+    background-color: #b0c090;
+    border-color: #b0c090;
+    color: black;
 }
 
 #ignore-report_ReportsTechnician{
-    background-color: grey;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
     color: white;
-    border: solid 1px grey;
+    background-color: darkgrey;
+    text-align: center;
+    cursor: pointer;
+}
+
+#ignore-report_ReportsTechnician:hover{
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: gray;
+    text-align: center;
+    cursor: pointer;
 }
 
 #decline-report_ReportsTechnician{
-     background-color: brown;
-     color: white;
-     border: solid 1px brown;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: brown;
+    text-align: center;
+    cursor: pointer;
  }
+
+#decline-report_ReportsTechnician:hover{
+    background-color: maroon;
+    border-color: maroon;
+}
 

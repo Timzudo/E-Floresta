@@ -75,6 +75,16 @@ const FAQ = () => {
                                 "Remover gerente".
                             </Accordion.Body>
                         </Accordion.Item>
+                        <Accordion.Item eventKey="6">
+                            <Accordion.Header>Como funcionam as notas?</Accordion.Header>
+                            <Accordion.Body>
+                                As notas referem-se aos pontos de confiança de um utilizador. Um utilizador que faça contribuições positivas (denúncias
+                                consideradas pertinentes pelos técnicos) ganhará pontos de confiança, o que influenciará a subida da nota. Caso o
+                                utilizador faça contribuições que atrapalhem o bom funcionamento do site, a sua nota irá descer. Existem 5 notas possíveis:
+                                de 1 a 5, sendo 1 a pior e 5 a melhor. A nota inicial é 2. Os utilizadores com notas superiores terão prioridade sobre as
+                                denúncias feitas por utilizadores com notas mais baixas. É possível verificar a sua nota no perfil de utilizador.
+                            </Accordion.Body>
+                        </Accordion.Item>
                     </Accordion>
                 </div>
             </div>

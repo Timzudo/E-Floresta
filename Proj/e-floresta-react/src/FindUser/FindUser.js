@@ -219,37 +219,37 @@ const FindUserModal = (props) => {
             <Modal.Body>
                 <div className="profileInfo_finduser">
                     <div id="email_finduser">
-                        <p className="label"> E-mail: {props.obj.email} </p>
+                        <p className="label"> <b>E-mail:</b> {props.obj.email} </p>
                     </div>
                     <div id="name_finduser">
-                        <label className="label"> Nome Completo: </label>
+                        <label className="label"><b> Nome Completo:</b> </label>
                         <input onChange={() => changeInfo = true} className="input-modal_FindUser" id="change-complete-name" type="text" defaultValue={props.obj.name}/>
                     </div>
                     <div id="phone_finduser">
-                        <label className="label"> Telemóvel/Telefone: </label>
+                        <label className="label"> <b>Telemóvel/Telefone:</b> </label>
                         <input onChange={() => changeInfo = true} className="input-modal_FindUser" id="change-phone" type="number" defaultValue={props.obj.phone} maxLength="9"/>
                     </div>
                     <div id="nif_finduser">
-                        <label className="label" htmlFor="change-nif">NIF:</label>
+                        <label className="label" htmlFor="change-nif"><b>NIF:</b> </label>
                         <input onChange={() => changeInfo = true}className="input-modal_FindUser" id="change-nif" type="number" defaultValue={props.obj.nif} maxLength="9"/>
                     </div>
                     <div id="grade_finduser">
-                        <p className="label"> Nível do utilizador: {props.obj.grade} </p>
+                        <p className="label"> <b>Nível do utilizador: </b>{props.obj.grade} </p>
                     </div>
                     <div id="type_finduser">
-                        <p className="label"> Tipo de utilizador: {props.obj.type} </p>
+                        <p className="label"> <b>Tipo de utilizador: </b>{props.obj.type} </p>
                     </div>
                     <div id="state_finduser">
-                        <p className="label"> Estado do utilizador: {props.obj.state} </p>
+                        <p className="label"> <b>Estado do utilizador: </b>{props.obj.state} </p>
                     </div>
                     <div id="distrito_finduser">
-                        <p className="label"> Distrito: {props.obj.distrito} </p>
+                        <p className="label"> <b>Distrito: </b>{props.obj.distrito} </p>
                     </div>
                     <div id="concelho_finduser">
-                        <p className="label">Concelho: {props.obj.concelho} </p>
+                        <p className="label"> <b>Concelho: </b>{props.obj.concelho} </p>
                     </div>
                     <div id="freguesia_finduser">
-                        <p className="label"> Freguesia: {props.obj.freguesia} </p>
+                        <p className="label"> <b>Freguesia: </b>{props.obj.freguesia} </p>
                     </div>
                     <Form.Check
                         className="position-relative mt-3"
@@ -317,7 +317,7 @@ const FindUserModal = (props) => {
 
                     <div className="btn-group" id="confirmAndCancel_ChangeProfile">
                         <div id="confirmChanges_ChangeProfile">
-                            <Button onClick={sendRequest} className="confirm-modal_FindUser" type="button" variant="success" size="sm">
+                            <Button onClick={sendRequest} id="confirm-modal_FindUser" type="button" variant="success" size="sm">
                                 Confirmar Alterações
                             </Button>
                         </div>

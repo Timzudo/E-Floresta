@@ -38,17 +38,18 @@ const ReportsTechnician = () => {
                                     <Card.Header><b>Autor: {arr[i].sender}</b></Card.Header>
                                     <Card.Header>Prioridade: {arr[i].priority}</Card.Header>
                                     <Card.Body>
-                                        <Card.Title>Tópico: {arr[i].topic}</Card.Title>
+                                        <Card.Title> <h3>Tópico: {arr[i].topic}</h3></Card.Title>
                                         <p></p>
                                         <Card.Text>
                                             <Row>
                                                 <Col>
-                                                    <h6> Nome da Parcela: {arr[i].parcelName}</h6>
-                                                    <h6> Distrito: {arr[i].distrito}</h6>
-                                                    <h6> Concelho: {arr[i].concelho}</h6>
-                                                    <h6> Freguesia: {arr[i].freguesia}</h6>
+                                                    <h6> <b>Nome da Parcela:</b> {arr[i].parcelName}</h6>
+                                                    <h6> <b>Distrito:</b> {arr[i].distrito}</h6>
+                                                    <h6> <b>Concelho: </b>{arr[i].concelho}</h6>
+                                                    <h6> <b>Freguesia:</b> {arr[i].freguesia}</h6>
                                                 </Col>
                                                 <Col>
+                                                    <h6><b>Descrição do problema: </b></h6>
                                                     <h6>{arr[i].message}</h6>
                                                 </Col>
                                             </Row>
