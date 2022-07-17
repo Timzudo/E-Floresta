@@ -1,7 +1,7 @@
 import './ChangePassword.css'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import TopBar from "../TopBar/TopBar";
-import {Button} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, { Component }  from 'react';
 import CheckIfActive from "../util/CheckIfActive";
@@ -57,27 +57,29 @@ const ChangePassword = () => {
                 <div className="body-changePassword">
                     <h2 className="title_ChangePassword"><b>Altere a sua palavra-passe</b></h2>
                     <br/>
-                    <div id="oldPassword_ChangePassword">
+                    <div className="alignFields_ChangePassword" id="oldPassword_ChangePassword">
                         Palavra-Passe Antiga: {oldPassword} <input className="fields_ChangePassword" id="old-password_ChangePassword" type="password" maxLength="64"/>
                     </div>
-                    <div id="newPassword_ChangePassword">
+                    <div className="alignFields_ChangePassword" id="newPassword_ChangePassword">
                         Nova Palavra-Passe: {newPassword} <input className="fields_ChangePassword" id="new-password_ChangePassword" type="password" maxLength="64"/>
                     </div>
-                    <div id="confirmPassword_ChangePassword">
+                    <div className="alignFields_ChangePassword" id="confirmPassword_ChangePassword">
                         Confirmar nova Palavra-Passe: {confirmation} <input className="fields_ChangePassword" id="confirm-password_ChangePassword" type="password" maxLength="64"/>
                     </div>
 
-                    <div className="btn-group" id="confirmAndCancel_ChangePassword">
-                        <div id="confirm_ChangePassword">
-                            <Button type="button" className="btn btn-success btn-sm" onClick={changePassword}> Confirmar Alterações</Button>
-                        </div>
+                    <Row className="btn-group" id="confirmAndCancel_ChangePassword">
+                        <Col id="confirm_ChangePassword">
+                            <Button type="button" id="confirmButton_ChangePassword" className="btn btn-success btn-sm"
+                                    onClick={changePassword}>Confirmar Alterações</Button>
+                        </Col>
 
-                        <div id="cancel_ChangePassword">
+                        <Col id="cancel_ChangePassword">
                             <Link to="/profile">
-                                <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
+                                <Button type="button" id="cancelButton_ChangePassword" className="btn btn-secondary btn-sm">
+                                    Cancelar Alterações </Button>
                             </Link>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
 
                 </div>
             </div>

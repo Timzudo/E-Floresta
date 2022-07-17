@@ -16,7 +16,7 @@ const TopBar = () => {
 
             <ButtonGroup className="buttons_TopBar" size="lg">
                 <Link to="/homepage">
-                    <Button id="option1">Página Inicial</Button>
+                    <Button variant="success" id="option1">Página Inicial</Button>
                 </Link>
 
                 {role.includes("A")?
@@ -48,61 +48,61 @@ const TopBar = () => {
                     : <></>}
 
                 {role === 'D' ? <Link to="/map">
-                    <Button id="option2">Registar Parcela</Button>
+                    <Button variant="success" id="option2">Registar Parcela</Button>
                 </Link> : <></>}
 
 
                 {role === 'D' ? <Link to="/my-parcels">
-                    <Button id="option3">Minhas Parcelas</Button>
+                    <Button variant="success" id="option3">Minhas Parcelas</Button>
                 </Link> : <></>}
 
                 {role === 'C' ? <Link to="/parcels-entity">
-                    <Button id="option5">Minhas Parcelas</Button>
+                    <Button variant="success" id="option5">Minhas Parcelas</Button>
                 </Link> : <></>}
 
 
                 {role === 'C' ? <Link to="/proposed-parcels-entity">
-                    <Button id="option6">Parcelas Pendentes</Button>
+                    <Button variant="success" id="option6">Parcelas Pendentes</Button>
                 </Link> : <></>}
 
 
                 {role.includes('A') || role.includes('B') ? <Link to="/reports-technician">
-                    <Button id="option13">Denúncias</Button>
+                    <Button variant="success" id="option13">Denúncias</Button>
                 </Link> : <></>}
 
 
                 {role.includes('A') ? <Link to="/find-user">
-                    <Button id="option19">Encontrar Utilizador</Button>
+                    <Button variant="success" id="option19">Encontrar Utilizador</Button>
                 </Link> : <></>}
 
 
                 {role.includes('D') ? <Link to="/statistics">
-                    <Button id="option9">Estatísticas</Button>
+                    <Button variant="success" id="option9">Estatísticas</Button>
                 </Link> : <></>}
 
                 {role === 'C' ? <Link to="/statistics-entity">
-                    <Button id="option11">Estatísticas</Button>
+                    <Button variant="success" id="option11">Estatísticas</Button>
                 </Link> : <></>}
 
                 {role.includes('B') ? <Link to="/statistics-technician">
-                    <Button id="option14">Estatísticas</Button>
+                    <Button variant="success" id="option14">Estatísticas</Button>
                 </Link> : <></>}
 
                 {role.includes('A') ? <Link to="/statistics-admin">
-                    <Button id="option12">Estatísticas</Button>
+                    <Button variant="success" id="option12">Estatísticas</Button>
                 </Link> : <></>}
 
 
                 <Link to="/rankings">
-                    <Button id="option10">Rankings</Button>
+                    <Button variant="success" id="option10">Rankings</Button>
                 </Link>
 
                 <Link to="/faq">
-                    <Button id="option20">FAQ</Button>
+                    <Button variant="success" id="option20">FAQ</Button>
                 </Link>
 
                 <Link to="/about-us">
-                    <Button id="option4">Sobre Nós</Button>
+                    <Button variant="success" id="option4">Sobre Nós</Button>
                 </Link>
             </ButtonGroup>
 

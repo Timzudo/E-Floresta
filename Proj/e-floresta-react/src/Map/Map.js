@@ -11,7 +11,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 const google = window.google;
 const containerStyle = {
-    width: '75vw',
+    width: '70vw',
     height: 'calc(100vh - 60px)'
 };
 
@@ -309,56 +309,56 @@ const Map = () => {
                 <div className="submit_Map">
                     <Form onSubmit={submitHandler}>
                         {role === "D"?<></>:<Form.Group className="mt-3" controlId="formOwnerName">
-                            <Form.Label> <strong>Nome do Dono</strong> </Form.Label>
+                            <Form.Label> <strong>Nome do Dono</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control className="map_fields" required type="text" placeholder="Nome do Dono" />
                         </Form.Group>}
 
                         <Form.Group className="mt-3" controlId="formParcelName">
-                            <Form.Label> <strong>Nome da Parcela</strong> </Form.Label>
+                            <Form.Label> <strong>Nome da Parcela</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control className="map_fields" required type="text" placeholder="Nome da parcela" maxLength="64"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formDistritoDropdown">
-                            <Form.Label> <strong>Distrito</strong> </Form.Label>
+                            <Form.Label> <strong>Distrito</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Select defaultValue="" className="map_fields" onChange={(e) => handleSetDistrito(e.target.value)}>
-                                <option disabled={true} value="">-</option>
+                                <option disabled={true} value="">Selecione um distrito</option>
                                 {distritoList}
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formConcelhoDropdown">
-                            <Form.Label> <strong>Concelho</strong> </Form.Label>
+                            <Form.Label> <strong>Concelho</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Select defaultValue="" className="map_fields" onChange={(e) => handleSetConcelho(e.target.value)}>
-                                <option disabled={true} value="">-</option>
+                                <option disabled={true} value="">Selecione um concelho</option>
                                 {concelhoOptions}
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formFreguesiaDropdown">
-                            <Form.Label> <strong>Freguesia</strong> </Form.Label>
+                            <Form.Label> <strong>Freguesia</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Select defaultValue="" className="map_fields">
-                                <option disabled={true} value="">-</option>
+                                <option disabled={true} value="">Selecione uma freguesia</option>
                                 {freguesiaOptions}
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelSection">
-                            <Form.Label> <strong>Secção da Parcela</strong> </Form.Label>
+                            <Form.Label> <strong>Secção da Parcela</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control className="map_fields" required type="text" placeholder="Secção da Parcela (Ex: SA)" maxLength="2"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelArticalNum">
-                            <Form.Label> <strong>Nº de Artigo da Parcela</strong> </Form.Label>
+                            <Form.Label> <strong>Nº de Artigo da Parcela</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control className="map_fields" required type="number" placeholder="Nº de Artigo (Ex: 105)" maxLength="3"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelCover">
-                            <Form.Label> <strong>Cobertura do solo</strong> </Form.Label>
+                            <Form.Label> <strong>Cobertura do solo</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control className="map_fields" required type="text" placeholder="Cobertura do solo" maxLength="64"/>
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelUsage">
-                            <Form.Label> <strong>Utilização do solo</strong> </Form.Label>
+                            <Form.Label> <strong>Utilização do solo</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Select className="map_fields">
                                 <option value="Recreacional">Recreacional</option>
                                 <option value="Transporte">Transporte</option>
@@ -372,7 +372,7 @@ const Map = () => {
                         </Form.Group>
 
                         <Form.Group className="mt-3" controlId="formParcelOldUsage">
-                            <Form.Label> <strong>Utilização prévia do solo</strong> </Form.Label>
+                            <Form.Label> <strong>Utilização prévia do solo</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Select className="map_fields">
                                 <option value="Recreacional">Recreacional</option>
                                 <option value="Transporte">Transporte</option>
@@ -387,7 +387,7 @@ const Map = () => {
 
 
                         <Form.Group className="position-relative mt-3" controlId="formParcelPhoto">
-                            <Form.Label> <strong>Foto</strong> </Form.Label>
+                            <Form.Label> <strong>Foto</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control
                                 className="map_fields"
                                 type="file"
@@ -399,7 +399,7 @@ const Map = () => {
                         </Form.Group>
 
                         <Form.Group className="position-relative mt-3" controlId="formParcelPdf">
-                            <Form.Label> <strong>PDF</strong> </Form.Label>
+                            <Form.Label> <strong>PDF</strong><span className="red-text">*</span> </Form.Label>
                             <Form.Control
                                 className="map_fields"
                                 type="file"

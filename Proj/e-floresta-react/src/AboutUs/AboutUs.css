@@ -24,6 +24,7 @@ body,html{
 
 .title_AboutUs{
     margin-left: 2%;
+    color: #3E503A;
 }
 
 .initial-text_AboutUs{
@@ -31,7 +32,8 @@ body,html{
 }
 
 .title2_AboutUs{
-    margin-left: 57%;
+    margin-left: 53%;
+    color: #3E503A;
 }
 
 #card1-name_AboutUs{
@@ -49,7 +51,7 @@ body,html{
 }
 
 #card2-text_AboutUs{
-    margin-left: 12%;
+    margin-left: 11%;
 }
 
 #card-title_AboutUs{

@@ -5,7 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useState } from 'react'
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
 import React, {useEffect} from 'react'
-import {Badge} from "react-bootstrap";
+import {Badge, Col, Row} from "react-bootstrap";
 import CheckIfActive from "../util/CheckIfActive";
 
 const Profile = () => {
@@ -123,19 +123,18 @@ const Profile = () => {
                         <p className="label_Profile"><b>Tipo de utilizador: </b> {type}</p>
                     </div>
 
-                    <div className="btn-group" id="change-profile-info">
-                        <div id="changeProfileInfo_Profile">
+                    <Row className="btn-group" id="change-profile-info">
+                        <Col id="changeProfileInfo_Profile">
                             <Link to="/change-profile">
                                 <button type="button" id="changeProfileButton_Profile" className="btn btn-secondary btn-sm">Editar Perfil</button>
                             </Link>
-                        </div>
+                        </Col>
 
-                        <div id="changePassword_Profile">
+                        <Col id="changePassword_Profile">
                             <button onClick={ () => navigate("/change-password")} type="button" id="changePasswordButton_Profile"
                                     className="btn btn-warning btn-sm">Alterar Palavra-Passe</button>
-                        </div>
-
-                    </div>
+                        </Col>
+                    </Row>
 
                 </div>
             </div>

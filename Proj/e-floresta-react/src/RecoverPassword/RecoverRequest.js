@@ -45,7 +45,7 @@ const RecoverPassword = () => {
                         <br/>
                         <h2 className="title_RecoverRequest"><b>Esqueceu a sua palavra-passe?</b></h2>
                         <p className="description_RecoverRequest">Insira o seu e-mail para receber um link de recuperação da sua palavra-passe.</p>
-                        <input id="email_RecoverRequest" type="email" placeholder="Email" maxLength="64"/>
+                        <input id="email_RecoverRequest" type="email" required placeholder="E-mail" maxLength="64"/>
                         <Button id="button_RecoverRequest" type="submit" variant="success" onClick={recoverPassword}>
                             Enviar pedido de recuperação
                         </Button>

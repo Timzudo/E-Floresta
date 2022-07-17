@@ -1,4 +1,4 @@
-body{
+body, html{
     margin: 0;
     height: 100%;
 }
@@ -6,7 +6,6 @@ body{
 .statistics-admin-background{
     padding: 0.5%;
 }
-
 
 .stats-admin-title{
     margin-top: 1%;

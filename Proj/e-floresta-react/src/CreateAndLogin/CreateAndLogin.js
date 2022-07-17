@@ -169,7 +169,7 @@ const CreateAndLogin = () => {
                 <Form.Check id="checkmark-login" type="checkbox" label="Mostrar Palavra-Passe" onClick={showPassword}/>
               </Form.Group>
 
-              <Button id="session-button" type="submit" onClick={login}>
+              <Button id="session-button" variant="success" type="submit" onClick={login}>
                 Entrar
               </Button>
             </Form>
@@ -239,7 +239,7 @@ const CreateAndLogin = () => {
                                 </Form.Select>
                               </Form.Group></>:<></>}
               <br/>
-              <Button id="create-acc-button" type="submit" onClick={register}>
+              <Button id="create-acc-button" variant="success" type="submit" onClick={register}>
                 Registar
               </Button>
 

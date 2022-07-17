@@ -112,7 +112,7 @@ const Home = () => {
             <div className="hero-image_Home">
                 <div className="hero-text_Home">
                     <h1><b>E-Floresta</b></h1>
-                    <p>Registe as suas parcelas de forma rápida e fácil</p>
+                    <p>Registe e gerencie as suas parcelas de forma rápida e fácil!</p>
                     <Link to="/create-and-login">
                         <Button id="button-hero_Home" variant="dark">Comece já</Button>
                     </Link>
@@ -141,7 +141,7 @@ const Home = () => {
             <div className="hero-image-faq_Home">
                 <div className="hero-text-faq_Home">
                     <h1><b>Perguntas frequentes</b></h1>
-                    <p>Tem alguma pergunta sobre a utilização do nosso site? </p>
+                    <p>Tem alguma questão sobre a utilização do nosso site? </p>
                     <p>Verifique a página de perguntas frequentes! </p>
                     <Link to="/faq-unlogged">
                         <Button id="button-hero_Home" variant="dark">FAQ</Button>

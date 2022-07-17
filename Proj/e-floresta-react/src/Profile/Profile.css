@@ -34,11 +34,6 @@ body,html{
     margin-left: 2%;
 }
 
-#changeProfileInfo_Profile,
-#changePassword_Profile{
-    padding: 5px;
-}
-
 .badge_Profile{
     height: 30px;
     width: 10%;
@@ -47,4 +42,41 @@ body,html{
 
 #badge-2_Profile{
     color: black;
+}
+
+#change-profile-info{
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+
+#changeProfileButton_Profile{
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: gray;
+    text-align: center;
+    cursor: pointer;
+}
+
+#changeProfileButton_Profile:hover{
+    background-color: dimgray;
+}
+
+#changePasswordButton_Profile{
+    width: 140%;
+    border: none;
+    border-radius: 0;
+    outline: 0;
+    display: inline-block;
+    color: black;
+    background-color: #FFD300;
+    text-align: center;
+    cursor: pointer;
+}
+
+#changePasswordButton_Profile:hover{
+    background-color: #FFBB25;
 }

@@ -4,7 +4,7 @@ import TopBar from '../TopBar/TopBar.js'
 import ProfileImage from "./profile_picture.png";
 import {Link, useNavigate} from "react-router-dom";
 import CheckIfLoggedOut from "../util/CheckIfLoggedOut";
-import {Badge, Button} from "react-bootstrap";
+import {Badge, Button, Col, Row} from "react-bootstrap";
 import {useState} from "react";
 import CheckIfActive from "../util/CheckIfActive";
 
@@ -117,19 +117,20 @@ const ChangeProfile = () => {
                         <p className="label_ChangeProfile"> <b>Tipo de utilizador: </b> {type} </p>
                     </div>
 
-                    <div className="btn-group" id="confirmAndCancel_ChangeProfile">
-                        <div id="confirmChanges_ChangeProfile">
-                            <Button type="button" className="btn btn-success btn-sm" onClick={changeProfile}>Confirmar
-                                Alterações</Button>
-                        </div>
+                    <Row className="btn-group" id="confirmAndCancel_ChangeProfile">
+                        <Col id="confirmChanges_ChangeProfile">
+                            <Button type="button" id="confirmChangesButton_ChangeProfile" className="btn btn-success btn-sm"
+                                    onClick={changeProfile}>Confirmar Alterações</Button>
+                        </Col>
 
-                        <div id="cancelChanges_ChangeProfile">
+                        <Col id="cancelChanges_ChangeProfile">
                             <Link to="/profile">
-                                <Button type="button" className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
+                                <Button type="button" id="cancelChangesButton_ChangeProfile"
+                                        className="btn btn-secondary btn-sm">Cancelar Alterações </Button>
                             </Link>
 
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
 
                 </div>
             </div>
