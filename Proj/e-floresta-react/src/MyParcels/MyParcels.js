@@ -49,21 +49,18 @@ const MyParcels = () => {
     const [nearbyShow, setNearbyShow] = useState(false);
 
     const handleShow = (obj) => {
-        console.log("show")
         setObj(obj);
         setShow(true);
         setEditShow(false);
         setNearbyShow(false);
     }
     const handleEditShow = (obj) => {
-        console.log("showedit")
         setObj(obj);
         setShow(false);
         setEditShow(true);
         setNearbyShow(false);
     }
     const handleNearbyShow = (obj) => {
-        console.log("shownearby")
         setObj(obj);
         setShow(false);
         setEditShow(false);
@@ -93,6 +90,26 @@ const MyParcels = () => {
                 <Badge pill bg="secondary">Por verificar</Badge>
             )
         }
+    }
+
+    //Get the button:
+    let mybutton = document.getElementById("backToTop");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.getElementById("body_MyParcels").scrollTop > 1) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.getElementById("body_MyParcels").scrollTop = 0; // For Safari
+       // For Chrome, Firefox, IE and Opera
     }
 
 
@@ -185,7 +202,7 @@ const MyParcels = () => {
                         {paths}
                     </GoogleMap>
 
-                    <div className="body_MyParcels">
+                    <div className="body_MyParcels" id="body_MyParcels">
                         <div className="container_MyParcels">
                             {requested? <Spinner id="spinner_ConfirmationPage" variant="success" animation="border" role="status">
                                 <span className="visually-hidden">Carregando...</span>
@@ -195,6 +212,14 @@ const MyParcels = () => {
                 </div>
 
             </LoadScript>
+
+            <button onClick={() => topFunction()} id="backToTop" title="Go to top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                     className="bi bi-arrow-up" viewBox="0 0 16 16">
+                    <path fillRule="evenodd"
+                          d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                </svg>
+                </button>
 
         </>
     )
