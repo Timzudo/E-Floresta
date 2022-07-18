@@ -92,24 +92,9 @@ const MyParcels = () => {
         }
     }
 
-    //Get the button:
-    let mybutton = document.getElementById("backToTop");
 
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-        if (document.getElementById("body_MyParcels").scrollTop > 1) {
-            mybutton.style.display = "block";
-        } else {
-            mybutton.style.display = "none";
-        }
-    }
-
-    // When the user clicks on the button, scroll to the top of the document
     function topFunction() {
-        document.getElementById("body_MyParcels").scrollTop = 0; // For Safari
-       // For Chrome, Firefox, IE and Opera
+        document.getElementById("body_MyParcels").scrollTop = 0;
     }
 
 
@@ -174,6 +159,7 @@ const MyParcels = () => {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(myJson);
         setRequested(true);
+
     }, [])
 
 
@@ -203,7 +189,7 @@ const MyParcels = () => {
                     </GoogleMap>
 
                     <div className="body_MyParcels" id="body_MyParcels">
-                        <div className="container_MyParcels">
+                        <div className="container_MyParcels" id="container_MyParcels">
                             {requested? <Spinner id="spinner_ConfirmationPage" variant="success" animation="border" role="status">
                                 <span className="visually-hidden">Carregando...</span>
                             </Spinner> : parcelList}

@@ -111,3 +111,8 @@ html, body{
 #backToTop:hover {
     background-color: #32443A;
 }
+
+
+#backToTop{
+    display: block;
+}
