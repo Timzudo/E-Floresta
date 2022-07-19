@@ -11,7 +11,7 @@
 
   <!-- Define the number of idle instances -->
   <automatic-scaling>
-    <min-idle-instances>0</min-idle-instances>
+    <min-idle-instances>1</min-idle-instances>
   </automatic-scaling>
 
   <static-files>
