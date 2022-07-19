@@ -42,3 +42,9 @@ indexes:
       - name: user_role
       - name: user_parcel_count
         direction: desc
+
+  - kind: Parcel
+    properties:
+      - name: parcel_state
+      - name: parcel_area
+        direction: desc
