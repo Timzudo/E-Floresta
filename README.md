@@ -23,16 +23,16 @@ These technologies and tools were carefully selected to create a robust and scal
 
 ### Register a land parcel
 
-![register](https://cdn.discordapp.com/attachments/723609492096549009/1100174814079103057/register.gif)
+![register](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODcyN2QzMTk3NjBhODA1OTVmNTg0OTA0YzM3ZWQ5NTkwZTc3ZjVlOCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/b8aJJb7C78HdtBy95j/giphy.gif)
 
 With the option of importing a GeoJSON
 
 
 ### Details of a land parcel
-![details](https://cdn.discordapp.com/attachments/723609492096549009/1100193135675572224/detalhes.gif)
+![details](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGIyNGZjOGJjYzNlY2RjYjljNDI2MTQ3ZTk3NWQxYmE4Y2M5ODFhYyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/GuG1HTYlul2sxpJ0FI/giphy.gif)
 
 ### Edit a land parcel
-![edit](https://cdn.discordapp.com/attachments/723609492096549009/1100193084911915069/editar.gif)
+![edit](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjA1ODI4M2U3NDc4MDllNzY5Yzc0ZmFmY2QxNTE3NjdkN2Y1NTMwYyZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/wWMqMmLfX4nAprVFmV/giphy.gif)
 
 
 ### Statistics
